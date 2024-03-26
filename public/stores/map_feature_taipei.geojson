@@ -1,0 +1,625 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "id": "122186",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.566688,
+                    25.046781
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "松山區 ",
+                "city": "台北市",
+                "section": "信義區",
+                "address": "台北市信義區東興路67號1樓",
+                "store_id": "122186",
+                "store_name": "總部"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "135241",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5688373,
+                    25.0435395
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "南港區 ",
+                "city": "台北市",
+                "section": "信義區",
+                "address": "台北市信義區永吉路30巷103號",
+                "store_id": "135241",
+                "store_name": "永信"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "158864",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5229754,
+                    25.043957
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "大安區 ",
+                "city": "台北市",
+                "section": "中正區",
+                "address": "台北市中正區林森南路4號之3",
+                "store_id": "158864",
+                "store_name": "千成"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "171764",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5260786,
+                    25.0955186
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "士林區 ",
+                "city": "台北市",
+                "section": "士林區",
+                "address": "台北市士林區中正路220號222號",
+                "store_id": "171764",
+                "store_name": "福榮"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "181451",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5655037,
+                    25.0798132
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "內湖區 ",
+                "city": "台北市",
+                "section": "內湖區",
+                "address": "台北市內湖區基湖路35巷13號1樓",
+                "store_id": "181451",
+                "store_name": "湖光"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "183848",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.520189,
+                    25.0574565
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "士林區 ",
+                "city": "台北市",
+                "section": "大同區",
+                "address": "台北市大同區民生西路84號1樓",
+                "store_id": "183848",
+                "store_name": "仟瑞"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "189695",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5623797,
+                    24.9845137
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "文山區 ",
+                "city": "台北市",
+                "section": "文山區",
+                "address": "台北市文山區忠順街二段10號1樓",
+                "store_id": "189695",
+                "store_name": "文忠"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "190330",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5649454,
+                    25.0424801
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "信義區 ",
+                "city": "台北市",
+                "section": "信義區",
+                "address": "台北市信義區基隆路一段178號180號1樓",
+                "store_id": "190330",
+                "store_name": "必成"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "190743",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.530118,
+                    25.0139612
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "文山區 ",
+                "city": "台北市",
+                "section": "中正區",
+                "address": "台北市中正區思源街16號",
+                "store_id": "190743",
+                "store_name": "博源"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197205",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.500961,
+                    25.137221
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "北投區 ",
+                "city": "台北市",
+                "section": "北投區",
+                "address": "台北市北投區中庸里大業路715-717號",
+                "store_id": "197205",
+                "store_name": "雙全"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197227",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.6195717,
+                    25.0733952
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "內湖區 ",
+                "city": "台北市",
+                "section": "內湖區",
+                "address": "台北市內湖區康樂街125巷2號2之1號",
+                "store_id": "197227",
+                "store_name": "瓏山林"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197560",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5335394,
+                    25.0590059
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "中山區 ",
+                "city": "台北市",
+                "section": "中山區",
+                "address": "台北市中山區松江路237號1樓",
+                "store_id": "197560",
+                "store_name": "統佳"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197744",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5269059,
+                    25.0332237
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "大安區 ",
+                "city": "台北市",
+                "section": "大安區",
+                "address": "台北市大安區金山南路二段18號1樓",
+                "store_id": "197744",
+                "store_name": "金信"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "200929",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5287942,
+                    25.1057885
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "北投區 ",
+                "city": "台北市",
+                "section": "士林區",
+                "address": "台北市士林區忠誠路一段126號",
+                "store_id": "200929",
+                "store_name": "誠義"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "846604",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4915865,
+                    25.032063
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "中正區 ",
+                "city": "台北市",
+                "section": "萬華區",
+                "address": "台北市萬華區環河南路二段207號",
+                "store_id": "846604",
+                "store_name": "雙環"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "865834",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5315574,
+                    25.0580554
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "中山區 ",
+                "city": "台北市",
+                "section": "中山區",
+                "address": "台北市中山區民生東路二段113號",
+                "store_id": "865834",
+                "store_name": "中福"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "946230",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5256626,
+                    25.0597579
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "中山區 ",
+                "city": "台北市",
+                "section": "中山區",
+                "address": "台北市中山區林森北路411號",
+                "store_id": "946230",
+                "store_name": "京都"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "948649",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5202804,
+                    25.1098719
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "北投區 ",
+                "city": "台北市",
+                "section": "北投區",
+                "address": "台北市北投區明德路114號",
+                "store_id": "948649",
+                "store_name": "明德"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "962209",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.517646,
+                    25.10564
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "北投區 ",
+                "city": "台北市",
+                "section": "北投區",
+                "address": "台北市北投區文林北路98號100號",
+                "store_id": "962209",
+                "store_name": "新豪美"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "971867",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.531581,
+                    25.0511675
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "中山區 ",
+                "city": "台北市",
+                "section": "中山區",
+                "address": "台北市中山區一江街11號13號",
+                "store_id": "971867",
+                "store_name": "鑫東一"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "992945",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5051869,
+                    25.0923393
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "士林區 ",
+                "city": "台北市",
+                "section": "士林區",
+                "address": "台北市士林區社中街320號322號1樓",
+                "store_id": "992945",
+                "store_name": "社中"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "992967",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5135932,
+                    25.0714182
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "士林區 ",
+                "city": "台北市",
+                "section": "大同區",
+                "address": "台北市大同區重慶北路3段258、260、262號1樓",
+                "store_id": "992967",
+                "store_name": "酒泉"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "214320",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5039807,
+                    25.0452369
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "中正區 ",
+                "city": "台北市",
+                "section": "萬華區",
+                "address": "台北市萬華區武昌街二段122之1號",
+                "store_id": "214320",
+                "store_name": "鑫日新"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "239455",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5681946,
+                    25.0282944
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "信義區 ",
+                "city": "台北市",
+                "section": "信義區",
+                "address": "台北市信義區松仁路162號164號1樓",
+                "store_id": "239455",
+                "store_name": "北府"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "249212",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.594971,
+                    25.0797897
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "內湖區 ",
+                "city": "台北市",
+                "section": "內湖區",
+                "address": "台北市內湖區星雲街136號",
+                "store_id": "249212",
+                "store_name": "金雲"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "250038",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5928917,
+                    25.0682619
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "內湖區 ",
+                "city": "台北市",
+                "section": "內湖區",
+                "address": "台北市內湖區民權東路六段180巷17號19號",
+                "store_id": "250038",
+                "store_name": "名寶"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "250359",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5524327,
+                    25.0532337
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "松山區 ",
+                "city": "台北市",
+                "section": "松山區",
+                "address": "台北市松山區健康路11號",
+                "store_id": "250359",
+                "store_name": "健一"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "251400",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.50644,
+                    25.044045
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "中正區 ",
+                "city": "台北市",
+                "section": "萬華區",
+                "address": "台北市萬華區西寧南路141號1樓2樓",
+                "store_id": "251400",
+                "store_name": "西寧南"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "254649",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5493628,
+                    25.0540532
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "松山區 ",
+                "city": "台北市",
+                "section": "松山區",
+                "address": "台北市松山區敦化北路149號1樓",
+                "store_id": "254649",
+                "store_name": "敦北"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "254878",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5647672,
+                    25.0334688
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "信義區 ",
+                "city": "台北市",
+                "section": "信義區",
+                "address": "台北市信義區信義路五段7號35樓",
+                "store_id": "254878",
+                "store_name": "一零一"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "261821",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5313073,
+                    25.1058595
+                ]
+            },
+            "properties": {
+                "zo_name": "北一區 ",
+                "do_name": "士林區 ",
+                "city": "台北市",
+                "section": "士林區",
+                "address": "台北市士林區忠義街68號",
+                "store_id": "261821",
+                "store_name": "凱立"
+            }
+        }
+    ]
+}

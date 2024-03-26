@@ -1,0 +1,265 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "id": "120700",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4889352,
+                    25.0822153
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "三重區 ",
+                "city": "新北市",
+                "section": "三重區",
+                "address": "新北市三重區仁愛街479號479之1號",
+                "store_id": "120700",
+                "store_name": "分子尾"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "148982",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4533513,
+                    25.1066763
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "林口區 ",
+                "city": "新北市",
+                "section": "五股區",
+                "address": "新北市五股區成泰路四段12號1樓",
+                "store_id": "148982",
+                "store_name": "泰里"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "190329",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.3970374,
+                    25.0785269
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "林口區 ",
+                "city": "新北市",
+                "section": "林口區",
+                "address": "新北市林口區粉寮路1段62、64號1樓",
+                "store_id": "190329",
+                "store_name": "仁森"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "871482",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.459289,
+                    25.0915441
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "淡水區 ",
+                "city": "新北市",
+                "section": "蘆洲區",
+                "address": "新北市蘆洲區永平街32巷12弄1號",
+                "store_id": "871482",
+                "store_name": "統吉"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "886875",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.50543,
+                    24.9956039
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "永和區 ",
+                "city": "新北市",
+                "section": "中和區",
+                "address": "新北市中和區景安路100號1樓102號1樓104號1樓",
+                "store_id": "886875",
+                "store_name": "景禮"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "895798",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5154161,
+                    25.0148839
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "永和區 ",
+                "city": "新北市",
+                "section": "永和區",
+                "address": "新北市永和區文化路7號",
+                "store_id": "895798",
+                "store_name": "永和"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "916468",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4136046,
+                    25.0037436
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "樹林區 ",
+                "city": "新北市",
+                "section": "樹林區",
+                "address": "新北市樹林區光華街2號4號",
+                "store_id": "916468",
+                "store_name": "武林"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "960535",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.433449,
+                    25.032465
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "板城區 ",
+                "city": "新北市",
+                "section": "新莊區",
+                "address": "新北市新莊區中正路516-1號",
+                "store_id": "960535",
+                "store_name": "輔大"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "982328",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.333196,
+                    24.964655
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "樹林區 ",
+                "city": "新北市",
+                "section": "鶯歌區",
+                "address": "新北市鶯歌區鶯桃路432號1樓",
+                "store_id": "982328",
+                "store_name": "長虹"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "985534",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4754257,
+                    25.0129729
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "板橋區 ",
+                "city": "新北市",
+                "section": "板橋區",
+                "address": "新北市板橋區民生路一段53號",
+                "store_id": "985534",
+                "store_name": "正隆"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "112400",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4214634,
+                    25.1811761
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "淡水區 ",
+                "city": "新北市",
+                "section": "淡水區",
+                "address": "新北市淡水區沙崙路24號1樓",
+                "store_id": "112400",
+                "store_name": "金崙"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "207735",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4726918,
+                    25.0100278
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "板橋區 ",
+                "city": "新北市",
+                "section": "板橋區",
+                "address": "新北市板橋區長安街202.204號",
+                "store_id": "207735",
+                "store_name": "板安"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "240938",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.3970295,
+                    25.0785293
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "林口區 ",
+                "city": "新北市",
+                "section": "林口區",
+                "address": "新北市林口區粉寮路1段62、64號1樓",
+                "store_id": "240938",
+                "store_name": "仁森"
+            }
+        }
+    ]
+}

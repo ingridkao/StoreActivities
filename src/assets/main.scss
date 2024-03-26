@@ -1,0 +1,54 @@
+@import './base.css';
+@import 'extent';
+
+#app {
+  margin: 0 auto;
+  font-weight: normal;
+}
+a {
+  text-decoration: none;
+  color: hsla(160, 100%, 37%, 1);
+  transition: 0.4s;
+  padding: 3px;
+}
+@media (hover: hover) {
+  a:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+  }
+}
+// ==== Page ====
+main{
+  @extend %flex-col;
+  justify-content: space-between;
+  width: 100%;
+  padding: 1.5rem 1rem 3rem 1rem;
+  h1{
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin: .5rem auto;
+  }
+  >section{
+    width: 100%;
+    max-width: 22rem;
+  }
+}
+// ==== Content Secton ====
+
+
+section{
+  &.linkBox{
+    @extend %flex-row;
+    justify-content: space-around;
+    >a {
+      margin-bottom: 1rem;
+    }
+  }
+  &.cardSection{
+    @extend %flex-row;
+    justify-content: center;
+
+    height: 20rem;
+    border: 1px solid #ddd;
+  }
+}

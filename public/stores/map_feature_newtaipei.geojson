@@ -1,0 +1,285 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "id": "127549",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.9228651,
+                    25.0514923
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "基隆區 ",
+                "city": "新北市",
+                "section": "貢寮區",
+                "address": "新北市貢寮區仁和路9號",
+                "store_id": "127549",
+                "store_name": "貢寮"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "127930",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.5153325,
+                    24.9930935
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "永和區 ",
+                "city": "新北市",
+                "section": "中和區",
+                "address": "新北市中和區景平路240巷1弄4號",
+                "store_id": "127930",
+                "store_name": "天城"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "136624",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4322735,
+                    25.0549434
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "林口區 ",
+                "city": "新北市",
+                "section": "泰山區",
+                "address": "新北市泰山區仁愛路66號",
+                "store_id": "136624",
+                "store_name": "公園賞"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "160041",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4596604,
+                    25.1546186
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "淡水區 ",
+                "city": "新北市",
+                "section": "淡水區",
+                "address": "新北市淡水區中正東路二段65號",
+                "store_id": "160041",
+                "store_name": "紅林站"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "171133",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.6321562,
+                    25.0696868
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "汐止區 ",
+                "city": "新北市",
+                "section": "汐止區",
+                "address": "新北市汐止區湖前街37號39號1樓",
+                "store_id": "171133",
+                "store_name": "湖鑫"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "174213",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.489416,
+                    25.066542
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "蘆洲區 ",
+                "city": "新北市",
+                "section": "三重區",
+                "address": "新北市三重區重陽路三段11號13號1樓",
+                "store_id": "174213",
+                "store_name": "修德"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "179780",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4005934,
+                    24.9431301
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "土城區 ",
+                "city": "新北市",
+                "section": "三峽區",
+                "address": "新北市三峽區介壽路三段153號1樓",
+                "store_id": "179780",
+                "store_name": "成峽"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "184391",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4381259,
+                    25.1897977
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "淡水區 ",
+                "city": "新北市",
+                "section": "淡水區",
+                "address": "新北市淡水區濱海路一段430號432號",
+                "store_id": "184391",
+                "store_name": "愛琴灣"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "185349",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.47962,
+                    25.008516
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "中和區 ",
+                "city": "新北市",
+                "section": "中和區",
+                "address": "新北市中和區員山路504號",
+                "store_id": "185349",
+                "store_name": "員新"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "190400",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.487972,
+                    25.084338
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "三重區 ",
+                "city": "新北市",
+                "section": "三重區",
+                "address": "新北市三重區溪尾街321號323號1樓",
+                "store_id": "190400",
+                "store_name": "重富"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "194860",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4327391,
+                    25.1748783
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "淡水區 ",
+                "city": "新北市",
+                "section": "淡水區",
+                "address": "新北市淡水區中正路1號",
+                "store_id": "194860",
+                "store_name": "新滬站"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197054",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.472265,
+                    25.047764
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "蘆洲區 ",
+                "city": "新北市",
+                "section": "三重區",
+                "address": "新北市三重區光復路一段25號27號1樓",
+                "store_id": "197054",
+                "store_name": "先嗇宮"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "198596",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.4682998,
+                    25.0247683
+                ]
+            },
+            "properties": {
+                "zo_name": "北三區 ",
+                "do_name": "板城區 ",
+                "city": "新北市",
+                "section": "板橋區",
+                "address": "新北市板橋區光武街2巷2號",
+                "store_id": "198596",
+                "store_name": "武江"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "200745",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    121.641961,
+                    25.0640666
+                ]
+            },
+            "properties": {
+                "zo_name": "北二區 ",
+                "do_name": "汐止區 ",
+                "city": "新北市",
+                "section": "汐止區",
+                "address": "新北市汐止區樟樹一路113號115號",
+                "store_id": "200745",
+                "store_name": "新汐農"
+            }
+        }
+    ]
+}

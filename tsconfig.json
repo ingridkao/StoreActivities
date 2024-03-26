@@ -10,5 +10,10 @@
     {
       "path": "./tsconfig.vitest.json"
     }
-  ]
+  ],
+  "compilerOptions": {
+    "module": "es2020"
+  },
+  "typeRoots": ["./node_modules/@types/", "./types"],
+  "exclude": ["print", "node_modules"]
 }

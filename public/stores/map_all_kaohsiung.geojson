@@ -1,0 +1,5565 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "id": "117911",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2959764,
+                    22.7214377
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區加昌里壽民路58號",
+                "store_id": "117911",
+                "store_name": "樂民"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "120191",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.287954,
+                    22.654745
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區龍水里美術東二路103號1樓",
+                "store_id": "120191",
+                "store_name": "美藝"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "120250",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.294868,
+                    22.712008
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區後昌路858之2號1樓",
+                "store_id": "120250",
+                "store_name": "秀昌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "121747",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3741242,
+                    22.6198903
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區杭州西街111號1樓",
+                "store_id": "121747",
+                "store_name": "鳳城"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "122485",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3376857,
+                    22.6104431
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區新強里崗山北街36號38號1樓",
+                "store_id": "122485",
+                "store_name": "來家"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "122946",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.398064,
+                    22.5012688
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "林園區",
+                "address": "高雄市林園區鳳林路一段2號1樓",
+                "store_id": "122946",
+                "store_name": "霖園"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "125831",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3518394,
+                    22.6875533
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區灣內里鳳仁路95之15號",
+                "store_id": "125831",
+                "store_name": "友福"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "128003",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.313868,
+                    22.665183
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區鼎泰里河堤路510號",
+                "store_id": "128003",
+                "store_name": "河堤"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "128612",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3060651,
+                    22.6165481
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區廣澤里文橫二路41號",
+                "store_id": "128612",
+                "store_name": "華堂"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "129051",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3064072,
+                    22.7912996
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區大德二路61號",
+                "store_id": "129051",
+                "store_name": "鑫程"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "130040",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2970932,
+                    22.6364265
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區自立一路68號70號",
+                "store_id": "130040",
+                "store_name": "國城"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "130084",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3120328,
+                    22.5924023
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區鎮興路170號",
+                "store_id": "130084",
+                "store_name": "鎮興"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "131696",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2618179,
+                    22.8626153
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "安澎區 ",
+                "city": "高雄市",
+                "section": "路竹區",
+                "address": "高雄市路竹區社南里大社路42號42之1號46號1樓",
+                "store_id": "131696",
+                "store_name": "路科"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "131892",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3957494,
+                    22.5035455
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "林園區",
+                "address": "高雄市林園區東林西路1號3號5號",
+                "store_id": "131892",
+                "store_name": "園東"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "132150",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2920059,
+                    22.6284799
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區成功一路455之1號",
+                "store_id": "132150",
+                "store_name": "太華"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "132208",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2636198,
+                    22.8546192
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "路竹區",
+                "address": "高雄市路竹區中正路172號172之1號",
+                "store_id": "132208",
+                "store_name": "元茗"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "135263",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.347405,
+                    22.6351322
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區文福里文化西路35號1樓",
+                "store_id": "135263",
+                "store_name": "文建"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "135735",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.4211821,
+                    22.6597927
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大樹區",
+                "address": "高雄市大樹區久堂里城隍巷15-8號",
+                "store_id": "135735",
+                "store_name": "九曲堂"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "135919",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3885926,
+                    22.6145451
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區自由路1號",
+                "store_id": "135919",
+                "store_name": "前中"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "135964",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.305044,
+                    22.6374289
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區建國二路233號",
+                "store_id": "135964",
+                "store_name": "港東"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "136532",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3510645,
+                    22.7314742
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區中山路344號346號",
+                "store_id": "136532",
+                "store_name": "翠屏"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "136727",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2494628,
+                    22.8808516
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "安澎區 ",
+                "city": "高雄市",
+                "section": "湖內區",
+                "address": "高雄市湖內區湖東里中山路一段229號",
+                "store_id": "136727",
+                "store_name": "新東專"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "136749",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3712961,
+                    22.580236
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "小港區",
+                "address": "高雄市小港區孔宅里高鳳路332號",
+                "store_id": "136749",
+                "store_name": "孔鳳"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "136901",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2899219,
+                    22.7993013
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區壽天里公園東路154號",
+                "store_id": "136901",
+                "store_name": "岡農"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "137041",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3024003,
+                    22.6129475
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區中華四路64號",
+                "store_id": "137041",
+                "store_name": "高昇"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "139081",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.29062,
+                    22.784613
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區信義里介壽路10巷25弄9號15號",
+                "store_id": "139081",
+                "store_name": "新兆湘"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "139092",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.349125,
+                    22.731944
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區中山路261號",
+                "store_id": "139092",
+                "store_name": "鈦旺"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "140025",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3403189,
+                    22.6428105
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區寶國里義華路171號",
+                "store_id": "140025",
+                "store_name": "義明"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "140209",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.319651,
+                    22.682919
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區民族一路987號",
+                "store_id": "140209",
+                "store_name": "重愛"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "140704",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.325614,
+                    22.6049686
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區瑞隆路619號",
+                "store_id": "140704",
+                "store_name": "新憲德"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "141246",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3227927,
+                    22.6330484
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區建國一路211號213號",
+                "store_id": "141246",
+                "store_name": "新道明"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "142412",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.4013883,
+                    22.7730141
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "燕巢區",
+                "address": "高雄市燕巢區深中路58號1樓",
+                "store_id": "142412",
+                "store_name": "高應大"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "142618",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.4035773,
+                    22.5397253
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區義仁里鳳林一路51巷5號1樓",
+                "store_id": "142618",
+                "store_name": "昭明"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "143242",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3030425,
+                    22.7270634
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區翠屏里德惠路66號1樓",
+                "store_id": "143242",
+                "store_name": "雙德"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "143611",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2848276,
+                    22.7975632
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區壽峰里前峰路152號之1一樓",
+                "store_id": "143611",
+                "store_name": "仁峰"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "143921",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.30852,
+                    22.643726
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區德智里熱河一街190號192號",
+                "store_id": "143921",
+                "store_name": "智由"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "146171",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2900297,
+                    22.7104983
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區建昌里右昌街148號",
+                "store_id": "146171",
+                "store_name": "鑫建昌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "146872",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.297013,
+                    22.670436
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區新下里華夏路256號",
+                "store_id": "146872",
+                "store_name": "南屏"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "147244",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3287182,
+                    22.5938572
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區鎮南里五甲二路744號",
+                "store_id": "147244",
+                "store_name": "天虹"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "149767",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3049415,
+                    22.6811727
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區新光里華夏路979號",
+                "store_id": "149767",
+                "store_name": "浚興"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "151173",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3065641,
+                    22.6486205
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區安東里吉林街271號",
+                "store_id": "151173",
+                "store_name": "吉遠"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "154699",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3135552,
+                    22.687358
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區福山里華夏路1453號1樓",
+                "store_id": "154699",
+                "store_name": "夏義"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "154910",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3976755,
+                    22.6019368
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區振成里鳳林三路322號324號1樓",
+                "store_id": "154910",
+                "store_name": "大發"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "155072",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3442355,
+                    22.6122122
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區新康街241號243號245號1樓",
+                "store_id": "155072",
+                "store_name": "鳳新"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "158440",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2978736,
+                    22.6659618
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區華豐里裕誠路1160號明倫路138號",
+                "store_id": "158440",
+                "store_name": "華豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "158679",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.332564,
+                    22.6056966
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區瑞昌里瑞隆路310號312號",
+                "store_id": "158679",
+                "store_name": "瑞崗"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "159502",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2964223,
+                    22.6273311
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區大同二路1號",
+                "store_id": "159502",
+                "store_name": "龍客"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "160177",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3090508,
+                    22.6879294
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區高鐵路107號B1",
+                "store_id": "160177",
+                "store_name": "左運"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "161343",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3182568,
+                    22.6702207
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區民族一路900號",
+                "store_id": "161343",
+                "store_name": "文藻"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "161491",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3662726,
+                    22.6237882
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區鎮東里光遠路73號",
+                "store_id": "161491",
+                "store_name": "黃埔"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "162117",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.315659,
+                    22.632016
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區六合路117號",
+                "store_id": "162117",
+                "store_name": "文昌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "162586",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3029819,
+                    22.6202168
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區仁政里青年一路299號301號303號1樓",
+                "store_id": "162586",
+                "store_name": "新仁政"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "162623",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3197166,
+                    22.6805633
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區福山里民族一路1014號1樓",
+                "store_id": "162623",
+                "store_name": "榮耀"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "162726",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3022078,
+                    22.7992448
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區大仁北路175號1樓",
+                "store_id": "162726",
+                "store_name": "仁東"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "162911",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3113212,
+                    22.6121124
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區復興三路150號1樓",
+                "store_id": "162911",
+                "store_name": "復興"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "162933",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.306429,
+                    22.613248
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區一心二路208號",
+                "store_id": "162933",
+                "store_name": "新盛心"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "163475",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2278723,
+                    22.8597281
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "安澎區 ",
+                "city": "高雄市",
+                "section": "路竹區",
+                "address": "高雄市路竹區華正路390號",
+                "store_id": "163475",
+                "store_name": "竹滬"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "163729",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.299877,
+                    22.6046364
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區復興四路10號1樓",
+                "store_id": "163729",
+                "store_name": "軟科"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "164032",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3083479,
+                    22.7526494
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "橋頭區",
+                "address": "高雄市橋頭區仕隆里隆豐路275號",
+                "store_id": "164032",
+                "store_name": "新隆豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "164102",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.31631,
+                    22.730614
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區惠豐里德民路115號",
+                "store_id": "164102",
+                "store_name": "都會"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "165574",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3215797,
+                    22.7285365
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區惠民里高楠公路1764之1號",
+                "store_id": "165574",
+                "store_name": "惠心"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "165758",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2961335,
+                    22.7926814
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區岡山路264號1樓",
+                "store_id": "165758",
+                "store_name": "岡燕"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "166692",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3751856,
+                    22.6224874
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區鳳林路97號1樓",
+                "store_id": "166692",
+                "store_name": "鳳陽"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "167008",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3244206,
+                    22.7401375
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區創新路76號78號80號1樓",
+                "store_id": "167008",
+                "store_name": "豐創"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "167293",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3243728,
+                    22.6714682
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區鼎強里鼎金後路432號1.2樓",
+                "store_id": "167293",
+                "store_name": "鼎強"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "167385",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3129825,
+                    22.7207278
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區加昌路275.277號",
+                "store_id": "167385",
+                "store_name": "新加昌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "170026",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.298605,
+                    22.708118
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區光輝里後昌路637號639號1樓",
+                "store_id": "170026",
+                "store_name": "新昌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "170347",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3486167,
+                    22.7249468
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區三民路213號",
+                "store_id": "170347",
+                "store_name": "大民"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "170576",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.269403,
+                    22.613939
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "旗津區",
+                "address": "高雄市旗津區海岸路9號",
+                "store_id": "170576",
+                "store_name": "旗津"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "170602",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3292008,
+                    22.8804525
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "阿蓮區",
+                "address": "高雄市阿蓮區中山路15號17號19號",
+                "store_id": "170602",
+                "store_name": "阿蓮"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "170613",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2939073,
+                    22.656066
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區龍子里裕誠路2080號",
+                "store_id": "170613",
+                "store_name": "誠美"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "171052",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2925874,
+                    22.6660418
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區慶豐街1號",
+                "store_id": "171052",
+                "store_name": "慶豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "171328",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3946105,
+                    22.6372728
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區鳳屏一路564號",
+                "store_id": "171328",
+                "store_name": "鳳屏"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "171535",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3341591,
+                    22.6030436
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區永豐路1號",
+                "store_id": "171535",
+                "store_name": "泰豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "173863",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3049963,
+                    22.6658395
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區新上里裕誠路448號",
+                "store_id": "173863",
+                "store_name": "凹仔底"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "177290",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3175657,
+                    22.6399637
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區安康里九如一路877號",
+                "store_id": "177290",
+                "store_name": "鑫永年"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "177430",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3178769,
+                    22.641489
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區中民里永年街48號50號52號1樓",
+                "store_id": "177430",
+                "store_name": "延慶"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "177474",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2898405,
+                    22.6804018
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區勝利路123號",
+                "store_id": "177474",
+                "store_name": "勝利"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "180193",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.369672,
+                    22.623946
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區中山東路209-1及209-2號1樓",
+                "store_id": "180193",
+                "store_name": "瑞竹"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "180300",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3568318,
+                    22.6247464
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區中山路223.225.227號",
+                "store_id": "180300",
+                "store_name": "鳳凌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "181440",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3168362,
+                    22.6846102
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區重愛路168號1樓",
+                "store_id": "181440",
+                "store_name": "山福"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "181484",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2856916,
+                    22.7860634
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區後協里仁壽路248號",
+                "store_id": "181484",
+                "store_name": "柳橋"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "181510",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3073264,
+                    22.7506973
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "橋頭區",
+                "address": "高雄市橋頭區仕豐路61號1樓",
+                "store_id": "181510",
+                "store_name": "仕豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "182281",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3037926,
+                    22.6475741
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區安和里察哈爾一街148號1樓",
+                "store_id": "182281",
+                "store_name": "後驛"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "182306",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2812329,
+                    22.6549017
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區光榮里西藏街6號1樓",
+                "store_id": "182306",
+                "store_name": "藏美"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "182650",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2921907,
+                    22.6865666
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區左營大路340號",
+                "store_id": "182650",
+                "store_name": "廟東"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "182797",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.302379,
+                    22.819468
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區嘉興路151號1.2樓",
+                "store_id": "182797",
+                "store_name": "嘉興"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "183206",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3501743,
+                    22.6450377
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區青年路二段596號.598巷2.4號1.2樓",
+                "store_id": "183206",
+                "store_name": "澄清湖"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "183228",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3935243,
+                    22.6047572
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區永芳里進學路103號1樓",
+                "store_id": "183228",
+                "store_name": "源隆"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "183480",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3085411,
+                    22.6611207
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左营区",
+                "address": "高雄市左營區明誠二路318.320號",
+                "store_id": "183480",
+                "store_name": "新上明"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "184081",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3052728,
+                    22.6102527
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區林森四路255號",
+                "store_id": "184081",
+                "store_name": "亞新灣"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "184092",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2823022,
+                    22.6213073
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "鹽埕區",
+                "address": "高雄市鹽埕區大勇路29號",
+                "store_id": "184092",
+                "store_name": "駁藝"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "184209",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3075305,
+                    22.6312041
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區中正三路84號1樓",
+                "store_id": "184209",
+                "store_name": "正仁"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "184553",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3052212,
+                    22.6015621
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區忠純里中華五路969巷6號1樓",
+                "store_id": "184553",
+                "store_name": "忠純"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "184830",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2646319,
+                    22.8409222
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "安澎區 ",
+                "city": "高雄市",
+                "section": "路竹區",
+                "address": "高雄市路竹區中山路1821號",
+                "store_id": "184830",
+                "store_name": "高苑"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "185040",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.330407,
+                    22.622286
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區三多一路239號1樓",
+                "store_id": "185040",
+                "store_name": "福海"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "185202",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2952774,
+                    22.6681515
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區華榮路387號1樓",
+                "store_id": "185202",
+                "store_name": "榮夏"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "185660",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3047196,
+                    22.6301495
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區林森一路162號",
+                "store_id": "185660",
+                "store_name": "新球庭"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186098",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3323119,
+                    22.6232353
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區三多一路108.110號",
+                "store_id": "186098",
+                "store_name": "宏順"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186113",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3093913,
+                    22.6877488
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區菜公里高鐵路115號1樓",
+                "store_id": "186113",
+                "store_name": "彩虹市"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186135",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3476417,
+                    22.728947
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區翠屏里三民路304號",
+                "store_id": "186135",
+                "store_name": "大社"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186205",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.295299,
+                    22.6328727
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區草江里七賢二路193號193-1號193-2號1樓",
+                "store_id": "186205",
+                "store_name": "新盛"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186272",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3301681,
+                    22.6420978
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區寶安里建興路51號53號1樓",
+                "store_id": "186272",
+                "store_name": "龍城"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186375",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3616574,
+                    22.6339173
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區北門里鳳松路108.110.112號1樓",
+                "store_id": "186375",
+                "store_name": "鳳駿"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186456",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3009199,
+                    22.611343
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區自強三路2.6號新光路72.74號",
+                "store_id": "186456",
+                "store_name": "強泥"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186630",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3082489,
+                    22.5922014
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區鎮陽里前鎮街278號280號",
+                "store_id": "186630",
+                "store_name": "鎮陽"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186733",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2941212,
+                    22.6625391
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區明誠里裕誠路1610號1612號",
+                "store_id": "186733",
+                "store_name": "祥裕"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "186836",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.411956,
+                    22.5613785
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區新厝里鳳林二路160號",
+                "store_id": "186836",
+                "store_name": "鳳明"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "187666",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2933911,
+                    22.7964057
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區壽天里壽天路37號之3",
+                "store_id": "187666",
+                "store_name": "肯娣"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "188119",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3358824,
+                    22.6559872
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "鳥松區",
+                "address": "高雄市鳥松區本館路196號1樓",
+                "store_id": "188119",
+                "store_name": "球場"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "188614",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2876422,
+                    22.6801601
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區左營大路14-5號",
+                "store_id": "188614",
+                "store_name": "新左營"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "188658",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3075695,
+                    22.6629386
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區明華一路126號",
+                "store_id": "188658",
+                "store_name": "安華"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "188739",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3932986,
+                    22.6346538
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區中庄里八德路69號71號73號",
+                "store_id": "188739",
+                "store_name": "德庄"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "188913",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2763279,
+                    22.6516755
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區青海路641號1樓",
+                "store_id": "188913",
+                "store_name": "海青"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "189514",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3407436,
+                    22.6370516
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區九如一路126號128號130號",
+                "store_id": "189514",
+                "store_name": "鑫寶華"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "189754",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.4287728,
+                    22.5627699
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區潮寮里華中南路275號",
+                "store_id": "189754",
+                "store_name": "潮欣"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "189994",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3232769,
+                    22.7396937
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區創新路1號",
+                "store_id": "189994",
+                "store_name": "新創"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "190248",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3067364,
+                    22.6593822
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區富國路112號116號1樓",
+                "store_id": "190248",
+                "store_name": "國勝"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "190640",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3706655,
+                    22.6361378
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區鳳仁路174號",
+                "store_id": "190640",
+                "store_name": "鳳仁"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "193111",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2936589,
+                    22.6182287
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區海邊路48.48-1.48-2號",
+                "store_id": "193111",
+                "store_name": "海音"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "193465",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3059026,
+                    22.6761243
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區博愛三路378.380號",
+                "store_id": "193465",
+                "store_name": "生態園"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "193579",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2798542,
+                    22.7269663
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區藍田路962.966號",
+                "store_id": "193579",
+                "store_name": "學高"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "194309",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3483372,
+                    22.6387827
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區文濱路22號",
+                "store_id": "194309",
+                "store_name": "方城市"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "194424",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3140065,
+                    22.610765
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區民權二路380號1樓",
+                "store_id": "194424",
+                "store_name": "長權"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "195069",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3252238,
+                    22.6358248
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區樂仁路116號",
+                "store_id": "195069",
+                "store_name": "樂仁"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "195209",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3360059,
+                    22.6165765
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區武營路433號",
+                "store_id": "195209",
+                "store_name": "武營"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "195771",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3116431,
+                    22.6170592
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區復興二路22號",
+                "store_id": "195771",
+                "store_name": "興陽"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "195863",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.298219,
+                    22.664385
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區明倫路149號",
+                "store_id": "195863",
+                "store_name": "華榮"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197238",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.329195,
+                    22.72557
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區鳳楠路235號朝明路233號",
+                "store_id": "197238",
+                "store_name": "好事登"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197711",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3011078,
+                    22.6248481
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區中山一路11號(中央公園站內)",
+                "store_id": "197711",
+                "store_name": "中央公"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197870",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3042986,
+                    22.6225777
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區振成里新田路114號",
+                "store_id": "197870",
+                "store_name": "新崛江"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "197881",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3084033,
+                    22.6859008
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區重信路601號",
+                "store_id": "197881",
+                "store_name": "信科"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "198161",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.354132,
+                    22.681183
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區仁雄路6之11號1樓",
+                "store_id": "198161",
+                "store_name": "仁雄"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "198378",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.302619,
+                    22.60196
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區成功二路62號",
+                "store_id": "198378",
+                "store_name": "正成"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "198448",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.335502,
+                    22.6016347
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區善志街27號",
+                "store_id": "198448",
+                "store_name": "善志"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "198644",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2481294,
+                    22.7840551
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "彌陀區",
+                "address": "高雄市彌陀區中正路246號",
+                "store_id": "198644",
+                "store_name": "彌盛"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "198703",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2610542,
+                    22.8540464
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "安澎區 ",
+                "city": "高雄市",
+                "section": "路竹區",
+                "address": "高雄市路竹區國昌路1號",
+                "store_id": "198703",
+                "store_name": "一揚"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "199865",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.284691,
+                    22.6494574
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區龍水二路1.3號",
+                "store_id": "199865",
+                "store_name": "美南"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "200239",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2921212,
+                    22.6802373
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區勝利路110號",
+                "store_id": "200239",
+                "store_name": "春秋閣"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "200505",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.348049,
+                    22.5667599
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "小港區",
+                "address": "高雄市小港區民益路46號1樓及2樓",
+                "store_id": "200505",
+                "store_name": "永益"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "200860",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3148747,
+                    22.6638626
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區鼎泰里裕誠路56號",
+                "store_id": "200860",
+                "store_name": "鼎瑞"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "200882",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2911269,
+                    22.6217148
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區博孝里河東路8號1樓",
+                "store_id": "200882",
+                "store_name": "愛河"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201070",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3453748,
+                    22.7472041
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區保社里旗楠路71號",
+                "store_id": "201070",
+                "store_name": "好事達"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201092",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2744511,
+                    22.6217119
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區臨海二路8號",
+                "store_id": "201092",
+                "store_name": "臨海"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201162",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2940198,
+                    22.6587463
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區裕誠路1946號1樓",
+                "store_id": "201162",
+                "store_name": "裕東"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201173",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3120644,
+                    22.6322401
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區六合一路27號",
+                "store_id": "201173",
+                "store_name": "中義"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201221",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3517455,
+                    22.7275907
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區中華路16-66號1.2樓",
+                "store_id": "201221",
+                "store_name": "華社"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "206754",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2904586,
+                    22.6822306
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區店仔頂路23.25號",
+                "store_id": "206754",
+                "store_name": "蓮潭"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "207241",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.315206,
+                    22.6564789
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區民族一路427-20號2樓",
+                "store_id": "207241",
+                "store_name": "悅誠"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213556",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3566692,
+                    22.5670274
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "小港區",
+                "address": "高雄市小港區漢民路381號",
+                "store_id": "213556",
+                "store_name": "順苓"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213590",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.4181414,
+                    22.6004863
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區光明路二段810號1F",
+                "store_id": "213590",
+                "store_name": "三隆"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "215057",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2847985,
+                    22.7928881
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區仁壽里公園西路三段131號133號",
+                "store_id": "215057",
+                "store_name": "鴻林"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "832915",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2832786,
+                    22.6260606
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "鹽埕區",
+                "address": "高雄市鹽埕區大仁路139號瀨南路172號",
+                "store_id": "832915",
+                "store_name": "鹽埕"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "854030",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3353529,
+                    22.7064349
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區竹後里水管路189號",
+                "store_id": "854030",
+                "store_name": "台塑"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "855480",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3210892,
+                    22.6880107
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區民族一路1084號",
+                "store_id": "855480",
+                "store_name": "華民"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "861061",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.32294,
+                    22.573923
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區草衙里后安路146號",
+                "store_id": "861061",
+                "store_name": "后安"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "865513",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3330355,
+                    22.6110997
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區五武漢里武慶二路52號54號",
+                "store_id": "865513",
+                "store_name": "武慶"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "865627",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3084888,
+                    22.6222654
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區青年一路220號",
+                "store_id": "865627",
+                "store_name": "寶成"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "874104",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.353584,
+                    22.581887
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "小港區",
+                "address": "高雄市小港區桂陽路255號",
+                "store_id": "874104",
+                "store_name": "桂陽"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "885643",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3230519,
+                    22.6460558
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區正興路1號3號",
+                "store_id": "885643",
+                "store_name": "雙興"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "895879",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3023982,
+                    22.6217563
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區新田路189號191號",
+                "store_id": "895879",
+                "store_name": "新田"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "895938",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3107324,
+                    22.6109688
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區復興三路116號",
+                "store_id": "895938",
+                "store_name": "高雄"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "896193",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2952202,
+                    22.6158537
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區苓雅二路243號",
+                "store_id": "896193",
+                "store_name": "永泰"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "896551",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3003033,
+                    22.6643422
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區明誠里南屏路527號529號",
+                "store_id": "896551",
+                "store_name": "文信"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "896997",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3023986,
+                    22.6182159
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區中山二路463號",
+                "store_id": "896997",
+                "store_name": "中雅"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "905077",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.308229,
+                    22.6294505
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區復興一路28號30號32號1樓",
+                "store_id": "905077",
+                "store_name": "復橫"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "905354",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.308841,
+                    22.63739
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區復興一路176號",
+                "store_id": "905354",
+                "store_name": "興國"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "913584",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2881304,
+                    22.7952947
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區壽峰里前峰路80號",
+                "store_id": "913584",
+                "store_name": "利明"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "914152",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3009569,
+                    22.6126193
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區意誠里三多四路93號",
+                "store_id": "914152",
+                "store_name": "東泥"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "914244",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3275506,
+                    22.8825763
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "阿蓮區",
+                "address": "高雄市阿蓮區民生路92號",
+                "store_id": "914244",
+                "store_name": "蓮山"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "915546",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3149041,
+                    22.6095918
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區一心一路406號",
+                "store_id": "915546",
+                "store_name": "天山"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "922500",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3323756,
+                    22.6027835
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區瑞平里公正路25號",
+                "store_id": "922500",
+                "store_name": "崗正"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "928597",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.29447,
+                    22.627874
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區自強二路172號",
+                "store_id": "928597",
+                "store_name": "前金"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "936037",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3058148,
+                    22.6027093
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區忠純里中華五路997號",
+                "store_id": "936037",
+                "store_name": "獅甲"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "936381",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2992447,
+                    22.7930102
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區碧紅里中山北路2號",
+                "store_id": "936381",
+                "store_name": "群弘益"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "941615",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3012169,
+                    22.6113171
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區意誠里新光路64號66號",
+                "store_id": "941615",
+                "store_name": "新強"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "943806",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.33521,
+                    22.640448
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區寶德里覺民路338號",
+                "store_id": "943806",
+                "store_name": "光武"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "956400",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.30204,
+                    22.635646
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區中山一路279號",
+                "store_id": "956400",
+                "store_name": "天健"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "966119",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.363702,
+                    22.571207
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "小港區",
+                "address": "高雄市小港區泰山里宏平路83-2號",
+                "store_id": "966119",
+                "store_name": "宏文"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "966359",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.300146,
+                    22.655269
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區龍子里大順一路825號",
+                "store_id": "966359",
+                "store_name": "順屏"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "968908",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3143909,
+                    22.7742193
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區大遼里大遼路122-3號",
+                "store_id": "968908",
+                "store_name": "友情"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "971502",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3085197,
+                    22.6329208
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區中東里復興一路72號1樓",
+                "store_id": "971502",
+                "store_name": "新三華"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "971708",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.304587,
+                    22.6139575
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區中山二路268號B1(高雄捷運R8站)",
+                "store_id": "971708",
+                "store_name": "雄捷"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "972158",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3668912,
+                    22.5636941
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "小港區",
+                "address": "高雄市小港區山明里水秀路59號",
+                "store_id": "972158",
+                "store_name": "田金"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "972561",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2857656,
+                    22.6681751
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區雄峰里九如四路2007號1樓",
+                "store_id": "972561",
+                "store_name": "新前鋒"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "973128",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2911119,
+                    22.6720738
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區翠華路601巷122,126號",
+                "store_id": "973128",
+                "store_name": "新海勝"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "982409",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3116599,
+                    22.6148409
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區復興三路435號437號",
+                "store_id": "982409",
+                "store_name": "鑫愛群"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "985372",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3118127,
+                    22.6449806
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區十全一路74號",
+                "store_id": "985372",
+                "store_name": "安生"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "990411",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2679029,
+                    22.6117387
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "旗津區",
+                "address": "高雄市旗津區振興里廟前路12號1樓",
+                "store_id": "990411",
+                "store_name": "旗廟"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "991171",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3319871,
+                    22.6372766
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區有光路123號.125號.127號",
+                "store_id": "991171",
+                "store_name": "新有光"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "992288",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3667845,
+                    22.6279909
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區瑞興里瑞興路250-1號1樓",
+                "store_id": "992288",
+                "store_name": "瑞順"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "992772",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3131671,
+                    22.6618814
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區明吉路9號",
+                "store_id": "992772",
+                "store_name": "理馨"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "993797",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2914159,
+                    22.7261859
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區藍昌路379號1樓",
+                "store_id": "993797",
+                "store_name": "藍田"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "993926",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3911517,
+                    22.6373808
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區後庄村成功路43號",
+                "store_id": "993926",
+                "store_name": "美庄"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "996682",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.297539,
+                    22.627941
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區大同一路268號1樓",
+                "store_id": "996682",
+                "store_name": "青盛"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "111843",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3157905,
+                    22.6175509
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區三多二路437號439號441號441-1號1樓",
+                "store_id": "111843",
+                "store_name": "學源"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "113621",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3110467,
+                    22.6408562
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區九如二路86號1樓",
+                "store_id": "113621",
+                "store_name": "新如東"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "113768",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.4328997,
+                    22.6911618
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大樹區",
+                "address": "高雄市大樹區樣腳里中興東路7號9號11號13號",
+                "store_id": "113768",
+                "store_name": "大樹"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "113953",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3329733,
+                    22.6300479
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區正大里輔仁路一段145號1樓",
+                "store_id": "113953",
+                "store_name": "正心"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "114200",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2642006,
+                    22.865245
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "安澎區 ",
+                "city": "高雄市",
+                "section": "路竹區",
+                "address": "高雄市路竹區大社路162號",
+                "store_id": "114200",
+                "store_name": "路好"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "115856",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3386355,
+                    22.7421031
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區清豐里旗楠路891號1樓",
+                "store_id": "115856",
+                "store_name": "麗景"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "117025",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.340605,
+                    22.593517
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區二甲里鳳南一路25號27號",
+                "store_id": "117025",
+                "store_name": "鳳南"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "117726",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.326108,
+                    22.657639
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區本和里大福街211號1樓",
+                "store_id": "117726",
+                "store_name": "宏明"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "193915",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3846896,
+                    22.5576388
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "小港區",
+                "address": "高雄市小港區高坪二十二路321號",
+                "store_id": "193915",
+                "store_name": "坪高"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "196637",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3293403,
+                    22.596109
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區龍成路58.60.62號",
+                "store_id": "196637",
+                "store_name": "龍鎮"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "198024",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3287182,
+                    22.5938572
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區鎮南里五甲二路744號",
+                "store_id": "198024",
+                "store_name": "天虹"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "207300",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3050582,
+                    22.6591061
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區富民路65號一.二樓",
+                "store_id": "207300",
+                "store_name": "富慶"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213682",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.340605,
+                    22.593517
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區二甲里鳳南一路25號27號",
+                "store_id": "213682",
+                "store_name": "鳳南"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213730",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.325614,
+                    22.6049686
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區瑞隆路619號",
+                "store_id": "213730",
+                "store_name": "新憲德"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213811",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3476237,
+                    22.7289417
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區翠屏里三民路304號",
+                "store_id": "213811",
+                "store_name": "大社"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201335",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2925874,
+                    22.6660418
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區慶豐街1號",
+                "store_id": "201335",
+                "store_name": "慶豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213729",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2978736,
+                    22.6659618
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區華豐里裕誠路1160號明倫路138號",
+                "store_id": "213729",
+                "store_name": "華豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213785",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3067364,
+                    22.6593822
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區富國路112號116號1樓",
+                "store_id": "213785",
+                "store_name": "國勝"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213615",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3148747,
+                    22.6638626
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區鼎泰里裕誠路56號",
+                "store_id": "213615",
+                "store_name": "鼎瑞"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201405",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3243728,
+                    22.6714682
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區鼎金後路432號1樓",
+                "store_id": "201405",
+                "store_name": "鼎強"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "216636",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.315206,
+                    22.6564789
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區民族一路427-20號2樓",
+                "store_id": "216636",
+                "store_name": "悅誠"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201508",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3064072,
+                    22.7912996
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區大德二路61號",
+                "store_id": "201508",
+                "store_name": "鑫程"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "213992",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3023982,
+                    22.6217563
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區新田路189號191號",
+                "store_id": "213992",
+                "store_name": "新田"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "214098",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2900297,
+                    22.7104983
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區建昌里右昌街148號",
+                "store_id": "214098",
+                "store_name": "鑫建昌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201601",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.282362,
+                    22.6213145
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "鹽埕區",
+                "address": "高雄市鹽埕區大勇路29號",
+                "store_id": "201601",
+                "store_name": "駁藝"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "207698",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3036183,
+                    22.623287
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區文橫二路164-1號.164-2號",
+                "store_id": "207698",
+                "store_name": "文漾"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201612",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2911119,
+                    22.6720738
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區翠華路601巷122,126號",
+                "store_id": "201612",
+                "store_name": "新海勝"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201645",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.297203,
+                    22.636389
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區自立一路68號70號",
+                "store_id": "201645",
+                "store_name": "國城"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201689",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3067364,
+                    22.6593822
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區富國路112號116號1樓",
+                "store_id": "201689",
+                "store_name": "國勝"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "207207",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.305252,
+                    22.6139452
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區中山二路268-1號",
+                "store_id": "207207",
+                "store_name": "捷心"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "208093",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3666148,
+                    22.6276767
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區瑞興路216號1樓",
+                "store_id": "208093",
+                "store_name": "瑞順"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "208989",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3315329,
+                    22.7228163
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區鳳楠路82號1樓",
+                "store_id": "208989",
+                "store_name": "四季春"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "209890",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3443389,
+                    22.6766272
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區仁雄路97-3號1樓",
+                "store_id": "209890",
+                "store_name": "尚讚"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "209971",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.4680209,
+                    22.9043821
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "內門區",
+                "address": "高雄市內門區大學路200號",
+                "store_id": "209971",
+                "store_name": "靜月"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "210409",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3204567,
+                    22.6397106
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區九如一路805號",
+                "store_id": "210409",
+                "store_name": "平等"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "211734",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3068425,
+                    22.6150756
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市苓雅區文橫二路2號與文橫二路二巷2號",
+                "store_id": "211734",
+                "store_name": "華文"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "216278",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3452842,
+                    22.7470544
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區保社里旗楠路71號",
+                "store_id": "216278",
+                "store_name": "好事達"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "217097",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2926958,
+                    22.6660399
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區慶豐街1號",
+                "store_id": "217097",
+                "store_name": "慶豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "209937",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2933214,
+                    22.7364338
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "橋頭區",
+                "address": "高雄市橋頭區甲昌路227號",
+                "store_id": "209937",
+                "store_name": "侑群"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "211310",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2982829,
+                    22.6920889
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區左營大路676號1樓2樓678號1樓",
+                "store_id": "211310",
+                "store_name": "哈囉"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "212047",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3921547,
+                    22.5068927
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "林園區",
+                "address": "高雄市林園區仁愛路129.131.133號",
+                "store_id": "212047",
+                "store_name": "仁忠"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "217525",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3287182,
+                    22.5938572
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區鎮南里五甲二路744號",
+                "store_id": "217525",
+                "store_name": "天虹"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201874",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3353836,
+                    22.7064017
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區竹後里水管路189號191號",
+                "store_id": "201874",
+                "store_name": "台塑"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "212368",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3006528,
+                    22.6324613
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區六合二路37號",
+                "store_id": "212368",
+                "store_name": "合莊"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201900",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.308229,
+                    22.6294505
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區復興一路28號30號32號1樓",
+                "store_id": "201900",
+                "store_name": "復橫"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "211930",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.324957,
+                    22.616694
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市前鎮區英明路一號",
+                "store_id": "211930",
+                "store_name": "新聖明"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "201922",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3118127,
+                    22.6449806
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區十全一路74號",
+                "store_id": "201922",
+                "store_name": "安生"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "211103",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3460789,
+                    22.7329517
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區大社路30-29號",
+                "store_id": "211103",
+                "store_name": "社旺"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "217318",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3364662,
+                    22.6166249
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區武營路433號",
+                "store_id": "217318",
+                "store_name": "武營"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "207676",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.276265,
+                    22.731938
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區大學西路815.817號",
+                "store_id": "207676",
+                "store_name": "晉學"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "217536",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.315659,
+                    22.632016
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區六合路117號",
+                "store_id": "217536",
+                "store_name": "文昌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "238821",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.30204,
+                    22.635646
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區中山一路279號",
+                "store_id": "238821",
+                "store_name": "天健"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "212003",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3024723,
+                    22.6414347
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區博愛一路1號",
+                "store_id": "212003",
+                "store_name": "新博如"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "212184",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.309412,
+                    22.666932
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區自由二路398號1樓400號1樓402號1樓",
+                "store_id": "212184",
+                "store_name": "昱廣"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "228743",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3154565,
+                    22.627773
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區五福一路77號1樓",
+                "store_id": "228743",
+                "store_name": "文化"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "238577",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3518394,
+                    22.6875533
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區灣內里鳳仁路95之15號",
+                "store_id": "238577",
+                "store_name": "友福"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "239592",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.321617,
+                    22.728583
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區惠民里高楠公路1764之1號",
+                "store_id": "239592",
+                "store_name": "惠心"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "237345",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3292008,
+                    22.8804525
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "阿蓮區",
+                "address": "高雄市阿蓮區中山路15號17號19號",
+                "store_id": "237345",
+                "store_name": "阿蓮"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "228651",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.351525,
+                    22.565724
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "小港區",
+                "address": "高雄市小港區漢民路219號1樓",
+                "store_id": "228651",
+                "store_name": "苓民"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "228905",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.303057,
+                    22.6221852
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "新興區",
+                "address": "高雄市新興區新田路144號1樓2樓144之1號1樓2樓",
+                "store_id": "228905",
+                "store_name": "新田"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "210421",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2769056,
+                    22.649178
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區鼓山三路8-25號1樓",
+                "store_id": "210421",
+                "store_name": "銀川"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "206880",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3479462,
+                    22.6747718
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區仁孝路368號1樓",
+                "store_id": "206880",
+                "store_name": "赤山"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "229414",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2704219,
+                    22.6237028
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "鼓山區",
+                "address": "高雄市鼓山區臨海二路52號1樓52-1號1樓",
+                "store_id": "229414",
+                "store_name": "哨臨"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "237448",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2920059,
+                    22.6284799
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區成功一路455之1號",
+                "store_id": "237448",
+                "store_name": "太華"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "229241",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2383815,
+                    22.7938709
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "彌陀區",
+                "address": "高雄市彌陀區文安路1-1號1樓1-2號1樓",
+                "store_id": "229241",
+                "store_name": "彌安"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "241285",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2920059,
+                    22.6284799
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區成功一路455之1號",
+                "store_id": "241285",
+                "store_name": "太華"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "237529",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3946105,
+                    22.6372728
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區鳳屏一路564號566號",
+                "store_id": "237529",
+                "store_name": "鳳屏"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "210683",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3960473,
+                    22.632635
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "大寮區",
+                "address": "高雄市大寮區八德路197號1樓2樓199號",
+                "store_id": "210683",
+                "store_name": "德龍"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "211321",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3256834,
+                    22.5789199
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "前鎮區 ",
+                "city": "高雄市",
+                "section": "前鎮區",
+                "address": "高雄市前鎮區南衙路47號",
+                "store_id": "211321",
+                "store_name": "南衙"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "211480",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3415751,
+                    22.6106908
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "鳳山區 ",
+                "city": "高雄市",
+                "section": "鳳山區",
+                "address": "高雄市鳳山區大明路193號",
+                "store_id": "211480",
+                "store_name": "大強"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "249393",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3360059,
+                    22.6165765
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區武營路433號",
+                "store_id": "249393",
+                "store_name": "武營"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "230975",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2940561,
+                    22.7239964
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區壽豐路517號519號521號",
+                "store_id": "230975",
+                "store_name": "惠豐"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "229942",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.336093,
+                    22.6924789
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區八德西路1870-1號1樓",
+                "store_id": "229942",
+                "store_name": "得永"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "230997",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2922494,
+                    22.6328824
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "前金區",
+                "address": "高雄市前金區自強一路149號1樓2樓",
+                "store_id": "230997",
+                "store_name": "幸福川"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "231820",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3037121,
+                    22.800668
+                ]
+            },
+            "properties": {
+                "zo_name": "嘉南區 ",
+                "do_name": "岡山區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區竹圍東街93號1樓",
+                "store_id": "231820",
+                "store_name": "竹圍東"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "237703",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.31681,
+                    22.6846091
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區重愛路168號1樓",
+                "store_id": "237703",
+                "store_name": "山福"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "207849",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.35325,
+                    22.7238328
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "大社區",
+                "address": "高雄市大社區金龍路380號",
+                "store_id": "207849",
+                "store_name": "金順"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "208059",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2925542,
+                    22.7847341
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "岡山區",
+                "address": "高雄市岡山區介壽路78號",
+                "store_id": "208059",
+                "store_name": "新兆湘"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "193591",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3511627,
+                    22.6806682
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "大仁區 ",
+                "city": "高雄市",
+                "section": "仁武區",
+                "address": "高雄市仁武區仁雄路35號澄合街172之1號",
+                "store_id": "193591",
+                "store_name": "澄雄"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "231602",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3019299,
+                    22.6797071
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區政德路585號",
+                "store_id": "231602",
+                "store_name": "重德"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "235408",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3331363,
+                    22.6236059
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "苓雅區 ",
+                "city": "高雄市",
+                "section": "苓雅區",
+                "address": "高雄市苓雅區三多一路66號68號",
+                "store_id": "235408",
+                "store_name": "宏順"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "253808",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3024723,
+                    22.6414347
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區博愛一路1號",
+                "store_id": "253808",
+                "store_name": "新博如"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "254786",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.308391,
+                    22.6859128
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區重信路601號",
+                "store_id": "254786",
+                "store_name": "信科"
+            }
+        }
+    ]
+}

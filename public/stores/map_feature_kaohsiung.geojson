@@ -1,0 +1,125 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "id": "120250",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.294868,
+                    22.712008
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "楠梓區 ",
+                "city": "高雄市",
+                "section": "楠梓區",
+                "address": "高雄市楠梓區後昌路858之2號1樓",
+                "store_id": "120250",
+                "store_name": "秀昌"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "135964",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.305044,
+                    22.6374289
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區建國二路233號",
+                "store_id": "135964",
+                "store_name": "港東"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "188614",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.2876422,
+                    22.6801601
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區左營大路14-5號",
+                "store_id": "188614",
+                "store_name": "新左營"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "188658",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3075695,
+                    22.6629386
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "左營區 ",
+                "city": "高雄市",
+                "section": "左營區",
+                "address": "高雄市左營區明華一路126號",
+                "store_id": "188658",
+                "store_name": "安華"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "943806",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.33521,
+                    22.640448
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區寶德里覺民路338號",
+                "store_id": "943806",
+                "store_name": "光武"
+            }
+        },
+        {
+            "type": "Feature",
+            "id": "992772",
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    120.3131671,
+                    22.6618814
+                ]
+            },
+            "properties": {
+                "zo_name": "高屏區 ",
+                "do_name": "三民區 ",
+                "city": "高雄市",
+                "section": "三民區",
+                "address": "高雄市三民區明吉路9號",
+                "store_id": "992772",
+                "store_name": "理馨"
+            }
+        }
+    ]
+}
