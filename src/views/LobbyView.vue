@@ -2,7 +2,9 @@
 /**
  * 活動大廳
  * 1. 確認使用者同意裝置位置資料
- * 請求所有活動列表
+ * 2. 確認URL是否有ct參數
+ * 3. 請求所有活動列表
+ * 4. 連結至指定活動
  */
 import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'

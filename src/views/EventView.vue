@@ -1,13 +1,29 @@
 <script setup lang="ts">
 /**
- * 活動檢核
- *        false coming soon
+ * 活動詳情頁面
+ * 1. 檢測是否為進行中活動
+ *    false >>> coming soon | Wrap up
+ * 2. 確認LINE login
+ *    true  >>> 有userdata且有ct送出打卡
+ *    false >>> 點擊按鈕觸發LINE Login
  */
-import { RouterLink } from 'vue-router';
-import CameraBtn from '@/components/button/CameraBtn.vue';
+
+// import { RouterLink } from 'vue-router';
+// import CameraBtn from '@/components/button/CameraBtn.vue';
+import { useLIFF } from '@/composable/useLIFF'
+const { message, error, isLoggedIn } = useLIFF()
+
 </script>
 
 <template>
+  <div>
+    <p v-if="message">{{ message }}</p>
+    <p v-if="error">
+      <code>{{ error }}</code>
+    </p>
+    {{ isLoggedIn }}
+  </div>
+
   <div class="event">
     <h1>活動詳情頁面</h1>
     <section class="event_time">
