@@ -64,11 +64,11 @@ watch(
 </script>
 
 <template>
+  <HeaderMenu />
   <main>
-    ==={{ siteLoading }} ===
-    <HeaderMenu />
-    <div id="mapboxBasic"></div>
-    <CameraBtn />
+    <a href="https://qwaretest-9b8d6.web.app/map8">先看這個</a>
+    <!-- <div id="mapboxBasic"></div> -->
+    <!-- <CameraBtn /> -->
   </main>
 </template>
 

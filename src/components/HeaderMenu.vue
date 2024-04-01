@@ -1,12 +1,26 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useLIFF } from '@/composable/useLIFF'
+const {
+  userOS, openInLIFF,
+  userLoggedIn, userProfile,
+  initLine, externalBrowserLogout
+} = useLIFF()
 
 const navOpen = ref<Boolean>(false)
+const togggle = () => {
+  navOpen.value = !navOpen.value
+}
 const menuList = ref([
+  // {
+  //   link: '/',
+  //   key: 'lobby',
+  //   name: '活動大廳'
+  // },
   {
-    link: '/',
-    key: 'Home',
+    link: '/activity',
+    key: 'Activity',
     name: '活動說明'
   },
   {
@@ -22,29 +36,46 @@ const menuList = ref([
   {
     link: '/collected',
     key: 'collected',
-    name: '門市地圖'
+    name: '集郵冊'
   },
 ])
-const togggle = () => {
-  navOpen.value = !navOpen.value
-}
+
+onMounted(() => {
+  initLine()
+})
 </script>
 
 <template>
-  <div id="sidemenu">
+  <div id="sidemenu" class="mainheader">
     <button class="sidemenu__btn" @click="togggle" :class="{ active: navOpen }">
       <span class="top"></span>
       <span class="mid"></span>
       <span class="bottom"></span>
     </button>
+    <div>
+      <p>{{ userLoggedIn ? '已登入' : '未登入' }}</p>
+      <p>{{ userOS }}開啟|{{ openInLIFF ? 'LINE內開啟' : '外部瀏覽器' }}</p>
+    </div>
+
     <transition name="translateX">
       <nav v-show="navOpen">
         <div class="sidemenu__wrapper">
-          <ul class="sidemenu__list">
+          <ul class="sidemenu__list" v-if="userProfile.userId">
             <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
               <RouterLink :to="item.link">{{ item.name }}</RouterLink>
             </li>
           </ul>
+          <div v-else>
+            <RouterLink to="/">回到大廳</RouterLink>
+          </div>
+        </div>
+        <div v-if="userProfile.userId" class="userProfile">
+          <img :src="userProfile.pictureUrl" :alt="userProfile.displayName">
+          <div>
+            <p>{{ userProfile.displayName || '' }}</p>
+            <p>{{ userProfile.userId || '' }}</p>
+            <button @click="externalBrowserLogout">登出</button>
+          </div>
         </div>
       </nav>
     </transition>
@@ -61,6 +92,13 @@ const togggle = () => {
     width: 200px;
     height: 100vh;
     background: grey;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: column;
+
+    overflow: hidden;
   }
 
   .sidemenu {
@@ -116,11 +154,12 @@ const togggle = () => {
     }
 
     &__wrapper {
-      padding-top: 50px;
+      width: 100%;
+      padding-top: 4.5rem;
     }
 
     &__list {
-      padding-top: 50px;
+      padding-top: 4.5rem;
       list-style: none;
       padding: 0;
       margin: 0;
@@ -131,7 +170,7 @@ const togggle = () => {
         text-decoration: none;
         line-height: 1.25rem;
         font-size: 1.25rem;
-        padding: .5rem;
+        padding: .5rem 1rem;
         display: block;
         color: white;
         transition: .4s ease;

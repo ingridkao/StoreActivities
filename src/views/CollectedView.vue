@@ -4,6 +4,8 @@
  * 請求所有|打卡紀錄?
  */
 import { reactive } from 'vue'
+import HeaderMenu from '@/components/HeaderMenu.vue';
+
 interface CollectedListType {
   store_id?: string;
   store_name?: string;
@@ -25,6 +27,7 @@ const collectedStore = reactive<CollectedListType[]>([
 </script>
 
 <template>
+  <HeaderMenu />
   <main>
     <section v-if="collectedStore.length === 0">
       <h1>一起來蒐集吧</h1>

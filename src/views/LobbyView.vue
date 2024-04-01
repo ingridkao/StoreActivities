@@ -7,57 +7,28 @@
  * 4. 連結至指定活動
  */
 import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
 import ActivitiesItem from '@/components/ActivitiesItem.vue'
 import { useGeolocation } from '@vueuse/core'
-import { useURL } from '@/composable/useURL'
 import { useFetchData } from '@/composable/useFetch'
+
 const { coords, error } = useGeolocation()
-const { ct } = useURL()
-const { verifyQRCode } = useFetchData()
 const latitude = computed(() => Number.isFinite(coords.value.latitude) ? coords.value.latitude : null)
 const longitude = computed(() => Number.isFinite(coords.value.longitude) ? coords.value.longitude : null)
+console.log(error.value);
 
-const activitiesList = ref([
-  {
-    id: 1,
-    title: '使徒來襲',
-    msg: '給地圖滿滿的初號機',
-    link: '/mapEva',
-  },
-  {
-    id: 2,
-    title: '門市打卡活動',
-    msg: '全台7-11門市',
-    link: '/mapStore ',
-  },
-  {
-    id: 3,
-    title: '測試1',
-    msg: '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試',
-    link: '/',
-  },
-  {
-    id: 4,
-    title: '測試2',
-    msg: '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試',
-    link: '/ ',
-  }
-])
+type CollectedListType = {
+  id?: number;
+  title?: string;
+  msg?: string;
+  link?: string;
+}
+const activitiesList = ref<CollectedListType[]>([])
 
-const router = useRouter()
+const { fetchActivityData } = useFetchData()
 onMounted(async () => {
-  const verifyRes = await verifyQRCode()
-  console.log(verifyRes);
-  if (ct.value) {
-    // const verifyRes = await verifyQRCode(ct.value)
-    // console.log(verifyRes);
-    // 檢核成功 >>> get events
-    // 檢核失敗 >>>
-    router.push({ path: '/error' })
-  } else {
-
-  }
+  fetchActivityData().then((res: any) => {
+    activitiesList.value = res || []
+  })
 })
 
 </script>
@@ -69,10 +40,9 @@ onMounted(async () => {
       <p>{{ error ? error.message : error }}</p>
       <p>此活動需要裝置位置，請確認是否提供位置資訊存取權</p>
     </section>
-    {{ latitude }}
-    {{ longitude }}
-    <section v-for="{ id, title, msg, link } in activitiesList" :key="id">
-      <ActivitiesItem :title="title" :msg="msg" :link="link" :img="'https://picsum.photos/seed/picsum/400/300'" />
+    {{ latitude }} | {{ longitude }}
+    <section v-for="activities in activitiesList" :key="activities.id">
+      <ActivitiesItem v-if="activities.id" :activities="activities" />
     </section>
   </main>
 </template>

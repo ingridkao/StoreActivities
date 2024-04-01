@@ -1,25 +1,48 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { useRouter } from 'vue-router'
+import { useFetchData } from '@/composable/useFetch'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
 
 const props = defineProps<{
-  title: String,
-  img: String,
-  msg: String,
-  link: String
+  activities: { id?: number; title?: string; msg?: string; link?: string }
 }>()
+const img = 'https://picsum.photos/seed/picsum/400/300'
 
+const router = useRouter()
+const { verifyQRCode } = useFetchData()
+const { setAcStorage } = useBrowserStorage()
+
+const linkTo = async () => {
+  const routerPath = props.activities.link
+  if (routerPath) {
+    const verifyRes = await verifyQRCode().catch(error => { })
+    if (verifyRes) {
+      const activitiesID = String(props.activities.id) || ''
+      setAcStorage(activitiesID)
+      router.push({
+        path: `${routerPath}`,
+        query: {
+          ac: activitiesID
+        }
+      })
+    }
+  } else {
+    // 檢核失敗或沒有link
+    router.push({ path: '/error' })
+  }
+}
 </script>
 
 <template>
-  <RouterLink :to="props.link" class="activities">
+  <div class="activities" @click="linkTo">
     <div class="activities_img">
-      <img :src="props.img" :alt="props.title">
+      <img :src="img" :alt="props.activities.title || ''">
     </div>
-    <h2>{{ props.title }}</h2>
+    <h2>{{ props.activities.title || '' }}</h2>
     <h3>
-      {{ props.msg }}
+      {{ props.activities.msg || '' }}
     </h3>
-  </RouterLink>
+  </div>
 </template>
 
 <style lang="scss" scoped>

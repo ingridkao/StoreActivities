@@ -17,38 +17,63 @@ a {
   }
 }
 // ==== Page ====
-main{
+main {
   @extend %flex-col;
   justify-content: space-between;
   width: 100%;
   padding: 1.5rem 1rem 3rem 1rem;
-  h1{
+  h1 {
     text-align: center;
     font-weight: bold;
     font-size: 1.5rem;
-    margin: .5rem auto;
+    margin: 0.5rem auto;
   }
-  >section{
+  > section {
     width: 100%;
     max-width: 22rem;
   }
 }
 // ==== Content Secton ====
 
-
-section{
-  &.linkBox{
+section {
+  &.linkBox {
     @extend %flex-row;
     justify-content: space-around;
-    >a {
+    > a {
       margin-bottom: 1rem;
     }
   }
-  &.cardSection{
+  &.cardSection {
     @extend %flex-row;
     justify-content: center;
 
     height: 20rem;
     border: 1px solid #ddd;
+  }
+}
+
+.mainheader {
+  @extend %flex-row;
+  justify-content: space-between;
+  padding: 0.25rem 1rem;
+  .userProfile {
+    @extend %flex-row;
+    img {
+      width: 36px;
+      height: 36px;
+      background: #cfd4da;
+      border-radius: 50%;
+    }
+    > div {
+      @extend %flex-col;
+      align-items: flex-start;
+      padding: 0 0.5rem;
+    }
+  }
+  .userNotAuth {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #cfd4da;
   }
 }

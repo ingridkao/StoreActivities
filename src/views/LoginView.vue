@@ -21,7 +21,7 @@ import axios from 'axios';
 
 const line_channel_id = import.meta.env.VITE_LINE_CHANNEL_ID;         // Line Channel ID
 const line_channel_secret = import.meta.env.VITE_LINE_CHANNEL_SECRET; // Line Channel Secret
-const line_redirect_uri = import.meta.env.VITE_LINE_REDIRECT;         // Line developer Callback URL
+const line_redirect_uri = import.meta.env.VITE_LINE_CHANNEL_REDIRECT;         // Line developer Callback URL
 
 export default {
   data() {
@@ -29,7 +29,7 @@ export default {
       loginInfo: null as null | loginInfoOption,
       line_channel_id: import.meta.env.VITE_LINE_CHANNEL_ID,    // Line Channel ID
       line_channel_secret: import.meta.env.VITE_LINE_CHANNEL_SECRET,// Line Channel Secret
-      line_redirect_uri: import.meta.env.VITE_LINE_REDIRECT,  // Line developer Callback URL
+      line_redirect_uri: import.meta.env.VITE_LINE_CHANNEL_REDIRECT,  // Line developer Callback URL
     }
   },
   async mounted() {

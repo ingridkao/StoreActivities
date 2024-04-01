@@ -1,35 +1,15 @@
 <script setup lang="ts">
-/**
- * 活動詳情頁面
- * 1. 檢測是否為進行中活動
- *    false >>> coming soon | Wrap up
- * 2. 確認LINE login
- *    true  >>> 有userdata且有ct送出打卡
- *    false >>> 點擊按鈕觸發LINE Login
- */
-
-// import { RouterLink } from 'vue-router';
-// import CameraBtn from '@/components/button/CameraBtn.vue';
-import { useLIFF } from '@/composable/useLIFF'
-const { message, error, isLoggedIn } = useLIFF()
-
+defineEmits(['enter'])
 </script>
 
 <template>
-  <div>
-    <p v-if="message">{{ message }}</p>
-    <p v-if="error">
-      <code>{{ error }}</code>
-    </p>
-    {{ isLoggedIn }}
-  </div>
-
-  <div class="event">
+  <main class="event">
     <h1>活動詳情頁面</h1>
     <section class="event_time">
       <div>4.16</div>
       <div>6.30</div>
     </section>
+
     <section>
       <h2>活動辦法</h2>
       <p>
@@ -47,16 +27,15 @@ const { message, error, isLoggedIn } = useLIFF()
     </section>
 
     <section class="linkBox">
-      <!-- Line登入 -->
-      <button>進入活動</button>
-      <!-- <RouterLink to="/mapStore">門市地圖查詢</RouterLink> -->
-      <!-- <RouterLink to="/scan">進入活動</RouterLink> -->
+      <button @click="$emit('enter')">進入活動</button>
     </section>
-  </div>
+  </main>
 </template>
 
 <style lang="scss" scoped>
 .event {
+  flex-direction: column;
+
   section {}
 
   @media (min-width: 1024px) {

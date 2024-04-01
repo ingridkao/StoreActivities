@@ -27,6 +27,20 @@ This template should help get you started developing with Vue 3 in Vite.
 
 <!-- [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard) -->
 
+# env
+
+```
+VITE_LINE_CHANNEL_ID=
+VITE_LINE_CHANNEL_SECRET=
+VITE_LIFF_ID=
+VITE_LINE_CHANNEL_REDIRECT=
+VITE_LIFF_ENDPOINT_URL=
+
+VITE_MAP8_KEY=
+VITE_MAPBOX_KEY=
+
+```
+
 # Skills
 
 ## 使用套件
@@ -77,7 +91,6 @@ npm i --save-dev @types/qs
 ```sh
 npm i @vueuse/core
 ```
-
 
 # Project Setup
 
