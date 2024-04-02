@@ -32,6 +32,12 @@ main {
     width: 100%;
     max-width: 22rem;
   }
+  &#mapMain {
+    position: relative;
+    height: 100dvh;
+    padding: 0;
+    overflow: hidden;
+  }
 }
 // ==== Content Secton ====
 
@@ -55,6 +61,7 @@ section {
 .mainheader {
   @extend %flex-row;
   justify-content: space-between;
+  width: 100%;
   padding: 0.25rem 1rem;
   .userProfile {
     @extend %flex-row;

@@ -3,10 +3,23 @@ import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
 const {
-  userOS, openInLIFF,
-  userLoggedIn, userProfile,
+  getOpenInClient, getUserOS, getLineProfile,
   initLine, externalBrowserLogout
 } = useLIFF()
+const openInLIFF = getOpenInClient()
+const userOS = getUserOS()
+const userLoggedIn = ref()
+const userProfile = ref()
+onMounted(() => {
+  initLine().then(res => {
+    userLoggedIn.value = res || false
+    getLineProfile().then(profile => {
+      if (profile) {
+        userProfile.value = profile
+      }
+    })
+  })
+})
 
 const navOpen = ref<Boolean>(false)
 const togggle = () => {
@@ -40,9 +53,6 @@ const menuList = ref([
   },
 ])
 
-onMounted(() => {
-  initLine()
-})
 </script>
 
 <template>
@@ -60,16 +70,18 @@ onMounted(() => {
     <transition name="translateX">
       <nav v-show="navOpen">
         <div class="sidemenu__wrapper">
-          <ul class="sidemenu__list" v-if="userProfile.userId">
-            <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
-              <RouterLink :to="item.link">{{ item.name }}</RouterLink>
+          <ul class="sidemenu__list">
+            <template v-if="userProfile && userProfile.userId">
+              <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
+                <RouterLink :to="item.link">{{ item.name }}</RouterLink>
+              </li>
+            </template>
+            <li v-else class="sidemenu__item">
+              <RouterLink to="/">回到大廳</RouterLink>
             </li>
           </ul>
-          <div v-else>
-            <RouterLink to="/">回到大廳</RouterLink>
-          </div>
         </div>
-        <div v-if="userProfile.userId" class="userProfile">
+        <div v-if="userProfile && userProfile.userId" class="userProfile">
           <img :src="userProfile.pictureUrl" :alt="userProfile.displayName">
           <div>
             <p>{{ userProfile.displayName || '' }}</p>
