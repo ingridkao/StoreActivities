@@ -1,6 +1,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import axios from 'axios'
 // import { useRouter } from 'vue-router'
+import type { ActivityListType } from '@/composable/configurable'
 
 import { useLoadingStore } from '@/stores/loading'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
@@ -20,52 +21,68 @@ export function useFetchData() {
   const { getQueryParam } = useURL()
   const verifyQRCode = () => {
     const ctStr = getQueryParam(window.location.href, 'ct')
-
     return new Promise((resolve, reject) => {
-      resolve(true)
       if (ctStr) {
-        // 驗證ct
         // axios.get('http://localhost:8080/').then((res) => {
         //   resolve(res.data.data)
-        // })
         // 通過驗證
         setCtStorage(ctStr)
+        resolve(true)
+        // })
         // 沒有通過驗證
         // deleteStorage('ct')
+      } else {
+        resolve(false)
       }
     })
   }
 
-  const fetchActivityData = (): Promise<
-    { id: number; title: string; msg: string; link: string }[]
-  > => {
+  const fetchActivityData = (): Promise<ActivityListType[]> => {
     return new Promise((resolve, reject) => {
+      // axios.get()
       resolve([
         {
           id: 1,
           title: '測試LINE登入1',
           msg: '測試LINE Login點這個~測試LINE Login點這個~測試LINE Login點這個~',
+          statu: 1,
           link: '/activity'
         },
         {
           id: 2,
           title: '測試LINE登入2',
           msg: '測試LINE Login點這個~測試LINE Login點這個~測試LINE Login點這個~',
+          statu: 1,
           link: '/activity'
         },
         {
           id: 3,
-          title: '門市打卡活動',
-          msg: '全台7-11門市',
-          link: '/mapStore '
+          title: '預告活動',
+          msg: '測試LINE Login點這個~測試LINE Login點這個~測試LINE Login點這個~',
+          statu: 2,
+          link: '/activity'
         },
         {
           id: 4,
-          title: '使徒來襲',
+          title: '門市打卡活動',
+          msg: '全台7-11門市',
+          statu: 1,
+          link: '/mapStore '
+        },
+        {
+          id: 5,
+          title: '使徒來襲(已結束)',
           msg: '給地圖滿滿的初號機',
+          statu: 0,
           link: '/mapEva'
         }
       ])
+    })
+  }
+
+  const confirmActivity = (): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      resolve(true)
     })
   }
 
@@ -94,6 +111,7 @@ export function useFetchData() {
   return {
     verifyQRCode,
     fetchActivityData,
+    confirmActivity,
     fetchLayerData
   }
 }

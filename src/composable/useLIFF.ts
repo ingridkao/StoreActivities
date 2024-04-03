@@ -32,7 +32,10 @@ export function useLIFF() {
   const getUserOS = () => {
     return liff.getOS()
   }
-  // 判斷目前網頁是否跑在 LIFF Browser 底下，你可以藉此判斷是否要初始化 LIFF SDK 或透過 liff.closeWindow() 關閉視窗！
+
+  // 判斷目前網頁是否跑在 LIFF Browser 底下
+  // - 是否要初始化 LIFF SDK
+  // - 是否要透過 liff.closeWindow() 關閉視窗！
   const getOpenInClient = (): boolean => {
     return liff.isInClient()
   }
@@ -40,8 +43,8 @@ export function useLIFF() {
   // ============================
   const liffId = ref()
   const externalBrowserLogin = async (ct: string, ac: string) => {
-    // 無法在Line的內部瀏覽器使用login()
-    if (liff.isInClient()) return
+    // 在Line的內部瀏覽器liff.init()在執行時會自動執行登入
+    if (!liff.isInClient()) return
 
     // 讓URL有ct和ac
     const redirectUri: URL = new URL(import.meta.env.VITE_LIFF_ENDPOINT_URL)

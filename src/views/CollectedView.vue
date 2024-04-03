@@ -5,12 +5,8 @@
  */
 import { reactive } from 'vue'
 import HeaderMenu from '@/components/HeaderMenu.vue';
+import type { CollectedListType } from '@/composable/configurable'
 
-interface CollectedListType {
-  store_id?: string;
-  store_name?: string;
-  checkInTime?: string;
-}
 const collectedStore = reactive<CollectedListType[]>([
   {
     store_id: '870504',
