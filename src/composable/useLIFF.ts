@@ -1,31 +1,40 @@
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
+import type { ProfileType } from '@/composable/configurable'
 
 // https://developers.line.biz/en/docs/liff/pluggable-sdk/#activate-liff-api
 import liff from '@line/liff/core'
-
 // Functions that can be executed even before the LIFF app is initialized
 import getOS from '@line/liff/get-os'
 import isInClient from '@line/liff/is-in-client'
 
 // Functions that need liff init
-import isLoggedIn from '@line/liff/is-logged-in'
-import getProfile from '@line/liff/get-profile'
+// The liff.use() method is executed before the liff.init() method
 import login from '@line/liff/login'
 import logout from '@line/liff/logout'
+import isLoggedIn from '@line/liff/is-logged-in'
+import getProfile from '@line/liff/get-profile'
+import getFriendship from '@line/liff/get-friendship'
+// import getIDToken from '@line/liff/get-id-token'
+import closeWindow from '@line/liff/close-window'
 import scanCodeV2 from '@line/liff/scan-code-v2'
 // import isApiAvailable from '@line/liff/is-api-available'
 // import getAccessToken from '@line/liff/get-access-token'
 
-// The liff.use() method is executed before the liff.init() method
 liff.use(new getOS())
 liff.use(new isInClient())
-liff.use(new isLoggedIn())
-liff.use(new getProfile())
+
 liff.use(new login())
 liff.use(new logout())
+liff.use(new isLoggedIn())
+liff.use(new getProfile())
+liff.use(new getFriendship())
+// liff.use(new getIDToken())
+liff.use(new closeWindow())
 liff.use(new scanCodeV2())
 // liff.use(new isApiAvailable())
+// liff.use(new getAccessToken())
 
 export function useLIFF() {
   // ios || android || web
@@ -41,118 +50,126 @@ export function useLIFF() {
   }
 
   // ============================
-  const liffId = ref()
-  const externalBrowserLogin = async (ct: string, ac: string) => {
-    // 在Line的內部瀏覽器liff.init()在執行時會自動執行登入
-    if (!liff.isInClient()) return
+  const friendFlag = ref(false)
 
-    // 讓URL有ct和ac
-    const redirectUri: URL = new URL(import.meta.env.VITE_LIFF_ENDPOINT_URL)
-    const params = {} as { ct?: string; ac?: string }
-    if (ct) params['ct'] = String(ct)
-    if (ac) params['ac'] = String(ac)
-    const searchParams: URLSearchParams = new URLSearchParams(params)
-    redirectUri.search = searchParams.toString()
-
-    // 會導向login channel中LIFF設定的Endpoint URL
-    const loginLine = (redirectUri: string) => {
-      liff.login({
-        redirectUri
-      })
-    }
-
-    // 確認LIFF初始化以及沒有登入
-    if (liffId.value && !liff.isLoggedIn()) {
-      loginLine(redirectUri.href)
-    } else {
-      initLine().then((res) => {
-        if (!res) {
-          loginLine(redirectUri.href)
-        }
-      })
-    }
-  }
-
-  const router = useRouter()
-  const externalBrowserLogout = () => {
-    // 無法在Line內部瀏覽器使用logout()
-    if (liff.isInClient()) {
-      // liff.closeWindow()
-      // 開啟外部瀏覽器去大廳頁
-    } else if (liffId.value && liff.isLoggedIn()) {
-      liff.logout()
-      router.push({ path: '/' })
-    }
-  }
-
-  const getLineProfile = () => {
-    const getUserProfile = () => {
-      return new Promise((resolve, reject) => {
-        liff
-          .getProfile()
-          .then((profile) => {
-            resolve(profile || {})
-          })
-          .catch((e: Error) => {
-            console.log('error', e)
-            reject(e)
-          })
-      })
-    }
-    if (liffId.value && liff.isLoggedIn()) {
-      return getUserProfile()
-    } else {
-      return initLine().then((res) => {
-        if (res) {
-          return getUserProfile()
-        }
-      })
-    }
-  }
-
-  const liffError = ref('')
-  const initLine = () => {
+  // then  初始成功未登入 = false
+  // then  初始成功已登入 = true
+  // catch 初始失敗
+  const useLineInit = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       liff
         .init({
           liffId: import.meta.env.VITE_LIFF_ID
         })
         .then(() => {
-          liffId.value = liff.id
+          liff.getFriendship().then((data) => {
+            friendFlag.value = data && data.friendFlag ? data.friendFlag : false
+          })
           const userLoggedIn = liff.isLoggedIn()
-          // console.log(import.meta.env.VITE_LIFF_ID)
-          // console.log(liff.id)
-          resolve(userLoggedIn)
+          resolve(userLoggedIn || true)
         })
         .catch((e: Error) => {
-          liffError.value = `${e}`
-          reject(e)
+          reject(Error(`初始失敗${e}`))
         })
     })
   }
 
-  // const scanCode = () => {
-  //   if (liff.isInClient() && liffId.value) {
-  //     // 使用scanCodeV2
-  //     liff
-  //       .scanCodeV2()
-  //       .then((result) => {
-  //         // result = { value: "" }
-  //       })
-  //       .catch((error) => {
-  //         console.log('error', error)
-  //       })
-  //   } else {
-  //     //換頁去scan
-  //   }
-  // }
+  const useLineLogin = (): Promise<boolean> => {
+    const redirectUri: URL = new URL(import.meta.env.VITE_LIFF_ENDPOINT_URL)
+    return new Promise((resolve) => {
+      if (liff.isLoggedIn()) {
+        // 已登入
+        resolve(true)
+      } else if (liff.isInClient()) {
+        // 不能在LIFF瀏覽器中使用
+        // liff.init()在執行時會自動執行
+        resolve(true)
+      } else {
+        const { getAcString, getCtString } = useBrowserStorage()
+        const acStr = getAcString()
+        const ctStr = getCtString()
+        const params = {} as { ct?: string; ac?: string }
+        if (acStr) params['ac'] = String(acStr)
+        if (ctStr) params['ct'] = String(ctStr)
+        const searchParams: URLSearchParams = new URLSearchParams(params)
+        redirectUri.search = searchParams.toString()
+        liff.login({
+          redirectUri: redirectUri.href
+        })
+        resolve(true)
+      }
+    })
+  }
+
+  const useLineProfile = (isLoggedIn: boolean = false): Promise<ProfileType> => {
+    return new Promise((resolve, reject) => {
+      if (isLoggedIn) {
+        liff
+          .getProfile()
+          .then((profile) => resolve(profile))
+          .catch((e: Error) => reject(Error(`取得失敗${e}`)))
+      } else {
+        reject(Error(`未登入`))
+      }
+    })
+  }
+
+  const router = useRouter()
+  const useLineLogout = () => {
+    const isLogging = liff.isLoggedIn()
+    if (!isLogging) return
+    const isInLiff = liff.isInClient()
+    if (isInLiff) {
+      // liff.closeWindow();
+      // 開啟外部瀏覽器去大廳頁
+    } else {
+      liff.logout()
+      router.push({ path: '/' })
+    }
+  }
+
+  const scanCodeByLine = (init: boolean = false) => {
+    return new Promise((resolve, reject) => {
+      if (init) {
+        liff
+          .scanCodeV2()
+          .then((result) => resolve(result))
+          .catch((error) => reject(error))
+      } else {
+        reject('line init fall')
+      }
+    })
+  }
+
+  const isLogin = ref(false)
+  const getLineProfile = async () => {
+    try {
+      isLogin.value = await useLineInit()
+      isLogin.value = await useLineLogin()
+      const profile: ProfileType = await useLineProfile(isLogin.value)
+      return profile || {}
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const scanCode = async () => {
+    try {
+      const isLoggedIn = await useLineInit()
+      const scanRes = await scanCodeByLine(isLoggedIn)
+      console.log(scanRes)
+    } catch (error) {
+      //換頁去scan
+      console.error(error)
+    }
+  }
   return {
-    liffError,
+    isLogin,
     getUserOS,
     getOpenInClient,
+    useLineInit,
+    useLineLogout,
     getLineProfile,
-    externalBrowserLogin,
-    externalBrowserLogout,
-    initLine
+    scanCode
   }
 }

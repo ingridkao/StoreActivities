@@ -2,22 +2,18 @@
 import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
-const {
-  getOpenInClient, getUserOS, getLineProfile,
-  initLine, externalBrowserLogout
-} = useLIFF()
+import { useFetchData } from '@/composable/useFetch'
+
+const { isLogin, getOpenInClient, getUserOS, getLineProfile, useLineLogout } = useLIFF()
 const openInLIFF = getOpenInClient()
 const userOS = getUserOS()
-const userLoggedIn = ref()
 const userProfile = ref()
+
 onMounted(() => {
-  initLine().then(res => {
-    userLoggedIn.value = res || false
-    getLineProfile().then(profile => {
-      if (profile) {
-        userProfile.value = profile
-      }
-    })
+  getLineProfile().then(profile => {
+    userProfile.value = profile
+  }).catch(error => {
+    console.error(error);
   })
 })
 
@@ -26,11 +22,6 @@ const togggle = () => {
   navOpen.value = !navOpen.value
 }
 const menuList = ref([
-  // {
-  //   link: '/',
-  //   key: 'lobby',
-  //   name: '活動大廳'
-  // },
   {
     link: '/activity',
     key: 'Activity',
@@ -53,6 +44,9 @@ const menuList = ref([
   },
 ])
 
+const { getDevice } = useFetchData()
+const isMobile = getDevice()
+
 </script>
 
 <template>
@@ -63,15 +57,16 @@ const menuList = ref([
       <span class="bottom"></span>
     </button>
     <div>
-      <p>{{ userLoggedIn ? '已登入' : '未登入' }}</p>
+      <p>{{ isLogin ? '已登入' : '未登入' }}</p>
       <p>{{ userOS }}開啟|{{ openInLIFF ? 'LINE內開啟' : '外部瀏覽器' }}</p>
+      <p>isMobile:{{ isMobile ? true : false }}</p>
     </div>
 
     <transition name="translateX">
       <nav v-show="navOpen">
         <div class="sidemenu__wrapper">
           <ul class="sidemenu__list">
-            <template v-if="userProfile && userProfile.userId">
+            <template v-if="isLogin">
               <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
                 <RouterLink :to="item.link">{{ item.name }}</RouterLink>
               </li>
@@ -81,12 +76,12 @@ const menuList = ref([
             </li>
           </ul>
         </div>
-        <div v-if="userProfile && userProfile.userId" class="userProfile">
-          <img :src="userProfile.pictureUrl" :alt="userProfile.displayName">
+        <div v-if="isLogin" class="userProfile">
+          <img v-if="userProfile.pictureUrl" :src="userProfile.pictureUrl" :alt="userProfile.displayName">
           <div>
             <p>{{ userProfile.displayName || '' }}</p>
             <p>{{ userProfile.userId || '' }}</p>
-            <button @click="externalBrowserLogout">登出</button>
+            <button v-if="!openInLIFF" @click="useLineLogout">登出</button>
           </div>
         </div>
       </nav>

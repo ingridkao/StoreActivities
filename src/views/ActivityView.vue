@@ -1,39 +1,38 @@
 <script setup lang="ts">
 /**
- * 1.  確認是否為進行中活動
- * 2.  取得LINE user profile
- * 2-1.已登入:網頁導轉到此頁
- * 2-2.未登入:LINE Login redirect到此頁
- * 
- * 去檢測ct和ac 
- * 
- * 有ac >> 導轉到活動詳情頁面
+ * 確認是否為進行中活動
  */
-// import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+
 import ActivitiesContent from '@/components/activity/ActivitiesContent.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
-import { useLIFF } from '@/composable/useLIFF'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
+
 import { useFetchData } from '@/composable/useFetch'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
+const router = useRouter()
 const { confirmActivity } = useFetchData()
-
-const { getAcString, getCtString } = useBrowserStorage()
+const { getAcString } = useBrowserStorage()
 const acStr = getAcString()
-const ctStr = getCtString()
+const content = ref({})
 
-const { externalBrowserLogin } = useLIFF()
-const enterActivity = () => {
-    externalBrowserLogin(ctStr, acStr)
-}
+onMounted(() => {
+    confirmActivity(Number(acStr)).then(async (res) => {
+        if (typeof res === 'object') {
+            content.value = res
+        } else if (res === 2) {
+            router.push({ path: '/wrapup' })
+        } else {
+            router.push({ name: 'ComingSoon' })
+        }
+    })
+})
 
-// todo: 判斷活動是否還未開始或是逾期
-// onMounted(() => {
-// })
 </script>
 
 <template>
     <HeaderMenu />
-    <ActivitiesContent @enter="enterActivity" />
+    <ActivitiesContent :content="content" />
 </template>
 
 <style lang="scss" scoped></style>

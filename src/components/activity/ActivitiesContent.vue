@@ -1,5 +1,49 @@
 <script setup lang="ts">
-defineEmits(['enter'])
+/**
+ * 1.取得LINE user profile
+ *   - 已登入:網頁導轉到此頁
+ *   - 未登入:LINE Login redirect到此頁
+ * 2.去檢測ct 
+ *   - 有  : 送出打卡資訊
+ *   - 沒有: 到活動地圖頁面
+ */
+import { ref, computed } from 'vue'
+// import { useRouter } from 'vue-router'
+import { useLIFF } from '@/composable/useLIFF'
+import { useFetchData } from '@/composable/useFetch'
+import type { ActivityListType, ProfileType } from '@/composable/configurable'
+const props = defineProps<{
+  content: ActivityListType
+}>()
+
+const { getLineProfile } = useLIFF()
+const { verifyQRCode, commitStoreCheckIn } = useFetchData()
+const userProfile = ref<ProfileType>({})
+// const router = useRouter()
+const enterActivity = async () => {
+  try {
+    const profile: ProfileType | undefined = await getLineProfile()
+    userProfile.value = profile || {}
+    const userId = profile && profile.userId ? profile.userId : ''
+    const verifyRes = await verifyQRCode()
+    if (verifyRes) {
+      const commitRes = await commitStoreCheckIn(userId)
+      console.log(commitRes);
+      // 打卡成功或失敗
+      // 換頁到打卡結果頁面並帶session結果給下一頁
+      // router.push({ 
+      // path: '/result'
+      // })
+    }
+  } catch (error) {
+    // 異常
+    console.error(error);
+    // 顯示提示錯誤dialog
+    // 倒數10秒reset
+  }
+}
+// const content = computed(() => props.content)
+
 </script>
 
 <template>
@@ -27,8 +71,9 @@ defineEmits(['enter'])
     </section>
 
     <section class="linkBox">
-      <button @click="$emit('enter')">進入活動</button>
+      <button @click="enterActivity">進入活動</button>
     </section>
+    <!-- {{ content }} -->
   </main>
 </template>
 

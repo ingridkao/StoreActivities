@@ -11,3 +11,9 @@ export interface CollectedListType {
   store_name?: string
   checkInTime?: string
 }
+
+export interface ProfileType {
+  userId?: string
+  displayName?: string
+  pictureUrl?: string
+}

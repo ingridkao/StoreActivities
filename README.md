@@ -86,11 +86,22 @@ npm i qs
 npm i --save-dev @types/qs
 ```
 
-### 4.vueuse
+### 5.vueuse
 
 ```sh
 npm i @vueuse/core
 ```
+
+### 6.[UAParser.js](https://docs.uaparser.js.org/v2/)
+
+開源 JavaScript 程式庫，用於偵測使用者的瀏覽器、引擎、作業系統、CPU 和裝置類型/型號。
+
+```sh
+npm i ua-parser-js
+npm i --save-dev @types/ua-parser-js
+```
+
+[github](https://github.com/faisalman/ua-parser-js)
 
 # Project Setup
 

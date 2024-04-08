@@ -16,9 +16,14 @@ import ActivitiesInvalidItem from '@/components/activity/ActivitiesInvalidItem.v
 const activitiesList = ref<ActivityListType[]>([])
 const { fetchActivityData, verifyQRCode } = useFetchData()
 onMounted(async () => {
-  fetchActivityData().then((res: any) => {
+  try {
+    const res = await fetchActivityData()
     activitiesList.value = res || []
-  })
+    await verifyQRCode()
+  } catch (error) {
+    // 檢核失敗顯示提示錯誤dialog
+    console.error(error);
+  }
 })
 
 const { coords, error, resume } = useGeolocation()
@@ -34,14 +39,6 @@ watchEffect(
       getPosition.value = true
       lat.value = latitude
       lon.value = latitude
-
-      const verifyRes = await verifyQRCode().catch(error => {
-        // 檢核失敗顯示提示錯誤dialog
-      })
-      // if (verifyRes) {
-      console.log(verifyRes);
-      // }
-
     } else if (error.value && error.value.code >= 1) {
       geoErrorCode.value = error.value.code
       const GeolocationPositionError = ['沒有獲取地理位置信息的權限', '資訊回傳了錯誤', '取得地理資訊超過時限']

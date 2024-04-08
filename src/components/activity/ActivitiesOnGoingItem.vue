@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-
+import type { ActivityListType } from '@/composable/configurable'
 const props = defineProps<{
-  activities: { id?: number; title?: string; msg?: string; link?: string }
+  activities: ActivityListType
 }>()
 const img = 'https://picsum.photos/seed/picsum/400/300'
 

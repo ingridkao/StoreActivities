@@ -2,8 +2,9 @@
 /**
  * 預告中活動 || 已結束活動
  */
+import type { ActivityListType } from '@/composable/configurable'
 const props = defineProps<{
-  activities: { id?: number; title?: string; msg?: string; link?: string }
+  activities: ActivityListType
 }>()
 const img = 'https://picsum.photos/seed/picsum/400/300'
 
