@@ -1,76 +1,70 @@
 <script setup lang="ts">
 /**
  * 活動大廳
- * 1. 確認使用者同意裝置位置資料
- * 請求所有活動列表
+ * 1.  確認使用者同意裝置位置資料
+ * 2-1.確認URL是否有ct參數 >> 驗證是否合法
+ * 2-2.請求所有活動列表    >> 連結至指定活動
  */
-import { ref, onMounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import ActivitiesItem from '@/components/ActivitiesItem.vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import { useGeolocation } from '@vueuse/core'
-import { useURL } from '@/composable/useURL'
+import type { ActivityListType } from '@/composable/configurable'
 import { useFetchData } from '@/composable/useFetch'
-const { coords, error } = useGeolocation()
-const { ct } = useURL()
-const { verifyQRCode } = useFetchData()
-const latitude = computed(() => Number.isFinite(coords.value.latitude) ? coords.value.latitude : null)
-const longitude = computed(() => Number.isFinite(coords.value.longitude) ? coords.value.longitude : null)
 
-const activitiesList = ref([
-  {
-    id: 1,
-    title: '使徒來襲',
-    msg: '給地圖滿滿的初號機',
-    link: '/mapEva',
-  },
-  {
-    id: 2,
-    title: '門市打卡活動',
-    msg: '全台7-11門市',
-    link: '/mapStore ',
-  },
-  {
-    id: 3,
-    title: '測試1',
-    msg: '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試',
-    link: '/',
-  },
-  {
-    id: 4,
-    title: '測試2',
-    msg: '測試測試測試測試測試測試測試測試測試測試測試測試測試測試測試',
-    link: '/ ',
-  }
-])
+import ActivitiesOnGoingItem from '@/components/activity/ActivitiesOnGoingItem.vue'
+import ActivitiesInvalidItem from '@/components/activity/ActivitiesInvalidItem.vue'
 
-const router = useRouter()
+const activitiesList = ref<ActivityListType[]>([])
+const { fetchActivityData, verifyQRCode } = useFetchData()
 onMounted(async () => {
-  const verifyRes = await verifyQRCode()
-  console.log(verifyRes);
-  if (ct.value) {
-    // const verifyRes = await verifyQRCode(ct.value)
-    // console.log(verifyRes);
-    // 檢核成功 >>> get events
-    // 檢核失敗 >>>
-    router.push({ path: '/error' })
-  } else {
-
+  try {
+    const res = await fetchActivityData()
+    activitiesList.value = res || []
+    await verifyQRCode()
+  } catch (error) {
+    // 檢核失敗顯示提示錯誤dialog
+    console.error(error);
   }
 })
+
+const { coords, error, resume } = useGeolocation()
+const getPosition = ref<boolean>(false)
+const lat = ref<null | number>(null)
+const lon = ref<null | number>(null)
+const geoErrorCode = ref<number>(0)
+const geoError = ref<string>('')
+watchEffect(
+  async () => {
+    const { latitude, longitude } = coords.value
+    if (!getPosition.value && Number.isFinite(latitude) && Number.isFinite(longitude)) {
+      getPosition.value = true
+      lat.value = latitude
+      lon.value = latitude
+    } else if (error.value && error.value.code >= 1) {
+      geoErrorCode.value = error.value.code
+      const GeolocationPositionError = ['沒有獲取地理位置信息的權限', '資訊回傳了錯誤', '取得地理資訊超過時限']
+      const GeolocationErrorString = GeolocationPositionError[error.value.code - 1]
+      geoError.value = GeolocationErrorString || ''
+    }
+  }
+)
 
 </script>
 
 <template>
   <main>
     <h1>大廳</h1>
-    <section class="model" v-if="error">
-      <p>{{ error ? error.message : error }}</p>
-      <p>此活動需要裝置位置，請確認是否提供位置資訊存取權</p>
+    <section class="model" v-if="geoError">
+      <p>{{ geoError }}</p>
+      <p>打卡活動需要裝置位置資訊，請確認是否提供位置存取權</p>
+      <button v-if="geoErrorCode > 1" @click="resume">開啟存取權</button>
     </section>
-    {{ latitude }}
-    {{ longitude }}
-    <section v-for="{ id, title, msg, link } in activitiesList" :key="id">
-      <ActivitiesItem :title="title" :msg="msg" :link="link" :img="'https://picsum.photos/seed/picsum/400/300'" />
+    <section v-else>
+      {{ lat }} | {{ lon }}
+    </section>
+
+    <section v-for="activities in activitiesList" :key="activities.id">
+      <ActivitiesOnGoingItem v-if="activities.id && activities.statu === 1" :activities="activities" />
+      <ActivitiesInvalidItem v-else-if="activities.id" :activities="activities" />
     </section>
   </main>
 </template>

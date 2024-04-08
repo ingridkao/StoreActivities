@@ -27,6 +27,20 @@ This template should help get you started developing with Vue 3 in Vite.
 
 <!-- [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard) -->
 
+# env
+
+```
+VITE_LINE_CHANNEL_ID=
+VITE_LINE_CHANNEL_SECRET=
+VITE_LIFF_ID=
+VITE_LINE_CHANNEL_REDIRECT=
+VITE_LIFF_ENDPOINT_URL=
+
+VITE_MAP8_KEY=
+VITE_MAPBOX_KEY=
+
+```
+
 # Skills
 
 ## 使用套件
@@ -72,12 +86,22 @@ npm i qs
 npm i --save-dev @types/qs
 ```
 
-### 4.vueuse
+### 5.vueuse
 
 ```sh
 npm i @vueuse/core
 ```
 
+### 6.[UAParser.js](https://docs.uaparser.js.org/v2/)
+
+開源 JavaScript 程式庫，用於偵測使用者的瀏覽器、引擎、作業系統、CPU 和裝置類型/型號。
+
+```sh
+npm i ua-parser-js
+npm i --save-dev @types/ua-parser-js
+```
+
+[github](https://github.com/faisalman/ua-parser-js)
 
 # Project Setup
 

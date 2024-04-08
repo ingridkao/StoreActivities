@@ -1,12 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { useLIFF } from '@/composable/useLIFF'
+import { useFetchData } from '@/composable/useFetch'
+
+const { isLogin, getOpenInClient, getUserOS, getLineProfile, useLineLogout } = useLIFF()
+const openInLIFF = getOpenInClient()
+const userOS = getUserOS()
+const userProfile = ref()
+
+onMounted(() => {
+  getLineProfile().then(profile => {
+    userProfile.value = profile
+  }).catch(error => {
+    console.error(error);
+  })
+})
 
 const navOpen = ref<Boolean>(false)
+const togggle = () => {
+  navOpen.value = !navOpen.value
+}
 const menuList = ref([
   {
-    link: '/',
-    key: 'Home',
+    link: '/activity',
+    key: 'Activity',
     name: '活動說明'
   },
   {
@@ -22,29 +40,49 @@ const menuList = ref([
   {
     link: '/collected',
     key: 'collected',
-    name: '門市地圖'
+    name: '集郵冊'
   },
 ])
-const togggle = () => {
-  navOpen.value = !navOpen.value
-}
+
+const { getDevice } = useFetchData()
+const isMobile = getDevice()
+
 </script>
 
 <template>
-  <div id="sidemenu">
+  <div id="sidemenu" class="mainheader">
     <button class="sidemenu__btn" @click="togggle" :class="{ active: navOpen }">
       <span class="top"></span>
       <span class="mid"></span>
       <span class="bottom"></span>
     </button>
+    <div>
+      <p>{{ isLogin ? '已登入' : '未登入' }}</p>
+      <p>{{ userOS }}開啟|{{ openInLIFF ? 'LINE內開啟' : '外部瀏覽器' }}</p>
+      <p>isMobile:{{ isMobile ? true : false }}</p>
+    </div>
+
     <transition name="translateX">
       <nav v-show="navOpen">
         <div class="sidemenu__wrapper">
           <ul class="sidemenu__list">
-            <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
-              <RouterLink :to="item.link">{{ item.name }}</RouterLink>
+            <template v-if="isLogin">
+              <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
+                <RouterLink :to="item.link">{{ item.name }}</RouterLink>
+              </li>
+            </template>
+            <li v-else class="sidemenu__item">
+              <RouterLink to="/">回到大廳</RouterLink>
             </li>
           </ul>
+        </div>
+        <div v-if="isLogin" class="userProfile">
+          <img v-if="userProfile.pictureUrl" :src="userProfile.pictureUrl" :alt="userProfile.displayName">
+          <div>
+            <p>{{ userProfile.displayName || '' }}</p>
+            <p>{{ userProfile.userId || '' }}</p>
+            <button v-if="!openInLIFF" @click="useLineLogout">登出</button>
+          </div>
         </div>
       </nav>
     </transition>
@@ -61,6 +99,13 @@ const togggle = () => {
     width: 200px;
     height: 100vh;
     background: grey;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: column;
+
+    overflow: hidden;
   }
 
   .sidemenu {
@@ -116,11 +161,12 @@ const togggle = () => {
     }
 
     &__wrapper {
-      padding-top: 50px;
+      width: 100%;
+      padding-top: 4.5rem;
     }
 
     &__list {
-      padding-top: 50px;
+      padding-top: 4.5rem;
       list-style: none;
       padding: 0;
       margin: 0;
@@ -131,7 +177,7 @@ const togggle = () => {
         text-decoration: none;
         line-height: 1.25rem;
         font-size: 1.25rem;
-        padding: .5rem;
+        padding: .5rem 1rem;
         display: block;
         color: white;
         transition: .4s ease;

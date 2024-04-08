@@ -10,9 +10,9 @@ const router = createRouter({
       component: LobbyView
     },
     {
-      path: '/event',
-      name: 'Event',
-      component: () => import('../views/EventView.vue')
+      path: '/activity',
+      name: 'Activity',
+      component: () => import('../views/ActivityView.vue')
     },
     {
       path: '/mapStore',
@@ -49,7 +49,7 @@ const router = createRouter({
       name: 'login',
       component: () => import('../views/LoginView.vue')
     },
-    { 
+    {
       path: '/:pathMatch(.*)*',
       name: 'ComingSoon',
       component: () => import('../views/ComingSoonView.vue'),

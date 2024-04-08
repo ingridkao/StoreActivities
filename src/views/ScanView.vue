@@ -4,7 +4,7 @@
  * redirect Lobby page
  */
 import { ref, onMounted, onUnmounted } from 'vue';
-import { RouterLink } from 'vue-router';
+import HeaderMenu from '@/components/HeaderMenu.vue';
 
 import jsQR from "jsqr";
 
@@ -180,6 +180,8 @@ onUnmounted(() => {
 </script>
 
 <template>
+    <HeaderMenu />
+
     <div class="cameraBox">
         <div v-if="!canvasVisible" class="loadingMessage">
             🎥 Unable to access video stream (please make sure you have a webcam enabled)
@@ -202,8 +204,6 @@ onUnmounted(() => {
         <!-- {{ imageDatas }} -->
         <!-- {{ codes }} -->
         <button @click="stopMediaTracks">關閉攝影機</button>
-        <RouterLink to="/collected">打卡紀錄</RouterLink>
-        <RouterLink to="/mapStore">門市地圖</RouterLink>
     </div>
 </template>
 
