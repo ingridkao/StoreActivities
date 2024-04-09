@@ -1,11 +1,11 @@
 import { describe, it, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import ActivitiesOnGoingItem from '../activity/ActivitiesOnGoingItem.vue'
+import ActivitiesListItem from '../activity/ActivitiesListItem.vue'
 
 describe('ActivitiesItem', () => {
   it('renders properly', () => {
-    const wrapper = mount(ActivitiesOnGoingItem, {
+    const wrapper = mount(ActivitiesListItem, {
       props: {
         activities: {}
       }

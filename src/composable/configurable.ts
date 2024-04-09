@@ -2,7 +2,7 @@ export interface ActivityListType {
   id?: number
   title?: string
   statu?: number
-  msg?: string
+  img?: string
   link?: string
 }
 

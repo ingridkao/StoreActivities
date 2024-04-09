@@ -10,8 +10,7 @@ import { useGeolocation } from '@vueuse/core'
 import type { ActivityListType } from '@/composable/configurable'
 import { useFetchData } from '@/composable/useFetch'
 
-import ActivitiesOnGoingItem from '@/components/activity/ActivitiesOnGoingItem.vue'
-import ActivitiesInvalidItem from '@/components/activity/ActivitiesInvalidItem.vue'
+import ActivitiesListItem from '@/components/activity/ActivitiesListItem.vue'
 
 const activitiesList = ref<ActivityListType[]>([])
 const { fetchActivityData, verifyQRCode } = useFetchData()
@@ -52,8 +51,7 @@ watchEffect(
 
 <template>
   <main>
-    <h1>大廳</h1>
-    <section class="model" v-if="geoError">
+    <!-- <section class="model" v-if="geoError">
       <p>{{ geoError }}</p>
       <p>打卡活動需要裝置位置資訊，請確認是否提供位置存取權</p>
       <button v-if="geoErrorCode > 1" @click="resume">開啟存取權</button>
@@ -61,10 +59,20 @@ watchEffect(
     <section v-else>
       {{ lat }} | {{ lon }}
     </section>
+    -->
 
+    <!-- 活動列表(大廳頁面) -->
     <section v-for="activities in activitiesList" :key="activities.id">
-      <ActivitiesOnGoingItem v-if="activities.id && activities.statu === 1" :activities="activities" />
-      <ActivitiesInvalidItem v-else-if="activities.id" :activities="activities" />
+      <ActivitiesListItem v-if="activities.id" :activities="activities" />
+    </section>
+
+    <section>
+      <ActivitiesListItem :activities="{
+      title: '打卡紀錄',
+      statu: 1,
+      img: 'https://i.imgur.com/d8ptVfB.png',
+      link: '/collected'
+    }" />
     </section>
   </main>
 </template>

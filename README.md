@@ -2,6 +2,52 @@
 
 This template should help get you started developing with Vue 3 in Vite.
 
+# Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### 編譯成靜態並部屬到firebase hosting上
+
+```sh
+npm run deploy
+```
+
+### [API-dev](https://github.com/ingridkao/node_todo_test/tree/storeActivities)
+
+1. 於此專案上一層檔案位置進行clone
+   `git clone https://github.com/ingridkao/node_todo_test.git -b storeActivities`
+
+2. 於node_todo_test目錄啟動nodejs http server
+   `node store.js`
+
+### [API-prod](https://storeactivities-api.onrender.com/activities)
+
+更新API透過github自動部屬到render
+
+```
+
+```
+
+<!-- ### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
+``` -->
+
 # User story
 
 - 使用者可以透過掃描機台qrCode連結到官方Line
@@ -32,9 +78,11 @@ This template should help get you started developing with Vue 3 in Vite.
 ```
 VITE_LINE_CHANNEL_ID=
 VITE_LINE_CHANNEL_SECRET=
-VITE_LIFF_ID=
 VITE_LINE_CHANNEL_REDIRECT=
+VITE_LIFF_ID=
 VITE_LIFF_ENDPOINT_URL=
+
+VITE_API_URL=
 
 VITE_MAP8_KEY=
 VITE_MAPBOX_KEY=
@@ -102,30 +150,6 @@ npm i --save-dev @types/ua-parser-js
 ```
 
 [github](https://github.com/faisalman/ua-parser-js)
-
-# Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-```
 
 ### Lint with [ESLint](https://eslint.org/)
 

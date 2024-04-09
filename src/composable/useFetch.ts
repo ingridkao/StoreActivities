@@ -10,7 +10,7 @@ import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useURL } from '@/composable/useURL'
 
 // import { useConvenienceStore } from '@/stores/convenience'
-
+const API_URL = import.meta.env.VITE_API_URL
 const parser = new UAParser()
 export function useFetchData() {
   // const router = useRouter()
@@ -53,7 +53,7 @@ export function useFetchData() {
   const commitStoreCheckIn = async (userId: string = '') => {
     return new Promise((resolve, reject) => {
       if (userId) {
-        // axios.get('http://localhost:8080/').then((res) => {
+        // axios.get(`${API_URL}/').then((rs) => {
         resolve(true)
         //   resolve(res.data.data)
         // }).catch(e=>{
@@ -70,44 +70,9 @@ export function useFetchData() {
 
   const fetchActivityData = (): Promise<ActivityListType[]> => {
     return new Promise((resolve, reject) => {
-      // axios.get()
-      resolve([
-        {
-          id: 1,
-          title: '測試LINE登入1',
-          msg: '測試LINE Login點這個~測試LINE Login點這個~測試LINE Login點這個~',
-          statu: 1,
-          link: '/activity'
-        },
-        {
-          id: 2,
-          title: '測試LINE登入2',
-          msg: '測試LINE Login點這個~測試LINE Login點這個~測試LINE Login點這個~',
-          statu: 1,
-          link: '/activity'
-        },
-        {
-          id: 3,
-          title: '預告活動',
-          msg: '測試LINE Login點這個~測試LINE Login點這個~測試LINE Login點這個~',
-          statu: 2,
-          link: '/activity'
-        },
-        {
-          id: 4,
-          title: '門市打卡活動',
-          msg: '全台7-11門市',
-          statu: 1,
-          link: '/mapStore '
-        },
-        {
-          id: 5,
-          title: '使徒來襲(已結束)',
-          msg: '給地圖滿滿的初號機',
-          statu: 0,
-          link: '/mapEva'
-        }
-      ])
+      axios.get(`${API_URL}/activities`).then((res) => {
+        resolve(res.data || [])
+      })
     })
   }
 
