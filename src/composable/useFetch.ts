@@ -8,9 +8,9 @@ import type { ActivityListType } from '@/composable/configurable'
 import { useLoadingStore } from '@/stores/loading'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useURL } from '@/composable/useURL'
+const { VITE_MOCKAPI_URL } = import.meta.env
 
 // import { useConvenienceStore } from '@/stores/convenience'
-const API_URL = import.meta.env.VITE_API_URL
 const parser = new UAParser()
 export function useFetchData() {
   // const router = useRouter()
@@ -26,26 +26,45 @@ export function useFetchData() {
   // ct=OP666000031818094ac904
   // 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
   const { getQueryParam } = useURL()
-  const verifyQRCode = () => {
-    const isMobile = getDevice()
+  const verifyQRCode = (latitude: null | number = null, longitude: null | number = null) => {
+    console.log(latitude)
+    console.log(longitude)
+
+    // const lat = Number(latitude)
+    // const lon = Number(longitude)
+    // const isMobile = getDevice()
     const ctStr = getQueryParam(window.location.href, 'ct')
+    const lat = getQueryParam(window.location.href, 'lat')
+    const lon = getQueryParam(window.location.href, 'lon')
     return new Promise((resolve, reject) => {
-      if (!isMobile) {
-        reject(Error('請使用移動裝置'))
-      } else if (!ctStr) {
-        reject(Error('沒有ct'))
+      // if (!isMobile) {
+      //   reject(Error('請使用移動裝置'))
+      if (ctStr) {
+        axios
+          .post('/api/ScanEntry/IbonEntry', {
+            data: {
+              qrCode: ctStr,
+              longitude: Number(lon),
+              latitude: Number(lat)
+            }
+          })
+          .then((res) => {
+            if (res && res.data) {
+              if (res.data.result.token) {
+                // 通過驗證set cookies
+                // setCtStorage(ctStr)
+                // deleteStorage('ct')
+                console.log(res.data.result.token)
+                resolve(res.data.result)
+              } else {
+                reject(res.data.msg)
+              }
+            } else {
+              reject('發生了例外錯誤')
+            }
+          })
       } else {
-        // axios.get('http://localhost:8080/').then((res) => {
-        //   // 通過驗證
-        //   resolve(res.data.data)
-        // }).catch(e=>{
-        // 沒有通過驗證
-        // deleteStorage('ct')
-        // })
-        setCtStorage(ctStr)
-        resolve(true)
-        // deleteStorage('ct')
-        // reject(Error('意外錯誤' + error))
+        resolve(false)
       }
     })
   }
@@ -53,7 +72,7 @@ export function useFetchData() {
   const commitStoreCheckIn = async (userId: string = '') => {
     return new Promise((resolve, reject) => {
       if (userId) {
-        // axios.get(`${API_URL}/').then((rs) => {
+        // axios.get(`${VITE_MOCKAPI_URL}/').then((rs) => {
         resolve(true)
         //   resolve(res.data.data)
         // }).catch(e=>{
@@ -70,7 +89,7 @@ export function useFetchData() {
 
   const fetchActivityData = (): Promise<ActivityListType[]> => {
     return new Promise((resolve, reject) => {
-      axios.get(`${API_URL}/activities`).then((res) => {
+      axios.get(`${VITE_MOCKAPI_URL}/activities`).then((res) => {
         resolve(res.data || [])
       })
     })

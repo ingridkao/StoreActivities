@@ -1,8 +1,51 @@
 # StoreActivities
 
-This template should help get you started developing with Vue 3 in Vite.
+門市打卡
+[demo](https://qwaretest2.web.app/)
+[LIFF](https://liff.line.me/2003380973-6NBnrB5K)
 
-# Project Setup
+## Git Flow
+
+目前分支僅main, dev, feature
+
+1. main:主要部屬分支
+   > 主要功能完成或是每周進行dev>main合併
+2. dev: 主要開發分支
+   > 更新頻率: 2days
+3. feature: 根據功能和需求建立不同的分支
+   1. 新增分支(base dev)
+      > 分支名稱建議:
+      > feat/add-linescan
+      > feat/integrate-checkin-api
+      > style/add-homepage
+      > style/rewrite-lightbox
+      > 可以使用chartGPT prompt:`使用git flow，<功能開發描述>，寫出分支名稱`
+   2. 進行feat>dev合併，**請使用Github pull request(PR)**
+   3. 合併完刪除該feature分支
+
+## User story | Issue
+
+- [x] 使用者使用LINE登入(透過Line LIFF實現)
+- [x] 使用者在活動大廳(/)觀看有興趣的活動
+  - [ ] 樣式
+- [ ] 使用者在活動詳情頁面(/activity)觀看活動說明
+  - [ ] 樣式
+- [ ] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
+  - [ ] 樣式
+- [ ] 使用者開啟掃描說明(/direction)進行開啟相機
+  - [ ] 樣式
+- [ ] 使用者看到打卡結果(/result)
+  - [ ] 樣式
+- [ ] 使用者查閱過去打卡紀錄(/collected)
+  - [ ] 樣式
+- [ ] 使用者使用手機掃描機台qrCode確認所在位置
+      POST`https://print-api-uat.ibon.com.tw/cloudprint_api_dev/api/ExtraActivity/ScanEntry/IbonEntry`
+- [ ] 打開大廳頁面選擇活動後驗證打卡是否成功
+  - [ ] 樣式
+
+## Project Setup
+
+### Install
 
 ```sh
 npm install
@@ -20,13 +63,17 @@ npm run dev
 npm run build
 ```
 
-### 編譯成靜態並部屬到firebase hosting上
+### 測試環境部屬
+
+編譯成靜態並部屬到[firebase hosting](https://firebase.google.com/docs/hosting/quickstart?hl=zh&authuser=0)上
 
 ```sh
 npm run deploy
 ```
 
-### [API-dev](https://github.com/ingridkao/node_todo_test/tree/storeActivities)
+### Mock API-dev
+
+[Github](https://github.com/ingridkao/node_todo_test/tree/storeActivities)
 
 1. 於此專案上一層檔案位置進行clone
    `git clone https://github.com/ingridkao/node_todo_test.git -b storeActivities`
@@ -34,9 +81,10 @@ npm run deploy
 2. 於node_todo_test目錄啟動nodejs http server
    `node store.js`
 
-### [API-prod](https://storeactivities-api.onrender.com/activities)
+### Mock API-prod
 
-更新API透過github自動部屬到render
+[API URL](https://storeactivities-api.onrender.com)
+更新API透過[Github](https://github.com/ingridkao/node_todo_test/tree/storeActivities)push自動部屬到render
 
 ```
 
@@ -47,15 +95,6 @@ npm run deploy
 ```sh
 npm run test:unit
 ``` -->
-
-# User story
-
-- 使用者可以透過掃描機台qrCode連結到官方Line
-- 使用者不用進行登入(透過Line LIFF獲取)
-- 使用者可以在活動大廳觀看有興趣的活動
-- 使用者可以透過門市地圖找到附近或是特色門市、聯名門市，並可以導航至門市
-- 使用者可以用手機掃描機台qrCode
-- 使用者可以看到打卡紀錄
 
 # tasks
 
@@ -76,20 +115,15 @@ npm run test:unit
 # env
 
 ```
-VITE_LINE_CHANNEL_ID=
-VITE_LINE_CHANNEL_SECRET=
-VITE_LINE_CHANNEL_REDIRECT=
 VITE_LIFF_ID=
 VITE_LIFF_ENDPOINT_URL=
 
+VITE_MOCKAPI_URL=
 VITE_API_URL=
 
-VITE_MAP8_KEY=
 VITE_MAPBOX_KEY=
 
 ```
-
-# Skills
 
 ## 使用套件
 
@@ -142,6 +176,8 @@ npm i @vueuse/core
 
 ### 6.[UAParser.js](https://docs.uaparser.js.org/v2/)
 
+[Github Repo](https://github.com/faisalman/ua-parser-js)
+
 開源 JavaScript 程式庫，用於偵測使用者的瀏覽器、引擎、作業系統、CPU 和裝置類型/型號。
 
 ```sh
@@ -149,9 +185,7 @@ npm i ua-parser-js
 npm i --save-dev @types/ua-parser-js
 ```
 
-[github](https://github.com/faisalman/ua-parser-js)
-
-### Lint with [ESLint](https://eslint.org/)
+## Lint with [ESLint](https://eslint.org/)
 
 - 使用[eslint-plugin-vue](https://eslint.vuejs.org/): 專為 Vue.js 項目定制的 ESLint 插件，建立vue專案有選取的話不用另外安裝
 - 執行
@@ -165,15 +199,7 @@ npm i --save-dev @types/ua-parser-js
 
   [參考文章](https://pjchender.blogspot.com/2019/07/vue-vue-style-guide-eslint-plugin-vue.html)
 
-# 部屬Deploy
-
-[firebase hosting](https://firebase.google.com/docs/hosting/quickstart?hl=zh&authuser=0)
-
-```sh
-firebase deploy --only hosting
-```
-
-### 開發中碰到的問題
+## 開發中碰到的問題
 
 1. [leaflet]在手機端地圖底圖一直出不來
    原本是以下寫法
@@ -201,4 +227,4 @@ firebase deploy --only hosting
 
    - 原本`{s}`代表是TileLayer連結的subdomain，預設為a, b或c其中一個，[參考文章](https://ithelp.ithome.com.tw/articles/10203732)
 
-   - openstreetmap地圖圖磚 policies[使用政策](https://operations.osmfoundation.org/policies/tiles/)
+   - openstreetmap地圖圖磚 [使用政策](https://operations.osmfoundation.org/policies/tiles/)
