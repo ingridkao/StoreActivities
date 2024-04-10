@@ -5,45 +5,68 @@
  * 2-1.確認URL是否有ct參數 >> 驗證是否合法
  * 2-2.請求所有活動列表    >> 連結至指定活動
  */
-import { ref, onMounted, watchEffect } from 'vue'
+import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue'
+// const instance = getCurrentInstance()
+// console.log(instance?.appContext.config.globalProperties.$swal);
+
 import { useGeolocation } from '@vueuse/core'
 import type { ActivityListType } from '@/composable/configurable'
 import { useFetchData } from '@/composable/useFetch'
 
-import ActivitiesOnGoingItem from '@/components/activity/ActivitiesOnGoingItem.vue'
-import ActivitiesInvalidItem from '@/components/activity/ActivitiesInvalidItem.vue'
+import ActivitiesListItem from '@/components/activity/ActivitiesListItem.vue'
 
+const { proxy } = getCurrentInstance()
 const activitiesList = ref<ActivityListType[]>([])
 const { fetchActivityData, verifyQRCode } = useFetchData()
+
 onMounted(async () => {
   try {
     const res = await fetchActivityData()
     activitiesList.value = res || []
-    await verifyQRCode()
   } catch (error) {
-    // 檢核失敗顯示提示錯誤dialog
-    console.error(error);
+    proxy.$swal.fire({
+      icon: "error",
+      title: '出了一點問題',
+      text: error,
+    })
   }
 })
 
 const { coords, error, resume } = useGeolocation()
-const getPosition = ref<boolean>(false)
-const lat = ref<null | number>(null)
-const lon = ref<null | number>(null)
 const geoErrorCode = ref<number>(0)
-const geoError = ref<string>('')
+let getPosition = false
 watchEffect(
   async () => {
     const { latitude, longitude } = coords.value
-    if (!getPosition.value && Number.isFinite(latitude) && Number.isFinite(longitude)) {
-      getPosition.value = true
-      lat.value = latitude
-      lon.value = latitude
+    if (getPosition) return
+    if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+      getPosition = true
+      try {
+        await verifyQRCode(latitude, longitude)
+      } catch (error) {
+        proxy.$swal.fire({
+          icon: "error",
+          title: '驗證錯誤',
+          text: error,
+        })
+      }
+
     } else if (error.value && error.value.code >= 1) {
       geoErrorCode.value = error.value.code
       const GeolocationPositionError = ['沒有獲取地理位置信息的權限', '資訊回傳了錯誤', '取得地理資訊超過時限']
       const GeolocationErrorString = GeolocationPositionError[error.value.code - 1]
-      geoError.value = GeolocationErrorString || ''
+      proxy.$swal.fire({
+        icon: "info",
+        title: '打卡活動需要裝置位置資訊，請確認是否提供位置存取權',
+        text: GeolocationErrorString || '',
+        showCancelButton: true,
+        confirmButtonText: "開啟存取權",
+        cancelButtonText: "拒絕",
+      }).then((result: { isConfirmed: boolean, isDenied: boolean, isDismissed: boolean, value: boolean }) => {
+        if (result.isConfirmed) {
+          resume()
+        }
+      });
     }
   }
 )
@@ -52,19 +75,18 @@ watchEffect(
 
 <template>
   <main>
-    <h1>大廳</h1>
-    <section class="model" v-if="geoError">
-      <p>{{ geoError }}</p>
-      <p>打卡活動需要裝置位置資訊，請確認是否提供位置存取權</p>
-      <button v-if="geoErrorCode > 1" @click="resume">開啟存取權</button>
-    </section>
-    <section v-else>
-      {{ lat }} | {{ lon }}
+    <!-- 活動列表(大廳頁面) -->
+    <section v-for="activities in activitiesList" :key="activities.id">
+      <ActivitiesListItem v-if="activities.id" :activities="activities" />
     </section>
 
-    <section v-for="activities in activitiesList" :key="activities.id">
-      <ActivitiesOnGoingItem v-if="activities.id && activities.statu === 1" :activities="activities" />
-      <ActivitiesInvalidItem v-else-if="activities.id" :activities="activities" />
+    <section>
+      <ActivitiesListItem :activities="{
+      title: '打卡紀錄',
+      statu: 1,
+      img: 'https://i.imgur.com/d8ptVfB.png',
+      link: '/collected'
+    }" />
     </section>
   </main>
 </template>

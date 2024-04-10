@@ -30,6 +30,16 @@ const router = createRouter({
       component: () => import('../views/CollectedView.vue')
     },
     {
+      path: '/direction',
+      name: 'Direction',
+      component: () => import('../views/DirectionView.vue')
+    },
+    {
+      path: '/result',
+      name: 'Result',
+      component: () => import('../views/ResultView.vue')
+    },
+    {
       path: '/scan',
       name: 'Scan',
       component: () => import('../views/ScanView.vue')
@@ -43,11 +53,6 @@ const router = createRouter({
       path: '/error',
       name: 'CodeError',
       component: () => import('../views/CodeErrorView.vue')
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/LoginView.vue')
     },
     {
       path: '/:pathMatch(.*)*',
