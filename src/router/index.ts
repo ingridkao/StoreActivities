@@ -25,7 +25,12 @@ const router = createRouter({
     //   component: () => import('../views/MapEvaView.vue')
     // },
     {
-      path: '/collected',
+      path: '/album',
+      name: 'Album',
+      component: () => import('../views/AlbumView.vue')
+    },
+    {
+      path: '/collected/:id',
       name: 'Collected',
       component: () => import('../views/CollectedView.vue')
     },

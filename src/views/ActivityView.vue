@@ -6,7 +6,7 @@ import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import ActivitiesContent from '@/components/activity/ActivitiesContent.vue';
-import HeaderMenu from '@/components/HeaderMenu.vue';
+// import HeaderMenu from '@/components/HeaderMenu.vue';
 
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
@@ -31,7 +31,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <HeaderMenu />
+    <!-- <HeaderMenu /> -->
     <ActivitiesContent :content="content" />
 </template>
 

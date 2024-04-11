@@ -38,9 +38,9 @@ const menuList = ref([
     name: '門市地圖'
   },
   {
-    link: '/collected',
-    key: 'collected',
-    name: '集郵冊'
+    link: '/album',
+    key: 'album',
+    name: '集郵冊-打卡紀錄'
   },
 ])
 

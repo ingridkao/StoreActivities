@@ -34,9 +34,9 @@
   - [ ] 樣式
 - [ ] 使用者開啟掃描說明(/direction)進行開啟相機
   - [ ] 樣式
-- [ ] 使用者看到打卡結果(/result)
+- [ ] 使用者查閱過去所有活動打卡紀錄(/album)
   - [ ] 樣式
-- [ ] 使用者查閱過去打卡紀錄(/collected)
+- [ ] 使用者看到單一活動打卡結果(/collected)
   - [ ] 樣式
 - [ ] 使用者使用手機掃描機台qrCode確認所在位置
       POST`https://print-api-uat.ibon.com.tw/cloudprint_api_dev/api/ExtraActivity/ScanEntry/IbonEntry`

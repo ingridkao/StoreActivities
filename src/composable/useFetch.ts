@@ -3,7 +3,7 @@
 import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
 
-import type { ActivityListType } from '@/composable/configurable'
+import type { ActivityListType, CollectedListType } from '@/composable/configurable'
 
 import { useLoadingStore } from '@/stores/loading'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
@@ -95,6 +95,14 @@ export function useFetchData() {
     })
   }
 
+  const fetchCollectData = (): Promise<CollectedListType[]> => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${VITE_MOCKAPI_URL}/collect`).then((res) => {
+        resolve(res.data || [])
+      })
+    })
+  }
+
   const confirmActivity = (acStr: number | null = null): Promise<ActivityListType | number> => {
     return new Promise((resolve, reject) => {
       if (!acStr) resolve(0)
@@ -140,6 +148,7 @@ export function useFetchData() {
     verifyQRCode,
     commitStoreCheckIn,
     fetchActivityData,
+    fetchCollectData,
     confirmActivity,
     fetchLayerData,
     getDevice
