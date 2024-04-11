@@ -1,9 +1,10 @@
 <script setup lang="ts">
 /**
- * 確認是否為進行中活動
+ * 說明: 活動詳情
  */
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import Cookies from 'js-cookie'
 
 import ActivitiesContent from '@/components/activity/ActivitiesContent.vue';
 import HeaderMenu from '@/components/HeaderMenu.vue';
@@ -16,6 +17,7 @@ const { getAcString } = useBrowserStorage()
 const acStr = getAcString()
 const content = ref({})
 
+console.log(Cookies.get("SCAN_RESULT"));
 onMounted(() => {
     confirmActivity(Number(acStr)).then(async (res) => {
         if (typeof res === 'object') {

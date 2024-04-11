@@ -185,6 +185,37 @@ npm i ua-parser-js
 npm i --save-dev @types/ua-parser-js
 ```
 
+### 7.[sweetalert2](https://sweetalert2.github.io/)
+
+零依賴的js彈出框
+
+```sh
+npm install sweetalert2
+```
+
+
+### 8.[js-cookie](https://github.com/js-cookie/js-cookie/tree/latest#readme)
+
+用於處理 cookie 的簡單、輕量級 JavaScript API
+```sh
+npm i js-cookie
+```
+
+- 適用於所有瀏覽器
+- [相關常見問題](https://github.com/js-cookie/js-cookie/wiki/Frequently-Asked-Questions#expire-cookies-in-less-than-a-day)
+
+
+- 如何讓cookie在一天之內過期
+  - 當您希望 cookie 從現在起 5 分鐘後過期
+    ```js
+      const inFifteenMinutes = new Date(new Date().getTime() + 5 * 60 * 1000);
+      Cookies.set('foo', 'bar', {
+          expires: inFifteenMinutes
+      });
+    ```
+
+
+
 ## Lint with [ESLint](https://eslint.org/)
 
 - 使用[eslint-plugin-vue](https://eslint.vuejs.org/): 專為 Vue.js 項目定制的 ESLint 插件，建立vue專案有選取的話不用另外安裝
