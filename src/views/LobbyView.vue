@@ -82,10 +82,10 @@ watchEffect(
 
     <section>
       <ActivitiesListItem :activities="{
-      title: '打卡紀錄',
+      title: '集郵冊-打卡紀錄',
       statu: 1,
       img: 'https://i.imgur.com/d8ptVfB.png',
-      link: '/collected'
+      link: '/album'
     }" />
     </section>
   </main>

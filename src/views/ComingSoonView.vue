@@ -9,7 +9,6 @@ import { RouterLink } from 'vue-router';
     </section>
 
     <section class="linkBox">
-      <!-- <RouterLink to="/collected">打卡紀錄</RouterLink> -->
       <RouterLink to="/">活動大廳</RouterLink>
     </section>
   </main>
