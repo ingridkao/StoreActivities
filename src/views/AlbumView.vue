@@ -1,18 +1,17 @@
 <script setup lang="ts">
 /**
- * 所有活動打卡紀錄列表
+ * 所有打卡紀錄
  */
-import { ref, onMounted, getCurrentInstance } from 'vue'
-import { useRouter } from 'vue-router'
-// import HeaderMenu from '@/components/HeaderMenu.vue';
-import { useFetchData } from '@/composable/useFetch'
+import { ref, onMounted, getCurrentInstance, computed } from 'vue'
+// import HeaderMenu from '@/components/HeaderMenu.vue'
 
 import type { CollectedListType } from '@/composable/configurable'
+import { useFetchData } from '@/composable/useFetch'
 const { fetchCollectData } = useFetchData()
 
 const collectedStore = ref<CollectedListType[]>([])
 const { proxy } = getCurrentInstance()
-
+const stampBaseCount = ref(20)
 onMounted(async () => {
   try {
     const res = await fetchCollectData()
@@ -21,23 +20,47 @@ onMounted(async () => {
     proxy.$swal.fire({
       icon: "error",
       title: '出了一點問題',
-      text: error,
+      text: error
     })
   }
 })
 
-const router = useRouter()
+const accumulation = computed(() => {
+  const numberStr = String(collectedStore.value.length)
+  return numberStr.padStart( 5 - numberStr.length, "0")
+})
 
-const linkTo = async (id:string) => {
-  if (id) {
-    router.push({
-      name: 'Collected',
-      params: {
-        id: id
+const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
+const catImportUrl = new URL('@/assets/images/cats/cat1.png', import.meta.url).href
+const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
+const linkTo = async (storeItem:CollectedListType) => {
+  if (storeItem.store_id) {
+    proxy.$swal.fire({
+      html: `
+        <div class="imgBox">
+          <img src="${catImportUrl}" alt="喵喵人"/>
+        </div>
+        <div class="textBox">
+          <h6>${storeItem.store_name || '7-11'}門市</h6>
+          <p>最後打卡時間</p><p>${storeItem.checkInTime}</p>
+        </div>
+      `,
+      imageUrl: storeIcon,
+      imageWidth: 300,
+      imageHeight: 300,
+      imageAlt: `${storeItem.store_name}門市`,
+      showCloseButton: true,
+      showConfirmButton: false,
+      customClass:{
+        //https://sweetalert2.github.io/#customClass
+        htmlContainer: 'cat'
       }
     })
   } else {
-    router.push({ path: '/error' })
+    proxy.$swal.fire({
+      icon: "error",
+      title: '出了一點問題'
+    })
   }
 }
 </script>
@@ -45,61 +68,99 @@ const linkTo = async (id:string) => {
 <template>
   <!-- <HeaderMenu /> -->
   <main>
-    <section v-if="collectedStore.length === 0">
-      <h1>一起來蒐集吧</h1>
-    </section>
 
-    <section v-else class="collected">
-      <div class="collected_info">
-        放大圖示的img??
-      </div>
-      <div class="collected_text">
-        <h6>累積蒐集門市數：{{ collectedStore.length }}家</h6>
-      </div>
-      <div v-for="storeItem in collectedStore" :key="storeItem['store_id']" class="collected_item" >
-        <div @click="linkTo(storeItem['store_id'])">
-          <div class="imgBox">
-            <img src="~@/assets/images/7-11logo.jpg" :alt="storeItem['store_name']" />
-          </div>
-          <div class="contenBox">
-            <p>門市：{{ storeItem['store_id'] }} {{ storeItem['store_name'] }}</p>
-            <p>最後打卡時間：{{ storeItem['checkInTime'] }}</p>
-          </div>
+    <section class="info">
+      <div>
+        <h5>目前累積蒐集門市</h5>
+        <div>
+          <p>
+            {{ accumulation }}
+            <span>家</span>
+          </p>
         </div>
       </div>
+      <div class="info_img">
+        <img :src="catImportUrl" alt="喵喵人" />
+      </div>
     </section>
+
+    <section class="stamp">
+      <div 
+        v-for="baseItem in stampBaseCount" 
+        :key="baseItem" 
+        class="stamp_base"
+        :style="{backgroundImage:  `url('${footImportUrl}')`}"
+      >
+        <button 
+          v-if="collectedStore[baseItem-1] && collectedStore[baseItem-1]['store_id']" 
+          @click="linkTo(collectedStore[baseItem-1])"
+        >
+          <img :src="storeIcon" :alt="collectedStore[baseItem-1]['store_name']" />
+        </button>
+      </div>
+    </section>
+
   </main>
+
 </template>
+<style lang="scss" scope>
+img{
+  width: 100%;
+}
 
-<style lang="scss" scoped>
-.collected {
-  box-sizing: border-box;
-  padding: .75rem;
+.info{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 
-  &_info {}
+  &_img{
+    width: 40%;
+  }
+}
+.stamp{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap; 
+  &_base{
+    color: white;
+    text-align: center;
+    align-items: center;
+    width: 5rem;
+    height: 5rem;
+    margin: 0.25rem;
+    flex: 1 0 auto;
+    background-color: #ddd;
+    background-size: contain;
+    button{
+      display: flex;
+      align-items: center;
+      height: 100%;
+    }
+  }
+}
+</style>
 
-  &_text {}
-
-  &_item {
-    width: 100%;
-    display: flex;
+<style lang="scss">
+// For sweetalert2 custom class
+.cat{
+  &.swal2-html-container{
+    display: flex !important;
     flex-direction: row;
-    background: #fff;
-    color: #555;
-    box-sizing: content-box;
-    margin-bottom: .5rem;
-
-    .imgBox {
-      width: 5.5rem;
-      height: 5.5rem;
-
-      img {
+    position: relative;
+    background-color: #ddd;
+    overflow: visible;
+    .imgBox{
+      position: absolute;
+      top: -5rem;
+      left: 0;
+      width: 10rem;
+      img{
         width: 100%;
       }
     }
-
-    .contenBox {
-      padding: 1rem;
+    .textBox{
+      height: 5rem;
     }
   }
 }
