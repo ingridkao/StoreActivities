@@ -6,10 +6,11 @@ export interface ActivityListType {
   link?: string
 }
 
-export interface CollectedListType {
-  store_id?: string
-  store_name?: string
-  checkInTime?: string
+export interface AlbumType {
+  event_id?: string
+  event_name?: string
+  collection?: number
+  limit ?: number
 }
 
 export interface ProfileType {

@@ -185,6 +185,15 @@ npm i ua-parser-js
 npm i --save-dev @types/ua-parser-js
 ```
 
+### 7.[sweetalert2](https://sweetalert2.github.io/)
+用於創建美觀且高度可自訂的彈出式對話框 alert 和模態對話框 modal，可以取代 Window.alert()、Window.confirm() 和 window.prompt()，比原生的彈跳視窗更加美觀且有更高的可變性。
+
+全域引入於`main.ts`
+
+```sh
+npm install sweetalert
+```
+
 ## Lint with [ESLint](https://eslint.org/)
 
 - 使用[eslint-plugin-vue](https://eslint.vuejs.org/): 專為 Vue.js 項目定制的 ESLint 插件，建立vue專案有選取的話不用另外安裝

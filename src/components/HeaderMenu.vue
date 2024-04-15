@@ -22,11 +22,11 @@ const togggle = () => {
   navOpen.value = !navOpen.value
 }
 const menuList = ref([
-  {
-    link: '/activity',
-    key: 'Activity',
-    name: '活動說明'
-  },
+  // {
+  //   link: '/activity',
+  //   key: 'Activity',
+  //   name: '活動說明'
+  // },
   {
     link: '/scan',
     key: 'scan',
@@ -40,8 +40,8 @@ const menuList = ref([
   {
     link: '/album',
     key: 'album',
-    name: '集郵冊-打卡紀錄'
-  },
+    name: '集郵冊(所有活動打卡紀錄)'
+  }
 ])
 
 const { getDevice } = useFetchData()

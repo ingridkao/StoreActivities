@@ -3,7 +3,7 @@
 import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
 
-import type { ActivityListType, CollectedListType } from '@/composable/configurable'
+import type { ActivityListType, CollectedListType, AlbumType } from '@/composable/configurable'
 
 import { useLoadingStore } from '@/stores/loading'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
@@ -95,6 +95,14 @@ export function useFetchData() {
     })
   }
 
+  const fetchAlbumData = (): Promise<AlbumType[]> => {
+    return new Promise((resolve, reject) => {
+      axios.get(`${VITE_MOCKAPI_URL}/album`).then((res) => {
+        resolve(res.data || [])
+      })
+    })
+  }
+
   const fetchCollectData = (): Promise<CollectedListType[]> => {
     return new Promise((resolve, reject) => {
       axios.get(`${VITE_MOCKAPI_URL}/collect`).then((res) => {
@@ -148,6 +156,7 @@ export function useFetchData() {
     verifyQRCode,
     commitStoreCheckIn,
     fetchActivityData,
+    fetchAlbumData,
     fetchCollectData,
     confirmActivity,
     fetchLayerData,
