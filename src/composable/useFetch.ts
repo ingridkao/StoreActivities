@@ -3,12 +3,12 @@
 import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
 
-import type { ActivityListType, CollectedListType, AlbumType } from '@/composable/configurable'
+import type { ActivityListType, CollectedListType, AlbumType, ScanResultType } from '@/composable/configurable'
 
 import { useLoadingStore } from '@/stores/loading'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useURL } from '@/composable/useURL'
-const { VITE_MOCKAPI_URL } = import.meta.env
+const { VITE_MOCKAPI_URL, VITE_BASE_URL } = import.meta.env
 
 // import { useConvenienceStore } from '@/stores/convenience'
 const parser = new UAParser()
@@ -29,7 +29,6 @@ export function useFetchData() {
   const verifyQRCode = (latitude: null | number = null, longitude: null | number = null) => {
     console.log(latitude)
     console.log(longitude)
-
     // const lat = Number(latitude)
     // const lon = Number(longitude)
     // const isMobile = getDevice()
@@ -69,6 +68,42 @@ export function useFetchData() {
     })
   }
 
+  const verifyScanResult = (code:string, lat:number, lon:number):Promise<boolean|ScanResultType> => {
+    // const isMobile = getDevice()
+    const ctStr = code.split(`${VITE_BASE_URL}/?ct=`)
+
+    return new Promise((resolve, reject) => {
+      if(!ctStr || ctStr.length === 0){
+        reject('QRCode掃描失敗')
+      }else if(!lat || !lon){
+        reject('裝置未提供經緯度')
+      }else if(ctStr[1]){
+        axios
+        .post(`${VITE_MOCKAPI_URL}/scan`, {
+          data: {
+            ct: ctStr,
+            lon: lon,
+            lat: lat
+          }
+        })
+        .then((res) => {
+            if (res && res.data) {
+              if (res.data.data) {
+                deleteStorage('ct')
+                resolve(res.data.data)
+              } else {
+                resolve(false)
+              }
+            } else {
+              reject('後端發生了例外錯誤')
+            }
+          })
+      }else{
+        reject('輸入參數異常')
+      }
+    })
+  }
+
   const commitStoreCheckIn = async (userId: string = '') => {
     return new Promise((resolve, reject) => {
       if (userId) {
@@ -91,6 +126,8 @@ export function useFetchData() {
     return new Promise((resolve, reject) => {
       axios.get(`${VITE_MOCKAPI_URL}/activities`).then((res) => {
         resolve(res.data || [])
+      }).catch((err) => {
+        reject(err)
       })
     })
   }
@@ -99,6 +136,8 @@ export function useFetchData() {
     return new Promise((resolve, reject) => {
       axios.get(`${VITE_MOCKAPI_URL}/album`).then((res) => {
         resolve(res.data || [])
+      }).catch((err) => {
+        reject(err)
       })
     })
   }
@@ -107,6 +146,8 @@ export function useFetchData() {
     return new Promise((resolve, reject) => {
       axios.get(`${VITE_MOCKAPI_URL}/collect`).then((res) => {
         resolve(res.data || [])
+      }).catch((err) => {
+        reject(err)
       })
     })
   }
@@ -160,6 +201,7 @@ export function useFetchData() {
     fetchCollectData,
     confirmActivity,
     fetchLayerData,
-    getDevice
+    getDevice,
+    verifyScanResult
   }
 }

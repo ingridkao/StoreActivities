@@ -42,6 +42,17 @@ export function useBrowserStorage() {
     }
   }
 
+  
+  const setLocationStorage = (latitude: null | number = null, longitude: null | number = null) => {
+    const toString = `${latitude},${longitude}`
+    sessionStorage.setItem('location', toString)
+  }
+
+  const getLocationStorage = () => {
+    const sessionStorageLocation = sessionStorage.getItem('location')
+    return sessionStorageLocation ? sessionStorageLocation.split(',') : []
+  }
+
   onMounted(async () => {
     if (sessionStorage.getItem('ct')) {
       sessionStorage.getItem('ct')
@@ -53,6 +64,8 @@ export function useBrowserStorage() {
     setAcStorage,
     getCtString,
     setCtStorage,
-    deleteStorage
+    deleteStorage,
+    setLocationStorage,
+    getLocationStorage
   }
 }

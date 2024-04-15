@@ -1,17 +1,21 @@
 <script setup lang="ts">
 /**
- * 掃描QR Code
- * redirect Lobby page
+ * 開啟相機掃描QR Code
  */
-import { ref, onMounted, onUnmounted } from 'vue';
-import HeaderMenu from '@/components/HeaderMenu.vue';
+import { ref, onMounted, onUnmounted } from 'vue'
+import jsQR from "jsqr"
+// import HeaderMenu from '@/components/HeaderMenu.vue';
+import { useFetchData } from '@/composable/useFetch'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
+import ScanResult from '@/components/scan/ScanResult.vue';
 
-import jsQR from "jsqr";
+const { verifyScanResult } = useFetchData()
+const { getLocationStorage } = useBrowserStorage()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
-const canvasVisible = ref(false);
-const videoLoading = ref(false);
-const qrCodeOutputData = ref<string>('');
+const canvasVisible = ref(false)
+const videoLoading = ref(false)
+const qrCodeOutputData = ref<string>('')
 
 let video: HTMLVideoElement | null = null;
 let canvasElement: HTMLCanvasElement | null = null;
@@ -66,7 +70,10 @@ let animationId: AnimationRequestId | null = null;
 
 // const imageDatas = ref()
 // const codes = ref()
-const updateOutPutData = (imageData: any) => {
+const showsScanResult = ref(false)
+const scanResultContent = ref({})
+const [lat, lon] = getLocationStorage()
+const updateOutPutData = async(imageData: any) => {
     if (qrCodeOutputData.value !== '') return
     const code = jsQR(imageData.data, imageData.width, imageData.height, {
         inversionAttempts: "dontInvert",
@@ -79,6 +86,23 @@ const updateOutPutData = (imageData: any) => {
         drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner)
         drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner)
         qrCodeOutputData.value = code.data
+
+        try {
+            const scanResult = await verifyScanResult(code.data, Number(lat), Number(lon))
+            if(scanResult){
+                showsScanResult.value = true
+                scanResultContent.value = scanResult
+                // 打卡成功蓋版
+            }else{
+                showsScanResult.value = true
+                scanResultContent.value = {}
+                // 打卡失敗蓋版
+            }
+        } catch (error) {
+            showsScanResult.value = true
+            scanResultContent.value = {}
+            console.error(error);
+        }
         // pauseAnimation()
     }
 }
@@ -158,7 +182,6 @@ onMounted(() => {
                 canvasVisible.value = false;
                 console.error(error);
             });
-        console.log(streamInstance);
     }
 });
 
@@ -176,11 +199,10 @@ onUnmounted(() => {
 })
 
 
-
 </script>
 
 <template>
-    <HeaderMenu />
+    <!-- <HeaderMenu /> -->
 
     <div class="cameraBox">
         <div v-if="!canvasVisible" class="loadingMessage">
@@ -205,6 +227,8 @@ onUnmounted(() => {
         <!-- {{ codes }} -->
         <button @click="stopMediaTracks">關閉攝影機</button>
     </div>
+
+    <ScanResult v-if="showsScanResult" :result="scanResultContent"/>
 </template>
 
 <style lang="scss" scoped>

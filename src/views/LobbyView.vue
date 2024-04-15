@@ -33,7 +33,6 @@ onMounted(async () => {
 })
 
 const { coords, error, resume } = useGeolocation()
-const geoErrorCode = ref<number>(0)
 let getPosition = false
 watchEffect(
   async () => {
@@ -52,7 +51,6 @@ watchEffect(
       }
 
     } else if (error.value && error.value.code >= 1) {
-      geoErrorCode.value = error.value.code
       const GeolocationPositionError = ['沒有獲取地理位置信息的權限', '資訊回傳了錯誤', '取得地理資訊超過時限']
       const GeolocationErrorString = GeolocationPositionError[error.value.code - 1]
       proxy.$swal.fire({
@@ -66,7 +64,7 @@ watchEffect(
         if (result.isConfirmed) {
           resume()
         }
-      });
+      })
     }
   }
 )

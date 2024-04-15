@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import type { ProfileType } from '@/composable/configurable'
+// import { useFetchData } from '@/composable/useFetch'
 
 // https://developers.line.biz/en/docs/liff/pluggable-sdk/#activate-liff-api
 import liff from '@line/liff/core'
@@ -15,7 +16,7 @@ import login from '@line/liff/login'
 import logout from '@line/liff/logout'
 import isLoggedIn from '@line/liff/is-logged-in'
 import getProfile from '@line/liff/get-profile'
-import getFriendship from '@line/liff/get-friendship'
+// import getFriendship from '@line/liff/get-friendship'
 // import getIDToken from '@line/liff/get-id-token'
 import closeWindow from '@line/liff/close-window'
 import scanCodeV2 from '@line/liff/scan-code-v2'
@@ -29,7 +30,7 @@ liff.use(new login())
 liff.use(new logout())
 liff.use(new isLoggedIn())
 liff.use(new getProfile())
-liff.use(new getFriendship())
+// liff.use(new getFriendship())
 // liff.use(new getIDToken())
 liff.use(new closeWindow())
 liff.use(new scanCodeV2())
@@ -50,7 +51,7 @@ export function useLIFF() {
   }
 
   // ============================
-  const friendFlag = ref(false)
+  // const friendFlag = ref(false)
 
   // then  初始成功未登入 = false
   // then  初始成功已登入 = true
@@ -62,9 +63,9 @@ export function useLIFF() {
           liffId: import.meta.env.VITE_LIFF_ID
         })
         .then(() => {
-          liff.getFriendship().then((data) => {
-            friendFlag.value = data && data.friendFlag ? data.friendFlag : false
-          })
+          // liff.getFriendship().then((data) => {
+          //   friendFlag.value = data && data.friendFlag ? data.friendFlag : false
+          // })
           const userLoggedIn = liff.isLoggedIn()
           resolve(userLoggedIn || true)
         })
@@ -114,6 +115,15 @@ export function useLIFF() {
     })
   }
 
+  const useLineScan = () => {
+    return new Promise((resolve, reject) => {
+      liff
+        .scanCodeV2()
+        .then((result) => resolve(result))
+        .catch((error) => reject(`LineScan: ${error}`))
+    })
+  }
+
   const router = useRouter()
   const useLineLogout = () => {
     const isLogging = liff.isLoggedIn()
@@ -128,19 +138,6 @@ export function useLIFF() {
     }
   }
 
-  const scanCodeByLine = (init: boolean = false) => {
-    return new Promise((resolve, reject) => {
-      if (init) {
-        liff
-          .scanCodeV2()
-          .then((result) => resolve(result))
-          .catch((error) => reject(error))
-      } else {
-        reject('line init fall')
-      }
-    })
-  }
-
   const isLogin = ref(false)
   const getLineProfile = async () => {
     try {
@@ -153,14 +150,36 @@ export function useLIFF() {
     }
   }
 
+  //const { verifyQRCode, commitStoreCheckIn } = useFetchData()
+  // const { getAcString } = useBrowserStorage()
   const scanCode = async () => {
+    const isInClient = getOpenInClient()
+    // const acStr = getAcString()
+
     try {
-      const isLoggedIn = await useLineInit()
-      const scanRes = await scanCodeByLine(isLoggedIn)
-      console.log(scanRes)
+      if(isInClient){
+        isLogin.value = await useLineInit()
+        isLogin.value = await useLineLogin()
+        const scanResult = await useLineScan()
+        console.log(scanResult); 
+        // return scanResult
+        // set ct
+        // const verifyRes = await verifyQRCode()
+        // if (verifyRes) {
+        //   const commitRes = await commitStoreCheckIn(userId)
+        //   console.log(commitRes);
+        //   // 打卡成功或失敗
+        //   // 換頁到打卡結果頁面並帶session結果給下一頁
+        //   // router.push({ 
+        //   // path: '/result'
+        //   // })
+        // }
+      }else{
+        router.push({ path: '/scan' })
+      }
     } catch (error) {
-      //換頁去scan
       console.error(error)
+      router.push({ path: '/scan' })
     }
   }
   return {

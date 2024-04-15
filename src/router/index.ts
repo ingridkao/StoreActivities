@@ -15,6 +15,11 @@ const router = createRouter({
       component: () => import('../views/ActivityView.vue')
     },
     {
+      path: '/direction',
+      name: 'Direction',
+      component: () => import('../views/DirectionView.vue')
+    },
+    {
       path: '/mapStore',
       name: 'MapStore',
       component: () => import('../views/MapStoreView.vue')
@@ -34,11 +39,7 @@ const router = createRouter({
       name: 'Collected',
       component: () => import('../views/CollectedView.vue')
     },
-    {
-      path: '/direction',
-      name: 'Direction',
-      component: () => import('../views/DirectionView.vue')
-    },
+
     {
       path: '/result',
       name: 'Result',
