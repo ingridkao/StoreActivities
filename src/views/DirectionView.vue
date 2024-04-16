@@ -6,15 +6,15 @@
  *       - 未登入:LINE Login redirect到活動說明頁面
  * step2.開啟打卡頁面|功能
  */
+import HeaderMenu from '@/components/HeaderMenu.vue'
 import { useLIFF } from '@/composable/useLIFF'
 const { scanCode } = useLIFF()
-
-const startScanning = async() => {
+const startScanning = async () => {
   try {
     await scanCode()
   } catch (error) {
     // 異常
-    console.error(error);
+    console.error(error)
     // 顯示提示錯誤dialog
     // 倒數10秒reset
   }
@@ -22,10 +22,10 @@ const startScanning = async() => {
 </script>
 
 <template>
+  <HeaderMenu />
   <main>
     <section>
       <!-- 步驟 -->
-
     </section>
 
     <section>

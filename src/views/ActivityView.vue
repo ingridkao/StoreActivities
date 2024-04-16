@@ -1,6 +1,7 @@
 <script setup lang="ts">
 /**
  * 活動說明
+ * step0.確認裝置是否提供經緯度
  * step1.確認是否為進行中活動
  * step2.取得LINE user profile
  *       - 已登入:網頁導轉到此頁
@@ -9,29 +10,25 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
+import HeaderMenu from '@/components/HeaderMenu.vue';
+
+// import type { ProfileType } from '@/composable/configurable'
+import { useFetchData } from '@/composable/useFetch'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useGeolocation } from '@vueuse/core'
-
-// import HeaderMenu from '@/components/HeaderMenu.vue';
-
-import type { ProfileType } from '@/composable/configurable'
+import { useGeo } from '@/composable/useGeo'
 import { useLIFF } from '@/composable/useLIFF'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 
-
-import { useFetchData } from '@/composable/useFetch'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
-
-const { confirmActivity, verifyQRCode, commitStoreCheckIn } = useFetchData()
-const { getAcString, setLocationStorage } = useBrowserStorage()
-const acStr = getAcString()
-const content = ref({})
 const router = useRouter()
+const { confirmActivity, verifyQRCode, commitStoreCheckIn } = useFetchData()
+const { getAcStorage, setAcStorage, setLocationStorage } = useBrowserStorage()
 
-const { proxy } = getCurrentInstance()
-const { coords, error, resume } = useGeolocation()
-
+// step0
+const { coords, error } = useGeolocation()
+const { geoErrorHandler } = useGeo()
 let getPosition = false
 watchEffect(
   async () => {
@@ -42,28 +39,18 @@ watchEffect(
       setLocationStorage(latitude, longitude)
 
     } else if (error.value && error.value.code >= 1) {
-      const GeolocationPositionError = ['沒有獲取地理位置信息的權限', '資訊回傳了錯誤', '取得地理資訊超過時限']
-      const GeolocationErrorString = GeolocationPositionError[error.value.code - 1]
-      proxy.$swal.fire({
-        icon: "info",
-        title: '打卡活動需要裝置位置資訊，請確認是否提供位置存取權',
-        text: GeolocationErrorString || '',
-        showCancelButton: true,
-        confirmButtonText: "開啟存取權",
-        cancelButtonText: "拒絕",
-      }).then((result: { isConfirmed: boolean, isDenied: boolean, isDismissed: boolean, value: boolean }) => {
-        if (result.isConfirmed) {
-          resume()
-        }
-      })
+      geoErrorHandler(error.value.code)
     }
   }
 )
 
-
+// step1
+const acStr = getAcStorage()
+const content = ref({})
 onMounted(() => {
   confirmActivity(Number(acStr)).then(async (res) => {
     if (typeof res === 'object') {
+      setAcStorage(String(acStr))
       content.value = res
     } else if (res === 2) {
       router.push({ path: '/wrapup' })
@@ -73,22 +60,22 @@ onMounted(() => {
   })
 })
 
-const { getLineProfile } = useLIFF()
 const { errorAlert } = useSweetAlert()
-
-const gotoDirection = () => {
-  router.push({ path: '/direction' })
-}
+const { getLineProfile } = useLIFF()
+const userProfile = ref()
 
 const enterActivity = async () => {
   try {
     const verifyRes = await verifyQRCode()
     if (verifyRes) {
-      const profile: ProfileType | undefined = await getLineProfile()
-      const userId = profile && profile.userId ? profile.userId : ''
-      const commitRes = await commitStoreCheckIn(userId)
+      // step2
+      const profile = getLineProfile()
+      if(profile) userProfile.value = profile
+      const commitRes = await commitStoreCheckIn(String(userProfile.value.userId), String(acStr))
+      console.log(commitRes);
+      
       // if(commitRes){
-
+      // 打卡成功
       // }else{
 
       // }
@@ -102,10 +89,13 @@ const enterActivity = async () => {
   }
 }
 
+const gotoDirection = () => {
+  router.push({ path: '/direction' })
+}
 </script>
 
 <template>
-  <!-- <HeaderMenu /> -->
+  <HeaderMenu />
   <main class="event">
     <section class="event_time">
       <div>4.16</div>
@@ -141,9 +131,6 @@ const enterActivity = async () => {
 <style lang="scss" scoped>
 .event {
   flex-direction: column;
-
-  section {}
-
   @media (min-width: 1024px) {
     min-height: 100vh;
     display: flex;

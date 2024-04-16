@@ -52,9 +52,7 @@ export function useLIFF() {
 
   // ============================
   // const friendFlag = ref(false)
-
-  // then  初始成功未登入 = false
-  // then  初始成功已登入 = true
+  // then  初始成功
   // catch 初始失敗
   const useLineInit = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -66,8 +64,7 @@ export function useLIFF() {
           // liff.getFriendship().then((data) => {
           //   friendFlag.value = data && data.friendFlag ? data.friendFlag : false
           // })
-          const userLoggedIn = liff.isLoggedIn()
-          resolve(userLoggedIn || true)
+          resolve(true)
         })
         .catch((e: Error) => {
           reject(Error(`初始失敗${e}`))
@@ -75,36 +72,34 @@ export function useLIFF() {
     })
   }
 
-  const useLineLogin = (): Promise<boolean> => {
+  const useLineLogin = (): Promise<boolean|ProfileType> => {
     const redirectUri: URL = new URL(import.meta.env.VITE_LIFF_ENDPOINT_URL)
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       if (liff.isLoggedIn()) {
-        // 已登入
-        resolve(true)
-      } else if (liff.isInClient()) {
-        // 不能在LIFF瀏覽器中使用
-        // liff.init()在執行時會自動執行
-        resolve(true)
+        liff
+        .getProfile()
+        .then((profile) => resolve(profile))
+        .catch((e: Error) => reject(Error(`取得失敗${e}`)))
+
       } else {
-        const { getAcString, getCtString } = useBrowserStorage()
-        const acStr = getAcString()
-        const ctStr = getCtString()
+        const { getAcStorage, getCtCookies } = useBrowserStorage()
+        const ctStr = getCtCookies()
+        const acStr = getAcStorage()
         const params = {} as { ct?: string; ac?: string }
-        if (acStr) params['ac'] = String(acStr)
         if (ctStr) params['ct'] = String(ctStr)
+        if (acStr) params['ac'] = String(acStr)
         const searchParams: URLSearchParams = new URLSearchParams(params)
         redirectUri.search = searchParams.toString()
         liff.login({
           redirectUri: redirectUri.href
         })
-        resolve(true)
       }
     })
   }
 
-  const useLineProfile = (isLoggedIn: boolean = false): Promise<ProfileType> => {
+  const useLineProfile = (): Promise<ProfileType> => {
     return new Promise((resolve, reject) => {
-      if (isLoggedIn) {
+      if (liff.isLoggedIn()) {
         liff
           .getProfile()
           .then((profile) => resolve(profile))
@@ -138,34 +133,30 @@ export function useLIFF() {
     }
   }
 
-  const isLogin = ref(false)
   const getLineProfile = async () => {
     try {
-      isLogin.value = await useLineInit()
-      isLogin.value = await useLineLogin()
-      const profile: ProfileType = await useLineProfile(isLogin.value)
-      return profile || {}
+      await useLineInit()
+      await useLineLogin()
+      const profile = await useLineProfile()
+      return profile || null
     } catch (error) {
       console.error(error)
     }
   }
 
   //const { verifyQRCode, commitStoreCheckIn } = useFetchData()
-  // const { getAcString } = useBrowserStorage()
   const scanCode = async () => {
     const isInClient = getOpenInClient()
-    // const acStr = getAcString()
-
     try {
       if(isInClient){
-        isLogin.value = await useLineInit()
-        isLogin.value = await useLineLogin()
+        await useLineInit()
+        await useLineLogin()
         const scanResult = await useLineScan()
-        console.log(scanResult); 
-        // return scanResult
-        // set ct
-        // const verifyRes = await verifyQRCode()
+        alert(scanResult)
+        // const verifyRes = await verifyQRCode(scanResult)
         // if (verifyRes) {
+        // const profile: ProfileType = await useLineProfile()
+        // const userId = profile && profile.userId ? profile.userId : ''
         //   const commitRes = await commitStoreCheckIn(userId)
         //   console.log(commitRes);
         //   // 打卡成功或失敗
@@ -178,12 +169,11 @@ export function useLIFF() {
         router.push({ path: '/scan' })
       }
     } catch (error) {
-      console.error(error)
+      alert(error)
       router.push({ path: '/scan' })
     }
   }
   return {
-    isLogin,
     getUserOS,
     getOpenInClient,
     useLineInit,

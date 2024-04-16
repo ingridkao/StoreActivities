@@ -4,13 +4,10 @@
  */
 import { ref, onMounted, onUnmounted } from 'vue'
 import jsQR from "jsqr"
-// import HeaderMenu from '@/components/HeaderMenu.vue';
 import { useFetchData } from '@/composable/useFetch'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import ScanResult from '@/components/scan/ScanResult.vue';
 
 const { verifyScanResult } = useFetchData()
-const { getLocationStorage } = useBrowserStorage()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
 const canvasVisible = ref(false)
@@ -72,7 +69,6 @@ let animationId: AnimationRequestId | null = null;
 // const codes = ref()
 const showsScanResult = ref(false)
 const scanResultContent = ref({})
-const [lat, lon] = getLocationStorage()
 const updateOutPutData = async(imageData: any) => {
     if (qrCodeOutputData.value !== '') return
     const code = jsQR(imageData.data, imageData.width, imageData.height, {
@@ -88,7 +84,7 @@ const updateOutPutData = async(imageData: any) => {
         qrCodeOutputData.value = code.data
 
         try {
-            const scanResult = await verifyScanResult(code.data, Number(lat), Number(lon))
+            const scanResult = await verifyScanResult(code.data)
             if(scanResult){
                 showsScanResult.value = true
                 scanResultContent.value = scanResult
@@ -202,8 +198,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-    <!-- <HeaderMenu /> -->
-
     <div class="cameraBox">
         <div v-if="!canvasVisible" class="loadingMessage">
             🎥 Unable to access video stream (please make sure you have a webcam enabled)
@@ -223,8 +217,6 @@ onUnmounted(() => {
             </div>
         </div>
         <button @click="cleanOutPutData">重新抓取</button>
-        <!-- {{ imageDatas }} -->
-        <!-- {{ codes }} -->
         <button @click="stopMediaTracks">關閉攝影機</button>
     </div>
 

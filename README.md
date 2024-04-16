@@ -23,25 +23,51 @@
    2. 進行feat>dev合併，**請使用Github pull request(PR)**
    3. 合併完刪除該feature分支
 
+
 ## User story | Issue
 
 - [x] 使用者使用LINE登入(透過Line LIFF實現)
 - [x] 使用者在活動大廳(/)觀看有興趣的活動
   - [ ] 樣式
-- [ ] 使用者在活動詳情頁面(/activity)觀看活動說明
+- [x] 使用者在活動詳情頁面(/activity)觀看活動說明
   - [ ] 樣式
 - [ ] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
   - [ ] 樣式
 - [ ] 使用者開啟掃描說明(/direction)進行開啟相機
   - [ ] 樣式
-- [ ] 使用者查閱過去所有活動打卡紀錄(/album)
+- [x] 使用者查閱過去所有活動打卡紀錄(/album)
   - [ ] 樣式
-- [ ] 使用者看到單一活動打卡結果(/collected)
+- [x] 使用者看到單一活動打卡結果(/collected)
   - [ ] 樣式
 - [ ] 使用者使用手機掃描機台qrCode確認所在位置
       POST`https://print-api-uat.ibon.com.tw/cloudprint_api_dev/api/ExtraActivity/ScanEntry/IbonEntry`
 - [ ] 打開大廳頁面選擇活動後驗證打卡是否成功
   - [ ] 樣式
+
+
+### 頁面說明
+
+| | Page          | @/view             | @/component            | Description |
+|-| ------------- | ------------------ | ---------------------- | ----------- |
+|O|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |
+| |活動說明        | ActivityView.vue   | HeaderMenu             |             |
+|O|打卡教學        | DirectionView.vue  | HeaderMenu             |             |
+|-|相機掃描        | ScanView.vue       | 打卡成功/打卡失敗        |            |
+|O|所有活動打卡紀錄 | AlbumView.vue      |                        |             |
+| |單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu             |             |
+|?|中獎序號        | WinningView.vue    |                        |             |
+| |門市地圖        | MapStoreView.vue   | 門市詳細                |             |
+|O|活動已結束      | WrapUpView.vue     |                        |             |
+|O|ComingSoon     | ComingSoonView.vue |                         | 404page     |
+
+### 組件說明
+
+| | Component              | Description  | Used for                        |
+|-| ---------------------- | ------------ | ------------------------------- |
+|O| HeaderMenu.vue         | 會觸發Line登入| 活動說明,打卡教學,單一活動打卡紀錄 |
+|O| ActivitiesListItem.vue | 活動列表      | 活動大廳                         |
+
+
 
 ## Project Setup
 
@@ -125,6 +151,8 @@ VITE_BASE_URL=
 VITE_MAPBOX_KEY=
 
 ```
+
+## 頁面對應
 
 ## 使用套件
 

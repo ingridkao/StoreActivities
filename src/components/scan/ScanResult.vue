@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router'
 
 import type { ScanResultType } from '@/composable/configurable'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-const { getAcString, setAcStorage } = useBrowserStorage()
+const { getAcStorage, setAcStorage } = useBrowserStorage()
 
 const props = defineProps<{
   result: ScanResultType
@@ -16,7 +16,6 @@ const props = defineProps<{
 watch(
   () => props.result.event_id,
   (eventId) => {
-    
     if (eventId) setAcStorage(String(eventId))
   }, { deep: true }
 )
@@ -24,7 +23,7 @@ watch(
 const successResult = computed(() => Object.keys(props.result).length > 0)
 const router = useRouter()
 
-const acString = getAcString()
+const acString = getAcStorage()
 const showCollect = async () => {
   router.push({
     name: 'Collected',

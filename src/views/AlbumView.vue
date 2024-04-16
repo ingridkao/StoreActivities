@@ -2,46 +2,34 @@
 /**
  * 所有打卡紀錄
  */
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
-// import HeaderMenu from '@/components/HeaderMenu.vue'
+  import { ref, onMounted } from 'vue'
 
-import type { AlbumType } from '@/composable/configurable'
-import { useFetchData } from '@/composable/useFetch'
-import { useSweetAlert } from '@/composable/useSweetAlert'
-const { fetchAlbumData } = useFetchData()
-const { errorAlert } = useSweetAlert()
+  import type { AlbumType } from '@/composable/configurable'
+  import { useFetchData } from '@/composable/useFetch'
+  import { useSweetAlert } from '@/composable/useSweetAlert'
+  import { useLink } from '@/composable/useLink'
+  const { linkToCollect } = useLink()
 
-const albumStore = ref<AlbumType[]>([])
-onMounted(async () => {
-  try {
-    const res = await fetchAlbumData()
-    albumStore.value = res || []
-  } catch (error) {
-    const errorStr = String(error)
-    errorAlert(errorStr)
-  }
-})
+  const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
+  const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
 
-const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
-const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
-const router = useRouter()
-const linkTo = async (albumItem:AlbumType) => {
-  if (albumItem.event_id) {
-    router.push({
-      name: 'Collected',
-      params: {
-        id: albumItem.event_id
-      }
-    })
-  } else {
-    errorAlert()
-  }
-}
+  const { fetchAlbumData } = useFetchData()
+  const { errorAlert } = useSweetAlert()
+
+  const albumStore = ref<AlbumType[]>([])
+  onMounted(async () => {
+    try {
+      const res = await fetchAlbumData()
+      albumStore.value = res || []
+    } catch (error) {
+      const errorStr = String(error)
+      errorAlert(errorStr)
+    }
+  })
+
 </script>
 
 <template>
-  <!-- <HeaderMenu /> -->
   <main>
     <section class="album">
       <div 
@@ -50,7 +38,7 @@ const linkTo = async (albumItem:AlbumType) => {
       >
         <div class="album_title">
           <h6>{{ albumItem.event_name || '打卡活動' }}</h6>
-          <button @click="linkTo(albumItem)">></button>
+          <button @click="linkToCollect(albumItem)">></button>
         </div>
         <div class="album_base">
           <div 

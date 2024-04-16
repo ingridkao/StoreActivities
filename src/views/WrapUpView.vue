@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+/**
+ * 活動已結束
+ */
+  import { useLink } from '@/composable/useLink'
+  const { linkToLobby, linkToAlbum } = useLink()
 </script>
 
 <template>
@@ -9,8 +13,8 @@ import { RouterLink } from 'vue-router';
     </section>
 
     <section class="linkBox">
-      <RouterLink to="/album">過去打卡紀錄</RouterLink>
-      <RouterLink to="/">活動大廳</RouterLink>
+      <button @click="linkToAlbum">過去活動打卡紀錄</button>
+      <button @click="linkToLobby">活動大廳</button>
     </section>
   </main>
 </template>

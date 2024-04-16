@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, reactive, watch, computed } from 'vue';
 import CameraBtn from '@/components/button/CameraBtn.vue';
-import HeaderMenu from '@/components/HeaderMenu.vue'
 import FilterBox from '@/components/maps/FilterBox.vue'
 
 import { useMap } from '@/composable/useMap'
@@ -69,7 +68,6 @@ watch(
 
 <template>
   <main id="mapMain">
-    <HeaderMenu />
     <!-- <a href="https://qwaretest-9b8d6.web.app/map8">先看這個</a> -->
     <div id="mapboxBasic"></div>
     <!-- <CameraBtn /> -->

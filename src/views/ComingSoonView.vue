@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+/**
+ * ComingSoon
+ */
+  import { useLink } from '@/composable/useLink'
+  const { linkToLobby } = useLink()
 </script>
 
 <template>
@@ -9,7 +13,7 @@ import { RouterLink } from 'vue-router';
     </section>
 
     <section class="linkBox">
-      <RouterLink to="/">活動大廳</RouterLink>
+      <button @click="linkToLobby">活動大廳</button>
     </section>
   </main>
 </template>
