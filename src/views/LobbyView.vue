@@ -11,12 +11,12 @@ import { ref, onMounted, watchEffect } from 'vue'
 import type { ActivityListType } from '@/composable/configurable'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
+import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 
 import ActivitiesListItem from '@/components/ActivitiesListItem.vue'
-
 
 // step0
 const { coords, error } = useGeolocation()
@@ -24,6 +24,7 @@ const { geoErrorHandler } = useGeo()
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
 const { fetchActivityData, fetchAdData, verifyQRCode } = useFetchData()
+const { getQueryParam } = useLink()
 
 let getPosition = false
 watchEffect(
@@ -32,10 +33,14 @@ watchEffect(
     if (getPosition) return
     if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
       getPosition = true
-      setLocationStorage(latitude, longitude)
+      // setLocationStorage(latitude, longitude)
       try {
         // step1
-        await verifyQRCode()
+        const pathQuery1 = getQueryParam(window.location.href, 'ct')
+        const pathQuery2 = getQueryParam(window.location.href, 'lat')
+        const pathQuery3 = getQueryParam(window.location.href, 'lon')
+        setLocationStorage(Number(pathQuery2), Number(pathQuery3))
+        await verifyQRCode(pathQuery1)
       } catch (error) {
         errorAlert(`verifyQRCode:${error}`)
       }

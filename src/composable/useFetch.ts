@@ -1,17 +1,18 @@
 import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
-import type { ActivityListType, CollectedListType, CollectedType, AlbumType, ScanResultType } from '@/composable/configurable'
+import type { ActivityListType, CollectedListType, CollectedType, AlbumType, ScanResultType, VerifyCodeResultType } from '@/composable/configurable'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-import { useLink } from '@/composable/useLink'
+// import { useLIFF } from '@/composable/useLIFF'
+
 import { useLoadingStore } from '@/stores/loading'
-const { VITE_MOCKAPI_URL, VITE_BASE_URL } = import.meta.env
+const { VITE_MOCKAPI_URL } = import.meta.env
 
 export function useFetchData() {
   const parser = new UAParser()
   const loadStore = useLoadingStore()
   const { 
     getCtCookies, setCtCookies, 
-    getTokenCookies, setTokenCookies, resetCtCookies,
+    setTokenCookies, resetCtCookies,
     getAcStorage,
     deleteStorage, getLocationStorage } = useBrowserStorage()
 
@@ -21,16 +22,15 @@ export function useFetchData() {
   }
 
   // 驗證QR Code
-  const { getQueryParam } = useLink()
-  const verifyQRCode = (ctStr:string='') => {
+  const verifyQRCode = (ctStr:string=''):Promise<boolean|VerifyCodeResultType> => {
     // ct=OP666000031818094ac904
     // 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
     let ctString = ctStr 
-    if(ctString === ''){
-      ctString = getQueryParam(window.location.href, 'ct')
+    if(ctStr !== ''){
+      ctString = ctStr
+    }else{
+      ctString = getCtCookies()
     }
-    const lat = getQueryParam(window.location.href, 'lat')
-    const lon = getQueryParam(window.location.href, 'lon')
     const [latitude, longitude] = getLocationStorage()
     return new Promise((resolve, reject) => {
       if (ctString) {
@@ -38,8 +38,8 @@ export function useFetchData() {
         .post('/api/ScanEntry/IbonEntry', {
           data: {
             qrCode: ctString,
-            longitude: Number(lon) || longitude,
-            latitude: Number(lat) || latitude
+            longitude: longitude,
+            latitude: latitude
           }
         })
         .then((res) => {
@@ -47,11 +47,16 @@ export function useFetchData() {
             if (res.data.result.token) {
               setCtCookies(ctString)
               setTokenCookies(res.data.result.token)
-              resolve(true)
+              resolve({
+                c: ctString,
+                t: res.data.result.token
+              })
             } else {
+              resetCtCookies()
               reject(res.data.msg)
             }
           } else {
+            resetCtCookies()
             reject('發生了例外錯誤')
           }
         })
@@ -61,91 +66,49 @@ export function useFetchData() {
     })
   }
 
-  const verifyScanResult = (code:string):Promise<boolean|ScanResultType> => {
-    // const isMobile = getDevice()
-    const [lat, lon] = getLocationStorage()
-    const ctToken = getTokenCookies()
-    const activityId = getAcStorage()
-    const codeSplit = code.split(`${VITE_BASE_URL}/?ct=`)
-    let ctStr = ''
-    if(codeSplit && codeSplit.length > 0){
-      ctStr = codeSplit[1]
-    }else{
-      ctStr = getCtCookies()
-    }
-
+  const commitStoreCheckIn = async (verifyRes:boolean|VerifyCodeResultType):Promise<boolean|ScanResultType>  => {
+    const acStr = getAcStorage()
+    // const { getLineProfile } = useLIFF()
+    // const profile = getLineProfile()
+    // console.log(profile);
+    // if(profile) userProfile.value = profile
     return new Promise((resolve, reject) => {
-      if(!lat || !lon){
-        reject('裝置未提供經緯度')
-      }else if(ctStr === '' || ctToken === ''){
-        reject('QRCode掃描失敗')
-      }else if(activityId){
-        axios
-        .post(`${VITE_MOCKAPI_URL}/scan`, {
-          data: {
-            token: ctToken,
-            ct: ctStr,
-            ac: activityId,
-            lon: lon,
-            lat: lat
-          }
-        })
-        .then((res) => {
-          if (res && res.data) {
-            if (res.data.data) {
-              resolve(res.data.data)
-              resetCtCookies()
-            } else {
-              resolve(false)
-            }
-          } else {
-            reject('後端發生了例外錯誤')
-          }
-        })
+      if(verifyRes){
+        if(!acStr){
+          reject('活動錯誤')
+        // }else if(!userId){
+        //   reject('訪客無法進行打卡')
+        }else{
+          // 驗證成功
+          // axios
+          // .post(`${VITE_MOCKAPI_URL}/checkIn`, {
+          //   data: {
+          //     uid: userId,
+          //     aid: acStr,
+          //     token: '123',
+          //     qrcode: ct
+          //     // lon: lon,
+          //     // lat: lat
+          //   }
+          // })
+          // .then((res) => {
+          //   if (res && res.data) {
+          //     if (res.data.data) {
+          //       deleteStorage('ct')
+          //       resolve(res.data.data)
+          //     } else {
+          //       resolve(false)
+          //     }
+          //   } else {
+          //     reject('後端發生了例外錯誤')
+          //   }
+          // })
+          resolve({
+            event_id: String(acStr),
+          })
+        }
       }else{
-        reject('輸入參數異常')
-      }
-    })
-  }
-
-  const commitStoreCheckIn = async (userId: string = '', acStr: string = '') => {
-
-    return new Promise((resolve, reject) => {
-      if (userId) {
-        // axios.get(`${VITE_MOCKAPI_URL}/').then((rs) => {
-        resolve(true)
-        //   resolve(res.data.data)
-        // }).catch(e=>{
-        // 打卡失敗
-        // return Error(e)
-        // }).finally(()=>{
-        // deleteStorage('ct')
-        // })
-        axios
-        .post(`${VITE_MOCKAPI_URL}/checkIn`, {
-          data: {
-            uid: userId,
-            aid: acStr,
-            token: '123',
-            qrcode: ct
-            // lon: lon,
-            // lat: lat
-          }
-        })
-        .then((res) => {
-          if (res && res.data) {
-            if (res.data.data) {
-              deleteStorage('ct')
-              resolve(res.data.data)
-            } else {
-              resolve(false)
-            }
-          } else {
-            reject('後端發生了例外錯誤')
-          }
-        })
-      } else {
-        reject('訪客無法進行打卡')
+        reject('參數錯誤')
       }
     })
   }
@@ -203,17 +166,15 @@ export function useFetchData() {
     })
   }
 
-  const confirmActivity = (acStr: number | null = null): Promise<ActivityListType | number> => {
+  const confirmActivity = (acStr: String = ''): Promise<ActivityListType | number> => {
     return new Promise((resolve, reject) => {
-      if (!acStr) resolve(0)
+      if (acStr === '') resolve(0)
       fetchActivityData()
         .then((res: ActivityListType[]) => {
-          const ongoActivity = res.find((item) => Number(item.id) === Number(acStr))
+          const ongoActivity = res.find((item) => String(item.id) === acStr)
           if (ongoActivity && ongoActivity.statu === 1) {
-            // 活動中
             resolve(ongoActivity)
           } else {
-
             const statusCode = ongoActivity ? Number(ongoActivity.statu) : 0
             resolve(statusCode)
           }
@@ -252,7 +213,6 @@ export function useFetchData() {
     fetchCollectData,
     confirmActivity,
     fetchLayerData,
-    getDevice,
-    verifyScanResult
+    getDevice
   }
 }

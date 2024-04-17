@@ -10,8 +10,8 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, onMounted, watchEffect } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, watchEffect } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue';
 
 // import type { ProfileType } from '@/composable/configurable'
@@ -19,9 +19,9 @@ import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
-import { useLIFF } from '@/composable/useLIFF'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 
+const route = useRoute()
 const router = useRouter()
 const { confirmActivity, verifyQRCode, commitStoreCheckIn } = useFetchData()
 const { getAcStorage, setAcStorage, setLocationStorage } = useBrowserStorage()
@@ -30,53 +30,51 @@ const { getAcStorage, setAcStorage, setLocationStorage } = useBrowserStorage()
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 let getPosition = false
+
+// step1
+const { errorAlert } = useSweetAlert()
+const content = ref({})
+
 watchEffect(
   async () => {
+    // step0
     const { latitude, longitude } = coords.value
     if (getPosition) return
     if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
       getPosition = true
-      setLocationStorage(latitude, longitude)
+      // setLocationStorage(latitude, longitude)
 
     } else if (error.value && error.value.code >= 1) {
       geoErrorHandler(error.value.code)
     }
+
+    // step1
+    const acStr = getAcStorage()
+    const activityId = route.params && route.params.id ? route.params.id: acStr
+    try {
+      const confirmRes = await confirmActivity(String(activityId))
+      if (typeof confirmRes === 'object') {
+        setAcStorage(String(activityId))
+        content.value = confirmRes
+      } else if (confirmRes === 2) {
+        router.push({ path: '/wrapup' })
+      } else {
+        router.push({ name: 'ComingSoon' })
+      }
+    } catch (error) {
+      const errorStr = String(error)
+      errorAlert(errorStr)
+    }
   }
 )
 
-// step1
-const acStr = getAcStorage()
-const content = ref({})
-onMounted(() => {
-  confirmActivity(Number(acStr)).then(async (res) => {
-    if (typeof res === 'object') {
-      setAcStorage(String(acStr))
-      content.value = res
-    } else if (res === 2) {
-      router.push({ path: '/wrapup' })
-    } else {
-      router.push({ name: 'ComingSoon' })
-    }
-  })
-})
-
-const { errorAlert } = useSweetAlert()
-const { getLineProfile } = useLIFF()
-const userProfile = ref()
 
 const enterActivity = async () => {
   try {
+    // step3
     const verifyRes = await verifyQRCode()
     if (verifyRes) {
-      // step2
-      const profile = getLineProfile()
-      if(profile) userProfile.value = profile
-      const commitRes = await commitStoreCheckIn(String(userProfile.value.userId), String(acStr))
-      console.log(commitRes);
-      // if(commitRes){
-      // 打卡成功
-      // }else{
-      // }
+      const commitRes = await commitStoreCheckIn(verifyRes)
       console.log(commitRes);
     } else {
       router.push({ path: '/direction' })

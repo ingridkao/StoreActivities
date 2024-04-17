@@ -10,7 +10,7 @@ const router = createRouter({
       component: LobbyView
     },
     {
-      path: '/activity',
+      path: '/activity/:id?',
       name: 'Activity',
       component: () => import('../views/ActivityView.vue')
     },

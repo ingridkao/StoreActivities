@@ -33,8 +33,14 @@ export interface ProfileType {
 }
 
 export interface ScanResultType {
-  event_id?: number
+  event_id?: string
   id?: string
   name?: string
   date?: string
 }
+
+export interface VerifyCodeResultType {
+  c?: string
+  t?: string
+}
+
