@@ -5,9 +5,9 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import jsQR from "jsqr"
 import { useFetchData } from '@/composable/useFetch'
-import ScanResult from '@/components/ScanResult.vue';
-
-const { verifyScanResult } = useFetchData()
+import ScanResult from '@/components/ScanResult.vue'
+const { VITE_BASE_URL } = import.meta.env
+const { verifyQRCode, commitStoreCheckIn } = useFetchData()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
 const canvasVisible = ref(false)
@@ -69,6 +69,7 @@ let animationId: AnimationRequestId | null = null;
 // const codes = ref()
 const showsScanResult = ref(false)
 const scanResultContent = ref({})
+
 const updateOutPutData = async(imageData: any) => {
     if (qrCodeOutputData.value !== '') return
     const code = jsQR(imageData.data, imageData.width, imageData.height, {
@@ -84,17 +85,23 @@ const updateOutPutData = async(imageData: any) => {
         qrCodeOutputData.value = code.data
 
         try {
-            const scanResult = await verifyScanResult(code.data)
-            if(scanResult){
-                showsScanResult.value = true
-                scanResultContent.value = scanResult
+            const codeSplit = code.data.split(`${VITE_BASE_URL}/?ct=`)
+            // const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
+            // const verifyRes = await verifyQRCode(ctCode)
+            // const commitRes = await commitStoreCheckIn(verifyRes)            
+            const qrcodeOk = (codeSplit.length === 2 && codeSplit[1])?true: false
+            const commitRes = await commitStoreCheckIn(qrcodeOk)
+            if(commitRes){
                 // 打卡成功蓋版
+                showsScanResult.value = true
+                scanResultContent.value = commitRes
             }else{
+                // 打卡失敗蓋版
                 showsScanResult.value = true
                 scanResultContent.value = {}
-                // 打卡失敗蓋版
             }
         } catch (error) {
+            // 打卡失敗蓋版
             showsScanResult.value = true
             scanResultContent.value = {}
             console.error(error);

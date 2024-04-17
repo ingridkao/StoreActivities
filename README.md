@@ -32,18 +32,22 @@
 - [x] 使用者在活動詳情頁面(/activity)觀看活動說明
   - [ ] 樣式
   - [ ] 串接API(待UI完成再進行)
-- [ ] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
-  - [ ] 樣式
 - [x] 使用者開啟掃描說明(/direction)進行開啟相機
+  - [ ] 樣式
+- [x] 使用者看到所有活動打卡列表(/album)
+  - [ ] 樣式
+- [x] 使用者看到單一活動打卡結果(/collected)
+  > 開發route說明
+  `/collected` -> 回到所有活動打卡列表
+  `/collected/1`,`/collected/2`,`/collected/3` -> 顯示單一活動打卡
+  點擊門市彈出視窗(使用sweetalert2)
+  - [ ] 樣式
+- [ ] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
   - [ ] 樣式
 - [x] 使用者查閱過去所有活動打卡紀錄(/album)
   - [ ] 樣式
-- [x] 使用者看到單一活動打卡結果(/collected)
-  - [ ] 樣式
-- [ ] 使用者使用手機掃描機台qrCode確認所在位置
-      POST`https://print-api-uat.ibon.com.tw/cloudprint_api_dev/api/ExtraActivity/ScanEntry/IbonEntry`
-- [ ] 打開大廳頁面選擇活動後驗證打卡是否成功
-  - [ ] 樣式
+- [x] 使用者使用手機掃描機台qrCode確認所在位置
+- [ ] 驗證打卡是否成功
 
 
 ### 頁面說明

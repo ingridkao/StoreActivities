@@ -23,11 +23,11 @@
     navOpen.value = !navOpen.value
   }
   const menuList = ref([
-    {
-      link: '/scan',
-      key: 'Scan',
-      name: '我要打卡'
-    },
+    // {
+    //   link: '/scan',
+    //   key: 'Scan',
+    //   name: '我要打卡'
+    // },
     {
       link: '/mapStore',
       key: 'MapStore',
@@ -36,7 +36,7 @@
     {
       link: '/album',
       key: 'Album',
-      name: '活動打卡紀錄'
+      name: '所有打卡紀錄'
     }
   ])
 
@@ -53,16 +53,22 @@
     <transition name="translateX">
       <nav v-show="navOpen">
         <div class="sidemenu__wrapper">
-          <!-- <ul class="sidemenu__list">
-            <template v-if="userProfile">
+          <ul class="sidemenu__list">
+            <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
+              <RouterLink :to="item.link">{{ item.name }}</RouterLink>
+            </li>
+            <li class="sidemenu__item">
+              <button @click="linkToLobby">回到活動大廳</button>
+            </li>
+            <!-- <template v-if="userProfile">
               <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
                 <RouterLink :to="item.link">{{ item.name }}</RouterLink>
               </li>
             </template>
             <li v-else class="sidemenu__item">
               <button @click="linkToLobby">回到活動大廳</button>
-            </li>
-          </ul> -->
+            </li> -->
+          </ul>
         </div>
         <!-- <div v-if="userProfile" class="userProfile">
           <img v-if="userProfile.pictureUrl" :src="userProfile.pictureUrl" :alt="userProfile.displayName">
@@ -162,19 +168,27 @@
       }
 
       &__item {
-        a {
-          text-decoration: none;
-          line-height: 1.25rem;
+        a,button {
+          width: 100%;
+          line-height: 2rem;
           font-size: 1.25rem;
           padding: .5rem 1rem;
           display: block;
           color: white;
           transition: .4s ease;
-
+          text-align: center;
           &:hover {
             background: lightgrey;
             color: dimgrey;
           }
+        }
+        a{
+          text-decoration: none;
+        }
+        button{
+          background: transparent;
+          outline: none;
+          border: none;
         }
       }
     }

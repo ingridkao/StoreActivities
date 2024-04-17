@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+// import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import type { ProfileType } from '@/composable/configurable'
@@ -152,19 +152,12 @@ export function useLIFF() {
         await useLineInit()
         await useLineLogin()
         const scanResult = await useLineScan()
+        // 掃描出來的code
         alert(scanResult)
         // const verifyRes = await verifyQRCode(scanResult)
-        // if (verifyRes) {
-        // const profile: ProfileType = await useLineProfile()
-        // const userId = profile && profile.userId ? profile.userId : ''
-        //   const commitRes = await commitStoreCheckIn(userId)
-        //   console.log(commitRes);
-        //   // 打卡成功或失敗
-        //   // 換頁到打卡結果頁面並帶session結果給下一頁
-        //   // router.push({ 
-        //   // path: '/result'
-        //   // })
-        // }
+        // const commitRes = await commitStoreCheckIn(verifyRes)
+        // console.log(commitRes);
+        // 打卡成功或失敗->sweat alert
       }else{
         router.push({ path: '/scan' })
       }
