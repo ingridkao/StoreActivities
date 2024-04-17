@@ -15,25 +15,26 @@ const router = createRouter({
       component: () => import('../views/ActivityView.vue')
     },
     {
-      path: '/mapStore',
-      name: 'MapStore',
-      component: () => import('../views/MapStoreView.vue')
-    },
-    // {
-    //   path: '/mapEva',
-    //   name: 'mapEvangelion',
-    //   component: () => import('../views/MapEvaView.vue')
-    // },
-    {
-      path: '/collected',
-      name: 'Collected',
-      component: () => import('../views/CollectedView.vue')
-    },
-    {
       path: '/direction',
       name: 'Direction',
       component: () => import('../views/DirectionView.vue')
     },
+    {
+      path: '/mapStore',
+      name: 'MapStore',
+      component: () => import('../views/MapStoreView.vue')
+    },
+    {
+      path: '/album',
+      name: 'Album',
+      component: () => import('../views/AlbumView.vue')
+    },
+    {
+      path: '/collected/:id?',
+      name: 'Collected',
+      component: () => import('../views/CollectedView.vue'),
+    },
+
     {
       path: '/result',
       name: 'Result',
@@ -45,14 +46,14 @@ const router = createRouter({
       component: () => import('../views/ScanView.vue')
     },
     {
+      path: '/winning',
+      name: 'Winning',
+      component: () => import('../views/WinningView.vue')
+    },
+    {
       path: '/wrapup',
       name: 'WrapUp',
       component: () => import('../views/WrapUpView.vue')
-    },
-    {
-      path: '/error',
-      name: 'CodeError',
-      component: () => import('../views/CodeErrorView.vue')
     },
     {
       path: '/:pathMatch(.*)*',

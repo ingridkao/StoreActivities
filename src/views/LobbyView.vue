@@ -1,65 +1,81 @@
 <script setup lang="ts">
 /**
- * 大廳: 活動廣告列表
+ * 活動大廳
+ * step0.  確認使用者同意裝置位置資料
+ * step1.  確認URL是否有ct參數 >> 驗證是否合法 >> 合法則存起來
+ * step2-1.請求所有活動列表    >> 連結至指定活動
+ * step2-2.請求所有廣告列表    >> 連結至指定廣告
  */
-import { ref, onMounted, watchEffect, getCurrentInstance } from 'vue'
-// const instance = getCurrentInstance()
-// console.log(instance?.appContext.config.globalProperties.$swal);
-import ActivitiesListItem from '@/components/activity/ActivitiesListItem.vue'
+import { ref, onMounted, watchEffect } from 'vue'
 
 import type { ActivityListType } from '@/composable/configurable'
+import { useGeolocation } from '@vueuse/core'
+import { useGeo } from '@/composable/useGeo'
 import { useFetchData } from '@/composable/useFetch'
-const { proxy } = getCurrentInstance()
-const activitiesList = ref<ActivityListType[]>([])
-const { fetchActivityData, verifyQRCode } = useFetchData()
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
+import { useSweetAlert } from '@/composable/useSweetAlert'
 
-onMounted(async () => {
-  try {
-    const res = await fetchActivityData()
-    activitiesList.value = res || []
-  } catch (error) {
-    proxy.$swal.fire({
-      icon: "error",
-      title: '出了一點問題',
-      text: error,
-    })
-  }
-})
+import ActivitiesListItem from '@/components/ActivitiesListItem.vue'
 
-let skip = false
+
+// step0
+const { coords, error } = useGeolocation()
+const { geoErrorHandler } = useGeo()
+const { setLocationStorage } = useBrowserStorage()
+const { errorAlert } = useSweetAlert()
+const { fetchActivityData, fetchAdData, verifyQRCode } = useFetchData()
+
+let getPosition = false
 watchEffect(
   async () => {
-    if (skip) return
-    try {
-      skip = await verifyQRCode()
-    } catch (error) {   
-      skip = true   
-      proxy.$swal.fire({
-        icon: "error",
-        title: '驗證錯誤',
-        text: error,
-      })
+    const { latitude, longitude } = coords.value
+    if (getPosition) return
+    if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+      getPosition = true
+      setLocationStorage(latitude, longitude)
+      try {
+        // step1
+        await verifyQRCode()
+      } catch (error) {
+        errorAlert(`verifyQRCode:${error}`)
+      }
+    } else if (error.value && error.value.code >= 1) {
+      geoErrorHandler(error.value.code)
     }
   }
 )
+
+const activitiesList = ref<ActivityListType[]>([])
+onMounted(async () => {
+  try {
+    //step2-1
+    //step2-2
+    Promise.all([
+      fetchActivityData(),
+      // fetchAdData(),
+    ]).then(dataArray => {
+      activitiesList.value = dataArray[0] || []
+    })
+  } catch (error) {
+    errorAlert(`fetchActivityData:${error}`)
+  }
+})
 
 </script>
 
 <template>
   <main>
-    <section v-for="activities in activitiesList" :key="activities.id">
+    <template v-for="activities in activitiesList" :key="activities.id">
       <ActivitiesListItem v-if="activities.id" :activities="activities" />
-    </section>
+    </template>
 
-    <section>
-      <ActivitiesListItem 
-        :activities="{
-        title: '打卡紀錄',
-        statu: 1,
-        img: 'https://i.imgur.com/d8ptVfB.png',
-        link: '/collected'
-      }" />
-    </section>
+    <ActivitiesListItem :activities="{
+      title: '集郵冊-打卡紀錄',
+      statu: 1,
+      img: 'https://i.imgur.com/d8ptVfB.png',
+      link: '/album'
+    }" />
+
   </main>
 </template>
 

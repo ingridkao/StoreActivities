@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 
 import { mount } from '@vue/test-utils'
-import ActivitiesListItem from '../activity/ActivitiesListItem.vue'
+import ActivitiesListItem from '../ActivitiesListItem.vue'
 
 describe('ActivitiesItem', () => {
   it('renders properly', () => {
