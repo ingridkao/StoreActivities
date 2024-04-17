@@ -63,7 +63,8 @@ const linkTo = async () => {
 
     >div {
       height: 5rem;
-      background-color: #ddd;
+      background-color: rgba(255,255,255,0.5);
+      color: #000;
       border-radius: 0.5rem;
       display: flex;
       justify-content: center;

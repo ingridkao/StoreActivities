@@ -31,9 +31,10 @@
   - [ ] 樣式
 - [x] 使用者在活動詳情頁面(/activity)觀看活動說明
   - [ ] 樣式
+  - [ ] 串接API(待UI完成再進行)
 - [ ] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
   - [ ] 樣式
-- [ ] 使用者開啟掃描說明(/direction)進行開啟相機
+- [x] 使用者開啟掃描說明(/direction)進行開啟相機
   - [ ] 樣式
 - [x] 使用者查閱過去所有活動打卡紀錄(/album)
   - [ ] 樣式
@@ -52,9 +53,9 @@
 |O|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |
 | |活動說明        | ActivityView.vue   | HeaderMenu             |             |
 |O|打卡教學        | DirectionView.vue  | HeaderMenu             |             |
-|-|相機掃描        | ScanView.vue       | 打卡成功/打卡失敗        |            |
+|O|相機掃描        | ScanView.vue       | ScanResult             |            |
 |O|所有活動打卡紀錄 | AlbumView.vue      |                        |             |
-| |單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu             |             |
+|O|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu             |             |
 |?|中獎序號        | WinningView.vue    |                        |             |
 | |門市地圖        | MapStoreView.vue   | 門市詳細                |             |
 |O|活動已結束      | WrapUpView.vue     |                        |             |
@@ -66,6 +67,7 @@
 |-| ---------------------- | ------------ | ------------------------------- |
 |O| HeaderMenu.vue         | 會觸發Line登入| 活動說明,打卡教學,單一活動打卡紀錄 |
 |O| ActivitiesListItem.vue | 活動列表      | 活動大廳                         |
+|O| ScanResult.vue         | 打卡結果      | 相機掃描                         |
 
 
 

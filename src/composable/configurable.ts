@@ -19,6 +19,13 @@ export interface CollectedListType {
   checkInTime?: string
 }
 
+export interface CollectedType {
+  event_id?: string
+  event_name?: string
+  limit ?: number
+  collection?: CollectedListType[]
+}
+
 export interface ProfileType {
   userId?: string
   displayName?: string

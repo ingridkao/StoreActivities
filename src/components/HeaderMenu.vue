@@ -3,19 +3,19 @@
    * Header
    */
   import { ref, onMounted } from 'vue'
-  import { RouterLink } from 'vue-router'
+  // import { RouterLink } from 'vue-router'
   import { useLink } from '@/composable/useLink'
-  import { useLIFF } from '@/composable/useLIFF'
+  // import { useLIFF } from '@/composable/useLIFF'
 
   const { linkToLobby } = useLink()
-  const { getOpenInClient, getUserOS, getLineProfile, useLineLogout } = useLIFF()
-  const openInLIFF = getOpenInClient()
-  const userOS = getUserOS()
+  // const { getOpenInClient, getUserOS, getLineProfile, useLineLogout } = useLIFF()
+  // const openInLIFF = getOpenInClient()
+  // const userOS = getUserOS()
 
   const userProfile = ref()
   onMounted(() => {
-    const profile = getLineProfile()
-    if(profile) userProfile.value = profile
+    // const profile = getLineProfile()
+    // if(profile) userProfile.value = profile
   })
 
   const navOpen = ref<Boolean>(false)
@@ -53,7 +53,7 @@
     <transition name="translateX">
       <nav v-show="navOpen">
         <div class="sidemenu__wrapper">
-          <ul class="sidemenu__list">
+          <!-- <ul class="sidemenu__list">
             <template v-if="userProfile">
               <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
                 <RouterLink :to="item.link">{{ item.name }}</RouterLink>
@@ -62,9 +62,9 @@
             <li v-else class="sidemenu__item">
               <button @click="linkToLobby">回到活動大廳</button>
             </li>
-          </ul>
+          </ul> -->
         </div>
-        <div v-if="userProfile" class="userProfile">
+        <!-- <div v-if="userProfile" class="userProfile">
           <img v-if="userProfile.pictureUrl" :src="userProfile.pictureUrl" :alt="userProfile.displayName">
           <div>
             <p>{{ userProfile.displayName || '' }}</p>
@@ -72,7 +72,7 @@
             <p>{{ userOS }}開啟|{{ openInLIFF ? 'LINE內開啟' : '外部瀏覽器' }}</p>
             <button v-if="!openInLIFF" @click="useLineLogout">登出</button>
           </div>
-        </div>
+        </div> -->
       </nav>
     </transition>
   </div>

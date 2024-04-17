@@ -5,7 +5,7 @@
    */
   import { ref, onMounted } from 'vue'
   import { useLink } from '@/composable/useLink'
-  const { BackCollect } = useLink()
+  const { backCollect } = useLink()
 
   const serialNumber = ref(5473985669)
   onMounted(() => {
@@ -30,7 +30,7 @@
     <section>
       <h6>使用說明</h6>
       <p>請至7-Eleven門市ibon機台列印，於.....</p>
-      <button @click="BackCollect">結束</button>
+      <button @click="backCollect">結束</button>
     </section>
   </main>
 </template>

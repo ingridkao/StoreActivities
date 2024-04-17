@@ -30,9 +30,9 @@ const router = createRouter({
       component: () => import('../views/AlbumView.vue')
     },
     {
-      path: '/collected/:id',
+      path: '/collected/:id?',
       name: 'Collected',
-      component: () => import('../views/CollectedView.vue')
+      component: () => import('../views/CollectedView.vue'),
     },
 
     {

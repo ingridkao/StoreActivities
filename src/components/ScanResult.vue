@@ -2,36 +2,16 @@
 /**
  * 打卡結果
  */
-import { computed, watch } from 'vue'
-import { useRouter } from 'vue-router'
-
+import { computed  } from 'vue'
 import type { ScanResultType } from '@/composable/configurable'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
-const { getAcStorage, setAcStorage } = useBrowserStorage()
+import { useLink } from '@/composable/useLink'
+const { linkToCollect } = useLink()
 
 const props = defineProps<{
   result: ScanResultType
 }>()
 
-watch(
-  () => props.result.event_id,
-  (eventId) => {
-    if (eventId) setAcStorage(String(eventId))
-  }, { deep: true }
-)
-
 const successResult = computed(() => Object.keys(props.result).length > 0)
-const router = useRouter()
-
-const acString = getAcStorage()
-const showCollect = async () => {
-  router.push({
-    name: 'Collected',
-    params: {
-      id: props.result.event_id ?props.result.event_id: acString
-    }
-  })
-}
 
 const scanAgain = async () => {
   window.location.reload()
@@ -51,7 +31,7 @@ const scanAgain = async () => {
       打卡失敗
     </section>
     <section>
-      <button @click="showCollect">查看紀錄</button>
+      <button @click="linkToCollect(props.result)">查看紀錄</button>
       <button @click="scanAgain">繼續打卡</button>
     </section>
   </div>

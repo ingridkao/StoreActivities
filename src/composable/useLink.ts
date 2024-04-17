@@ -1,11 +1,11 @@
 import { useRouter } from 'vue-router'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import type { AlbumType } from '@/composable/configurable'
+import type { AlbumType, ScanResultType } from '@/composable/configurable'
 
 export function useLink() {
 	const router = useRouter()
-	const { deleteSessionStorage, getAcQuery } = useBrowserStorage()
+	const { getAcStorage, deleteSessionStorage, getAcQuery } = useBrowserStorage()
 	const { errorAlert } = useSweetAlert()
 
 	const getQueryParam = (url: string, param: string) => {
@@ -24,13 +24,13 @@ export function useLink() {
 		router.push({ name: 'Album' })
 	}
 
-	const BackCollect = () => {
+	const backCollect = () => {
 		const acString = getAcQuery()
 		if (acString) {
 			router.push({
 				name: 'Collected',
 				params: {
-					id: acString
+					id: String(acString)
 				}
 			})
 		} else {
@@ -38,23 +38,26 @@ export function useLink() {
 		}
 	}
 
-	const linkToCollect = (albumItem: AlbumType | null = null) => {
-		if (albumItem && albumItem.event_id) {
+	const linkToCollect = (albumItem: ScanResultType | AlbumType | null = null) => {
+		const acString = getAcStorage()
+		const activityId = albumItem && albumItem.event_id ?albumItem.event_id: acString
+		if (activityId !== '') {
 			router.push({
 				name: 'Collected',
 				params: {
-					id: albumItem.event_id
+					id: String(activityId)
 				}
 			})
 		} else {
 			errorAlert()
 		}
 	}
+
 	return {
 		getQueryParam,
 		linkToLobby,
 		linkToAlbum,
-		BackCollect,
+		backCollect,
 		linkToCollect
 	}
 }

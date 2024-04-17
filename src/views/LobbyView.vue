@@ -50,7 +50,7 @@ onMounted(async () => {
     //step2-2
     Promise.all([
       fetchActivityData(),
-      fetchAdData(),
+      // fetchAdData(),
     ]).then(dataArray => {
       activitiesList.value = dataArray[0] || []
     })

@@ -1,6 +1,6 @@
 import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
-import type { ActivityListType, CollectedListType, AlbumType, ScanResultType } from '@/composable/configurable'
+import type { ActivityListType, CollectedListType, CollectedType, AlbumType, ScanResultType } from '@/composable/configurable'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useLink } from '@/composable/useLink'
 import { useLoadingStore } from '@/stores/loading'
@@ -9,7 +9,11 @@ const { VITE_MOCKAPI_URL, VITE_BASE_URL } = import.meta.env
 export function useFetchData() {
   const parser = new UAParser()
   const loadStore = useLoadingStore()
-  const { setCtCookies, setTokenCookies, deleteStorage, getLocationStorage } = useBrowserStorage()
+  const { 
+    getCtCookies, setCtCookies, 
+    getTokenCookies, setTokenCookies, resetCtCookies,
+    getAcStorage,
+    deleteStorage, getLocationStorage } = useBrowserStorage()
 
   const getDevice = () => {
     const result = parser.getDevice()
@@ -59,19 +63,29 @@ export function useFetchData() {
 
   const verifyScanResult = (code:string):Promise<boolean|ScanResultType> => {
     // const isMobile = getDevice()
-    const ctStr = code.split(`${VITE_BASE_URL}/?ct=`)
     const [lat, lon] = getLocationStorage()
+    const ctToken = getTokenCookies()
+    const activityId = getAcStorage()
+    const codeSplit = code.split(`${VITE_BASE_URL}/?ct=`)
+    let ctStr = ''
+    if(codeSplit && codeSplit.length > 0){
+      ctStr = codeSplit[1]
+    }else{
+      ctStr = getCtCookies()
+    }
 
     return new Promise((resolve, reject) => {
-      if(!ctStr || ctStr.length === 0){
-        reject('QRCode掃描失敗')
-      }else if(!lat || !lon){
+      if(!lat || !lon){
         reject('裝置未提供經緯度')
-      }else if(ctStr[1]){
+      }else if(ctStr === '' || ctToken === ''){
+        reject('QRCode掃描失敗')
+      }else if(activityId){
         axios
         .post(`${VITE_MOCKAPI_URL}/scan`, {
           data: {
+            token: ctToken,
             ct: ctStr,
+            ac: activityId,
             lon: lon,
             lat: lat
           }
@@ -79,8 +93,8 @@ export function useFetchData() {
         .then((res) => {
           if (res && res.data) {
             if (res.data.data) {
-              deleteStorage('ct')
               resolve(res.data.data)
+              resetCtCookies()
             } else {
               resolve(false)
             }
@@ -167,10 +181,22 @@ export function useFetchData() {
     })
   }
 
-  const fetchCollectData = (): Promise<CollectedListType[]> => {
+  // const fetchCollectsData = (): Promise<CollectedListType[]> => {
+  //   return new Promise((resolve, reject) => {
+  //     axios.get(`${VITE_MOCKAPI_URL}/collect`).then((res) => {
+  //       resolve(res.data || [])
+  //     }).catch((err) => {
+  //       reject(err)
+  //     })
+  //   })
+  // }
+
+  const fetchCollectData = (activityId:string=''): Promise<CollectedType> => {
     return new Promise((resolve, reject) => {
-      axios.get(`${VITE_MOCKAPI_URL}/collect`).then((res) => {
-        resolve(res.data || [])
+      axios.post(`${VITE_MOCKAPI_URL}/collect`, {
+        ac: activityId,
+      }).then((res) => {
+        resolve(res.data.data || {})
       }).catch((err) => {
         reject(err)
       })

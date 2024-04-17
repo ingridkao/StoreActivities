@@ -2,32 +2,52 @@
 /**
  * 單一活動打卡紀錄
  */
-import { ref, onMounted, getCurrentInstance, computed } from 'vue'
+import { ref, getCurrentInstance, computed, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
-import type { CollectedListType } from '@/composable/configurable'
+import type { CollectedListType, CollectedType } from '@/composable/configurable'
+import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 const { fetchCollectData } = useFetchData()
 const { errorAlert } = useSweetAlert()
 
+const collectedActivity = ref<CollectedType>({})
 const collectedStore = ref<CollectedListType[]>([])
 const { proxy } = getCurrentInstance()
 const stampBaseCount = ref(20)
-onMounted(async () => {
-  try {
-    // 會帶活動ID
-    const res = await fetchCollectData()
-    collectedStore.value = res || []
-  } catch (error) {
-    const errorStr = String(error)
-    errorAlert(errorStr)
+
+const route = useRoute()
+const { linkToAlbum } = useLink()
+
+watchEffect(
+  async () => {
+    const activityId = route.params.id
+    if(activityId){
+      try {
+        const res = await fetchCollectData(String(activityId))
+        if(res){
+          collectedActivity.value = res
+          collectedStore.value = res.collection || []
+        }
+      } catch (error) {
+        const errorStr = String(error)
+        errorAlert(errorStr)
+      }
+    }else{
+      linkToAlbum()
+    }
   }
-})
+)
 
 const accumulation = computed(() => {
-  const numberStr = String(collectedStore.value.length)
-  return numberStr.padStart(5 - numberStr.length, '0')
+  if(collectedActivity.value && collectedActivity.value.collection){
+    const numberStr = String(collectedActivity.value.collection.length)
+    return numberStr.padStart(5 - numberStr.length, '0')
+  }else{
+    return '0000'
+  }
 })
 
 const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href

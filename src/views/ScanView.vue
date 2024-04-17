@@ -5,7 +5,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import jsQR from "jsqr"
 import { useFetchData } from '@/composable/useFetch'
-import ScanResult from '@/components/scan/ScanResult.vue';
+import ScanResult from '@/components/ScanResult.vue';
 
 const { verifyScanResult } = useFetchData()
 

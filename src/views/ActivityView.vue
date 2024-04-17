@@ -73,11 +73,9 @@ const enterActivity = async () => {
       if(profile) userProfile.value = profile
       const commitRes = await commitStoreCheckIn(String(userProfile.value.userId), String(acStr))
       console.log(commitRes);
-      
       // if(commitRes){
       // 打卡成功
       // }else{
-
       // }
       console.log(commitRes);
     } else {
