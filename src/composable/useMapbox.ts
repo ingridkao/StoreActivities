@@ -7,16 +7,44 @@ import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { point, polygon } from '@turf/helpers'
 import bboxPolygon from '@turf/bbox-polygon'
 import booleanPointInPolygon from '@turf/boolean-point-in-polygon'
-import { useConvenienceStore } from '@/stores/convenience'
+import { useFetchData } from '@/composable/useFetch'
+import { useMap } from '@/composable/useMap'
+// import { useLoadingStore } from '@/stores/loading'
+
 interface CityStoreDataValue {
   city?: string
   type?: string
   storeData?: any
   disabled?: boolean
 }
+interface CityStoreDataType {
+  [key: string]: CityStoreDataValue
+}
 
 export function useMapbox() {
-  const convenienceStore = useConvenienceStore()
+  const storeSelectd = ref<String>('all')
+  const storeFilterOptions = reactive([
+    {
+      value: 'all',
+      nameTw: '所有門市'
+    },
+    {
+      value: 'feature',
+      nameTw: '主題門市'
+    },
+    {
+      value: 'open',
+      nameTw: '聯名門市'
+    }
+  ])
+  const updateChecked = (target: String) => {
+    storeSelectd.value = target
+  }
+
+  const { fetchLayerData } = useFetchData()
+  const { clientLocationCity } = useMap()
+
+  // const loadStore = useLoadingStore()
 
   // minZoom: 最大區域新北
   // zoom: 初始 ZOOM LEVEL; [0-20, 0 為最小 (遠), 20 ;最大 (近)]
@@ -89,8 +117,7 @@ export function useMapbox() {
     const markerName = `${targetKey}-marker`
     const sourceName = `${targetKey}-source`
     const layerName = `${targetKey}-layer`
-    const layerVisibility =
-      convenienceStore.storeRadioSelectd === layerItem.type ? 'visible' : 'none'
+    const layerVisibility = storeSelectd.value === layerItem.type ? 'visible' : 'none'
 
     map.value.addSource(sourceName, {
       type: 'geojson',
@@ -158,6 +185,28 @@ export function useMapbox() {
     })
   }
 
+  const cityStoreData = reactive<CityStoreDataType>({})
+  const updateStoreResult = (results:any) => {
+    results.forEach((layerData:any, layerIndex: number) => {
+      const layerType = storeFilterOptions[layerIndex]['value']
+      console.log(layerType);
+      const layerKey = `${clientLocationCity.value}_${layerType}`
+      const storeData = layerData['data']
+      if (storeData && storeData.features) {
+        const storeCount: number = storeData.features.length
+        const layerDatas = {
+          city: clientLocationCity.value,
+          type: layerType,
+          storeData: storeData,
+          disabled: storeCount === 0
+        } as CityStoreDataValue
+        cityStoreData[layerKey] = layerDatas
+        addDataToMap(layerDatas)
+      }
+    })
+    // loadStore.toggle(false)
+  }
+
   onMounted(async () => {
     loadStyle()
     loadScript()
@@ -217,6 +266,15 @@ export function useMapbox() {
           map.value.scrollZoom.setZoomRate(1 / 1600) // 觸控板縮放, 分母越大級距越小
           map.value.scrollZoom.setWheelZoomRate(1 / 100) // 滑鼠滾輪縮放, 分母越大級距越小
 
+          try {
+            const storeResults = await fetchLayerData(clientLocationCity.value)
+            updateStoreResult(storeResults)
+          } catch (error) {
+            console.log(error);
+            
+            
+          }
+          
           // 安全限制之後要把這個拿掉
 
           // 移動地圖事件
@@ -258,6 +316,9 @@ export function useMapbox() {
   })
 
   return {
+    storeSelectd,
+    storeFilterOptions,
+    updateChecked,
     mapConfig,
     map,
     geolocate,

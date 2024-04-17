@@ -47,7 +47,7 @@
 - [x] 使用者查閱過去所有活動打卡紀錄(/album)
   - [ ] 樣式
 - [x] 使用者使用手機掃描機台qrCode確認所在位置
-- [ ] 驗證打卡是否成功
+- [x] 驗證打卡是否成功
 
 
 ### 頁面說明
@@ -61,7 +61,7 @@
 |O|所有活動打卡紀錄 | AlbumView.vue      |                        |             |
 |O|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu             |             |
 |?|中獎序號        | WinningView.vue    |                        |             |
-| |門市地圖        | MapStoreView.vue   | 門市詳細                |             |
+| |門市地圖        | MapStoreView.vue   | 門市詳細(預計4/19commit)|             |
 |O|活動已結束      | WrapUpView.vue     |                        |             |
 |O|ComingSoon     | ComingSoonView.vue |                         | 404page     |
 
