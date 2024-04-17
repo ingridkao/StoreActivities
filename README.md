@@ -217,6 +217,7 @@ npm i --save-dev @types/ua-parser-js
 ```
 
 ### 7.[sweetalert2](https://sweetalert2.github.io/)
+
 用於創建美觀且高度可自訂的彈出式對話框 alert 和模態對話框 modal，可以取代 Window.alert()、Window.confirm() 和 window.prompt()，比原生的彈跳視窗更加美觀且有更高的可變性。
 
 全域引入於`main.ts`
@@ -224,6 +225,27 @@ npm i --save-dev @types/ua-parser-js
 ```sh
 npm install sweetalert
 ```
+
+### 8.[js-cookie](https://github.com/js-cookie/js-cookie/tree/latest#readme)
+
+用於處理 cookie 的簡單、輕量級 JavaScript API
+```sh
+npm i js-cookie
+```
+
+- 適用於所有瀏覽器
+- [相關常見問題](https://github.com/js-cookie/js-cookie/wiki/Frequently-Asked-Questions#expire-cookies-in-less-than-a-day)
+
+
+- 如何讓cookie在一天之內過期
+  - 當您希望 cookie 從現在起 5 分鐘後過期
+    ```js
+      const inFifteenMinutes = new Date(new Date().getTime() + 5 * 60 * 1000);
+      Cookies.set('foo', 'bar', {
+          expires: inFifteenMinutes
+      });
+    ```
+
 
 ## Lint with [ESLint](https://eslint.org/)
 

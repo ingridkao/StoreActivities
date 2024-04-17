@@ -35,27 +35,27 @@ export function useFetchData() {
     return new Promise((resolve, reject) => {
       if (ctString) {
         axios
-          .post('/api/ScanEntry/IbonEntry', {
-            data: {
-              qrCode: ctString,
-              longitude: Number(lon) || longitude,
-              latitude: Number(lat) || latitude
-            }
-          })
-          .then((res) => {
-            if (res && res.data) {
-              if (res.data.result.token) {
-                setCtCookies(ctString)
-                setTokenCookies(res.data.result.token)
-                resolve(res.data.result)
-              } else {
-                reject(res.data.msg)
-              }
+        .post('/api/ScanEntry/IbonEntry', {
+          data: {
+            qrCode: ctString,
+            longitude: Number(lon) || longitude,
+            latitude: Number(lat) || latitude
+          }
+        })
+        .then((res) => {
+          if (res && res.data) {
+            if (res.data.result.token) {
+              setCtCookies(ctString)
+              setTokenCookies(res.data.result.token)
+              resolve(true)
             } else {
-              reject('發生了例外錯誤')
+              reject(res.data.msg)
             }
-          })
-        } else {
+          } else {
+            reject('發生了例外錯誤')
+          }
+        })
+      } else {
         resolve(false)
       }
     })

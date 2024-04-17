@@ -7,6 +7,7 @@
  * step2-2.請求所有廣告列表    >> 連結至指定廣告
  */
 import { ref, onMounted, watchEffect } from 'vue'
+
 import type { ActivityListType } from '@/composable/configurable'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
@@ -15,6 +16,7 @@ import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 
 import ActivitiesListItem from '@/components/ActivitiesListItem.vue'
+
 
 // step0
 const { coords, error } = useGeolocation()
@@ -73,6 +75,7 @@ onMounted(async () => {
       img: 'https://i.imgur.com/d8ptVfB.png',
       link: '/album'
     }" />
+
   </main>
 </template>
 
