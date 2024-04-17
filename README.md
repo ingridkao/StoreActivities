@@ -4,27 +4,27 @@
 [demo](https://qwaretest2.web.app/)
 [LIFF](https://liff.line.me/2003380973-6NBnrB5K)
 
-## Git Flow
+
+
+## 1.Git Flow
 
 目前分支僅main, dev, feature
-
-1. main:主要部屬分支
-   > 主要功能完成或是每周進行dev>main合併
-2. dev: 主要開發分支
-   > 更新頻率: 2days
+1. ~~main:主要部屬分支~~
+2. main: 主要分支
+   > 更新頻率: Mon, Wed, Fri
 3. feature: 根據功能和需求建立不同的分支
-   1. 新增分支(base dev)
+   1. 新增分支
       > 分支名稱建議:
       > feat/add-linescan
       > feat/integrate-checkin-api
       > style/add-homepage
       > style/rewrite-lightbox
-      > 可以使用chartGPT prompt:`使用git flow，<功能開發描述>，寫出分支名稱`
-   2. 進行feat>dev合併，**請使用Github pull request(PR)**
-   3. 合併完刪除該feature分支
+      名稱透過chartGPT產生，prompt:`使用git flow，<功能開發描述>，寫出分支名稱`
+   2. 進行feat>main合併，**請使用Github pull request(PR)**
+   3. 合併完刪除該feature分支(PR自動刪除)
 
 
-## User story | Issue
+## 2.User story | Issue
 
 - [x] 使用者使用LINE登入(透過Line LIFF實現)
 - [x] 使用者在活動大廳(/)觀看有興趣的活動
@@ -51,7 +51,7 @@
 | | Page          | @/view             | @/component            | Description |
 |-| ------------- | ------------------ | ---------------------- | ----------- |
 |O|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |
-| |活動說明        | ActivityView.vue   | HeaderMenu             |             |
+|O|活動說明        | ActivityView.vue   | HeaderMenu             |             |
 |O|打卡教學        | DirectionView.vue  | HeaderMenu             |             |
 |O|相機掃描        | ScanView.vue       | ScanResult             |            |
 |O|所有活動打卡紀錄 | AlbumView.vue      |                        |             |
@@ -71,7 +71,7 @@
 
 
 
-## Project Setup
+## 3.Project Setup
 
 ### Install
 
@@ -99,6 +99,7 @@ npm run build
 npm run deploy
 ```
 
+## 4.API 
 ### Mock API-dev
 
 [Github](https://github.com/ingridkao/node_todo_test/tree/storeActivities)
@@ -109,38 +110,14 @@ npm run deploy
 2. 於node_todo_test目錄啟動nodejs http server
    `node store.js`
 
+
 ### Mock API-prod
 
 [API URL](https://storeactivities-api.onrender.com)
 更新API透過[Github](https://github.com/ingridkao/node_todo_test/tree/storeActivities)push自動部屬到render
 
-```
 
-```
-
-<!-- ### Run Unit Tests with [Vitest](https://vitest.dev/)
-
-```sh
-npm run test:unit
-``` -->
-
-# tasks
-
-- 使用者如果從其他方式進入網站導轉到Line
-- 手機掃描機台qrCode
-  - 已登入: 進行打卡行為
-  - 未登入: 導轉到Line
-
-# 疑慮
-
-- 地圖其他功能?
-  - 門市地圖特別活動
-  - 如寶可夢地圖??
-- 機台掃描行為
-
-<!-- [![Standard - JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard) -->
-
-# env
+## 5.env
 
 ```
 VITE_LIFF_ID=
@@ -154,9 +131,8 @@ VITE_MAPBOX_KEY=
 
 ```
 
-## 頁面對應
 
-## 使用套件
+## 5.使用套件
 
 ### 1. sass/scss
 
@@ -247,7 +223,7 @@ npm i js-cookie
     ```
 
 
-## Lint with [ESLint](https://eslint.org/)
+## 7.Lint with [ESLint](https://eslint.org/)
 
 - 使用[eslint-plugin-vue](https://eslint.vuejs.org/): 專為 Vue.js 項目定制的 ESLint 插件，建立vue專案有選取的話不用另外安裝
 - 執行
@@ -261,7 +237,7 @@ npm i js-cookie
 
   [參考文章](https://pjchender.blogspot.com/2019/07/vue-vue-style-guide-eslint-plugin-vue.html)
 
-## 開發中碰到的問題
+## 8.開發中碰到的問題
 
 1. [leaflet]在手機端地圖底圖一直出不來
    原本是以下寫法
