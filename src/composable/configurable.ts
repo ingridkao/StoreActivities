@@ -44,3 +44,13 @@ export interface VerifyCodeResultType {
   t?: string
 }
 
+export interface CityStoreDataValue {
+  city?: string
+  type?: string
+  storeData?: any
+  disabled?: boolean
+}
+
+export interface CityStoreDataType {
+  [key: string]: CityStoreDataValue
+}

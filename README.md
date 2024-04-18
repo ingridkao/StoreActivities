@@ -42,7 +42,7 @@
   `/collected/1`,`/collected/2`,`/collected/3` -> 顯示單一活動打卡
   點擊門市彈出視窗(使用sweetalert2)
   - [ ] 樣式
-- [ ] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
+- [x] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
   - [ ] 樣式
 - [x] 使用者查閱過去所有活動打卡紀錄(/album)
   - [ ] 樣式
@@ -61,7 +61,7 @@
 |O|所有活動打卡紀錄 | AlbumView.vue      |                        |             |
 |O|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu             |             |
 |?|中獎序號        | WinningView.vue    |                        |             |
-| |門市地圖        | MapStoreView.vue   | 門市詳細(預計4/19commit)|             |
+|O|門市地圖        | MapStoreView.vue   | 門市詳細(預計4/19commit)|             |
 |O|活動已結束      | WrapUpView.vue     |                        |             |
 |O|ComingSoon     | ComingSoonView.vue |                         | 404page     |
 

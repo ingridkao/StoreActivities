@@ -6,7 +6,7 @@
  * step2-1.請求所有活動列表    >> 連結至指定活動
  * step2-2.請求所有廣告列表    >> 連結至指定廣告
  */
-import { ref, onMounted, watchEffect } from 'vue'
+import { ref, onMounted, watchEffect, computed } from 'vue'
 
 import type { ActivityListType } from '@/composable/configurable'
 import { useGeolocation } from '@vueuse/core'
@@ -15,7 +15,7 @@ import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-
+import { useLoadingStore } from '@/stores/loading'
 import ActivitiesListItem from '@/components/ActivitiesListItem.vue'
 
 // step0
@@ -23,7 +23,7 @@ const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { fetchActivityData, fetchAdData, verifyQRCode } = useFetchData()
+const { fetchActivityData, verifyQRCode } = useFetchData()
 const { getQueryParam } = useLink()
 
 let getPosition = false
@@ -50,21 +50,26 @@ watchEffect(
   }
 )
 
+const loadStore = useLoadingStore()
 const activitiesList = ref<ActivityListType[]>([])
 onMounted(async () => {
   try {
     //step2-1
     //step2-2
+    loadStore.toggle(true)
     Promise.all([
       fetchActivityData(),
       // fetchAdData(),
     ]).then(dataArray => {
       activitiesList.value = dataArray[0] || []
+      loadStore.toggle(false)
     })
   } catch (error) {
     errorAlert(`fetchActivityData:${error}`)
   }
 })
+
+const siteLoading = computed(() => loadStore.load)
 
 </script>
 
@@ -81,7 +86,21 @@ onMounted(async () => {
       link: '/album'
     }" />
 
+    <div v-if="siteLoading" class="loading">
+      Loading...
+    </div>
   </main>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.loading{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  background-color: rgba(255,255,255,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

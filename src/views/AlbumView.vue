@@ -8,6 +8,7 @@
   import { useFetchData } from '@/composable/useFetch'
   import { useSweetAlert } from '@/composable/useSweetAlert'
   import { useLink } from '@/composable/useLink'
+  import { useLoadingStore } from '@/stores/loading'
   const { linkToCollect } = useLink()
 
   const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
@@ -16,14 +17,18 @@
   const { fetchAlbumData } = useFetchData()
   const { errorAlert } = useSweetAlert()
 
+  const loadStore = useLoadingStore()
   const albumStore = ref<AlbumType[]>([])
   onMounted(async () => {
+    loadStore.toggle(true)
     try {
       const res = await fetchAlbumData()
       albumStore.value = res || []
+      loadStore.toggle(false)
     } catch (error) {
       const errorStr = String(error)
       errorAlert(errorStr)
+      loadStore.toggle(false)
     }
   })
 
