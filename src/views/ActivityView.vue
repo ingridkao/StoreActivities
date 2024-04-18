@@ -20,11 +20,12 @@ import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useSweetAlert } from '@/composable/useSweetAlert'
+import { useLoadingStore } from '@/stores/loading'
 
 const route = useRoute()
 const router = useRouter()
 const { confirmActivity, verifyQRCode, commitStoreCheckIn } = useFetchData()
-const { getAcStorage, setAcStorage, setLocationStorage } = useBrowserStorage()
+const { getAcStorage, setAcStorage } = useBrowserStorage()
 
 // step0
 const { coords, error } = useGeolocation()
@@ -68,8 +69,13 @@ watchEffect(
   }
 )
 
+const gotoDirection = () => {
+  router.push({ path: '/direction' })
+}
 
+const loadStore = useLoadingStore()
 const enterActivity = async () => {
+  loadStore.toggle(true)
   try {
     // step3
     const verifyRes = await verifyQRCode()
@@ -77,17 +83,16 @@ const enterActivity = async () => {
       const commitRes = await commitStoreCheckIn(verifyRes)
       console.log(commitRes);
     } else {
-      router.push({ path: '/direction' })
+      gotoDirection()
     }
+    loadStore.toggle(false)
   } catch (error) {
     const errorStr = String(error)
     errorAlert(errorStr)
+    loadStore.toggle(false)
   }
 }
 
-const gotoDirection = () => {
-  router.push({ path: '/direction' })
-}
 </script>
 
 <template>

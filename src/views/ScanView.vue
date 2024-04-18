@@ -7,7 +7,7 @@ import jsQR from "jsqr"
 import { useFetchData } from '@/composable/useFetch'
 import ScanResult from '@/components/ScanResult.vue'
 const { VITE_BASE_URL } = import.meta.env
-const { verifyQRCode, commitStoreCheckIn } = useFetchData()
+const { commitStoreCheckIn } = useFetchData()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
 const canvasVisible = ref(false)

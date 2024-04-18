@@ -19,7 +19,7 @@
                 "address": "台北市信義區東興路67號1樓",
                 "store_id": "122186",
                 "store_name": "總部",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -40,7 +40,7 @@
                 "address": "台北市信義區永吉路30巷103號",
                 "store_id": "135241",
                 "store_name": "永信",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -61,7 +61,7 @@
                 "address": "台北市中正區林森南路4號之3",
                 "store_id": "158864",
                 "store_name": "千成",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -82,7 +82,7 @@
                 "address": "台北市士林區中正路220號222號",
                 "store_id": "171764",
                 "store_name": "福榮",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -103,7 +103,7 @@
                 "address": "台北市內湖區基湖路35巷13號1樓",
                 "store_id": "181451",
                 "store_name": "湖光",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -124,7 +124,7 @@
                 "address": "台北市大同區民生西路84號1樓",
                 "store_id": "183848",
                 "store_name": "仟瑞",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -145,7 +145,7 @@
                 "address": "台北市文山區忠順街二段10號1樓",
                 "store_id": "189695",
                 "store_name": "文忠",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -166,7 +166,7 @@
                 "address": "台北市信義區基隆路一段178號180號1樓",
                 "store_id": "190330",
                 "store_name": "必成",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -187,7 +187,7 @@
                 "address": "台北市中正區思源街16號",
                 "store_id": "190743",
                 "store_name": "博源",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -208,7 +208,7 @@
                 "address": "台北市北投區中庸里大業路715-717號",
                 "store_id": "197205",
                 "store_name": "雙全",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -229,7 +229,7 @@
                 "address": "台北市內湖區康樂街125巷2號2之1號",
                 "store_id": "197227",
                 "store_name": "瓏山林",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -250,7 +250,7 @@
                 "address": "台北市中山區松江路237號1樓",
                 "store_id": "197560",
                 "store_name": "統佳",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -271,7 +271,7 @@
                 "address": "台北市大安區金山南路二段18號1樓",
                 "store_id": "197744",
                 "store_name": "金信",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -292,7 +292,7 @@
                 "address": "台北市士林區忠誠路一段126號",
                 "store_id": "200929",
                 "store_name": "誠義",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -313,7 +313,7 @@
                 "address": "台北市萬華區環河南路二段207號",
                 "store_id": "846604",
                 "store_name": "雙環",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -334,7 +334,7 @@
                 "address": "台北市中山區民生東路二段113號",
                 "store_id": "865834",
                 "store_name": "中福",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -355,7 +355,7 @@
                 "address": "台北市中山區林森北路411號",
                 "store_id": "946230",
                 "store_name": "京都",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -376,7 +376,7 @@
                 "address": "台北市北投區明德路114號",
                 "store_id": "948649",
                 "store_name": "明德",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -1177,7 +1177,7 @@
                 "address": "台北市大安區安居街33號",
                 "store_id": "127631",
                 "store_name": "安居",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -1338,7 +1338,7 @@
                 "address": "台北市中正區紹興北街37號1樓",
                 "store_id": "128070",
                 "store_name": "紹興",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -3459,7 +3459,7 @@
                 "address": "台北市中正區中華路一段41號1樓",
                 "store_id": "148764",
                 "store_name": "欣漢華",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -3540,7 +3540,7 @@
                 "address": "台北市中正區懷寧街30號32號1樓",
                 "store_id": "149413",
                 "store_name": "鑫華福",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -4301,7 +4301,7 @@
                 "address": "台北市松山區八德路三段20-2號",
                 "store_id": "159340",
                 "store_name": "台場",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -5702,7 +5702,7 @@
                 "address": "台北市文山區指南路二段99號101號",
                 "store_id": "170668",
                 "store_name": "政大",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -7323,7 +7323,7 @@
                 "address": "台北市大同區長安西路271號1樓及273巷2號1樓",
                 "store_id": "184988",
                 "store_name": "塔城",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -8984,7 +8984,7 @@
                 "address": "台北市松山區光復北路11巷44號",
                 "store_id": "190064",
                 "store_name": "京復",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -10065,7 +10065,7 @@
                 "address": "台北市文山區木柵路一段111號1樓(世新大管院)",
                 "store_id": "196198",
                 "store_name": "世成",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -13306,7 +13306,7 @@
                 "address": "台北市士林區格致路57號",
                 "store_id": "928427",
                 "store_name": "文大",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -15587,7 +15587,7 @@
                 "address": "台北市南港區三重路23號1樓",
                 "store_id": "991182",
                 "store_name": "馥樺",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -17208,7 +17208,7 @@
                 "address": "台北市士林區格致路57號",
                 "store_id": "201472",
                 "store_name": "文大",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -17389,7 +17389,7 @@
                 "address": "台北市松山區光復北路11巷44號",
                 "store_id": "213718",
                 "store_name": "京復",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -18110,7 +18110,7 @@
                 "address": "台北市文山區指南路二段99號101號",
                 "store_id": "201829",
                 "store_name": "政大",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -20431,7 +20431,7 @@
                 "address": "台北市南港區三重路23號1樓",
                 "store_id": "237356",
                 "store_name": "馥樺",
-                "type":["open"]
+                "store_type":"open"
             }
         },
         {
@@ -26792,7 +26792,7 @@
                 "address": "台北市北投區文林北路98號100號",
                 "store_id": "962209",
                 "store_name": "新豪美",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26813,7 +26813,7 @@
                 "address": "台北市中山區一江街11號13號",
                 "store_id": "971867",
                 "store_name": "鑫東一",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26834,7 +26834,7 @@
                 "address": "台北市士林區社中街320號322號1樓",
                 "store_id": "992945",
                 "store_name": "社中",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26855,7 +26855,7 @@
                 "address": "台北市大同區重慶北路3段258、260、262號1樓",
                 "store_id": "992967",
                 "store_name": "酒泉",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26876,7 +26876,7 @@
                 "address": "台北市萬華區武昌街二段122之1號",
                 "store_id": "214320",
                 "store_name": "鑫日新",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26897,7 +26897,7 @@
                 "address": "台北市信義區松仁路162號164號1樓",
                 "store_id": "239455",
                 "store_name": "北府",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26918,7 +26918,7 @@
                 "address": "台北市內湖區星雲街136號",
                 "store_id": "249212",
                 "store_name": "金雲",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26939,7 +26939,7 @@
                 "address": "台北市內湖區民權東路六段180巷17號19號",
                 "store_id": "250038",
                 "store_name": "名寶",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26960,7 +26960,7 @@
                 "address": "台北市松山區健康路11號",
                 "store_id": "250359",
                 "store_name": "健一",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -26981,7 +26981,7 @@
                 "address": "台北市萬華區西寧南路141號1樓2樓",
                 "store_id": "251400",
                 "store_name": "西寧南",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -27002,7 +27002,7 @@
                 "address": "台北市松山區敦化北路149號1樓",
                 "store_id": "254649",
                 "store_name": "敦北",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -27023,7 +27023,7 @@
                 "address": "台北市信義區信義路五段7號35樓",
                 "store_id": "254878",
                 "store_name": "一零一",
-                "type":["feature"]
+                "store_type":"feature"
             }
         },
         {
@@ -27044,7 +27044,7 @@
                 "address": "台北市士林區忠義街68號",
                 "store_id": "261821",
                 "store_name": "凱立",
-                "type":["feature"]
+                "store_type":"feature"
             }
         }
     ]

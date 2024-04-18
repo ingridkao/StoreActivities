@@ -1,6 +1,6 @@
 import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
-import type { ActivityListType, CollectedListType, CollectedType, AlbumType, ScanResultType, VerifyCodeResultType } from '@/composable/configurable'
+import type { ActivityListType, CollectedType, AlbumType, ScanResultType, VerifyCodeResultType } from '@/composable/configurable'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 // import { useLIFF } from '@/composable/useLIFF'
 
@@ -14,7 +14,8 @@ export function useFetchData() {
     getCtCookies, setCtCookies, 
     setTokenCookies, resetCtCookies,
     getAcStorage,
-    deleteStorage, getLocationStorage } = useBrowserStorage()
+    getLocationStorage
+  } = useBrowserStorage()
 
   const getDevice = () => {
     const result = parser.getDevice()
@@ -144,16 +145,6 @@ export function useFetchData() {
     })
   }
 
-  // const fetchCollectsData = (): Promise<CollectedListType[]> => {
-  //   return new Promise((resolve, reject) => {
-  //     axios.get(`${VITE_MOCKAPI_URL}/collect`).then((res) => {
-  //       resolve(res.data || [])
-  //     }).catch((err) => {
-  //       reject(err)
-  //     })
-  //   })
-  // }
-
   const fetchCollectData = (activityId:string=''): Promise<CollectedType> => {
     return new Promise((resolve, reject) => {
       axios.post(`${VITE_MOCKAPI_URL}/collect`, {
@@ -188,20 +179,17 @@ export function useFetchData() {
   // 讀取指定城市資料
   const fetchLayerData = async (selectCity: string = '') => {
     const targerCity = String(selectCity)
-
-    const getAllStore = () => axios.get(`/stores/map_all_${targerCity}.geojson`)
-    const getFeatureStore = () => axios.get(`/stores/map_feature_${targerCity}.geojson`)
-    const getOpenStore = () => axios.get(`/stores/map_openstore_${targerCity}.geojson`)
-
+    if(!targerCity) return false
     loadStore.toggle(true)
-    return Promise.all([getAllStore(), getFeatureStore(), getOpenStore()])
-      .then((results) => {
-        if (!results) return false
-        return results
-      })
-      .catch((err) => {
-        loadStore.toggle(false)
-      })
+    return await axios.get(`/stores/map_${targerCity}.geojson`)
+    .then((geoRes) => {
+      if (!geoRes) return false
+      return geoRes
+    }).catch((error) => {
+      console.log(error)
+    }).finally(()=>{
+      loadStore.toggle(false)
+    })
   }
 
   return {

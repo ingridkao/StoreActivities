@@ -12,7 +12,7 @@
   // const openInLIFF = getOpenInClient()
   // const userOS = getUserOS()
 
-  const userProfile = ref()
+  // const userProfile = ref()
   onMounted(() => {
     // const profile = getLineProfile()
     // if(profile) userProfile.value = profile

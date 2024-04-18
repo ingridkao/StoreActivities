@@ -9,6 +9,7 @@ export function useLink() {
 	const { errorAlert } = useSweetAlert()
 
 	const getQueryParam = (url: string, param: string) => {
+		// eslint-disable-next-line no-useless-escape
 		const newParam = param.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
 		const regex = new RegExp('[\\?&]' + newParam + '=([^&#]*)')
 		const results = regex.exec(url)
