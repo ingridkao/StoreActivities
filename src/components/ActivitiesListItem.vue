@@ -30,7 +30,11 @@ const linkTo = async () => {
 <template>
   <div class="activities" :class="{ invalid: props.activities.statu != 1 }" @click="linkTo">
     <div class="activities_img">
-      <img v-if="props.activities.img" :src="props.activities.img" :alt="props.activities.title || ''" />
+      <img
+        v-if="props.activities.img"
+        :src="props.activities.img"
+        :alt="props.activities.title || ''"
+      />
       <div v-else>{{ props.activities.title }}</div>
     </div>
   </div>
@@ -57,13 +61,13 @@ const linkTo = async () => {
     width: 100%;
     overflow: hidden;
 
-    >img {
+    > img {
       width: 100%;
     }
 
-    >div {
+    > div {
       height: 5rem;
-      background-color: rgba(255,255,255,0.5);
+      background-color: rgba(255, 255, 255, 0.5);
       color: #000;
       border-radius: 0.5rem;
       display: flex;

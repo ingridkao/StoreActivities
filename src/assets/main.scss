@@ -42,8 +42,8 @@ section {
     > a {
       margin-bottom: 1rem;
     }
-    &.right{
-      justify-content: flex-end
+    &.right {
+      justify-content: flex-end;
     }
   }
   &.cardSection {
@@ -91,8 +91,8 @@ section {
   cursor: pointer;
 
   svg {
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
   }
 }

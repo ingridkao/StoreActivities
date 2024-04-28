@@ -10,7 +10,7 @@ export interface AlbumType {
   event_id?: string
   event_name?: string
   collection?: number
-  limit ?: number
+  limit?: number
 }
 
 export interface CollectedListType {
@@ -22,7 +22,7 @@ export interface CollectedListType {
 export interface CollectedType {
   event_id?: string
   event_name?: string
-  limit ?: number
+  limit?: number
   collection?: CollectedListType[]
 }
 

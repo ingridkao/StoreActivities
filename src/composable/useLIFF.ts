@@ -72,15 +72,14 @@ export function useLIFF() {
     })
   }
 
-  const useLineLogin = (): Promise<boolean|ProfileType> => {
+  const useLineLogin = (): Promise<boolean | ProfileType> => {
     const redirectUri: URL = new URL(import.meta.env.VITE_LIFF_ENDPOINT_URL)
     return new Promise((resolve, reject) => {
       if (liff.isLoggedIn()) {
         liff
-        .getProfile()
-        .then((profile) => resolve(profile))
-        .catch((e: Error) => reject(Error(`取得失敗${e}`)))
-
+          .getProfile()
+          .then((profile) => resolve(profile))
+          .catch((e: Error) => reject(Error(`取得失敗${e}`)))
       } else {
         const { getAcStorage, getCtCookies } = useBrowserStorage()
         const ctStr = getCtCookies()
@@ -148,7 +147,7 @@ export function useLIFF() {
   const scanCode = async () => {
     const isInClient = getOpenInClient()
     try {
-      if(isInClient){
+      if (isInClient) {
         await useLineInit()
         await useLineLogin()
         const scanResult = await useLineScan()
@@ -158,7 +157,7 @@ export function useLIFF() {
         // const commitRes = await commitStoreCheckIn(verifyRes)
         // console.log(commitRes);
         // 打卡成功或失敗->sweat alert
-      }else{
+      } else {
         router.push({ path: '/scan' })
       }
     } catch (error) {

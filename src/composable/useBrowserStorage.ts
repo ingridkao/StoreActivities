@@ -4,16 +4,16 @@ import { useRoute } from 'vue-router'
 export function useBrowserStorage() {
   const getAcQuery = () => {
     const route = useRoute()
-    if(route && route.query && route.query.ct){
+    if (route && route.query && route.query.ct) {
       setAcStorage(String(route.query.ct))
       return route.query.ct
-    }else{
+    } else {
       return ''
     }
   }
-  const getAcStorage = ():String => {
+  const getAcStorage = (): String => {
     const acQuery = getAcQuery()
-    if(acQuery) return String(acQuery)
+    if (acQuery) return String(acQuery)
     const acStorage = localStorage.getItem('ac')
     return acStorage || ''
   }
@@ -69,9 +69,13 @@ export function useBrowserStorage() {
   }
 
   return {
-    getAcQuery, getAcStorage, setAcStorage,
-    getCtCookies, setCtCookies, 
-    getTokenCookies, setTokenCookies,
+    getAcQuery,
+    getAcStorage,
+    setAcStorage,
+    getCtCookies,
+    setCtCookies,
+    getTokenCookies,
+    setTokenCookies,
     resetCtCookies,
     deleteStorage,
     deleteSessionStorage,

@@ -27,28 +27,26 @@ const { fetchActivityData, verifyQRCode } = useFetchData()
 const { getQueryParam } = useLink()
 
 let getPosition = false
-watchEffect(
-  async () => {
-    const { latitude, longitude } = coords.value
-    if (getPosition) return
-    if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
-      getPosition = true
-      // setLocationStorage(latitude, longitude)
-      try {
-        // step1
-        const pathQuery1 = getQueryParam(window.location.href, 'ct')
-        const pathQuery2 = getQueryParam(window.location.href, 'lat')
-        const pathQuery3 = getQueryParam(window.location.href, 'lon')
-        setLocationStorage(Number(pathQuery2), Number(pathQuery3))
-        await verifyQRCode(pathQuery1)
-      } catch (error) {
-        errorAlert(`verifyQRCode:${error}`)
-      }
-    } else if (error.value && error.value.code >= 1) {
-      geoErrorHandler(error.value.code)
+watchEffect(async () => {
+  const { latitude, longitude } = coords.value
+  if (getPosition) return
+  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+    getPosition = true
+    // setLocationStorage(latitude, longitude)
+    try {
+      // step1
+      const pathQuery1 = getQueryParam(window.location.href, 'ct')
+      const pathQuery2 = getQueryParam(window.location.href, 'lat')
+      const pathQuery3 = getQueryParam(window.location.href, 'lon')
+      setLocationStorage(Number(pathQuery2), Number(pathQuery3))
+      await verifyQRCode(pathQuery1)
+    } catch (error) {
+      errorAlert(`verifyQRCode:${error}`)
     }
+  } else if (error.value && error.value.code >= 1) {
+    geoErrorHandler(error.value.code)
   }
-)
+})
 
 const loadStore = useLoadingStore()
 const activitiesList = ref<ActivityListType[]>([])
@@ -58,9 +56,9 @@ onMounted(async () => {
     //step2-2
     loadStore.toggle(true)
     Promise.all([
-      fetchActivityData(),
+      fetchActivityData()
       // fetchAdData(),
-    ]).then(dataArray => {
+    ]).then((dataArray) => {
       activitiesList.value = dataArray[0] || []
       loadStore.toggle(false)
     })
@@ -70,7 +68,6 @@ onMounted(async () => {
 })
 
 const siteLoading = computed(() => loadStore.load)
-
 </script>
 
 <template>
@@ -79,26 +76,26 @@ const siteLoading = computed(() => loadStore.load)
       <ActivitiesListItem v-if="activities.id" :activities="activities" />
     </template>
 
-    <ActivitiesListItem :activities="{
-      title: '集郵冊-打卡紀錄',
-      statu: 1,
-      img: 'https://i.imgur.com/d8ptVfB.png',
-      link: '/album'
-    }" />
+    <ActivitiesListItem
+      :activities="{
+        title: '集郵冊-打卡紀錄',
+        statu: 1,
+        img: 'https://i.imgur.com/d8ptVfB.png',
+        link: '/album'
+      }"
+    />
 
-    <div v-if="siteLoading" class="loading">
-      Loading...
-    </div>
+    <div v-if="siteLoading" class="loading">Loading...</div>
   </main>
 </template>
 
 <style lang="scss" scoped>
-.loading{
+.loading {
   position: fixed;
   width: 100vw;
   height: 100vh;
   z-index: 1000;
-  background-color: rgba(255,255,255,0.8);
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;

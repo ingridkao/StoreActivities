@@ -2,8 +2,8 @@
 /**
  * ComingSoon
  */
-  import { useLink } from '@/composable/useLink'
-  const { linkToLobby } = useLink()
+import { useLink } from '@/composable/useLink'
+const { linkToLobby } = useLink()
 </script>
 
 <template>
