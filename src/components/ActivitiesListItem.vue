@@ -29,51 +29,23 @@ const linkTo = async () => {
 
 <template>
   <div class="activities" :class="{ invalid: props.activities.statu != 1 }" @click="linkTo">
-    <div class="activities_img">
-      <img
-        v-if="props.activities.img"
-        :src="props.activities.img"
-        :alt="props.activities.title || ''"
-      />
-      <div v-else>{{ props.activities.title }}</div>
-    </div>
+    <img :src="props.activities.img" :alt="props.activities.title || ''" />
   </div>
 </template>
 
 <style lang="scss" scoped>
 .activities {
-  position: relative;
-  display: block;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-  width: 22rem;
+  aspect-ratio: 169/50;
+  cursor: pointer;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+  }
+
   &.invalid {
     opacity: 0.3;
-  }
-
-  &:not(.invalid) {
-    .activities_img {
-      cursor: pointer;
-    }
-  }
-
-  &_img {
-    width: 100%;
-    overflow: hidden;
-
-    > img {
-      width: 100%;
-    }
-
-    > div {
-      height: 5rem;
-      background-color: rgba(255, 255, 255, 0.5);
-      color: #000;
-      border-radius: 0.5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
   }
 }
 </style>

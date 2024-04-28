@@ -81,33 +81,60 @@ const siteLoading = computed(() => loadStore.load)
 </script>
 
 <template>
-  <main>
-    <template v-for="activities in activitiesList" :key="activities.id">
-      <ActivitiesListItem v-if="activities.id" :activities="activities" />
-    </template>
-
-    <ActivitiesListItem
-      :activities="{
-        title: '集郵冊-打卡紀錄',
-        statu: 1,
-        img: 'https://i.imgur.com/d8ptVfB.png',
-        link: '/album'
-      }"
-    />
-
+  <main class="lobby-view">
     <div v-if="siteLoading" class="loading">Loading...</div>
+    <div v-else class="lobby-view__menu">
+      <ActivitiesListItem
+        :activities="activities"
+        v-for="activities in activitiesList"
+        :key="activities.id"
+      />
+      <div class="lobby-view__icon-bar">
+        <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
+        <img src="@/assets/images/lobby/icon-instagram.png" alt="instagram" />
+        <img src="@/assets/images/lobby/icon-youtube.png" alt="youtube" />
+        <img src="@/assets/images/lobby/icon-line.png" alt="line" />
+        <img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" />
+      </div>
+    </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
-.loading {
-  position: fixed;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1000;
-  background-color: rgba(255, 255, 255, 0.8);
+.lobby-view {
+  padding: 62px 26px 82px;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: url('@/assets/images/lobby/lobby-bg.png');
+
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 26px;
+    width: 100%;
+  }
+
+  &__icon-bar {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    align-items: center;
+
+    img {
+      width: 45px;
+      height: 45px;
+    }
+  }
+}
+.loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  font-size: 36px;
 }
 </style>
