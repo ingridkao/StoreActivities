@@ -18,20 +18,8 @@ a {
 }
 // ==== Page ====
 main {
-  @extend %flex-col;
-  justify-content: space-between;
+  min-height: 100vh;
   width: 100%;
-  padding: 1.5rem 1rem 3rem 1rem;
-  h1 {
-    text-align: center;
-    font-weight: bold;
-    font-size: 1.5rem;
-    margin: 0.5rem auto;
-  }
-  > section {
-    width: 100%;
-    max-width: 22rem;
-  }
 }
 // ==== Content Secton ====
 
