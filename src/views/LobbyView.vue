@@ -61,6 +61,16 @@ onMounted(async () => {
     ]).then((dataArray) => {
       activitiesList.value = dataArray[0] || []
       loadStore.toggle(false)
+
+      //TODO: After check api data, remove this
+      if (import.meta.env.VITE_UI_MODE) {
+        activitiesList.value = Array.from({ length: 5 }).map((_, i) => ({
+          id: i + 1,
+          img: `./images/lobby/lobby-item-${i + 1}.png`,
+          link: 'https://www.google.com',
+          statu: 1
+        }))
+      }
     })
   } catch (error) {
     errorAlert(`fetchActivityData:${error}`)
