@@ -15,16 +15,6 @@
     //   console.error(error);
     // })
   })
-
-const serialNumber = ref(5473985669)
-onMounted(() => {
-  // getSerialNumber().then(number => {
-  //   serialNumber.value = number
-  // }).catch(error => {
-  //   取得中獎序號失敗 -> sweetalert2
-  //   console.error(error);
-  // })
-})
 </script>
 
 <template>

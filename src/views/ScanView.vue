@@ -112,12 +112,12 @@ const updateOutPutData = async (imageData: any) => {
   }
 }
 const cleanOutPutData = () => {
-  qrCodeOutputData.value = ''
+    qrCodeOutputData.value = ''
 }
 
 const isMobile = ref(false)
 const tick = () => {
-  if (!canvasElement || !canvasCtx || !video) return
+    if (!canvasElement || !canvasCtx || !video) return
     videoLoading.value = true
     if (video.readyState == video.HAVE_ENOUGH_DATA) {
         videoLoading.value = false
@@ -131,15 +131,10 @@ const tick = () => {
         const imageData = canvasCtx.getImageData(0, 0, canvasElement.width, canvasElement.height);
         updateOutPutData(imageData)
     }
-    const imageData = canvasCtx.getImageData(0, 0, canvasElement.width, canvasElement.height)
-    // imageDatas.value = imageData
-    updateOutPutData(imageData)
-  }
-  // 持續執行動畫
-  animationId = requestAnimationFrame(tick)
+    // 持續執行動畫
+    animationId = requestAnimationFrame(tick)
 }
-// const videoW = ref(0)
-// const videoH = ref(0)
+
 let streamInstance: any = null
 onMounted(() => {
   const ua = navigator.userAgent
@@ -153,8 +148,6 @@ onMounted(() => {
   const getVideoSize = () => {
     if (!video || !canvasElement) return
 
-    // videoW.value = video.videoWidth
-    // videoH.value = video.videoHeight
     const ratio = Math.round((video.videoWidth / video.videoHeight) * 100) / 100
 
     if (window.innerWidth > 680) {

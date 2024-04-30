@@ -1,31 +1,31 @@
 <script setup lang="ts">
-  /**
-   * 測試環境會被導轉到line登入頁15, 23-27註解就可以避免被轉址
-   */
-  import { ref, onMounted, watchEffect } from 'vue'
-  import { RouterLink } from 'vue-router'
-  import { useLink } from '@/composable/useLink'
-  import { useLIFF } from '@/composable/useLIFF'
-  import { useBrowserStorage } from '@/composable/useBrowserStorage'
-	const { getAcStorage } = useBrowserStorage()
-  const { linkToLobby } = useLink()
-  const { 
+/**
+ * 測試環境會被導轉到line登入頁14, 23-27註解就可以避免被轉址
+ */
+import { ref, onMounted, watchEffect } from 'vue'
+import { RouterLink } from 'vue-router'
+import { useLink } from '@/composable/useLink'
+import { useLIFF } from '@/composable/useLIFF'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
+const { getAcStorage } = useBrowserStorage()
+const { linkToLobby } = useLink()
+const { 
     getOpenInClient, useLineLogout, 
-    getLineProfileAndAccessToken,
-  } = useLIFF()
-  const openInLIFF = getOpenInClient()
-  const userProfile = ref()
-  const accessToken = ref()
-  const props = defineProps<{
+    // getLineProfileAndAccessToken,
+} = useLIFF()
+const openInLIFF = getOpenInClient()
+const userProfile = ref()
+const accessToken = ref()
+const props = defineProps<{
     knowActivity: boolean
-  }>()
-  onMounted(async() => {
-    const userData = await getLineProfileAndAccessToken()
-    if(userData){
-      userProfile.value = userData.profile
-      accessToken.value = userData.accessToken
-    }
-  })
+}>()
+onMounted(async() => {
+// const userData = await getLineProfileAndAccessToken()
+// if(userData){
+//   userProfile.value = userData.profile
+//   accessToken.value = userData.accessToken
+// }
+})
 
   const navOpen = ref<Boolean>(false)
   const togggle = () => {

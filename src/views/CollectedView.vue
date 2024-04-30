@@ -120,6 +120,7 @@ img {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  max-width: 22rem;
 
   &_img {
     width: 40%;
@@ -130,6 +131,8 @@ img {
   flex-direction: row;
   justify-content: space-around;
   flex-wrap: wrap;
+  max-width: 22rem;
+
   &_base {
     color: white;
     text-align: center;
