@@ -89,6 +89,16 @@ const siteLoading = computed(() => loadStore.load)
         v-for="activities in activitiesList"
         :key="activities.id"
       />
+
+      <ActivitiesListItem 
+        :activities="{
+          title: '集郵冊-打卡紀錄',
+          statu: 1,
+          img: 'https://i.imgur.com/d8ptVfB.png',
+          link: '/album'
+        }" 
+      />
+
       <div class="lobby-view__icon-bar">
         <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
         <img src="@/assets/images/lobby/icon-instagram.png" alt="instagram" />

@@ -104,7 +104,7 @@
             :key="albumBase"
             :style="{ backgroundImage: `url('${footImportUrl}')` }"
           >
-            <div v-if="albumItem.collection && albumItem.collection >= albumBase" @click="openStoreInfo">
+            <button v-if="albumItem.collection && albumItem.collection >= albumBase" @click="openStoreInfo">
               <img :src="storeIcon" alt="已打卡" />
             </button>
           </div>
@@ -123,13 +123,14 @@ img {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-
+  max-width: 22rem;
   &_img {
     width: 40%;
   }
 }
 .album{
   width: 100%;
+  max-width: 22rem;
   &_title {
     display: flex;
     flex-direction: row;

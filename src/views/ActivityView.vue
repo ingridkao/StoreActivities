@@ -54,23 +54,19 @@ watchEffect(async () => {
       activityId = getAcStorage()
     }
     try {
-      const confirmRes = await confirmActivity(activityId)
-      if (typeof confirmRes === 'object') {
-        setAcStorage(activityId)
-        content.value = confirmRes
-      } else if (confirmRes === 2) {
-        router.push({ path: '/wrapup' })
-      } else {
-        router.push({ name: 'ComingSoon' })
-      }
+        const confirmRes = await confirmActivity(activityId)
+        if (typeof confirmRes === 'object') {
+            setAcStorage(activityId)
+            content.value = confirmRes
+        } else if (confirmRes === 2) {
+            router.push({ path: '/wrapup' })
+        } else {
+            router.push({ name: 'ComingSoon' })
+        }
     } catch (error) {
       const errorStr = String(error)
       errorAlert(errorStr)
     }
-  } catch (error) {
-    const errorStr = String(error)
-    errorAlert(errorStr)
-  }
 })
 
 const gotoDirection = () => {
