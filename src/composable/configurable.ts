@@ -31,6 +31,10 @@ export interface ProfileType {
   displayName?: string
   pictureUrl?: string
 }
+export interface ProfileAccessType {
+  accessToken?: string | null,
+  profile : ProfileType | undefined
+}
 
 export interface ScanResultType {
   event_id?: string

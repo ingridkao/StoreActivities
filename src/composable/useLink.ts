@@ -25,19 +25,37 @@ export function useLink() {
     router.push({ name: 'Album' })
   }
 
-  const backCollect = () => {
-    const acString = getAcQuery()
-    if (acString) {
-      router.push({
-        name: 'Collected',
-        params: {
-          id: String(acString)
-        }
-      })
-    } else {
-      router.push({ name: 'Album' })
-    }
-  }
+	const linkToWinning = () => {
+		router.push({ name: 'Winning' })
+	}
+
+	const linkToActivity = (activityId:string = '') => {
+		if(!activityId) activityId = getAcStorage()
+		if (activityId !== '') {
+			router.push({
+				name: 'Activity',
+				params: {
+					id: String(activityId)
+				}
+			})
+		} else {
+			errorAlert()
+		}
+	}
+
+	const backCollect = () => {
+		const acString = getAcStorage()
+		if (acString) {
+			router.push({
+				name: 'Collected',
+				params: {
+					id: String(acString)
+				}
+			})
+		} else {
+			router.push({ name: 'Album' })
+		}
+	}
 
   const linkToCollect = (albumItem: ScanResultType | AlbumType | null = null) => {
     const acString = getAcStorage()
@@ -54,11 +72,13 @@ export function useLink() {
     }
   }
 
-  return {
-    getQueryParam,
-    linkToLobby,
-    linkToAlbum,
-    backCollect,
-    linkToCollect
-  }
+	return {
+		getQueryParam,
+		linkToLobby,
+		linkToAlbum,
+		linkToWinning,
+		linkToActivity,
+		backCollect,
+		linkToCollect
+	}
 }

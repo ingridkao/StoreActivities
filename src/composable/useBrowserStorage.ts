@@ -11,14 +11,14 @@ export function useBrowserStorage() {
       return ''
     }
   }
-  const getAcStorage = (): String => {
+  const getAcStorage = ():string => {
     const acQuery = getAcQuery()
     if (acQuery) return String(acQuery)
     const acStorage = localStorage.getItem('ac')
     return acStorage || ''
   }
-  const setAcStorage = (value: string) => {
-    localStorage.setItem('ac', value)
+  const setAcStorage = (value: string | string[]) => {
+    localStorage.setItem('ac', String(value))
   }
 
   const getCtCookies = () => Cookies.get('ct1') || ''

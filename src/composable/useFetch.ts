@@ -79,10 +79,6 @@ export function useFetchData() {
     verifyRes: boolean | VerifyCodeResultType
   ): Promise<boolean | ScanResultType> => {
     const acStr = getAcStorage()
-    // const { getLineProfile } = useLIFF()
-    // const profile = getLineProfile()
-    // console.log(profile);
-    // if(profile) userProfile.value = profile
     return new Promise((resolve, reject) => {
       if (verifyRes) {
         if (!acStr) {
@@ -179,7 +175,7 @@ export function useFetchData() {
     })
   }
 
-  const confirmActivity = (acStr: String = ''): Promise<ActivityListType | number> => {
+  const confirmActivity = (acStr: string | string[] = ''): Promise<ActivityListType | number> => {
     return new Promise((resolve, reject) => {
       if (acStr === '') resolve(0)
       fetchActivityData()

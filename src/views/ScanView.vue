@@ -69,8 +69,6 @@ declare function requestAnimationFrame(callback: AnimationFunction): AnimationRe
 declare function cancelAnimationFrame(requestId: AnimationRequestId): void
 let animationId: AnimationRequestId | null = null
 
-// const imageDatas = ref()
-// const codes = ref()
 const showsScanResult = ref(false)
 const scanResultContent = ref({})
 
@@ -120,16 +118,18 @@ const cleanOutPutData = () => {
 const isMobile = ref(false)
 const tick = () => {
   if (!canvasElement || !canvasCtx || !video) return
-
-  videoLoading.value = true
-  if (video.readyState == video.HAVE_ENOUGH_DATA) {
-    videoLoading.value = false
-    canvasCtx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height)
-    // 添加遮罩層
-    if (isMobile.value) {
-      drawOverlayTopDown()
-    } else {
-      drawOverlayLeftRight()
+    videoLoading.value = true
+    if (video.readyState == video.HAVE_ENOUGH_DATA) {
+        videoLoading.value = false
+        canvasCtx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+        // 添加遮罩層
+        if (isMobile.value) {
+            drawOverlayTopDown()
+        } else {
+            drawOverlayLeftRight();
+        }
+        const imageData = canvasCtx.getImageData(0, 0, canvasElement.width, canvasElement.height);
+        updateOutPutData(imageData)
     }
     const imageData = canvasCtx.getImageData(0, 0, canvasElement.width, canvasElement.height)
     // imageDatas.value = imageData

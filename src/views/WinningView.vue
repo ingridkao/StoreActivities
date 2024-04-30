@@ -1,11 +1,20 @@
 <script setup lang="ts">
-/**
- * 中獎序號
- * 在這一頁可能還會有變動(可能會有多個中獎序號)
- */
-import { ref, onMounted } from 'vue'
-import { useLink } from '@/composable/useLink'
-const { backCollect } = useLink()
+  /**
+   * 中獎序號s
+   */
+  import { ref, onMounted } from 'vue'
+  import { useLink } from '@/composable/useLink'
+  const { backCollect } = useLink()
+
+  const serialNumber = ref(5473985669)
+  onMounted(() => {
+    // getSerialNumber().then(number => {
+    //   serialNumber.value = number
+    // }).catch(error => {
+    //   取得中獎序號失敗 -> sweetalert2
+    //   console.error(error);
+    // })
+  })
 
 const serialNumber = ref(5473985669)
 onMounted(() => {
@@ -29,7 +38,7 @@ onMounted(() => {
     <section>
       <h6>使用說明</h6>
       <p>請至7-Eleven門市ibon機台列印，於.....</p>
-      <button @click="backCollect">結束</button>
+      <button @click="backCollect">回到活動紀錄</button>
     </section>
   </main>
 </template>

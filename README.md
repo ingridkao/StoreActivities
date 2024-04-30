@@ -52,26 +52,35 @@
 
 ### 頁面說明
 
-| | Page          | @/view             | @/component            | Description |
-|-| ------------- | ------------------ | ---------------------- | ----------- |
-|O|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |
-|O|活動說明        | ActivityView.vue   | HeaderMenu             |             |
-|O|打卡教學        | DirectionView.vue  | HeaderMenu             |             |
-|O|相機掃描        | ScanView.vue       | ScanResult             |            |
-|O|所有活動打卡紀錄 | AlbumView.vue      |                        |             |
-|O|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu             |             |
-|?|中獎序號        | WinningView.vue    |                        |             |
-|O|門市地圖        | MapStoreView.vue   | 門市詳細(預計4/19commit)|             |
-|O|活動已結束      | WrapUpView.vue     |                        |             |
-|O|ComingSoon     | ComingSoonView.vue |                         | 404page     |
+Header
+1. 活動說明, 門市地圖, 活動打卡紀錄, 回到活動大廳
+2. 回到活動大廳
+
+V:已完成
+D:UI切版中，功能停止開發
+I:等待UI切版，功能開發中
+U:功能變動未完成
+
+| | Page          | @/view             | @/component            | Description | Auth |
+|-| ------------- | ------------------ | ---------------------- | ----------- | ---- |
+|D|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |  X   |
+|D|活動說明        | ActivityView.vue   | HeaderMenu             |             |  1   |
+|D|打卡說明        | DirectionView.vue  | HeaderMenu             |             |  1   |
+|D|相機掃描        | ScanView.vue       | ScanResult             |             |  X  |
+|U|所有活動打卡紀錄 | AlbumView.vue      |                        |             |  2   |
+|D|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu             |             |  1   |
+|U|中獎序號        | WinningView.vue    |                        |              |  1  |
+|U|門市地圖        | MapStoreView.vue   | 門市詳細(預計4/19commit)|              |  1  |
+|D|活動已結束      | WrapUpView.vue     |                        |              |  2  |
+|D|ComingSoon     | ComingSoonView.vue |                         | 404page     |  2  |
 
 ### 組件說明
 
 | | Component              | Description  | Used for                        |
 |-| ---------------------- | ------------ | ------------------------------- |
-|O| HeaderMenu.vue         | 會觸發Line登入| 活動說明,打卡教學,單一活動打卡紀錄 |
-|O| ActivitiesListItem.vue | 活動列表      | 活動大廳                         |
-|O| ScanResult.vue         | 打卡結果      | 相機掃描                         |
+|I| HeaderMenu.vue         | 會觸發Line登入| 如一直被轉址請註解部分程式         |
+|I| ActivitiesListItem.vue | 活動列表      | 活動大廳                         |
+|I| ScanResult.vue         | 打卡結果      | 相機掃描                         |
 
 
 

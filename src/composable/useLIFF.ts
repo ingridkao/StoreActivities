@@ -1,8 +1,9 @@
 // import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-import type { ProfileType } from '@/composable/configurable'
-// import { useFetchData } from '@/composable/useFetch'
+import type { ProfileType, ProfileAccessType } from '@/composable/configurable'
+import { useFetchData } from '@/composable/useFetch'
+const { VITE_LIFF_ID, VITE_BASE_URL, VITE_LIFF_ENDPOINT_URL } = import.meta.env
 
 // https://developers.line.biz/en/docs/liff/pluggable-sdk/#activate-liff-api
 import liff from '@line/liff/core'
@@ -16,12 +17,12 @@ import login from '@line/liff/login'
 import logout from '@line/liff/logout'
 import isLoggedIn from '@line/liff/is-logged-in'
 import getProfile from '@line/liff/get-profile'
+import getAccessToken from '@line/liff/get-access-token'
 // import getFriendship from '@line/liff/get-friendship'
 // import getIDToken from '@line/liff/get-id-token'
 import closeWindow from '@line/liff/close-window'
 import scanCodeV2 from '@line/liff/scan-code-v2'
 // import isApiAvailable from '@line/liff/is-api-available'
-// import getAccessToken from '@line/liff/get-access-token'
 
 liff.use(new getOS())
 liff.use(new isInClient())
@@ -30,12 +31,12 @@ liff.use(new login())
 liff.use(new logout())
 liff.use(new isLoggedIn())
 liff.use(new getProfile())
+liff.use(new getAccessToken())
 // liff.use(new getFriendship())
 // liff.use(new getIDToken())
 liff.use(new closeWindow())
 liff.use(new scanCodeV2())
 // liff.use(new isApiAvailable())
-// liff.use(new getAccessToken())
 
 export function useLIFF() {
   // ios || android || web
@@ -51,19 +52,15 @@ export function useLIFF() {
   }
 
   // ============================
-  // const friendFlag = ref(false)
   // then  初始成功
   // catch 初始失敗
   const useLineInit = (): Promise<boolean> => {
     return new Promise((resolve, reject) => {
       liff
         .init({
-          liffId: import.meta.env.VITE_LIFF_ID
+          liffId: VITE_LIFF_ID
         })
         .then(() => {
-          // liff.getFriendship().then((data) => {
-          //   friendFlag.value = data && data.friendFlag ? data.friendFlag : false
-          // })
           resolve(true)
         })
         .catch((e: Error) => {
@@ -72,8 +69,8 @@ export function useLIFF() {
     })
   }
 
-  const useLineLogin = (): Promise<boolean | ProfileType> => {
-    const redirectUri: URL = new URL(import.meta.env.VITE_LIFF_ENDPOINT_URL)
+  const useLineLogin = (): Promise<boolean|ProfileType> => {
+    const redirectUri: URL = new URL(VITE_LIFF_ENDPOINT_URL)
     return new Promise((resolve, reject) => {
       if (liff.isLoggedIn()) {
         liff
@@ -92,29 +89,11 @@ export function useLIFF() {
         liff.login({
           redirectUri: redirectUri.href
         })
-      }
-    })
-  }
-
-  const useLineProfile = (): Promise<ProfileType> => {
-    return new Promise((resolve, reject) => {
-      if (liff.isLoggedIn()) {
         liff
-          .getProfile()
-          .then((profile) => resolve(profile))
-          .catch((e: Error) => reject(Error(`取得失敗${e}`)))
-      } else {
-        reject(Error(`未登入`))
+        .getProfile()
+        .then((profile) => resolve(profile))
+        .catch((e: Error) => reject(Error(`取得失敗${e}`)))
       }
-    })
-  }
-
-  const useLineScan = () => {
-    return new Promise((resolve, reject) => {
-      liff
-        .scanCodeV2()
-        .then((result) => resolve(result))
-        .catch((error) => reject(`LineScan: ${error}`))
     })
   }
 
@@ -132,45 +111,66 @@ export function useLIFF() {
     }
   }
 
-  const getLineProfile = async () => {
+  // https://developers.line.biz/en/reference/liff/#get-access-token
+  const getLineProfileAndAccessToken = async (): Promise<ProfileAccessType | undefined> => {
     try {
-      await useLineInit()
-      await useLineLogin()
-      const profile = await useLineProfile()
-      return profile || null
-    } catch (error) {
-      console.error(error)
+      const isInClient = liff.isInClient()
+      if(isInClient){
+        // liff.init()在執行時會自動執行liff.login()
+        await liff.init({ liffId: VITE_LIFF_ID })
+        const accessToken = liff.getAccessToken()
+        const profile = await liff.getProfile()
+        return {
+          accessToken,
+          profile
+        }
+      }else{
+        await liff.init({ liffId: VITE_LIFF_ID })
+        if (!liff.isLoggedIn()) {
+          liff.login()
+        }
+        const accessToken = liff.getAccessToken()
+        const profile =  await liff.getProfile()
+        return {
+          accessToken,
+          profile
+        }
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
 
-  //const { verifyQRCode, commitStoreCheckIn } = useFetchData()
+  const { verifyQRCode, commitStoreCheckIn } = useFetchData()
   const scanCode = async () => {
-    const isInClient = getOpenInClient()
+    console.log('scanCode');
     try {
-      if (isInClient) {
-        await useLineInit()
-        await useLineLogin()
-        const scanResult = await useLineScan()
-        // 掃描出來的code
-        alert(scanResult)
-        // const verifyRes = await verifyQRCode(scanResult)
-        // const commitRes = await commitStoreCheckIn(verifyRes)
-        // console.log(commitRes);
-        // 打卡成功或失敗->sweat alert
-      } else {
-        router.push({ path: '/scan' })
+      await liff.init({ liffId: VITE_LIFF_ID })
+      const scanresult = await liff.scanCodeV2()
+      if(scanresult && scanresult.value){
+        const codeSplit = scanresult.value.split(`${VITE_BASE_URL}/?ct=`)
+        console.log(codeSplit);
+        const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
+        const verifyRes = await verifyQRCode(ctCode)
+        console.log(verifyRes);
+        // const commitRes = await commitStoreCheckIn(verifyRes) 
+        const qrcodeOk = (codeSplit.length === 2 && codeSplit[1])?true: false
+        const commitRes = await commitStoreCheckIn(qrcodeOk)
+        console.log(commitRes);
       }
-    } catch (error) {
-      alert(error)
+      console.log(scanresult)
+    } catch (err) {
+      console.log(err)
       router.push({ path: '/scan' })
     }
   }
+
   return {
     getUserOS,
     getOpenInClient,
     useLineInit,
     useLineLogout,
-    getLineProfile,
+    getLineProfileAndAccessToken,
     scanCode
   }
 }

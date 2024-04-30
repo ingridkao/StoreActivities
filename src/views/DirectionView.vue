@@ -22,7 +22,7 @@ const startScanning = async () => {
 </script>
 
 <template>
-  <HeaderMenu />
+  <HeaderMenu :knowActivity="true"/>
   <main>
     <section>
       <!-- 步驟 -->

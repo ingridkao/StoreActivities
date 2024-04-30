@@ -37,28 +37,35 @@ const { errorAlert } = useSweetAlert()
 const content = ref({})
 
 watchEffect(async () => {
-  // step0
-  const { latitude, longitude } = coords.value
-  if (getPosition) return
-  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
-    getPosition = true
-    // setLocationStorage(latitude, longitude)
-  } else if (error.value && error.value.code >= 1) {
-    geoErrorHandler(error.value.code)
-  }
-
-  // step1
-  const acStr = getAcStorage()
-  const activityId = route.params && route.params.id ? route.params.id : acStr
-  try {
-    const confirmRes = await confirmActivity(String(activityId))
-    if (typeof confirmRes === 'object') {
-      setAcStorage(String(activityId))
-      content.value = confirmRes
-    } else if (confirmRes === 2) {
-      router.push({ path: '/wrapup' })
-    } else {
-      router.push({ name: 'ComingSoon' })
+    // step0
+    const { latitude, longitude } = coords.value
+    if (getPosition) return
+    if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+      getPosition = true
+      // setLocationStorage(latitude, longitude)
+    } else if (error.value && error.value.code >= 1) {
+      geoErrorHandler(error.value.code)
+    }
+    // step1
+    let activityId:string | string[] = ''
+    if(route.params && route.params.id){
+      activityId = route.params.id
+    }else{
+      activityId = getAcStorage()
+    }
+    try {
+      const confirmRes = await confirmActivity(activityId)
+      if (typeof confirmRes === 'object') {
+        setAcStorage(activityId)
+        content.value = confirmRes
+      } else if (confirmRes === 2) {
+        router.push({ path: '/wrapup' })
+      } else {
+        router.push({ name: 'ComingSoon' })
+      }
+    } catch (error) {
+      const errorStr = String(error)
+      errorAlert(errorStr)
     }
   } catch (error) {
     const errorStr = String(error)
@@ -92,7 +99,8 @@ const enterActivity = async () => {
 </script>
 
 <template>
-  <HeaderMenu />
+  <HeaderMenu :knowActivity="true"/>
+
   <main class="event">
     <section class="event_time">
       <div>4.16</div>

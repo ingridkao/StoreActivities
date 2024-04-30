@@ -3,6 +3,7 @@
  * 門市地圖
  */
 import MapNavigationIcon from '@/components/icon/IconMapNavigation.vue'
+import HeaderMenu from '@/components/HeaderMenu.vue'
 
 import { useMapbox } from '@/composable/useMapbox'
 const { storeFilterOptions, storeFilterSelectd, targetBoxData, updateChecked, mapNavigation } =
@@ -10,6 +11,7 @@ const { storeFilterOptions, storeFilterSelectd, targetBoxData, updateChecked, ma
 </script>
 
 <template>
+  <HeaderMenu :knowActivity="true"/>
   <main id="mapMain">
     <!-- <a href="https://qwaretest-9b8d6.web.app/map8">先看這個</a> -->
     <div id="mapboxBasic"></div>
