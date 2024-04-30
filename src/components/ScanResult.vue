@@ -2,7 +2,7 @@
 /**
  * 打卡結果
  */
-import { computed  } from 'vue'
+import { computed } from 'vue'
 import type { ScanResultType } from '@/composable/configurable'
 import { useLink } from '@/composable/useLink'
 const { linkToCollect } = useLink()
@@ -16,7 +16,6 @@ const successResult = computed(() => Object.keys(props.result).length > 0)
 const scanAgain = async () => {
   window.location.reload()
 }
-
 </script>
 
 <template>
@@ -27,9 +26,7 @@ const scanAgain = async () => {
         {{ props.result }}
       </div>
     </section>
-    <section v-else>
-      打卡失敗
-    </section>
+    <section v-else>打卡失敗</section>
     <section>
       <button @click="linkToCollect(props.result)">查看紀錄</button>
       <button @click="scanAgain">繼續打卡</button>

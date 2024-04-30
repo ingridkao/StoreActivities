@@ -1,6 +1,12 @@
 import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
-import type { ActivityListType, CollectedType, AlbumType, ScanResultType, VerifyCodeResultType } from '@/composable/configurable'
+import type {
+  ActivityListType,
+  CollectedType,
+  AlbumType,
+  ScanResultType,
+  VerifyCodeResultType
+} from '@/composable/configurable'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 // import { useLIFF } from '@/composable/useLIFF'
 
@@ -10,9 +16,11 @@ const { VITE_MOCKAPI_URL } = import.meta.env
 export function useFetchData() {
   const parser = new UAParser()
   const loadStore = useLoadingStore()
-  const { 
-    getCtCookies, setCtCookies, 
-    setTokenCookies, resetCtCookies,
+  const {
+    getCtCookies,
+    setCtCookies,
+    setTokenCookies,
+    resetCtCookies,
     getAcStorage,
     getLocationStorage
   } = useBrowserStorage()
@@ -23,63 +31,65 @@ export function useFetchData() {
   }
 
   // 驗證QR Code
-  const verifyQRCode = (ctStr:string=''):Promise<boolean|VerifyCodeResultType> => {
+  const verifyQRCode = (ctStr: string = ''): Promise<boolean | VerifyCodeResultType> => {
     // ct=OP666000031818094ac904
     // 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
-    let ctString = ctStr 
-    if(ctStr !== ''){
+    let ctString = ctStr
+    if (ctStr !== '') {
       ctString = ctStr
-    }else{
+    } else {
       ctString = getCtCookies()
     }
     const [latitude, longitude] = getLocationStorage()
     return new Promise((resolve, reject) => {
       if (ctString) {
         axios
-        .post('/api/ScanEntry/IbonEntry', {
-          data: {
-            qrCode: ctString,
-            longitude: longitude,
-            latitude: latitude
-          }
-        })
-        .then((res) => {
-          if (res && res.data) {
-            if (res.data.result.token) {
-              setCtCookies(ctString)
-              setTokenCookies(res.data.result.token)
-              resolve({
-                c: ctString,
-                t: res.data.result.token
-              })
+          .post('/api/ScanEntry/IbonEntry', {
+            data: {
+              qrCode: ctString,
+              longitude: longitude,
+              latitude: latitude
+            }
+          })
+          .then((res) => {
+            if (res && res.data) {
+              if (res.data.result.token) {
+                setCtCookies(ctString)
+                setTokenCookies(res.data.result.token)
+                resolve({
+                  c: ctString,
+                  t: res.data.result.token
+                })
+              } else {
+                resetCtCookies()
+                reject(res.data.msg)
+              }
             } else {
               resetCtCookies()
-              reject(res.data.msg)
+              reject('發生了例外錯誤')
             }
-          } else {
-            resetCtCookies()
-            reject('發生了例外錯誤')
-          }
-        })
+          })
       } else {
         resolve(false)
       }
     })
   }
 
-  const commitStoreCheckIn = async (verifyRes:boolean|VerifyCodeResultType):Promise<boolean|ScanResultType>  => {
+  const commitStoreCheckIn = async (
+    verifyRes: boolean | VerifyCodeResultType
+  ): Promise<boolean | ScanResultType> => {
     const acStr = getAcStorage()
     // const { getLineProfile } = useLIFF()
     // const profile = getLineProfile()
     // console.log(profile);
     // if(profile) userProfile.value = profile
     return new Promise((resolve, reject) => {
-      if(verifyRes){
-        if(!acStr){
+      if (verifyRes) {
+        if (!acStr) {
           reject('活動錯誤')
-        // }else if(!userId){
-        //   reject('訪客無法進行打卡')
-        }else{
+          // }else if(!userId){
+          //   reject('訪客無法進行打卡')
+        } else {
           // 驗證成功
           // axios
           // .post(`${VITE_MOCKAPI_URL}/checkIn`, {
@@ -105,10 +115,10 @@ export function useFetchData() {
           //   }
           // })
           resolve({
-            event_id: String(acStr),
+            event_id: String(acStr)
           })
         }
-      }else{
+      } else {
         reject('參數錯誤')
       }
     })
@@ -116,44 +126,56 @@ export function useFetchData() {
 
   const fetchActivityData = (): Promise<ActivityListType[]> => {
     return new Promise((resolve, reject) => {
-      axios.get(`${VITE_MOCKAPI_URL}/activities`).then((res) => {
-        resolve(res.data || [])
-      }).catch((err) => {
-        reject(err)
-      })
+      axios
+        .get(`${VITE_MOCKAPI_URL}/activities`)
+        .then((res) => {
+          resolve(res.data || [])
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   }
 
   const fetchAdData = (): Promise<ActivityListType[]> => {
     return new Promise((resolve, reject) => {
-      axios.post('/api/ScanEntry/GetAdsData', {}).then((res) => {
-      // axios.get(`${VITE_MOCKAPI_URL}/GetAdsData`).then((res) => {
-        resolve(res.data || [])
-      }).catch((err) => {
-        reject(err)
-      })
+      axios
+        .post('/api/ScanEntry/GetAdsData', {})
+        .then((res) => {
+          // axios.get(`${VITE_MOCKAPI_URL}/GetAdsData`).then((res) => {
+          resolve(res.data || [])
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   }
 
   const fetchAlbumData = (): Promise<AlbumType[]> => {
     return new Promise((resolve, reject) => {
-      axios.get(`${VITE_MOCKAPI_URL}/album`).then((res) => {
-        resolve(res.data || [])
-      }).catch((err) => {
-        reject(err)
-      })
+      axios
+        .get(`${VITE_MOCKAPI_URL}/album`)
+        .then((res) => {
+          resolve(res.data || [])
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   }
 
-  const fetchCollectData = (activityId:string=''): Promise<CollectedType> => {
+  const fetchCollectData = (activityId: string = ''): Promise<CollectedType> => {
     return new Promise((resolve, reject) => {
-      axios.post(`${VITE_MOCKAPI_URL}/collect`, {
-        ac: activityId,
-      }).then((res) => {
-        resolve(res.data.data || {})
-      }).catch((err) => {
-        reject(err)
-      })
+      axios
+        .post(`${VITE_MOCKAPI_URL}/collect`, {
+          ac: activityId
+        })
+        .then((res) => {
+          resolve(res.data.data || {})
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   }
 
@@ -179,17 +201,20 @@ export function useFetchData() {
   // 讀取指定城市資料
   const fetchLayerData = async (selectCity: string = '') => {
     const targerCity = String(selectCity)
-    if(!targerCity) return false
+    if (!targerCity) return false
     loadStore.toggle(true)
-    return await axios.get(`/stores/map_${targerCity}.geojson`)
-    .then((geoRes) => {
-      if (!geoRes) return false
-      return geoRes
-    }).catch((error) => {
-      console.log(error)
-    }).finally(()=>{
-      loadStore.toggle(false)
-    })
+    return await axios
+      .get(`/stores/map_${targerCity}.geojson`)
+      .then((geoRes) => {
+        if (!geoRes) return false
+        return geoRes
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+      .finally(() => {
+        loadStore.toggle(false)
+      })
   }
 
   return {

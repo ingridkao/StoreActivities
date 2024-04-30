@@ -1,45 +1,44 @@
 <script setup lang="ts">
-  /**
-   * Header
-   */
-  import { ref, onMounted } from 'vue'
-  // import { RouterLink } from 'vue-router'
-  import { useLink } from '@/composable/useLink'
-  // import { useLIFF } from '@/composable/useLIFF'
+/**
+ * Header
+ */
+import { ref, onMounted } from 'vue'
+// import { RouterLink } from 'vue-router'
+import { useLink } from '@/composable/useLink'
+// import { useLIFF } from '@/composable/useLIFF'
 
-  const { linkToLobby } = useLink()
-  // const { getOpenInClient, getUserOS, getLineProfile, useLineLogout } = useLIFF()
-  // const openInLIFF = getOpenInClient()
-  // const userOS = getUserOS()
+const { linkToLobby } = useLink()
+// const { getOpenInClient, getUserOS, getLineProfile, useLineLogout } = useLIFF()
+// const openInLIFF = getOpenInClient()
+// const userOS = getUserOS()
 
-  // const userProfile = ref()
-  onMounted(() => {
-    // const profile = getLineProfile()
-    // if(profile) userProfile.value = profile
-  })
+// const userProfile = ref()
+onMounted(() => {
+  // const profile = getLineProfile()
+  // if(profile) userProfile.value = profile
+})
 
-  const navOpen = ref<Boolean>(false)
-  const togggle = () => {
-    navOpen.value = !navOpen.value
+const navOpen = ref<Boolean>(false)
+const togggle = () => {
+  navOpen.value = !navOpen.value
+}
+const menuList = ref([
+  // {
+  //   link: '/scan',
+  //   key: 'Scan',
+  //   name: '我要打卡'
+  // },
+  {
+    link: '/mapStore',
+    key: 'MapStore',
+    name: '門市地圖'
+  },
+  {
+    link: '/album',
+    key: 'Album',
+    name: '所有打卡紀錄'
   }
-  const menuList = ref([
-    // {
-    //   link: '/scan',
-    //   key: 'Scan',
-    //   name: '我要打卡'
-    // },
-    {
-      link: '/mapStore',
-      key: 'MapStore',
-      name: '門市地圖'
-    },
-    {
-      link: '/album',
-      key: 'Album',
-      name: '所有打卡紀錄'
-    }
-  ])
-
+])
 </script>
 
 <template>
@@ -85,128 +84,128 @@
 </template>
 
 <style lang="scss" scoped>
-  #sidemenu {
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 99;
-      width: 200px;
-      height: 100vh;
+#sidemenu {
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 200px;
+    height: 100vh;
+    background: grey;
+
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: column;
+
+    overflow: hidden;
+  }
+
+  .sidemenu {
+    &__btn {
+      display: block;
+      width: 50px;
+      height: 50px;
       background: grey;
+      border: none;
+      position: relative;
+      z-index: 100;
+      appearance: none;
+      cursor: pointer;
+      outline: none;
 
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      flex-direction: column;
-
-      overflow: hidden;
-    }
-
-    .sidemenu {
-      &__btn {
+      span {
         display: block;
-        width: 50px;
-        height: 50px;
-        background: grey;
-        border: none;
-        position: relative;
-        z-index: 100;
-        appearance: none;
-        cursor: pointer;
-        outline: none;
+        width: 20px;
+        height: 2px;
+        margin: auto;
+        background: white;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        transition: all 0.4s ease;
 
-        span {
-          display: block;
-          width: 20px;
-          height: 2px;
-          margin: auto;
-          background: white;
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          transition: all .4s ease;
-
-          &.top {
-            transform: translateY(-8px);
-          }
-
-          &.bottom {
-            transform: translateY(8px);
-          }
+        &.top {
+          transform: translateY(-8px);
         }
 
-        &.active {
-          .top {
-            transform: rotate(-45deg);
-          }
-
-          .mid {
-            transform: translateX(-20px) rotate(360deg);
-            opacity: 0;
-          }
-
-          .bottom {
-            transform: rotate(45deg);
-          }
+        &.bottom {
+          transform: translateY(8px);
         }
-
       }
 
-      &__wrapper {
-        width: 100%;
-        padding-top: 4.5rem;
-      }
-
-      &__list {
-        padding-top: 4.5rem;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-
-      &__item {
-        a,button {
-          width: 100%;
-          line-height: 2rem;
-          font-size: 1.25rem;
-          padding: .5rem 1rem;
-          display: block;
-          color: white;
-          transition: .4s ease;
-          text-align: center;
-          &:hover {
-            background: lightgrey;
-            color: dimgrey;
-          }
+      &.active {
+        .top {
+          transform: rotate(-45deg);
         }
-        a{
-          text-decoration: none;
+
+        .mid {
+          transform: translateX(-20px) rotate(360deg);
+          opacity: 0;
         }
-        button{
-          background: transparent;
-          outline: none;
-          border: none;
+
+        .bottom {
+          transform: rotate(45deg);
         }
       }
     }
-  }
 
-  .translateX-enter {
-    transform: translateX(-200px);
-    opacity: 0;
-  }
+    &__wrapper {
+      width: 100%;
+      padding-top: 4.5rem;
+    }
 
-  .translateX-enter-active,
-  .translateX-leave-active {
-    transform-origin: top left 0;
-    transition: .2s ease;
-  }
+    &__list {
+      padding-top: 4.5rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 
-  .translateX-leave-to {
-    transform: translateX(-200px);
-    opacity: 0;
+    &__item {
+      a,
+      button {
+        width: 100%;
+        line-height: 2rem;
+        font-size: 1.25rem;
+        padding: 0.5rem 1rem;
+        display: block;
+        color: white;
+        transition: 0.4s ease;
+        text-align: center;
+        &:hover {
+          background: lightgrey;
+          color: dimgrey;
+        }
+      }
+      a {
+        text-decoration: none;
+      }
+      button {
+        background: transparent;
+        outline: none;
+        border: none;
+      }
+    }
   }
+}
+
+.translateX-enter {
+  transform: translateX(-200px);
+  opacity: 0;
+}
+
+.translateX-enter-active,
+.translateX-leave-active {
+  transform-origin: top left 0;
+  transition: 0.2s ease;
+}
+
+.translateX-leave-to {
+  transform: translateX(-200px);
+  opacity: 0;
+}
 </style>

@@ -2,8 +2,8 @@
 /**
  * 活動已結束
  */
-  import { useLink } from '@/composable/useLink'
-  const { linkToLobby, linkToAlbum } = useLink()
+import { useLink } from '@/composable/useLink'
+const { linkToLobby, linkToAlbum } = useLink()
 </script>
 
 <template>

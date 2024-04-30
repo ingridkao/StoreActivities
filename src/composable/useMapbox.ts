@@ -54,13 +54,13 @@ export function useMapbox() {
     storeFilterSelectd.value = target
     if (popup.value) popup.value.remove()
     const sourceObject = map.value.getSource(sourceName)
-    if(sourceObject){
-      if(target === 'all'){
+    if (sourceObject) {
+      if (target === 'all') {
         map.value.setFilter(layerName, null)
-      }else{
+      } else {
         map.value.setFilter(layerName, ['in', 'store_type', target])
       }
-    }else{
+    } else {
       addLayerData()
     }
   }
@@ -185,11 +185,11 @@ export function useMapbox() {
 
   const targetBoxData = reactive({
     toggle: false as boolean,
-    location: {} as {lng:number,lat:number},
+    location: {} as { lng: number; lat: number },
     info: {} as any
   })
-  const openStoreInfo = (e: any, properties:any) => {
-    console.log(properties);
+  const openStoreInfo = (e: any, properties: any) => {
+    console.log(properties)
     targetBoxData.toggle = true
     targetBoxData.location = e.lngLat
     targetBoxData.info = properties || {}
@@ -211,7 +211,7 @@ export function useMapbox() {
     //   link.click()
     //   link.remove()
     // } else {
-      window.open(googleMapUrl, '_blank', 'noopener noreferrer')
+    window.open(googleMapUrl, '_blank', 'noopener noreferrer')
     // }
   }
   onMounted(async () => {
