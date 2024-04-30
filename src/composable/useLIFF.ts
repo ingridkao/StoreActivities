@@ -74,10 +74,9 @@ export function useLIFF() {
     return new Promise((resolve, reject) => {
       if (liff.isLoggedIn()) {
         liff
-        .getProfile()
-        .then((profile) => resolve(profile))
-        .catch((e: Error) => reject(Error(`取得失敗${e}`)))
-
+          .getProfile()
+          .then((profile) => resolve(profile))
+          .catch((e: Error) => reject(Error(`取得失敗${e}`)))
       } else {
         const { getAcStorage, getCtCookies } = useBrowserStorage()
         const ctStr = getCtCookies()

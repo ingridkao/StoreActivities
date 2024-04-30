@@ -20,31 +20,29 @@ const stampBaseCount = ref(20)
 const route = useRoute()
 const { linkToAlbum, linkToActivity, linkToWinning } = useLink()
 
-watchEffect(
-  async () => {
-    const activityId = route.params.id
-    if(activityId){
-      try {
-        const res = await fetchCollectData(String(activityId))
-        if(res){
-          collectedActivity.value = res
-          collectedStore.value = res.collection || []
-        }
-      } catch (error) {
-        const errorStr = String(error)
-        errorAlert(errorStr)
+watchEffect(async () => {
+  const activityId = route.params.id
+  if (activityId) {
+    try {
+      const res = await fetchCollectData(String(activityId))
+      if (res) {
+        collectedActivity.value = res
+        collectedStore.value = res.collection || []
       }
-    }else{
-      linkToAlbum()
+    } catch (error) {
+      const errorStr = String(error)
+      errorAlert(errorStr)
     }
+  } else {
+    linkToAlbum()
   }
-)
+})
 
 const accumulation = computed(() => {
-  if(collectedActivity.value && collectedActivity.value.collection){
+  if (collectedActivity.value && collectedActivity.value.collection) {
     const numberStr = String(collectedActivity.value.collection.length)
     return numberStr.padStart(5 - numberStr.length, '0')
-  }else{
+  } else {
     return '0000'
   }
 })

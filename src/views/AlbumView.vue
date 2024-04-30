@@ -68,6 +68,7 @@
       }
     })
   }
+
 </script>
 
 <template>
@@ -92,24 +93,18 @@
   
     <section class="album">
       <!-- API待後端開發完成，可覆蓋此區域 -->
-      <div 
-        v-for="albumItem in albumStore" 
-        :key="albumItem.event_id" 
-      >
+      <div v-for="albumItem in albumStore" :key="albumItem.event_id">
         <div class="album_title">
           <h6>{{ albumItem.event_name || '打卡活動' }}</h6>
           <button @click="linkToCollect(albumItem)">></button>
         </div>
         <div class="album_base">
-          <div 
-            v-for="albumBase in albumItem.limit" 
+          <div
+            v-for="albumBase in albumItem.limit"
             :key="albumBase"
-            :style="{backgroundImage:`url('${footImportUrl}')`}"
+            :style="{ backgroundImage: `url('${footImportUrl}')` }"
           >
-            <button 
-              v-if="albumItem.collection && albumItem.collection >= albumBase"
-              @click="openStoreInfo"
-            >
+            <div v-if="albumItem.collection && albumItem.collection >= albumBase" @click="openStoreInfo">
               <img :src="storeIcon" alt="已打卡" />
             </button>
           </div>
@@ -117,7 +112,6 @@
       </div>
     </section>
   </main>
-
 </template>
 
 <style lang="scss" scope>
@@ -136,27 +130,27 @@ img {
 }
 .album{
   width: 100%;
-  &_title{
+  &_title {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
   }
-  &_base{
+  &_base {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap; 
-    >div{
+    flex-wrap: wrap;
+    > div {
       width: 5rem;
       height: 5rem;
       margin: 0.25rem;
       flex: 1 0 auto;
       background-color: #ddd;
       background-size: contain;
-      >div{
+      > div {
         display: flex;
         align-items: center;
         height: 100%;
-        img{
+        img {
           width: 100%;
         }
       }
@@ -189,3 +183,4 @@ img {
   }
 }
 </style>
+

@@ -6,7 +6,7 @@
  * step2.取得LINE user profile
  *       - 已登入:網頁導轉到此頁
  *       - 未登入:LINE Login redirect到此頁
- * step3.去檢測ct 
+ * step3.去檢測ct
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
@@ -36,19 +36,16 @@ let getPosition = false
 const { errorAlert } = useSweetAlert()
 const content = ref({})
 
-watchEffect(
-  async () => {
+watchEffect(async () => {
     // step0
     const { latitude, longitude } = coords.value
     if (getPosition) return
     if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
       getPosition = true
       // setLocationStorage(latitude, longitude)
-
     } else if (error.value && error.value.code >= 1) {
       geoErrorHandler(error.value.code)
     }
-
     // step1
     let activityId:string | string[] = ''
     if(route.params && route.params.id){
@@ -70,8 +67,11 @@ watchEffect(
       const errorStr = String(error)
       errorAlert(errorStr)
     }
+  } catch (error) {
+    const errorStr = String(error)
+    errorAlert(errorStr)
   }
-)
+})
 
 const gotoDirection = () => {
   router.push({ path: '/direction' })
@@ -85,7 +85,7 @@ const enterActivity = async () => {
     const verifyRes = await verifyQRCode()
     if (verifyRes) {
       const commitRes = await commitStoreCheckIn(verifyRes)
-      console.log(commitRes);
+      console.log(commitRes)
     } else {
       gotoDirection()
     }
@@ -96,7 +96,6 @@ const enterActivity = async () => {
     loadStore.toggle(false)
   }
 }
-
 </script>
 
 <template>
@@ -118,7 +117,10 @@ const enterActivity = async () => {
         2021河濱自行車挑戰認證，分為「環騎台北」及「小鴨慢騎」2組，並精選數個環繞河濱的指定打卡點，活動時間自11月6日起至12月5日止，無論白天黑夜，只需透過手機就能自由報名參加。依著活動網頁指示，集滿指定數量打卡點，即可獲得電子完騎證明與專屬紀念品乙份。
       </p>
       <p>此活動不需要載任何App，直接Mobile Web就可以直接執行掃描QRCode，GPS定位，打卡等功能。</p>
-      <p>此外為鼓勵民眾多多參與2021河濱自行車挑戰認證，特別與進駐河濱公園的商家合作舉辦「集點抽獎」活動，參加者就有機會抽中iPhone 13乙台。心動不如馬上行動，趕快踏上自行車，來趟環騎挑戰之旅吧。</p>
+      <p>
+        此外為鼓勵民眾多多參與2021河濱自行車挑戰認證，特別與進駐河濱公園的商家合作舉辦「集點抽獎」活動，參加者就有機會抽中iPhone
+        13乙台。心動不如馬上行動，趕快踏上自行車，來趟環騎挑戰之旅吧。
+      </p>
     </section>
 
     <section>
