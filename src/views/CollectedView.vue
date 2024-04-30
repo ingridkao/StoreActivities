@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /**
- * 單一活動打卡紀錄
+ * 單一打卡紀錄
  */
 import { ref, getCurrentInstance, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
@@ -15,11 +15,10 @@ const { errorAlert } = useSweetAlert()
 
 const collectedActivity = ref<CollectedType>({})
 const collectedStore = ref<CollectedListType[]>([])
-const { proxy } = getCurrentInstance()
 const stampBaseCount = ref(20)
 
 const route = useRoute()
-const { linkToAlbum } = useLink()
+const { linkToAlbum, linkToActivity, linkToWinning } = useLink()
 
 watchEffect(
   async () => {
@@ -53,7 +52,8 @@ const accumulation = computed(() => {
 const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
 const catImportUrl = new URL('@/assets/images/cats/cat1.png', import.meta.url).href
 const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
-const linkTo = async (storeItem: CollectedListType) => {
+const { proxy } = getCurrentInstance()
+const openStoreInfo = async (storeItem: CollectedListType) => {
   if (storeItem.store_id) {
     proxy.$swal.fire({
       html: `
@@ -83,22 +83,13 @@ const linkTo = async (storeItem: CollectedListType) => {
 </script>
 
 <template>
-  <HeaderMenu />
+  <HeaderMenu :knowActivity="false"/>
   <main>
-    <section class="info">
-      <div>
-        <h5>目前累積蒐集門市</h5>
-        <div>
-          <p>
-            {{ accumulation }}
-            <span>家</span>
-          </p>
-        </div>
-      </div>
-      <div class="info_img">
-        <img :src="catImportUrl" alt="喵喵人" />
-      </div>
-    </section>
+    <p>
+      <span>已完成</span>
+      {{ accumulation }}
+      <span>次</span>
+    </p>
 
     <section class="stamp">
       <div
@@ -109,12 +100,17 @@ const linkTo = async (storeItem: CollectedListType) => {
       >
         <button
           v-if="collectedStore[baseItem - 1] && collectedStore[baseItem - 1]['store_id']"
-          @click="linkTo(collectedStore[baseItem - 1])"
+          @click="openStoreInfo(collectedStore[baseItem - 1])"
         >
           <img :src="storeIcon" :alt="collectedStore[baseItem - 1]['store_name']" />
         </button>
       </div>
     </section>
+
+    <footer>
+      <button @click="linkToWinning()">兌獎</button>
+      <button @click="linkToActivity(String(route.params.id))">回活動首頁</button>
+    </footer>
   </main>
 </template>
 <style lang="scss" scope>

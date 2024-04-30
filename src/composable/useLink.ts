@@ -25,8 +25,26 @@ export function useLink() {
 		router.push({ name: 'Album' })
 	}
 
+	const linkToWinning = () => {
+		router.push({ name: 'Winning' })
+	}
+
+	const linkToActivity = (activityId:string = '') => {
+		if(!activityId) activityId = getAcStorage()
+		if (activityId !== '') {
+			router.push({
+				name: 'Activity',
+				params: {
+					id: String(activityId)
+				}
+			})
+		} else {
+			errorAlert()
+		}
+	}
+
 	const backCollect = () => {
-		const acString = getAcQuery()
+		const acString = getAcStorage()
 		if (acString) {
 			router.push({
 				name: 'Collected',
@@ -58,6 +76,8 @@ export function useLink() {
 		getQueryParam,
 		linkToLobby,
 		linkToAlbum,
+		linkToWinning,
+		linkToActivity,
 		backCollect,
 		linkToCollect
 	}

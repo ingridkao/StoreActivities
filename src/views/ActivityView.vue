@@ -12,7 +12,7 @@
  */
 import { ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import HeaderMenu from '@/components/HeaderMenu.vue';
+import HeaderMenu from '@/components/HeaderMenu.vue'
 
 // import type { ProfileType } from '@/composable/configurable'
 import { useFetchData } from '@/composable/useFetch'
@@ -50,12 +50,16 @@ watchEffect(
     }
 
     // step1
-    const acStr = getAcStorage()
-    const activityId = route.params && route.params.id ? route.params.id: acStr
+    let activityId:string | string[] = ''
+    if(route.params && route.params.id){
+      activityId = route.params.id
+    }else{
+      activityId = getAcStorage()
+    }
     try {
-      const confirmRes = await confirmActivity(String(activityId))
+      const confirmRes = await confirmActivity(activityId)
       if (typeof confirmRes === 'object') {
-        setAcStorage(String(activityId))
+        setAcStorage(activityId)
         content.value = confirmRes
       } else if (confirmRes === 2) {
         router.push({ path: '/wrapup' })
@@ -96,7 +100,8 @@ const enterActivity = async () => {
 </script>
 
 <template>
-  <HeaderMenu />
+  <HeaderMenu :knowActivity="true"/>
+
   <main class="event">
     <section class="event_time">
       <div>4.16</div>

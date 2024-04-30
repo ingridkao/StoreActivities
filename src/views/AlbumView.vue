@@ -1,9 +1,10 @@
 <script setup lang="ts">
 /**
  * 所有打卡紀錄
+ * API待後端開發完成
  */
-  import { ref, onMounted } from 'vue'
-
+  import { ref, onMounted, computed, getCurrentInstance } from 'vue'
+  import HeaderMenu from '@/components/HeaderMenu.vue'
   import type { AlbumType } from '@/composable/configurable'
   import { useFetchData } from '@/composable/useFetch'
   import { useSweetAlert } from '@/composable/useSweetAlert'
@@ -13,12 +14,24 @@
 
   const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
   const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
+  const catImportUrl = new URL('@/assets/images/cats/cat1.png', import.meta.url).href
 
   const { fetchAlbumData } = useFetchData()
   const { errorAlert } = useSweetAlert()
 
   const loadStore = useLoadingStore()
   const albumStore = ref<AlbumType[]>([])
+
+  const accumulation = computed(() => {
+    let storeCount = 0
+    albumStore.value.map(item=>{
+      storeCount += Number(item.collection)
+    })
+    if(storeCount === 0)return '0000'
+    const numberStr = String(storeCount)
+    return numberStr.padStart(5 - numberStr.length, '0')
+  })
+
   onMounted(async () => {
     loadStore.toggle(true)
     try {
@@ -32,11 +45,53 @@
     }
   })
 
+  const { proxy } = getCurrentInstance()
+  const openStoreInfo = async () => {
+    proxy.$swal.fire({
+      html: `
+      <div class="imgBox">
+        <img src="${catImportUrl}" alt="喵喵人"/>
+      </div>
+      <div class="textBox">
+        <h6>7-11門市</h6>
+        <p>最後打卡時間</p><p>YYYY-MM-DD HH:mm:ss</p>
+      </div>
+    `,
+      imageUrl: storeIcon,
+      imageWidth: 300,
+      imageHeight: 300,
+      imageAlt: `7-11門市`,
+      showCloseButton: true,
+      showConfirmButton: false,
+      customClass: {
+        htmlContainer: 'cat'
+      }
+    })
+  }
 </script>
 
 <template>
+  <HeaderMenu :knowActivity="false"/>
+
   <main>
+
+    <section class="info">
+      <div>
+        <h5>目前累積蒐集門市</h5>
+        <div>
+          <p>
+            {{ accumulation }}
+            <span>家</span>
+          </p>
+        </div>
+      </div>
+      <div class="info_img">
+        <img :src="catImportUrl" alt="喵喵人" />
+      </div>
+    </section>
+  
     <section class="album">
+      <!-- API待後端開發完成，可覆蓋此區域 -->
       <div 
         v-for="albumItem in albumStore" 
         :key="albumItem.event_id" 
@@ -51,9 +106,12 @@
             :key="albumBase"
             :style="{backgroundImage:`url('${footImportUrl}')`}"
           >
-            <div v-if="albumItem.collection && albumItem.collection >= albumBase" >
+            <button 
+              v-if="albumItem.collection && albumItem.collection >= albumBase"
+              @click="openStoreInfo"
+            >
               <img :src="storeIcon" alt="已打卡" />
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -63,6 +121,19 @@
 </template>
 
 <style lang="scss" scope>
+img {
+  width: 100%;
+}
+
+.info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  &_img {
+    width: 40%;
+  }
+}
 .album{
   width: 100%;
   &_title{
@@ -89,6 +160,31 @@
           width: 100%;
         }
       }
+    }
+  }
+}
+</style>
+
+<style lang="scss">
+// For sweetalert2 custom class
+.cat {
+  &.swal2-html-container {
+    display: flex !important;
+    flex-direction: row;
+    position: relative;
+    background-color: #ddd;
+    overflow: visible;
+    .imgBox {
+      position: absolute;
+      top: -5rem;
+      left: 0;
+      width: 10rem;
+      img {
+        width: 100%;
+      }
+    }
+    .textBox {
+      height: 5rem;
     }
   }
 }

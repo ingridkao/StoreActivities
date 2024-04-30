@@ -1,45 +1,68 @@
 <script setup lang="ts">
   /**
-   * Header
+   * 測試環境會被導轉到line登入頁15, 23-27註解就可以避免被轉址
    */
-  import { ref, onMounted } from 'vue'
-  // import { RouterLink } from 'vue-router'
+  import { ref, onMounted, watchEffect } from 'vue'
+  import { RouterLink } from 'vue-router'
   import { useLink } from '@/composable/useLink'
-  // import { useLIFF } from '@/composable/useLIFF'
-
+  import { useLIFF } from '@/composable/useLIFF'
+  import { useBrowserStorage } from '@/composable/useBrowserStorage'
+	const { getAcStorage } = useBrowserStorage()
   const { linkToLobby } = useLink()
-  // const { getOpenInClient, getUserOS, getLineProfile, useLineLogout } = useLIFF()
-  // const openInLIFF = getOpenInClient()
-  // const userOS = getUserOS()
-
-  // const userProfile = ref()
-  onMounted(() => {
-    // const profile = getLineProfile()
-    // if(profile) userProfile.value = profile
+  const { 
+    getOpenInClient, useLineLogout, 
+    getLineProfileAndAccessToken,
+  } = useLIFF()
+  const openInLIFF = getOpenInClient()
+  const userProfile = ref()
+  const accessToken = ref()
+  const props = defineProps<{
+    knowActivity: boolean
+  }>()
+  onMounted(async() => {
+    const userData = await getLineProfileAndAccessToken()
+    if(userData){
+      userProfile.value = userData.profile
+      accessToken.value = userData.accessToken
+    }
   })
 
   const navOpen = ref<Boolean>(false)
   const togggle = () => {
     navOpen.value = !navOpen.value
   }
-  const menuList = ref([
-    // {
-    //   link: '/scan',
-    //   key: 'Scan',
-    //   name: '我要打卡'
-    // },
-    {
-      link: '/mapStore',
-      key: 'MapStore',
-      name: '門市地圖'
-    },
-    {
-      link: '/album',
-      key: 'Album',
-      name: '所有打卡紀錄'
+  const menuList = ref<{
+    link?: string
+    key?: string
+    name?: string
+  }[]>([])
+  
+  watchEffect(
+    () => {
+      if(props.knowActivity && userProfile.value){
+        const acString = getAcStorage()
+        menuList.value = [
+          {
+            link: `/activity/${acString}`,
+            key: 'Activity',
+            name: '活動說明'
+          },
+          {
+            link: '/mapStore',
+            key: 'MapStore',
+            name: '門市地圖'
+          },
+          {
+            link: `/collected/${acString}`,
+            key: 'Collected',
+            name: '活動打卡紀錄'
+          }
+        ]
+      }else{
+        menuList.value = []
+      }
     }
-  ])
-
+  )
 </script>
 
 <template>
@@ -55,30 +78,23 @@
         <div class="sidemenu__wrapper">
           <ul class="sidemenu__list">
             <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
-              <RouterLink :to="item.link">{{ item.name }}</RouterLink>
+              <RouterLink v-if="item.link" :to="item.link">{{ item.name }}</RouterLink>
             </li>
             <li class="sidemenu__item">
               <button @click="linkToLobby">回到活動大廳</button>
             </li>
-            <!-- <template v-if="userProfile">
-              <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
-                <RouterLink :to="item.link">{{ item.name }}</RouterLink>
-              </li>
-            </template>
-            <li v-else class="sidemenu__item">
-              <button @click="linkToLobby">回到活動大廳</button>
-            </li> -->
           </ul>
         </div>
-        <!-- <div v-if="userProfile" class="userProfile">
+        <div v-if="userProfile" class="userProfile">
           <img v-if="userProfile.pictureUrl" :src="userProfile.pictureUrl" :alt="userProfile.displayName">
           <div>
             <p>{{ userProfile.displayName || '' }}</p>
             <p>{{ userProfile.userId || '' }}</p>
-            <p>{{ userOS }}開啟|{{ openInLIFF ? 'LINE內開啟' : '外部瀏覽器' }}</p>
+            <hr>
+            <p>{{ accessToken || '' }}</p>
             <button v-if="!openInLIFF" @click="useLineLogout">登出</button>
           </div>
-        </div> -->
+        </div>
       </nav>
     </transition>
   </div>

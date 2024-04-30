@@ -65,8 +65,6 @@ declare function requestAnimationFrame(callback: AnimationFunction): AnimationRe
 declare function cancelAnimationFrame(requestId: AnimationRequestId): void;
 let animationId: AnimationRequestId | null = null;
 
-// const imageDatas = ref()
-// const codes = ref()
 const showsScanResult = ref(false)
 const scanResultContent = ref({})
 
@@ -128,7 +126,6 @@ const tick = () => {
             drawOverlayLeftRight();
         }
         const imageData = canvasCtx.getImageData(0, 0, canvasElement.width, canvasElement.height);
-        // imageDatas.value = imageData
         updateOutPutData(imageData)
     }
     // 持續執行動畫

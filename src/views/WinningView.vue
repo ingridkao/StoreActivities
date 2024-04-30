@@ -1,7 +1,6 @@
 <script setup lang="ts">
   /**
-   * 中獎序號
-   * 在這一頁可能還會有變動(可能會有多個中獎序號)
+   * 中獎序號s
    */
   import { ref, onMounted } from 'vue'
   import { useLink } from '@/composable/useLink'
@@ -30,7 +29,7 @@
     <section>
       <h6>使用說明</h6>
       <p>請至7-Eleven門市ibon機台列印，於.....</p>
-      <button @click="backCollect">結束</button>
+      <button @click="backCollect">回到活動紀錄</button>
     </section>
   </main>
 </template>
