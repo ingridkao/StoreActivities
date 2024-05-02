@@ -2,7 +2,7 @@
 /**
  * 單一打卡紀錄
  */
-import { ref, getCurrentInstance, computed, watchEffect } from 'vue'
+import { ref, computed, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
@@ -11,7 +11,7 @@ import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 const { fetchCollectData } = useFetchData()
-const { errorAlert } = useSweetAlert()
+const { errorAlert, storeInfoAlert } = useSweetAlert()
 
 const collectedActivity = ref<CollectedType>({})
 const collectedStore = ref<CollectedListType[]>([])
@@ -50,33 +50,8 @@ const accumulation = computed(() => {
 const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
 const catImportUrl = new URL('@/assets/images/cats/cat1.png', import.meta.url).href
 const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
-const { proxy } = getCurrentInstance()
 const openStoreInfo = async (storeItem: CollectedListType) => {
-  if (storeItem.store_id) {
-    proxy.$swal.fire({
-      html: `
-      <div class="imgBox">
-        <img src="${catImportUrl}" alt="喵喵人"/>
-      </div>
-      <div class="textBox">
-        <h6>${storeItem.store_name || '7-11'}門市</h6>
-        <p>最後打卡時間</p><p>${storeItem.checkInTime}</p>
-      </div>
-    `,
-      imageUrl: storeIcon,
-      imageWidth: 300,
-      imageHeight: 300,
-      imageAlt: `${storeItem.store_name}門市`,
-      showCloseButton: true,
-      showConfirmButton: false,
-      customClass: {
-        //https://sweetalert2.github.io/#customClass
-        htmlContainer: 'cat'
-      }
-    })
-  } else {
-    errorAlert()
-  }
+  storeInfoAlert(storeItem, catImportUrl, storeIcon)
 }
 </script>
 

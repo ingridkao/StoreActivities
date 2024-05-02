@@ -3,21 +3,17 @@
  * 所有打卡紀錄
  * API待後端開發完成
  */
-  import { ref, onMounted, computed, getCurrentInstance } from 'vue'
+import { ref, onMounted, computed } from 'vue'
   import HeaderMenu from '@/components/HeaderMenu.vue'
   import type { AlbumType } from '@/composable/configurable'
   import { useFetchData } from '@/composable/useFetch'
   import { useSweetAlert } from '@/composable/useSweetAlert'
   import { useLink } from '@/composable/useLink'
   import { useLoadingStore } from '@/stores/loading'
-  const { linkToCollect } = useLink()
 
-  const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
-  const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
-  const catImportUrl = new URL('@/assets/images/cats/cat1.png', import.meta.url).href
-
+const { linkToCollect } = useLink()
   const { fetchAlbumData } = useFetchData()
-  const { errorAlert } = useSweetAlert()
+const { errorAlert, storeInfoAlert } = useSweetAlert()
 
   const loadStore = useLoadingStore()
   const albumStore = ref<AlbumType[]>([])
@@ -45,29 +41,12 @@
     }
   })
 
-  const { proxy } = getCurrentInstance()
-  const openStoreInfo = async () => {
-    proxy.$swal.fire({
-      html: `
-      <div class="imgBox">
-        <img src="${catImportUrl}" alt="喵喵人"/>
-      </div>
-      <div class="textBox">
-        <h6>7-11門市</h6>
-        <p>最後打卡時間</p><p>YYYY-MM-DD HH:mm:ss</p>
-      </div>
-    `,
-      imageUrl: storeIcon,
-      imageWidth: 300,
-      imageHeight: 300,
-      imageAlt: `7-11門市`,
-      showCloseButton: true,
-      showConfirmButton: false,
-      customClass: {
-        htmlContainer: 'cat'
-      }
-    })
-  }
+const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
+const catImportUrl = new URL('@/assets/images/cats/cat1.png', import.meta.url).href
+const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
+const openStoreInfo = async () => {
+  storeInfoAlert({}, catImportUrl, storeIcon)
+}
 
 </script>
 
