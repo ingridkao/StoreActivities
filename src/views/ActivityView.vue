@@ -10,7 +10,7 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, watchEffect } from 'vue'
+import { ref, watchEffect, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
@@ -21,6 +21,14 @@ import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
+
+import data from '@/assets/data'
+import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
+import titleDecoBottomImg from '@/assets/images/activity/title-deco-bottom.svg'
+import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
+import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
+import enterButtonImg from '@/assets/images/activity/enter-button.svg'
+import listMarkerImg from '@/assets/images/list-marker.svg'
 
 const route = useRoute()
 const router = useRouter()
@@ -37,36 +45,36 @@ const { errorAlert } = useSweetAlert()
 const content = ref({})
 
 watchEffect(async () => {
-    // step0
-    const { latitude, longitude } = coords.value
-    if (getPosition) return
-    if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
-      getPosition = true
-      // setLocationStorage(latitude, longitude)
-    } else if (error.value && error.value.code >= 1) {
-      geoErrorHandler(error.value.code)
+  // step0
+  const { latitude, longitude } = coords.value
+  if (getPosition) return
+  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+    getPosition = true
+    // setLocationStorage(latitude, longitude)
+  } else if (error.value && error.value.code >= 1) {
+    geoErrorHandler(error.value.code)
+  }
+  // step1
+  let activityId: string | string[] = ''
+  if (route.params && route.params.id) {
+    activityId = route.params.id
+  } else {
+    activityId = getAcStorage()
+  }
+  try {
+    const confirmRes = await confirmActivity(activityId)
+    if (typeof confirmRes === 'object') {
+      setAcStorage(activityId)
+      content.value = confirmRes
+    } else if (confirmRes === 2) {
+      router.push({ path: '/wrapup' })
+    } else {
+      router.push({ name: 'ComingSoon' })
     }
-    // step1
-    let activityId:string | string[] = ''
-    if(route.params && route.params.id){
-      activityId = route.params.id
-    }else{
-      activityId = getAcStorage()
-    }
-    try {
-        const confirmRes = await confirmActivity(activityId)
-        if (typeof confirmRes === 'object') {
-            setAcStorage(activityId)
-            content.value = confirmRes
-        } else if (confirmRes === 2) {
-            router.push({ path: '/wrapup' })
-        } else {
-            router.push({ name: 'ComingSoon' })
-        }
-    } catch (error) {
-      const errorStr = String(error)
-      errorAlert(errorStr)
-    }
+  } catch (error) {
+    const errorStr = String(error)
+    errorAlert(errorStr)
+  }
 })
 
 const gotoDirection = () => {
@@ -95,44 +103,207 @@ const enterActivity = async () => {
 </script>
 
 <template>
-  <HeaderMenu :knowActivity="true"/>
+  <main class="activity-view">
+    <HeaderMenu :knowActivity="true" />
+    <div class="activity-view__top-bg"></div>
 
-  <main class="event">
-    <section class="event_time">
-      <div>4.16</div>
-      <div>6.30</div>
-    </section>
-
-    <section class="linkBox right">
-      <button @click="gotoDirection">info</button>
-    </section>
-
-    <section>
-      <h2>活動辦法</h2>
-      <p>
-        2021河濱自行車挑戰認證，分為「環騎台北」及「小鴨慢騎」2組，並精選數個環繞河濱的指定打卡點，活動時間自11月6日起至12月5日止，無論白天黑夜，只需透過手機就能自由報名參加。依著活動網頁指示，集滿指定數量打卡點，即可獲得電子完騎證明與專屬紀念品乙份。
-      </p>
-      <p>此活動不需要載任何App，直接Mobile Web就可以直接執行掃描QRCode，GPS定位，打卡等功能。</p>
-      <p>
-        此外為鼓勵民眾多多參與2021河濱自行車挑戰認證，特別與進駐河濱公園的商家合作舉辦「集點抽獎」活動，參加者就有機會抽中iPhone
-        13乙台。心動不如馬上行動，趕快踏上自行車，來趟環騎挑戰之旅吧。
-      </p>
-    </section>
-
-    <section>
-      <h2>獎品</h2>
-      <p>2024福袋 N組</p>
-      <p>City Cafe N組</p>
-      <p>City Cafe 鮮萃茶 N杯</p>
-    </section>
-
-    <section class="linkBox">
-      <button @click="enterActivity">進入活動</button>
-    </section>
+    <div class="activity-view__main">
+      <div class="activity-view__title">
+        <div class="activity-view__title--text-block">
+          <h1 class="activity-view__title--text-block-main">{{ data.activity.title }}</h1>
+          <h1 class="activity-view__title--text-block-bg">{{ data.activity.title }}</h1>
+        </div>
+        <div class="activity-view__title--deco">
+          <img :src="titleDecoTopImg" alt="title deco top" />
+          <img :src="titleDecoBottomImg" alt="title deco bottom" />
+        </div>
+      </div>
+      <img :src="activityMainCatImg" alt="activity main cat" />
+      <div class="activity-view__date">
+        <p class="activity-view__date--year">
+          {{ data.activity['date-title'] }} {{ data.activity.year }}
+        </p>
+        <div class="activity-view__date--day-block">
+          <p class="activity-view__date--day">{{ data.activity['start-date'] }}</p>
+          <div class="activity-view__date--connect-line"></div>
+          <p class="activity-view__date--day">{{ data.activity['end-date'] }}</p>
+        </div>
+      </div>
+    </div>
+    <img class="activity-view__info-icon-button" :src="infoIconButtonImg" alt="info icon button" />
+    <div class="activity-view__content">
+      <div
+        :key="title"
+        v-for="{ title, text } in data.activity.content"
+        class="activity-view__content--item"
+      >
+        <div class="activity-view__content--item-title">
+          <img :src="listMarkerImg" alt="list marker" />
+          <p>{{ title }}</p>
+        </div>
+        <p class="activity-view__content--item-text">{{ text }}</p>
+      </div>
+      <div class="activity-view__content--button">
+        <img :src="enterButtonImg" alt="enter button" />
+      </div>
+    </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
+%title {
+  font-size: 65px;
+  line-height: 75px;
+  letter-spacing: calc(65px * 0.17);
+  font-weight: 900;
+  white-space: pre-line;
+}
+
+.activity-view {
+  background-image: #fff;
+  padding-top: 30px;
+
+  &__top-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 500px;
+    background: url('@/assets/images/main-bg.png') repeat;
+  }
+
+  &__main {
+    position: relative;
+    width: 100%;
+    padding-top: 68px;
+
+    > img {
+      width: 100%;
+      height: auto;
+      position: relative;
+      z-index: 2;
+    }
+  }
+
+  &__title {
+    display: flex;
+    position: absolute;
+    right: 14px;
+    top: 0px;
+
+    &--text-block {
+      position: relative;
+
+      &-main {
+        @extend %title;
+        position: relative;
+        z-index: 2;
+        color: #fff;
+        text-shadow:
+          -1px -1px 0 #bc8700,
+          1px -1px 0 #bc8700,
+          -1px 1px 0 #bc8700,
+          1px 1px 0 #bc8700;
+      }
+
+      &-bg {
+        @extend %title;
+        position: absolute;
+        top: 0;
+        color: #fff;
+        -webkit-text-stroke: 8px #ffbd14;
+      }
+    }
+
+    &--deco {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+
+  &__date {
+    text-align: center;
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    width: 180px;
+    position: absolute;
+    bottom: 45px;
+    right: 20px;
+    z-index: 2;
+
+    &--year {
+      color: #d3d3d3;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    &--day-block {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border: 0.5px solid #d3d3d3;
+      padding: 8px 12px;
+      gap: 8px;
+    }
+
+    &--connect-line {
+      width: 36px;
+      background-color: #d3d3d3;
+      height: 1px;
+    }
+
+    &--day {
+      color: #d3d3d3;
+      font-size: 26px;
+      font-weight: 700;
+    }
+  }
+
+  &__content {
+    padding: 25px 43px 32px 26px;
+    position: relative;
+
+    &--item {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      margin-bottom: 25px;
+
+      &-title {
+        display: flex;
+        gap: 5px;
+
+        img {
+          width: 20px;
+        }
+      }
+
+      &-text {
+        font-size: 14px;
+        line-height: 18px;
+        color: #000000;
+        padding-left: 25px;
+      }
+    }
+
+    &--button {
+      margin-top: 10px;
+      text-align: center;
+    }
+  }
+
+  &__info-icon-button {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    right: 20px;
+    z-index: 3;
+    transform: translateY(-50%);
+  }
+}
+
 .event {
   flex-direction: column;
   @media (min-width: 1024px) {
