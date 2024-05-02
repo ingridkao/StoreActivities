@@ -90,13 +90,13 @@ const siteLoading = computed(() => loadStore.load)
         :key="activities.id"
       />
 
-      <ActivitiesListItem 
+      <ActivitiesListItem
         :activities="{
           title: '集郵冊-打卡紀錄',
           statu: 1,
           img: 'https://i.imgur.com/d8ptVfB.png',
           link: '/album'
-        }" 
+        }"
       />
 
       <div class="lobby-view__icon-bar">
@@ -116,7 +116,7 @@ const siteLoading = computed(() => loadStore.load)
   display: flex;
   justify-content: center;
   align-items: center;
-  background: url('@/assets/images/lobby/lobby-bg.png');
+  background: url('@/assets/images/background/light-green-bg.png');
 
   &__menu {
     display: flex;

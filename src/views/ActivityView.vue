@@ -169,7 +169,7 @@ const enterActivity = async () => {
     left: 0;
     width: 100%;
     height: 500px;
-    background: url('@/assets/images/main-bg.png') repeat;
+    background: url('@/assets/images/background/green-bg.png') repeat;
   }
 
   &__main {
