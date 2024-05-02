@@ -10,8 +10,8 @@ import { useBrowserStorage } from '@/composable/useBrowserStorage'
 const { getAcStorage } = useBrowserStorage()
 const { linkToLobby } = useLink()
 const { 
-    getOpenInClient, useLineLogout, 
-    // getLineProfileAndAccessToken,
+  getOpenInClient, useLineLogout, 
+  // getLineProfileAndAccessToken,
 } = useLIFF()
 const openInLIFF = getOpenInClient()
 const userProfile = ref()
@@ -20,11 +20,11 @@ const props = defineProps<{
     knowActivity: boolean
 }>()
 onMounted(async() => {
-// const userData = await getLineProfileAndAccessToken()
-// if(userData){
-//   userProfile.value = userData.profile
-//   accessToken.value = userData.accessToken
-// }
+  // const userData = await getLineProfileAndAccessToken()
+  // if(userData){
+  //   userProfile.value = userData.profile
+  //   accessToken.value = userData.accessToken
+  // }
 })
 
   const navOpen = ref<Boolean>(false)
@@ -103,6 +103,7 @@ onMounted(async() => {
 
 <style lang="scss" scoped>
 #sidemenu {
+  --color-background: grey;
   nav {
     position: fixed;
     top: 0;
@@ -125,7 +126,7 @@ onMounted(async() => {
       display: block;
       width: 50px;
       height: 50px;
-      background: grey;
+      background: var(--color-background);
       border: none;
       position: relative;
       z-index: 100;

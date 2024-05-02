@@ -1,4 +1,5 @@
 declare let mapboxgl: any
+import { UAParser } from 'ua-parser-js'
 
 import { ref, reactive, onMounted } from 'vue'
 import { useFetchData } from '@/composable/useFetch'
@@ -13,7 +14,6 @@ export function useMapbox() {
   const map = ref()
   const geolocate = ref()
   const popup = ref()
-  // const mapboxLayers = ref<any[]>([])
 
   const storeFilterSelectd = ref<String>('all')
   // 從後端取回
@@ -39,10 +39,11 @@ export function useMapbox() {
       if (storeResults && storeResults.data) {
         addDataToMap(storeResults.data)
       } else {
-        // 不合法的geojson
+        console.error('不合法的geojson');
       }
     } catch (error) {
       // alert
+      console.error(error);
     }
   }
 
@@ -55,17 +56,48 @@ export function useMapbox() {
     if (popup.value) popup.value.remove()
     const sourceObject = map.value.getSource(sourceName)
     if (sourceObject) {
+      if (!map.value.getLayer(layerName)) return
       if (target === 'all') {
         map.value.setFilter(layerName, null)
       } else {
         map.value.setFilter(layerName, ['in', 'store_type', target])
       }
     } else {
+      console.log('check updateChecked addLayerData');
       addLayerData()
     }
   }
 
+  const targetBoxData = reactive({
+    toggle: false as boolean,
+    location: {} as { lng?: number; lat?: number },
+    info: {} as any
+  })
+
+  const closeStoreInfo = () => {
+    targetBoxData.toggle = false
+    targetBoxData.location = {}
+    targetBoxData.info =  {}
+  }
+
+  let cacheStore_id = ''
+  const toggleStoreInfo = (classList:string) => {
+    if(Object.keys(targetBoxData.location).length > 0){
+      if(!targetBoxData.toggle){
+        targetBoxData.toggle = true
+        cacheStore_id = targetBoxData.info.store_id
+      }else if(targetBoxData.toggle && cacheStore_id === targetBoxData.info.store_id){
+        const trigger = ['infoBox'].some(className => classList.includes(className))
+        if(!trigger){
+          closeStoreInfo()
+        }
+      }
+    }
+  }
+
   const addDataToMap = (storeResults: any) => {
+    console.log('2 addDataToMap')
+
     map.value.addSource(sourceName, {
       type: 'geojson',
       data: storeResults
@@ -102,34 +134,9 @@ export function useMapbox() {
           'icon-offset': [0, -21]
         }
       })
-
-      map.value.on('click', layerName, (e: any) => {
-        map.value.getCanvas().style.cursor = 'pointer'
-        if (popup.value) popup.value.remove()
-
-        const coordinates = e.features[0].geometry.coordinates.slice()
-        const properties = e.features[0].properties
-        // const description = `
-        //   <p>店號: ${properties.store_id}</p>
-        //   <p>店名: ${properties.store_name}</p>
-        //   <p>地址: ${properties.address}</p>
-        // `
-        // // 確保訊息視窗不會被遮擋
-        // while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-        //   coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360
-        // }
-        // // 設定訊息視窗內容並在地圖上顯示
-        // popup.value.setLngLat(coordinates).setHTML(description).addTo(map.value)
-
-        // 將地圖中心點移動至店位置
-        mapMoveToCenter(coordinates)
-
-        // 打開資訊
-        openStoreInfo(e, properties)
-      })
-      // mapboxLayers.value.push(layerName)
     })
   }
+
   // minZoom: 最大區域新北
   // zoom: 初始 ZOOM LEVEL; [0-20, 0 為最小 (遠), 20 ;最大 (近)]
   // center: 初始中心座標，格式為 [lng, lat]
@@ -174,6 +181,7 @@ export function useMapbox() {
     })
   }
 
+  // 將地圖中心點移動至店位置
   const mapMoveToCenter = (coordinates: any) => {
     map.value.easeTo({
       center: coordinates,
@@ -183,44 +191,36 @@ export function useMapbox() {
     })
   }
 
-  const targetBoxData = reactive({
-    toggle: false as boolean,
-    location: {} as { lng: number; lat: number },
-    info: {} as any
-  })
-  const openStoreInfo = (e: any, properties: any) => {
-    console.log(properties)
-    targetBoxData.toggle = true
-    targetBoxData.location = e.lngLat
-    targetBoxData.info = properties || {}
-  }
-
+  // https://docs.uaparser.js.org/v2/api/ua-parser-js/get-device.html
   // 開啟googlemap導航
   const mapNavigation = () => {
+    const parser = new UAParser()
+    const result = parser.getDevice()
     // 前往目的地的經緯度
     const latitude = targetBoxData.location.lat
     const longitude = targetBoxData.location.lng
     const destination = `${latitude},${longitude}`
     const googleMapUrl = `https://www.google.com/maps/dir/?api=1&destination=${destination}`
-    // if (props.isMobile) {
-    //   // 創建<a>標籤
-    //   const link = document.createElement('a')
-    //   link.href = googleMapUrl
-    //   link.target = '_blank'
-    //   // 模擬單擊操作
-    //   link.click()
-    //   link.remove()
-    // } else {
-    window.open(googleMapUrl, '_blank', 'noopener noreferrer')
-    // }
+    if (result.type) {
+      // 創建<a>標籤
+      const link = document.createElement('a')
+      link.href = googleMapUrl
+      link.target = '_blank'
+      // 模擬單擊操作
+      link.click()
+      link.remove()
+    } else {
+      window.open(googleMapUrl, '_blank', 'noopener noreferrer')
+    }
   }
-  onMounted(async () => {
+
+  onMounted(() => {
     loadStyle()
     loadScript()
       .catch((error) => {
         console.log(error)
       })
-      .then(async (_res) => {
+      .then(() => {
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY
 
         // Initialize the GeolocateControl.
@@ -246,6 +246,7 @@ export function useMapbox() {
 
         map.value = new mapboxgl.Map({
           container: 'mapboxBasic', // 地圖容器 ID
+          style: 'mapbox://styles/mapbox/outdoors-v12',
           maxBounds: mapConfig.maxBounds,
           center: mapConfig.taipeiCenter,
           zoom: mapConfig.zoom,
@@ -269,37 +270,61 @@ export function useMapbox() {
         // 另一個加marker的方法
         // https://docs.mapbox.com/mapbox-gl-js/example/set-popup/
         // mapbox不支援GIF僅靜態圖片和canvas
-        map.value.on('load', () => {
+        map.value.on('load', async() => {
+          console.log('mapbox loaded');
           map.value.scrollZoom.enable({ around: 'center' }) // 改為根據地圖中心縮放
           map.value.scrollZoom.setZoomRate(1 / 1600) // 觸控板縮放, 分母越大級距越小
           map.value.scrollZoom.setWheelZoomRate(1 / 100) // 滑鼠滾輪縮放, 分母越大級距越小
 
-          addLayerData()
+          console.log('init addLayerData');
 
-          // 安全限制之後要把這個拿掉
-          // 移動地圖事件
-          // map.value.on('moveend', () => {
-          //   if (isMobile.value) return
-          //   const features = map.value.queryRenderedFeatures({ layers: mapboxLayers.value })
-          //   if (features) {
-          //     const uniqueIds = new Set()
-          //     const uniqueFeatures = []
-          //     for (const feature of features) {
-          //       const id = feature.properties["store_id"]
-          //       if (!uniqueIds.has(id)) {
-          //         uniqueIds.add(id)
-          //         uniqueFeatures.push(feature)
-          //       }
-          //     }
-          //     storeMapFilter.cacheList = uniqueFeatures
-          //     storeMapFilter.showList = uniqueFeatures
-          //   }
-          // })
+          await addLayerData()
+
+          map.value.on('click', (e:any) => {
+            if (e.defaultPrevented) return
+            const bbox = [
+              [e.point.x - 5, e.point.y - 5],
+              [e.point.x + 5, e.point.y + 5]
+            ]
+            try {
+              const selectedFeatures = map.value.queryRenderedFeatures(bbox, { layers: [layerName] })
+              if(selectedFeatures.length === 0){
+                closeStoreInfo()
+              }
+            } catch (error) {
+              console.error(error);
+            }
+          })
         })
+
         // After the last frame rendered before the map enters an "idle" state.
         map.value.on('idle', () => {
           // If these two layers were not added to the map, abort
           // if (!map.value.getLayer(sourceName)) return
+        })
+
+        map.value.on('click', layerName, (e: any) => {
+          map.value.getCanvas().style.cursor = 'pointer'
+          if (popup.value) popup.value.remove()
+          const { features, lngLat } = e
+          const coordinates = features[0].geometry.coordinates.slice()
+          const properties = features[0].properties
+          if(properties) {
+            targetBoxData.info = properties
+            if(lngLat) targetBoxData.location = lngLat
+            if(coordinates) mapMoveToCenter(coordinates)
+          }
+          // const description = `
+          //   <p>店號: ${properties.store_id}</p>
+          //   <p>店名: ${properties.store_name}</p>
+          //   <p>地址: ${properties.address}</p>
+          // `
+          // // 確保訊息視窗不會被遮擋
+          // while (Math.abs(lngLat.lng - coordinates[0]) > 180) {
+          //   coordinates[0] += lngLat.lng > coordinates[0] ? 360 : -360
+          // }
+          // // 設定訊息視窗內容並在地圖上顯示
+          // popup.value.setLngLat(coordinates).setHTML(description).addTo(map.value)
         })
 
         // map.value.on('zoomend', (event: Event) => {
@@ -324,7 +349,7 @@ export function useMapbox() {
     addDataToMap,
     updateChecked,
     targetBoxData,
-    openStoreInfo,
+    toggleStoreInfo,
     mapNavigation
   }
 }

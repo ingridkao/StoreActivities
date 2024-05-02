@@ -2,45 +2,70 @@
 /**
  * 門市地圖
  */
+import { onMounted, onUnmounted } from 'vue'
+
 import MapNavigationIcon from '@/components/icon/IconMapNavigation.vue'
 import HeaderMenu from '@/components/HeaderMenu.vue'
-
 import { useMapbox } from '@/composable/useMapbox'
-const { storeFilterOptions, storeFilterSelectd, targetBoxData, updateChecked, mapNavigation } =
-  useMapbox()
+import { useLink } from '@/composable/useLink'
+const { storeFilterOptions, storeFilterSelectd, targetBoxData, toggleStoreInfo, updateChecked, mapNavigation } = useMapbox()
+const { linkToDirection } = useLink()
+
+// 點選門市後出現資訊drawerBox >> 點選drawerBox以外則toggleStoreInfo()
+const handleOutsideClick = (event: Event) => {
+	const inputTarget = event.target as HTMLInputElement
+  toggleStoreInfo(String(inputTarget.classList.value))
+}
+
+onMounted(() => {
+	document.addEventListener('click', handleOutsideClick)
+})
+onUnmounted(() => {
+	document.removeEventListener('click', handleOutsideClick)
+})
+
+const goToDirection = () => {
+  // 提示離開此頁面
+  linkToDirection()
+}
 </script>
 
 <template>
-  <HeaderMenu :knowActivity="true"/>
   <main id="mapMain">
-    <!-- <a href="https://qwaretest-9b8d6.web.app/map8">先看這個</a> -->
+    <HeaderMenu :knowActivity="true"/>
+
     <div id="mapboxBasic"></div>
 
-    <div class="mapFilter">
-      <div class="mapFilter_btn">
+    <div class="drawerBox" :class="{ active: !targetBoxData.toggle }">
+      <div class="scanBox">
+        <button class="scanBox_btn" @click="goToDirection">我要打卡</button>
+      </div>
+      <div class="filterBox">
         <button
           v-for="item in storeFilterOptions"
           :key="item.value"
           @click="updateChecked(item.value)"
+          class="filterBox_btn"
           :class="{ active: storeFilterSelectd === item.value }"
         >
           {{ item.nameTw }}
         </button>
       </div>
-      <button>我要打卡</button>
     </div>
 
-    <div class="drawerBox" :class="{ active: targetBoxData.toggle }">
-      <div class="imgBox">
+    <div class="drawerBox infoBox" :class="{ active: targetBoxData.toggle }">
+      <div class="infoBox_img">
         <img src="~@/assets/images/7-11logo.jpg" :alt="targetBoxData.info['store_name']" />
       </div>
-      <div v-if="targetBoxData.info['store_id']" class="contenBox">
-        <p>門市：{{ targetBoxData.info['store_id'] }} {{ targetBoxData.info['store_name'] }}</p>
-        <p>地址：{{ targetBoxData.info['address'] }}</p>
+      <div v-if="targetBoxData.info['store_id']" class="infoBox_content">
+        <p class="infoBox_content_p">門市：{{ targetBoxData.info['store_id'] }} {{ targetBoxData.info['store_name'] }}</p>
+        <p class="infoBox_content_p">地址：{{ targetBoxData.info['address'] }}</p>
       </div>
-      <button class="mapBtn" @click="mapNavigation">
-        <MapNavigationIcon />
-      </button>
+      <KeepAlive>
+        <button v-if="targetBoxData.toggle" class="infoBox_navigation" @click="mapNavigation">
+          <MapNavigationIcon />
+        </button>
+      </KeepAlive>
     </div>
   </main>
 </template>
@@ -51,6 +76,11 @@ const { storeFilterOptions, storeFilterSelectd, targetBoxData, updateChecked, ma
   height: 100dvh;
   padding: 0;
   overflow: hidden;
+  #sidemenu{
+    position: absolute;
+    left: 0;
+    --color-background: transparent;
+  }
 }
 #mapboxBasic {
   width: 100%;
@@ -58,19 +88,18 @@ const { storeFilterOptions, storeFilterSelectd, targetBoxData, updateChecked, ma
   .mapboxgl-map {
   }
 }
-.mapFilter {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 5rem;
-  background: #ddd;
+
+.scanBox{
+  .scanBox{
+    // &_btn {}
+  }
+}
+
+.filterBox {
   &_btn {
-    button {
-      opacity: 0.5;
-      &.active {
-        opacity: 1;
-      }
+    opacity: 0.5;
+    &.active {
+      opacity: 1;
     }
   }
 }
@@ -94,24 +123,33 @@ const { storeFilterOptions, storeFilterSelectd, targetBoxData, updateChecked, ma
   &.active {
     bottom: 0;
   }
-  .imgBox {
+
+}
+.infoBox{
+  &_content {
+    padding: 0.5rem 1rem;
+  }
+  &_navigation {
+    top: -1.5rem;
+    right: 0.5rem;
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 3rem;
+    z-index: 100;
+    cursor: pointer;
+    svg {
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  }
+  &_img {
     width: 5.5rem;
     height: 5.5rem;
     img {
       width: 100%;
-    }
-  }
-  .contenBox {
-    padding: 0.5rem 1rem;
-  }
-  .mapBtn {
-    display: none;
-    top: -1.5rem;
-    right: 0.5rem;
-  }
-  &.active {
-    .mapBtn {
-      display: block;
+      pointer-events: none;
     }
   }
 }
