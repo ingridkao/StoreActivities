@@ -9,221 +9,187 @@ import { useLIFF } from '@/composable/useLIFF'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 const { getAcStorage } = useBrowserStorage()
 const { linkToLobby } = useLink()
-const { 
-    getOpenInClient, useLineLogout, 
-    // getLineProfileAndAccessToken,
+const {
+  getOpenInClient,
+  useLineLogout
+  // getLineProfileAndAccessToken,
 } = useLIFF()
 const openInLIFF = getOpenInClient()
 const userProfile = ref()
 const accessToken = ref()
 const props = defineProps<{
-    knowActivity: boolean
+  knowActivity: boolean
 }>()
-onMounted(async() => {
-// const userData = await getLineProfileAndAccessToken()
-// if(userData){
-//   userProfile.value = userData.profile
-//   accessToken.value = userData.accessToken
-// }
+onMounted(async () => {
+  // const userData = await getLineProfileAndAccessToken()
+  // if(userData){
+  //   userProfile.value = userData.profile
+  //   accessToken.value = userData.accessToken
+  // }
 })
 
-  const navOpen = ref<Boolean>(false)
-  const togggle = () => {
-    navOpen.value = !navOpen.value
-  }
-  const menuList = ref<{
+const navOpen = ref<Boolean>(false)
+const togggle = () => {
+  navOpen.value = !navOpen.value
+}
+const menuList = ref<
+  {
     link?: string
     key?: string
     name?: string
-  }[]>([])
-  
-  watchEffect(
-    () => {
-      if(props.knowActivity && userProfile.value){
-        const acString = getAcStorage()
-        menuList.value = [
-          {
-            link: `/activity/${acString}`,
-            key: 'Activity',
-            name: '活動說明'
-          },
-          {
-            link: '/mapStore',
-            key: 'MapStore',
-            name: '門市地圖'
-          },
-          {
-            link: `/collected/${acString}`,
-            key: 'Collected',
-            name: '活動打卡紀錄'
-          }
-        ]
-      }else{
-        menuList.value = []
-      }
-    }
-  )
+  }[]
+>([])
 
+watchEffect(() => {
+  if (props.knowActivity && userProfile.value) {
+    const acString = getAcStorage()
+    menuList.value = [
+      {
+        link: `/activity/${acString}`,
+        key: 'Activity',
+        name: '活動說明'
+      },
+      {
+        link: '/mapStore',
+        key: 'MapStore',
+        name: '門市地圖'
+      },
+      {
+        link: `/collected/${acString}`,
+        key: 'Collected',
+        name: '活動打卡紀錄'
+      }
+    ]
+  } else {
+    menuList.value = []
+  }
+})
 </script>
 
 <template>
-  <div id="sidemenu" class="mainheader">
-    <button class="sidemenu__btn" @click="togggle" :class="{ active: navOpen }">
-      <span class="top"></span>
-      <span class="mid"></span>
-      <span class="bottom"></span>
-    </button>
+  <div class="sidemenu">
+    <div class="sidemenu__btn" @click="togggle" :class="{ active: navOpen }">
+      <span class="sidemenu__btn--top"></span>
+      <span class="sidemenu__btn--mid"></span>
+      <span class="sidemenu__btn--bottom"></span>
+    </div>
 
-    <transition name="translateX">
-      <nav v-show="navOpen">
-        <div class="sidemenu__wrapper">
-          <ul class="sidemenu__list">
-            <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
-              <RouterLink v-if="item.link" :to="item.link">{{ item.name }}</RouterLink>
-            </li>
-            <li class="sidemenu__item">
-              <button @click="linkToLobby">回到活動大廳</button>
-            </li>
-          </ul>
-        </div>
+    <transition name="fade">
+      <div v-show="navOpen" class="sidemenu__wrapper">
+        <RouterLink
+          v-for="item in menuList"
+          :to="item.link ?? '/'"
+          :key="item.key"
+          class="sidemenu__item"
+        >
+          {{ item.name }}
+        </RouterLink>
+        <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
         <div v-if="userProfile" class="userProfile">
-          <img v-if="userProfile.pictureUrl" :src="userProfile.pictureUrl" :alt="userProfile.displayName">
+          <img
+            v-if="userProfile.pictureUrl"
+            :src="userProfile.pictureUrl"
+            :alt="userProfile.displayName"
+          />
           <div>
             <p>{{ userProfile.displayName || '' }}</p>
             <p>{{ userProfile.userId || '' }}</p>
-            <hr>
+            <hr />
             <p>{{ accessToken || '' }}</p>
             <button v-if="!openInLIFF" @click="useLineLogout">登出</button>
           </div>
         </div>
-      </nav>
+      </div>
     </transition>
   </div>
 </template>
 
 <style lang="scss" scoped>
-#sidemenu {
-  nav {
+%line {
+  display: block;
+  width: 24px;
+  height: 1px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+.sidemenu {
+  position: fixed;
+  top: 0;
+  z-index: 999;
+
+  &__btn {
+    width: 24px;
+    height: 22px;
+    top: 28px;
+    left: 21px;
+    z-index: 21;
+    position: absolute;
+
+    &--top {
+      @extend %line;
+      transform: translateY(0);
+    }
+
+    &--mid {
+      @extend %line;
+      width: 16px;
+      transform: translateY(6px);
+    }
+
+    &--bottom {
+      @extend %line;
+      transform: translateY(12px);
+    }
+
+    &.active {
+      .sidemenu__btn--top {
+        background: black;
+      }
+
+      .sidemenu__btn--mid {
+        background: black;
+      }
+
+      .sidemenu__btn--bottom {
+        background: black;
+      }
+    }
+  }
+
+  &__wrapper {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 99;
-    width: 200px;
-    height: 100vh;
-    background: grey;
-
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    flex-direction: column;
-
-    overflow: hidden;
+    z-index: 10;
+    width: 168px;
+    height: auto;
+    padding: 88px 20px 28px 30px;
+    background-color: white;
   }
 
-  .sidemenu {
-    &__btn {
-      display: block;
-      width: 50px;
-      height: 50px;
-      background: grey;
-      border: none;
-      position: relative;
-      z-index: 100;
-      appearance: none;
-      cursor: pointer;
-      outline: none;
+  &__item {
+    display: block;
+    padding: 10px 0;
+    color: black;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 100%;
+    border-bottom: 1px solid #c3c3c3;
 
-      span {
-        display: block;
-        width: 20px;
-        height: 2px;
-        margin: auto;
-        background: white;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        transition: all 0.4s ease;
-
-        &.top {
-          transform: translateY(-8px);
-        }
-
-        &.bottom {
-          transform: translateY(8px);
-        }
-      }
-
-      &.active {
-        .top {
-          transform: rotate(-45deg);
-        }
-
-        .mid {
-          transform: translateX(-20px) rotate(360deg);
-          opacity: 0;
-        }
-
-        .bottom {
-          transform: rotate(45deg);
-        }
-      }
-    }
-
-    &__wrapper {
-      width: 100%;
-      padding-top: 4.5rem;
-    }
-
-    &__list {
-      padding-top: 4.5rem;
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    &__item {
-      a,
-      button {
-        width: 100%;
-        line-height: 2rem;
-        font-size: 1.25rem;
-        padding: 0.5rem 1rem;
-        display: block;
-        color: white;
-        transition: 0.4s ease;
-        text-align: center;
-        &:hover {
-          background: lightgrey;
-          color: dimgrey;
-        }
-      }
-      a {
-        text-decoration: none;
-      }
-      button {
-        background: transparent;
-        outline: none;
-        border: none;
-      }
+    &:last-child {
+      border-bottom: none;
     }
   }
 }
 
-.translateX-enter {
-  transform: translateX(-200px);
-  opacity: 0;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
 }
 
-.translateX-enter-active,
-.translateX-leave-active {
-  transform-origin: top left 0;
-  transition: 0.2s ease;
-}
-
-.translateX-leave-to {
-  transform: translateX(-200px);
+.fade-enter-from,
+.fade-leave-to {
   opacity: 0;
 }
 </style>
