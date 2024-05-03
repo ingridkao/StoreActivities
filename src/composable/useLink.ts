@@ -5,7 +5,7 @@ import type { AlbumType, ScanResultType } from '@/composable/configurable'
 
 export function useLink() {
   const router = useRouter()
-  const { getAcStorage, deleteSessionStorage, getAcQuery } = useBrowserStorage()
+  const { getAcStorage, deleteSessionStorage } = useBrowserStorage()
   const { errorAlert } = useSweetAlert()
 
   const getQueryParam = (url: string, param: string) => {
@@ -15,11 +15,6 @@ export function useLink() {
     const results = regex.exec(url)
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
   }
-
-	const linkToLobby = () => {
-		deleteSessionStorage('ac')
-		router.push({ name: 'Lobby' })
-	}
 
 	const linkToAlbum = () => {
 		deleteSessionStorage('ac')
@@ -79,7 +74,6 @@ export function useLink() {
 
 	return {
 		getQueryParam,
-		linkToLobby,
 		linkToAlbum,
 		linkToActivity,
 		backCollect,

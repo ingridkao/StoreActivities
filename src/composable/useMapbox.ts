@@ -1,6 +1,5 @@
 declare let mapboxgl: any
 import { UAParser } from 'ua-parser-js'
-
 import { ref, reactive, onMounted } from 'vue'
 import { useFetchData } from '@/composable/useFetch'
 import { useMap } from '@/composable/useMap'
@@ -11,9 +10,30 @@ export function useMapbox() {
   const { clientLocationCity } = useMap()
   // const loadStore = useLoadingStore()
 
+  const sourceName = 'store-source'
+  const layerName = 'all-layer'
+  const markerId = 'common-marker'
+  // zoom: 初始 ZOOM LEVEL; [0-20, 0 為最小 (遠), 20 ;最大 (近)]
+  // minZoom: 最大區域新北
+  // center: 初始中心座標，格式為 [lng, lat]
+  // maxBounds: 台灣地圖區域
+  const mapConfig = reactive({
+    minZoom: 9,
+    zoom: 16.5,
+    maxZoom: 18.99,
+    taipeiCenter: [121.54885, 25.03625],
+    taipeiBound: [
+      [24.396308, 121.2827],
+      [25.585285, 122.0522]
+    ],
+    maxBounds: [
+      [105, 15],
+      [138.45858, 33.4]
+    ]
+  })
   const map = ref()
   const geolocate = ref()
-  const popup = ref()
+  // const popup = ref()
 
   const storeFilterSelectd = ref<String>('all')
   // 從後端取回
@@ -32,39 +52,84 @@ export function useMapbox() {
     }
   ])
 
-  // 新增圖層到地圖中
-  const addLayerData = async () => {
-    try {
-      const storeResults = await fetchLayerData(clientLocationCity.value)
-      if (storeResults && storeResults.data) {
-        addDataToMap(storeResults.data)
-      } else {
-        console.error('不合法的geojson');
-      }
-    } catch (error) {
-      // alert
-      console.error(error);
-    }
+  const loadMultIconImage = async() => {
+    const iconImages = [
+      { url: '/711_sl_36X36.gif', id: 'common-marker' },
+      { url: '/images/map/1.png', id: 'songshan' },
+      { url: '/images/map/2.png', id: 'nangang' },
+      { url: '/images/map/3.png', id: 'daan' },
+      { url: '/images/map/4.png', id: 'shilin' },
+      { url: '/images/map/5.png', id: 'neihu' },
+      { url: '/images/map/6.png', id: 'wenshan' },
+      { url: '/images/map/7.png', id: 'xinyi' },
+      { url: '/images/map/8.png', id: 'beitou' },
+      { url: '/images/map/9.png', id: 'zhongshan' },
+      { url: '/images/map/10.png', id: 'zhongzheng' },
+    ]
+    return Promise.all(
+      iconImages.map(async (img) => {
+        return new Promise((resolve, reject) => {
+          map.value.loadImage(img.url, (error: any, iconImage: ImageBitmap) => {              
+            if (error){
+              reject(error)
+            }else{
+              map.value.addImage(img.id, iconImage)
+              resolve(map.value.hasImage(img.id))
+            }
+          })
+        })
+      })
+    )
+    .then(icons => icons)
+    .catch(error => error)
   }
 
-  const sourceName = 'store-source'
-  const layerName = 'all-layer'
-  const markerName = 'common-marker'
+  const addLayerData = () => {
+    map.value.addLayer({
+      id: layerName,
+      type: 'symbol',
+      source: sourceName,
+      layout: {
+        // "text-font": ["Noto Sans Regular"], // 文字字體(map8必要資料, 不可省略)
+        'text-field': '{store_name}門市', //資訊文字
+        'text-offset': [0, 2.75], //文字位移位置第一個為x軸, 第二個為y軸
+        'text-size': {
+          stops: [
+            [mapConfig.zoom - 1, 0],
+            [mapConfig.zoom, 10]
+          ]
+        },
+        'icon-allow-overlap': true,
+        'icon-image': [
+          'case',
+          ["has", 'do'],
+          ['get', 'do'],
+          markerId
+        ],
+        'icon-size': [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          mapConfig.zoom,
+          // 0.8,
+          0.4,
+          mapConfig.maxZoom,
+          // 1.3
+          1
+        ],
+        'icon-offset': [0, -21]
+      }
+    })
+  }
 
   const updateChecked = (target: String) => {
     storeFilterSelectd.value = target
-    if (popup.value) popup.value.remove()
-    const sourceObject = map.value.getSource(sourceName)
-    if (sourceObject) {
-      if (!map.value.getLayer(layerName)) return
-      if (target === 'all') {
-        map.value.setFilter(layerName, null)
-      } else {
-        map.value.setFilter(layerName, ['in', 'store_type', target])
-      }
+    // if (popup.value) popup.value.remove()
+    if (!map.value.getLayer(layerName)) return
+    if (target === 'all') {
+      map.value.setFilter(layerName, null)
     } else {
-      console.log('check updateChecked addLayerData');
-      addLayerData()
+      map.value.setFilter(layerName, ['in', 'store_type', target])
     }
   }
 
@@ -82,79 +147,15 @@ export function useMapbox() {
 
   let cacheStore_id = ''
   const toggleStoreInfo = (classList:string) => {
-    if(Object.keys(targetBoxData.location).length > 0){
-      if(!targetBoxData.toggle){
-        targetBoxData.toggle = true
-        cacheStore_id = targetBoxData.info.store_id
-      }else if(targetBoxData.toggle && cacheStore_id === targetBoxData.info.store_id){
-        const trigger = ['infoBox'].some(className => classList.includes(className))
-        if(!trigger){
-          closeStoreInfo()
-        }
-      }
+    if(Object.keys(targetBoxData.location).length === 0) return
+    if(!targetBoxData.toggle){
+      targetBoxData.toggle = true
+      cacheStore_id = targetBoxData.info.store_id
+    }else if(targetBoxData.toggle && cacheStore_id === targetBoxData.info.store_id){
+      const trigger = ['infoBox'].some(className => classList.includes(className))
+      if(!trigger) closeStoreInfo()
     }
   }
-
-  const addDataToMap = (storeResults: any) => {
-    console.log('2 addDataToMap')
-
-    map.value.addSource(sourceName, {
-      type: 'geojson',
-      data: storeResults
-    })
-    map.value.loadImage('/711_sl_36X36.gif', (error: any, iconImage: any) => {
-      if (error) throw error
-      map.value.addImage(markerName, iconImage)
-      map.value.addLayer({
-        id: layerName,
-        type: 'symbol',
-        source: sourceName,
-        layout: {
-          // "text-font": ["Noto Sans Regular"], // 文字字體(必要資料, 不可省略)
-          'text-field': '{store_name}門市', //資訊文字
-          'text-offset': [0, 2.75], //文字位移位置第一個為x軸, 第二個為y軸
-          'text-size': {
-            stops: [
-              [mapConfig.zoom - 1, 0],
-              [mapConfig.zoom, 10]
-            ]
-          },
-          'icon-allow-overlap': true,
-          'icon-image': markerName,
-          // 'icon-image': ['get', 'icon'],
-          'icon-size': [
-            'interpolate',
-            ['linear'],
-            ['zoom'],
-            mapConfig.zoom,
-            0.8,
-            mapConfig.maxZoom,
-            1.3
-          ],
-          'icon-offset': [0, -21]
-        }
-      })
-    })
-  }
-
-  // minZoom: 最大區域新北
-  // zoom: 初始 ZOOM LEVEL; [0-20, 0 為最小 (遠), 20 ;最大 (近)]
-  // center: 初始中心座標，格式為 [lng, lat]
-  // maxBounds: 台灣地圖區域
-  const mapConfig = reactive({
-    minZoom: 9,
-    zoom: 16.5,
-    maxZoom: 18.99,
-    taipeiCenter: [121.54885, 25.03625],
-    taipeiBound: [
-      [24.396308, 121.2827],
-      [25.585285, 122.0522]
-    ],
-    maxBounds: [
-      [105, 15],
-      [138.45858, 33.4]
-    ]
-  })
 
   const loadScript = () => {
     return new Promise((resolve, reject) => {
@@ -223,7 +224,15 @@ export function useMapbox() {
       .then(() => {
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY
 
-        // Initialize the GeolocateControl.
+        // Initialize the Popup.
+        // popup.value = new mapboxgl.Popup({
+        //   anchor: 'bottom',
+        //   closeButton: true,
+        //   closeOnClick: false,
+        //   offset: [0, -30]
+        // })
+
+        // Initialize the GeolocateControl / Mapbox location button
         geolocate.value = new mapboxgl.GeolocateControl({
           positionOptions: {
             enableHighAccuracy: true
@@ -234,15 +243,10 @@ export function useMapbox() {
           showUserHeading: true,
           // 使用者位置周圍繪製一個透明圓圈
           showAccuracyCircle: true
+        }).on('geolocate', async () => {
+          console.log('2. A geolocate event has occurred.')
         })
 
-        // Initialize the Popup.
-        popup.value = new mapboxgl.Popup({
-          anchor: 'bottom',
-          closeButton: true,
-          closeOnClick: false,
-          offset: [0, -30]
-        })
 
         map.value = new mapboxgl.Map({
           container: 'mapboxBasic', // 地圖容器 ID
@@ -258,83 +262,88 @@ export function useMapbox() {
           attributionControl: false
         })
 
-        // Add the control to the map.
-        map.value.addControl(new mapboxgl.NavigationControl())
-        map.value.addControl(
-          new mapboxgl.AttributionControl({
-            compact: false
-          })
-        )
-        map.value.addControl(geolocate.value)
-
         // 另一個加marker的方法
         // https://docs.mapbox.com/mapbox-gl-js/example/set-popup/
         // mapbox不支援GIF僅靜態圖片和canvas
         map.value.on('load', async() => {
           console.log('mapbox loaded');
+
           map.value.scrollZoom.enable({ around: 'center' }) // 改為根據地圖中心縮放
           map.value.scrollZoom.setZoomRate(1 / 1600) // 觸控板縮放, 分母越大級距越小
           map.value.scrollZoom.setWheelZoomRate(1 / 100) // 滑鼠滾輪縮放, 分母越大級距越小
 
-          console.log('init addLayerData');
+          try {
+            const storeResults = await fetchLayerData(clientLocationCity.value)
+            if (!storeResults) {
+              // TODO: alert
+              console.error('不合法的geojson')
+            } else {
+              map.value.addSource(sourceName, {
+                type: 'geojson',
+                data: storeResults
+              })
 
-          await addLayerData()
+              const rr = await loadMultIconImage()
+              if(!rr) return
+              addLayerData()
+            }
+          } catch (error) {
+            // TODO: alert
+            console.error(error);
+          }
 
+          // When user clicking on the map, close the store bottom popup if it is not 'all-layer'.
           map.value.on('click', (e:any) => {
             if (e.defaultPrevented) return
-            const bbox = [
-              [e.point.x - 5, e.point.y - 5],
-              [e.point.x + 5, e.point.y + 5]
-            ]
+            if (!targetBoxData.toggle) return
             try {
+              const bbox = [
+                [e.point.x - 5, e.point.y - 5],
+                [e.point.x + 5, e.point.y + 5]
+              ]
               const selectedFeatures = map.value.queryRenderedFeatures(bbox, { layers: [layerName] })
-              if(selectedFeatures.length === 0){
-                closeStoreInfo()
-              }
+              if(selectedFeatures.length === 0) closeStoreInfo()
             } catch (error) {
               console.error(error);
             }
           })
+
+          // Clicking on a store icon on the map retrieves information about this store
+          // properties: the data source is the features object in GeoJSON
+          map.value.on('click', layerName, (e: any) => {
+            map.value.getCanvas().style.cursor = 'pointer'
+            // if (popup.value) popup.value.remove()
+
+            const { features, lngLat } = e
+            const coordinates = features[0].geometry.coordinates.slice()
+            const properties = features[0].properties
+            if(properties) {
+              targetBoxData.info = properties
+              if(lngLat) targetBoxData.location = lngLat
+              if(coordinates) mapMoveToCenter(coordinates)
+            }
+          })
+
+
+          // map.value.on('zoomend', (event: Event) => {
+          // console.log(map.value.getZoom());
+          // console.log(map.value.getBounds());
+          // })
+
+          // Add the control to the map.
+          map.value.addControl(new mapboxgl.NavigationControl())
+          map.value.addControl(
+            new mapboxgl.AttributionControl({
+              compact: false
+            })
+          )
+          map.value.addControl(geolocate.value)
         })
 
         // After the last frame rendered before the map enters an "idle" state.
         map.value.on('idle', () => {
           // If these two layers were not added to the map, abort
-          // if (!map.value.getLayer(sourceName)) return
-        })
-
-        map.value.on('click', layerName, (e: any) => {
-          map.value.getCanvas().style.cursor = 'pointer'
-          if (popup.value) popup.value.remove()
-          const { features, lngLat } = e
-          const coordinates = features[0].geometry.coordinates.slice()
-          const properties = features[0].properties
-          if(properties) {
-            targetBoxData.info = properties
-            if(lngLat) targetBoxData.location = lngLat
-            if(coordinates) mapMoveToCenter(coordinates)
-          }
-          // const description = `
-          //   <p>店號: ${properties.store_id}</p>
-          //   <p>店名: ${properties.store_name}</p>
-          //   <p>地址: ${properties.address}</p>
-          // `
-          // // 確保訊息視窗不會被遮擋
-          // while (Math.abs(lngLat.lng - coordinates[0]) > 180) {
-          //   coordinates[0] += lngLat.lng > coordinates[0] ? 360 : -360
-          // }
-          // // 設定訊息視窗內容並在地圖上顯示
-          // popup.value.setLngLat(coordinates).setHTML(description).addTo(map.value)
-        })
-
-        // map.value.on('zoomend', (event: Event) => {
-        // console.log(map.value.getZoom());
-        // console.log(map.value.getBounds());
-        // })
-
-        // 點擊按鈕取client位置
-        geolocate.value.on('geolocate', async () => {
-          console.log('2. A geolocate event has occurred.')
+          if (!map.value.getLayer(layerName)) return
         })
       })
   })
@@ -342,13 +351,12 @@ export function useMapbox() {
   return {
     storeFilterSelectd,
     storeFilterOptions,
-    mapConfig,
-    map,
-    geolocate,
-    popup,
-    addDataToMap,
-    updateChecked,
     targetBoxData,
+    // mapConfig,
+    // map,
+    // geolocate,
+    // popup,
+    updateChecked,
     toggleStoreInfo,
     mapNavigation
   }

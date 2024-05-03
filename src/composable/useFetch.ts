@@ -195,8 +195,8 @@ export function useFetchData() {
     return await axios
       .get(`/stores/map_${targerCity}.geojson`)
       .then((geoRes) => {
-        if (!geoRes) return false
-        return geoRes
+        if (geoRes && geoRes.data) return geoRes.data
+        return false
       })
       .catch((error) => {
         console.log(error)

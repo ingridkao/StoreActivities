@@ -3,12 +3,10 @@
  * 測試環境會被導轉到line登入頁14, 23-27註解就可以避免被轉址
  */
 import { ref, onMounted, watchEffect } from 'vue'
-import { RouterLink } from 'vue-router'
-import { useLink } from '@/composable/useLink'
+import { RouterLink, onBeforeRouteLeave  } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-const { getAcStorage } = useBrowserStorage()
-const { linkToLobby } = useLink()
+const { getAcStorage, deleteSessionStorage } = useBrowserStorage()
 const { 
   getOpenInClient, useLineLogout, 
   // getLineProfileAndAccessToken,
@@ -19,12 +17,19 @@ const accessToken = ref()
 const props = defineProps<{
     knowActivity: boolean
 }>()
+
 onMounted(async() => {
   // const userData = await getLineProfileAndAccessToken()
   // if(userData){
   //   userProfile.value = userData.profile
   //   accessToken.value = userData.accessToken
   // }
+})
+
+onBeforeRouteLeave((to) => {
+  if (to.name === 'Lobby') {
+		deleteSessionStorage('ac')
+  }
 })
 
   const navOpen = ref<Boolean>(false)
@@ -35,13 +40,18 @@ onMounted(async() => {
     link?: string
     key?: string
     name?: string
-  }[]>([])
+}[]>([          {
+  link: '/',
+  key: 'Lobby',
+  name: '活動打卡紀錄'
+}])
   
   watchEffect(
     () => {
       if(props.knowActivity && userProfile.value){
         const acString = getAcStorage()
         menuList.value = [
+          ...menuList.value,
           {
             link: `/activity/${acString}`,
             key: 'Activity',
@@ -58,8 +68,6 @@ onMounted(async() => {
             name: '活動打卡紀錄'
           }
         ]
-      }else{
-        menuList.value = []
       }
     }
   )
@@ -80,9 +88,6 @@ onMounted(async() => {
           <ul class="sidemenu__list">
             <li class="sidemenu__item" v-for="item in menuList" :key="item.key">
               <RouterLink v-if="item.link" :to="item.link">{{ item.name }}</RouterLink>
-            </li>
-            <li class="sidemenu__item">
-              <button @click="linkToLobby">回到活動大廳</button>
             </li>
           </ul>
         </div>
