@@ -27,5 +27,11 @@ export default {
   },
   storeInfoDialog: {
     lastCheckInTime: '最後打卡時間'
+  },
+  collected: {
+    title: '歡樂一夏',
+    startDate: '2024.07.15',
+    endDate: '08.31',
+    specialStampIndexList: [5, 10, 15, 30]
   }
 }
