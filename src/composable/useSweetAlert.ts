@@ -1,12 +1,56 @@
 import Swal from 'sweetalert2'
 import type { CollectedListType } from '@/composable/configurable'
 
+import data from '@/assets/data'
+import closeIconImg from '@/assets/images/close-icon.svg'
+import dialogCatImg from '@/assets/images/dialog-cat.png'
+
 export function useSweetAlert() {
   const errorAlert = (text: any = '') => {
     return Swal.fire({
       icon: 'error',
       title: '出了一點問題',
       text: String(text)
+    })
+  }
+
+  const openStoreInfo = ({
+    imageUrl,
+    storeName,
+    lastCheckInTime
+  }: {
+    imageUrl?: string
+    storeName?: string
+    lastCheckInTime?: string
+  }) => {
+    proxy.$swal.fire({
+      html: `
+        <div class="store-info-dialog__dialog-container--content">
+          <div class="store-info-dialog__dialog-container--content-image">
+            <img src="${imageUrl ?? '/images/example-store.png'}" alt="store"/>
+          </div>
+        </div>
+        <div class="store-info-dialog__dialog-container--footer">
+          <div class="store-info-dialog__dialog-container--footer-image">
+            <img src="${dialogCatImg}" alt="cat"/>
+          </div>
+          <div class="store-info-dialog__dialog-container--footer-info">
+            <h6>${storeName ?? '7-11門市'}</h6>
+            <p>${data.storeInfoDialog.lastCheckInTime}</p>
+            <p>${lastCheckInTime ?? 'YYYY-MM-DD HH:mm:ss'}</p>
+          </div>
+        </div>
+      `,
+      width: '313px',
+      padding: 0,
+      closeButtonHtml: `<img src="${closeIconImg}" alt="close"/>`,
+      showCloseButton: true,
+      showConfirmButton: false,
+      customClass: {
+        popup: 'store-info-dialog__dialog-popup',
+        closeButton: 'store-info-dialog__close-icon',
+        htmlContainer: 'store-info-dialog__dialog-container'
+      }
     })
   }
 
@@ -71,6 +115,7 @@ export function useSweetAlert() {
   return { 
     errorAlert,
     storeInfoAlert,
-    geoLocationErrorAlert
+    geoLocationErrorAlert,
+	openStoreInfo
   }
 }

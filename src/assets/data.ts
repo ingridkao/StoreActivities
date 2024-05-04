@@ -24,5 +24,8 @@ export default {
     step1Text: '掃描門市 ibon 右上角 QRcode',
     step1Tip: '＊ QRcode掃描失效時，請點選更新',
     step2Text: '手機畫面確認打卡成功！'
+  },
+  storeInfoDialog: {
+    lastCheckInTime: '最後打卡時間'
   }
 }
