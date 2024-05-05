@@ -33,5 +33,12 @@ export default {
     startDate: '2024.07.15',
     endDate: '08.31',
     specialStampIndexList: [5, 10, 15, 30]
+  },
+  winning: {
+    explanationTitle: '使用方式',
+    serialNumber: '序號',
+    deadline: '兌換期限',
+    accumulate: '累積',
+    store: '家門市'
   }
 }
