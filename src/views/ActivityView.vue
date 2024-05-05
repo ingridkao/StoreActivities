@@ -10,7 +10,7 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, watchEffect, onMounted, onUnmounted } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import ParagraphItem from '@/components/ParagraphItem.vue'
@@ -121,12 +121,12 @@ const enterActivity = async () => {
       <img :src="activityMainCatImg" alt="activity main cat" />
       <div class="activity-view__date">
         <p class="activity-view__date--year">
-          {{ data.activity['date-title'] }} {{ data.activity.year }}
+          {{ data.activity.dateTitle }} {{ data.activity.year }}
         </p>
         <div class="activity-view__date--day-block">
-          <p class="activity-view__date--day">{{ data.activity['start-date'] }}</p>
+          <p class="activity-view__date--day">{{ data.activity.startDate }}</p>
           <div class="activity-view__date--connect-line"></div>
-          <p class="activity-view__date--day">{{ data.activity['end-date'] }}</p>
+          <p class="activity-view__date--day">{{ data.activity.endDate }}</p>
         </div>
       </div>
     </div>

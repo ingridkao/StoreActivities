@@ -1,10 +1,10 @@
 export default {
   activity: {
     title: '歡樂\n一夏',
-    'date-title': '活動期間',
+    dateTitle: '活動期間',
     year: '2024',
-    'start-date': '7.15',
-    'end-date': '8.31',
+    startDate: '7.15',
+    endDate: '8.31',
     content: [
       {
         title: '活動辦法',
