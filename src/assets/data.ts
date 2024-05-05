@@ -40,5 +40,9 @@ export default {
     deadline: '兌換期限',
     accumulate: '累積',
     store: '家門市'
+  },
+  mapStore: {
+    storeLabel: '門市',
+    addressLabel: '地址'
   }
 }
