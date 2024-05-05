@@ -114,8 +114,12 @@ const enterActivity = async () => {
           <h1 class="activity-view__title--text-block-bg">{{ data.activity.title }}</h1>
         </div>
         <div class="activity-view__title--deco">
-          <img :src="titleDecoTopImg" alt="title deco top" />
-          <img :src="titleDecoBottomImg" alt="title deco bottom" />
+          <div class="activity-view__title--deco-top">
+            <img :src="titleDecoTopImg" alt="title deco top" />
+          </div>
+          <div class="activity-view__title--deco-bottom">
+            <img :src="titleDecoBottomImg" alt="title deco bottom" />
+          </div>
         </div>
       </div>
       <img :src="activityMainCatImg" alt="activity main cat" />
@@ -170,12 +174,14 @@ const enterActivity = async () => {
   &__main {
     position: relative;
     width: 100%;
+    height: 598px;
     padding-top: 68px;
 
     > img {
       width: 100%;
-      height: auto;
+      height: 100%;
       position: relative;
+      object-fit: contain;
       z-index: 2;
     }
   }
@@ -214,6 +220,19 @@ const enterActivity = async () => {
       display: flex;
       flex-direction: column;
       justify-content: center;
+
+      &-top,
+      &-bottom {
+        width: 68px;
+        height: 64px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
     }
   }
 
