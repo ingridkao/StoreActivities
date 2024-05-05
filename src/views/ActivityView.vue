@@ -13,6 +13,7 @@
 import { ref, watchEffect, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue'
+import ParagraphItem from '@/components/ParagraphItem.vue'
 
 // import type { ProfileType } from '@/composable/configurable'
 import { useFetchData } from '@/composable/useFetch'
@@ -28,7 +29,6 @@ import titleDecoBottomImg from '@/assets/images/activity/title-deco-bottom.svg'
 import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
 import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
 import enterButtonImg from '@/assets/images/activity/enter-button.svg'
-import listMarkerImg from '@/assets/images/list-marker.svg'
 
 const route = useRoute()
 const router = useRouter()
@@ -105,7 +105,6 @@ const enterActivity = async () => {
 <template>
   <main class="activity-view">
     <HeaderMenu :knowActivity="true" />
-
     <div class="activity-view__top-bg"></div>
 
     <div class="activity-view__main">
@@ -131,24 +130,17 @@ const enterActivity = async () => {
         </div>
       </div>
     </div>
-    <button class="activity-view__info-icon-button" @click="gotoDirection">
-      <img :src="infoIconButtonImg" alt="info icon button" />
-    </button>
+    <img class="activity-view__info-icon-button" :src="infoIconButtonImg" alt="info icon button" />
     <div class="activity-view__content">
-      <div
+      <ParagraphItem
         :key="title"
         v-for="{ title, text } in data.activity.content"
-        class="activity-view__content--item"
-      >
-        <div class="activity-view__content--item-title">
-          <img :src="listMarkerImg" alt="list marker" />
-          <p>{{ title }}</p>
-        </div>
-        <p class="activity-view__content--item-text">{{ text }}</p>
-      </div>
-      <button class="activity-view__content--button" @click="enterActivity">
+        :title="title"
+        :content="text"
+      />
+      <div class="activity-view__content--button">
         <img :src="enterButtonImg" alt="enter button" />
-      </button>
+      </div>
     </div>
   </main>
 </template>
@@ -268,34 +260,9 @@ const enterActivity = async () => {
     padding: 25px 43px 32px 26px;
     position: relative;
 
-    &--item {
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-      margin-bottom: 25px;
-
-      &-title {
-        display: flex;
-        gap: 5px;
-
-        img {
-          width: 20px;
-        }
-      }
-
-      &-text {
-        font-size: 14px;
-        line-height: 18px;
-        color: #000000;
-        padding-left: 25px;
-      }
-    }
-
     &--button {
-      display: block;
-      border: none;
-      background: transparent;
-      margin: 10px auto;
+      margin-top: 10px;
+      text-align: center;
     }
   }
 
@@ -306,11 +273,6 @@ const enterActivity = async () => {
     right: 20px;
     z-index: 3;
     transform: translateY(-50%);
-    border: none;
-    background: transparent;
-    >img{
-      width: 100%;
-    }
   }
 }
 
