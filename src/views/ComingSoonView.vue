@@ -2,8 +2,15 @@
 /**
  * ComingSoon
  */
-import { useLink } from '@/composable/useLink'
-const { linkToLobby } = useLink()
+import { RouterLink, onBeforeRouteLeave  } from 'vue-router'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
+const { deleteSessionStorage } = useBrowserStorage()
+
+onBeforeRouteLeave((to) => {
+  if (to.name === 'Lobby') {
+		deleteSessionStorage('ac')
+  }
+})
 </script>
 
 <template>
@@ -11,9 +18,8 @@ const { linkToLobby } = useLink()
     <section class="cardSection">
       <h1>Coming soon</h1>
     </section>
-
     <section class="linkBox">
-      <button @click="linkToLobby">活動大廳</button>
+      <RouterLink to="/">活動大廳</RouterLink>
     </section>
   </main>
 </template>

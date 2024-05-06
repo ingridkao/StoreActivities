@@ -2,8 +2,14 @@
 /**
  * 活動已結束
  */
-import { useLink } from '@/composable/useLink'
-const { linkToLobby, linkToAlbum } = useLink()
+import { RouterLink, onBeforeRouteLeave  } from 'vue-router'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
+const { deleteSessionStorage } = useBrowserStorage()
+onBeforeRouteLeave((to) => {
+  if (to.name === 'Lobby' || to.name === 'Album') {
+		deleteSessionStorage('ac')
+  }
+})
 </script>
 
 <template>
@@ -13,8 +19,8 @@ const { linkToLobby, linkToAlbum } = useLink()
     </section>
 
     <section class="linkBox">
-      <button @click="linkToAlbum">過去活動打卡紀錄</button>
-      <button @click="linkToLobby">活動大廳</button>
+      <RouterLink to="/album">過去活動打卡紀錄</RouterLink>
+      <RouterLink to="/">活動大廳</RouterLink>
     </section>
   </main>
 </template>

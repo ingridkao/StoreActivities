@@ -5,7 +5,7 @@ import type { AlbumType, ScanResultType } from '@/composable/configurable'
 
 export function useLink() {
   const router = useRouter()
-  const { getAcStorage, deleteSessionStorage, getAcQuery } = useBrowserStorage()
+  const { getAcStorage, deleteSessionStorage } = useBrowserStorage()
   const { errorAlert } = useSweetAlert()
 
   const getQueryParam = (url: string, param: string) => {
@@ -16,17 +16,9 @@ export function useLink() {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
   }
 
-  const linkToLobby = () => {
-    deleteSessionStorage('ac')
-    router.push({ name: 'Lobby' })
-  }
-  const linkToAlbum = () => {
-    deleteSessionStorage('ac')
-    router.push({ name: 'Album' })
-  }
-
-	const linkToWinning = () => {
-		router.push({ name: 'Winning' })
+	const linkToAlbum = () => {
+		deleteSessionStorage('ac')
+		router.push({ name: 'Album' })
 	}
 
 	const linkToActivity = (activityId:string = '') => {
@@ -72,13 +64,21 @@ export function useLink() {
     }
   }
 
+	const linkToWinning = () => {
+		router.push({ name: 'Winning' })
+	}
+
+	const linkToDirection = () => {
+		router.push({ name: 'Direction' })
+	}
+
 	return {
 		getQueryParam,
-		linkToLobby,
 		linkToAlbum,
-		linkToWinning,
 		linkToActivity,
 		backCollect,
-		linkToCollect
+		linkToCollect,
+		linkToWinning,
+		linkToDirection
 	}
 }

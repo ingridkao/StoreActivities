@@ -3,15 +3,12 @@
  * 測試環境會被導轉到line登入頁14, 23-27註解就可以避免被轉址
  */
 import { ref, onMounted, watchEffect } from 'vue'
-import { RouterLink } from 'vue-router'
-import { useLink } from '@/composable/useLink'
+import { RouterLink, onBeforeRouteLeave  } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-const { getAcStorage } = useBrowserStorage()
-const { linkToLobby } = useLink()
-const {
-  getOpenInClient,
-  useLineLogout
+const { getAcStorage, deleteSessionStorage } = useBrowserStorage()
+const { 
+  getOpenInClient, useLineLogout, 
   // getLineProfileAndAccessToken,
 } = useLIFF()
 const openInLIFF = getOpenInClient()
@@ -20,12 +17,19 @@ const accessToken = ref()
 const props = defineProps<{
   knowActivity: boolean
 }>()
-onMounted(async () => {
+
+onMounted(async() => {
   // const userData = await getLineProfileAndAccessToken()
   // if(userData){
   //   userProfile.value = userData.profile
   //   accessToken.value = userData.accessToken
   // }
+})
+
+onBeforeRouteLeave((to) => {
+  if (to.name === 'Lobby') {
+		deleteSessionStorage('ac')
+  }
 })
 
 const navOpen = ref<Boolean>(false)
@@ -37,33 +41,38 @@ const menuList = ref<
     link?: string
     key?: string
     name?: string
-  }[]
->([])
-
-watchEffect(() => {
-  if (props.knowActivity && userProfile.value) {
-    const acString = getAcStorage()
-    menuList.value = [
-      {
-        link: `/activity/${acString}`,
-        key: 'Activity',
-        name: '活動說明'
-      },
-      {
-        link: '/mapStore',
-        key: 'MapStore',
-        name: '門市地圖'
-      },
-      {
-        link: `/collected/${acString}`,
-        key: 'Collected',
-        name: '活動打卡紀錄'
-      }
-    ]
-  } else {
-    menuList.value = []
+}[]>([          {
+  link: '/',
+  key: 'Lobby',
+  name: '活動大廳'
+}])
+  
+watchEffect(
+  () => {
+    if(props.knowActivity && userProfile.value){
+      const acString = getAcStorage()
+      menuList.value = [
+        ...menuList.value,
+        {
+          link: `/activity/${acString}`,
+          key: 'Activity',
+          name: '活動說明'
+        },
+        {
+          link: '/mapStore',
+          key: 'MapStore',
+          name: '門市地圖'
+        },
+        {
+          link: `/collected/${acString}`,
+          key: 'Collected',
+          name: '活動打卡紀錄'
+        }
+      ]
+    }
   }
-})
+)
+
 </script>
 
 <template>

@@ -1,4 +1,3 @@
-import { UAParser } from 'ua-parser-js'
 import axios from 'axios'
 import type {
   ActivityListType,
@@ -14,7 +13,6 @@ import { useLoadingStore } from '@/stores/loading'
 const { VITE_MOCKAPI_URL } = import.meta.env
 
 export function useFetchData() {
-  const parser = new UAParser()
   const loadStore = useLoadingStore()
   const {
     getCtCookies,
@@ -24,11 +22,6 @@ export function useFetchData() {
     getAcStorage,
     getLocationStorage
   } = useBrowserStorage()
-
-  const getDevice = () => {
-    const result = parser.getDevice()
-    return result && result.type ? result.type : ''
-  }
 
   // 驗證QR Code
   const verifyQRCode = (ctStr: string = ''): Promise<boolean | VerifyCodeResultType> => {
@@ -202,8 +195,8 @@ export function useFetchData() {
     return await axios
       .get(`/stores/map_${targerCity}.geojson`)
       .then((geoRes) => {
-        if (!geoRes) return false
-        return geoRes
+        if (geoRes && geoRes.data) return geoRes.data
+        return false
       })
       .catch((error) => {
         console.log(error)
@@ -221,7 +214,6 @@ export function useFetchData() {
     fetchAlbumData,
     fetchCollectData,
     confirmActivity,
-    fetchLayerData,
-    getDevice
+    fetchLayerData
   }
 }

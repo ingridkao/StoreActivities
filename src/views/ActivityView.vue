@@ -105,6 +105,7 @@ const enterActivity = async () => {
 <template>
   <main class="activity-view">
     <HeaderMenu :knowActivity="true" />
+
     <div class="activity-view__top-bg"></div>
 
     <div class="activity-view__main">
@@ -130,7 +131,9 @@ const enterActivity = async () => {
         </div>
       </div>
     </div>
-    <img class="activity-view__info-icon-button" :src="infoIconButtonImg" alt="info icon button" />
+    <button class="activity-view__info-icon-button" @click="gotoDirection">
+      <img :src="infoIconButtonImg" alt="info icon button" />
+    </button>
     <div class="activity-view__content">
       <div
         :key="title"
@@ -143,9 +146,9 @@ const enterActivity = async () => {
         </div>
         <p class="activity-view__content--item-text">{{ text }}</p>
       </div>
-      <div class="activity-view__content--button">
+      <button class="activity-view__content--button" @click="enterActivity">
         <img :src="enterButtonImg" alt="enter button" />
-      </div>
+      </button>
     </div>
   </main>
 </template>
@@ -289,8 +292,10 @@ const enterActivity = async () => {
     }
 
     &--button {
-      margin-top: 10px;
-      text-align: center;
+      display: block;
+      border: none;
+      background: transparent;
+      margin: 10px auto;
     }
   }
 
@@ -301,6 +306,11 @@ const enterActivity = async () => {
     right: 20px;
     z-index: 3;
     transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    >img{
+      width: 100%;
+    }
   }
 }
 

@@ -53,7 +53,7 @@ const startScanning = async () => {
         <p>{{ data.direction.step2Text }}</p>
       </div>
     </div>
-    <div class="direction-view__button">
+    <div class="direction-view__button" @click="startScanning">
       <img :src="checkInButtonImg" alt="check in button" />
     </div>
   </main>

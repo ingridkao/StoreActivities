@@ -48,7 +48,7 @@ export function useMap() {
     }
   }
 
-  const clientLocationCity = ref('')
+  const clientLocationCity = ref('taipei')
   const clientCoords = ref<{ latitude: any; longitude: any } | null>(null)
   const getClientLocation = async () => {
     const fetchLocationFound = async (position: {

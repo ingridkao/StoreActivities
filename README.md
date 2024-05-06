@@ -2,77 +2,67 @@
 
 門市打卡
 [demo](https://qwaretest2.web.app/)
-[LIFF](https://liff.line.me/2003380973-6NBnrB5K)
-
+~~[LIFF](https://liff.line.me/2003380973-6NBnrB5K)~~
 
 
 ## 1.Git Flow
 
-目前分支僅main, dev, feature
-1. ~~main:主要部屬分支~~
-2. main: 主要分支
+Branch:
+
+1. main: 主要分支
    > 更新頻率: Mon, Wed, Fri
-3. feature: 根據功能和需求建立不同的分支
+   > 這三天下班前會將PR確認merge至`main`
+
+2. feature: 根據功能和需求建立不同的分支
    1. 新增分支
       > 分支名稱建議:
       > feat/add-linescan
       > feat/integrate-checkin-api
       > style/add-homepage
       > style/rewrite-lightbox
-      名稱透過chartGPT產生，prompt:`使用git flow，<功能開發描述>，寫出分支名稱`
+      名稱透過chartGPT產生，prompt:`使用git flow，這個分支將會<功能開發描述>，寫出分支名稱`
    2. 進行feat>main合併，**請使用Github pull request(PR)**
-   3. 合併完刪除該feature分支(PR自動刪除)
+   3. 合併完會自動刪除該feature分支(PR自動刪除)
+      > Tue, Thu開發前請確認`feat`分支是否被合併，如已被合併請pull最新的`main`繼續step1
 
 
 ## 2.User story | Issue
 
-- [x] 使用者使用LINE登入(透過Line LIFF實現)
-- [x] 使用者在活動大廳(/)觀看有興趣的活動
-  - [ ] 樣式
-- [x] 使用者在活動詳情頁面(/activity)觀看活動說明
-  - [ ] 樣式
-  - [ ] 串接API(待UI完成再進行)
-- [x] 使用者開啟掃描說明(/direction)進行開啟相機
-  - [ ] 樣式
-- [x] 使用者看到所有活動打卡列表(/album)
-  - [ ] 樣式
-- [x] 使用者看到單一活動打卡結果(/collected)
+- 使用者使用LINE登入(透過Line LIFF實現)
+- 使用者在活動大廳(/)觀看有興趣的活動
+- 使用者在活動詳情頁面(/activity)觀看活動說明
+- 使用者開啟掃描說明(/direction)進行開啟相機
+- 使用者看到所有活動打卡列表(/album)
+- 使用者看到單一活動打卡結果(/collected)
   > 開發route說明
   `/collected` -> 回到所有活動打卡列表
   `/collected/1`,`/collected/2`,`/collected/3` -> 顯示單一活動打卡
   點擊門市彈出視窗(使用sweetalert2)
-  - [ ] 樣式
-- [x] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
-  - [ ] 樣式
-- [x] 使用者查閱過去所有活動打卡紀錄(/album)
-  - [ ] 樣式
-- [x] 使用者使用手機掃描機台qrCode確認所在位置
-- [x] 驗證打卡是否成功
+- 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
+- 使用者查閱過去所有活動打卡紀錄(/album)
+- 使用者使用手機掃描機台qrCode確認所在位置
+- 驗證打卡是否成功
 
 
 ### 頁面說明
 
-Header
-1. 活動說明, 門市地圖, 活動打卡紀錄, 回到活動大廳
-2. 回到活動大廳
-
-V:已完成
-D:UI切版中，功能停止開發
-I:等待UI切版，功能開發中
-U:功能變動未完成
+- W: 確認UI後須修正
+- I: 等待UI切版，不更動相關頁面
+- F: 功能變動未完成，建議暫緩UI
 
 | | Page          | @/view             | @/component            | Description | Auth |
 |-| ------------- | ------------------ | ---------------------- | ----------- | ---- |
-|D|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |  X   |
-|D|活動說明        | ActivityView.vue   | HeaderMenu             |             |  1   |
-|D|打卡說明        | DirectionView.vue  | HeaderMenu             |             |  1   |
-|D|相機掃描        | ScanView.vue       | ScanResult             |             |  X  |
-|U|所有活動打卡紀錄 | AlbumView.vue      |                        |             |  2   |
-|D|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu             |             |  1   |
-|U|中獎序號        | WinningView.vue    |                        |              |  1  |
-|U|門市地圖        | MapStoreView.vue   | 門市詳細(預計4/19commit)|              |  1  |
-|D|活動已結束      | WrapUpView.vue     |                        |              |  2  |
-|D|ComingSoon     | ComingSoonView.vue |                         | 404page     |  2  |
+|I|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |      |
+|I|活動說明        | ActivityView.vue   | HeaderMenu.vue         |             |  V   |
+|I|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu.vue         |             |  V   |
+|I|門市地圖        | MapStoreView.vue   |                        |              |  V   |
+|F|所有活動打卡紀錄 | AlbumView.vue      |                        |             |  V   |
+|F|中獎序號        | WinningView.vue    |                        |             |  V   |
+|W|打卡說明        | DirectionView.vue  | HeaderMenu.vue         |             |  V   |
+|W|相機掃描        | ScanView.vue       | ScanResult.vue         |             |      |
+|W|活動已結束      | WrapUpView.vue     |                        |              |  V   |
+|W|ComingSoon     | ComingSoonView.vue |                         | 404page     |  V   |
+
 
 ### 組件說明
 
@@ -80,8 +70,27 @@ U:功能變動未完成
 |-| ---------------------- | ------------ | ------------------------------- |
 |I| HeaderMenu.vue         | 會觸發Line登入| 如一直被轉址請註解部分程式         |
 |I| ActivitiesListItem.vue | 活動列表      | 活動大廳                         |
-|I| ScanResult.vue         | 打卡結果      | 相機掃描                         |
+|W| ScanResult.vue         | 打卡結果      | 相機掃描                         |
 
+
+### HeaderMenu說明
+由於流程部分頁面選單會有以下差異：
+0. 沒有選單
+1. 活動說明, 門市地圖, 活動打卡紀錄, 回到活動大廳
+2. 回到活動大廳
+
+| | Page          |
+|-| ------------- |
+|0|活動大廳        |
+|1|活動說明        |
+|1|打卡說明        |
+|0|相機掃描        |
+|1|單一活動打卡紀錄 |
+|2|所有活動打卡紀錄 |
+|1|中獎序號        |
+|1|門市地圖        |
+|2|活動已結束      |
+|2|ComingSoon     |
 
 
 ## 3.Project Setup
