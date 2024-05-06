@@ -5,6 +5,14 @@
 import { computed } from 'vue'
 import type { ScanResultType } from '@/composable/configurable'
 import { useLink } from '@/composable/useLink'
+
+import checkFailImg from '@/assets/images/scan/check-fail.svg'
+import checkSuccessImg from '@/assets/images/scan/check-success.svg'
+import checkFailImageImg from '@/assets/images/scan/check-fail-image.png'
+import keepCheckButtonImg from '@/assets/images/scan/keep-check-button.svg'
+import recordButtonImg from '@/assets/images/scan/record-button.svg'
+import checkSuccessImageImg from '@/assets/images/scan/check-success-image.png'
+
 const { linkToCollect } = useLink()
 
 const props = defineProps<{
@@ -19,40 +27,166 @@ const scanAgain = async () => {
 </script>
 
 <template>
-  <div class="scanResult" :class="successResult ? 'success' : 'fail'">
-    <section v-if="successResult">
-      打卡成功
-      <div>
-        {{ props.result }}
+  <div
+    class="scan-result"
+    :class="{
+      fail: !successResult
+    }"
+  >
+    <div class="scan-result__content">
+      <div class="scan-result__content--result-text">
+        <img v-if="successResult" :src="checkSuccessImg" alt="check success" />
+        <img v-else :src="checkFailImg" alt="check fail" />
       </div>
-    </section>
-    <section v-else>打卡失敗</section>
-    <section>
-      <button @click="linkToCollect(props.result)">查看紀錄</button>
-      <button @click="scanAgain">繼續打卡</button>
-    </section>
+      <div v-if="successResult" class="scan-result__content--success">
+        <div class="scan-result__content--success-image">
+          <img :src="checkSuccessImageImg" alt="check success" />
+        </div>
+        <div class="scan-result__content--success-info">
+          <p class="scan-result__content--success-info-id">{{ props.result['event_id'] }}</p>
+          <p class="scan-result__content--success-info-name">{{ props.result.name }}</p>
+          <p class="scan-result__content--success-info-date">{{ props.result.date }}</p>
+        </div>
+      </div>
+      <div v-else class="scan-result__content--fail">
+        <img :src="checkFailImageImg" alt="check fail" class="scan-result__content--fail-image" />
+      </div>
+      <div class="scan-result__buttons">
+        <div class="scan-result__buttons--wrapper">
+          <img @click="linkToCollect(props.result)" :src="recordButtonImg" alt="record button" />
+        </div>
+        <div class="scan-result__buttons--wrapper">
+          <img @click="scanAgain" :src="keepCheckButtonImg" alt="keep check button" />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.scanResult {
+.scan-result {
   position: fixed;
   width: 100%;
   height: 100%;
+  overflow: scroll;
   top: 0;
   left: 0;
+  background: url('@/assets/images/background/light-green-bg.png') repeat;
 
   &.fail {
-    background-color: #95a6b8;
+    background: url('@/assets/images/background/gray-bg.png') repeat;
   }
 
-  &.success {
-    background-color: #b6c88a;
+  &__content {
+    width: 100%;
+    padding: 0 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 700px;
+    height: 100%;
+
+    &--result-text {
+      width: 225px;
+      height: 90px;
+      align-self: end;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    &--success {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 64px;
+
+      &-image {
+        width: 210px;
+        height: 278px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+      }
+
+      &-info {
+        width: 334px;
+        height: 191px;
+        display: flex;
+        color: #594c40;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transform: translateY(-10px);
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-image: url('@/assets/images/scan/check-success-bg.png');
+
+        &-id {
+          margin-top: 10px;
+          font-size: 18px;
+          font-weight: 700;
+        }
+
+        &-name {
+          font-size: 32px;
+          font-weight: 900;
+          margin-top: 12px;
+          margin-bottom: 19px;
+        }
+
+        &-date {
+          font-size: 15px;
+          font-weight: 500;
+        }
+      }
+    }
+
+    &--fail {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 78px;
+      padding-top: 20px;
+      width: 300px;
+      height: 380px;
+      overflow: hidden;
+
+      &-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
   }
 
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
+  &__buttons {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+
+    &--wrapper {
+      width: 135px;
+      height: 40px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
 }
 </style>
