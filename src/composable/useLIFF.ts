@@ -143,22 +143,26 @@ export function useLIFF() {
 
   const { verifyQRCode, commitStoreCheckIn } = useFetchData()
   const scanCode = async () => {
-    console.log('scanCode');
     try {
-      await liff.init({ liffId: VITE_LIFF_ID })
-      const scanresult = await liff.scanCodeV2()
-      if(scanresult && scanresult.value){
-        const codeSplit = scanresult.value.split(`${VITE_BASE_URL}/?ct=`)
-        console.log(codeSplit);
-        const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
-        const verifyRes = await verifyQRCode(ctCode)
-        console.log(verifyRes);
-        // const commitRes = await commitStoreCheckIn(verifyRes) 
-        const qrcodeOk = (codeSplit.length === 2 && codeSplit[1])?true: false
-        const commitRes = await commitStoreCheckIn(qrcodeOk)
-        console.log(commitRes);
+      const isInClient = liff.isInClient()
+      if(isInClient){
+        await liff.init({ liffId: VITE_LIFF_ID })
+        const scanresult = await liff.scanCodeV2()
+        if(scanresult && scanresult.value){
+          const codeSplit = scanresult.value.split(`${VITE_BASE_URL}/?ct=`)
+          console.log(codeSplit);
+          const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
+          const verifyRes = await verifyQRCode(ctCode)
+          console.log(verifyRes);
+          // const commitRes = await commitStoreCheckIn(verifyRes) 
+          const qrcodeOk = (codeSplit.length === 2 && codeSplit[1])?true: false
+          const commitRes = await commitStoreCheckIn(qrcodeOk)
+          console.log(commitRes);
+        }
+        console.log(scanresult)
+      }else{
+        router.push({ path: '/scan' })
       }
-      console.log(scanresult)
     } catch (err) {
       console.log(err)
       router.push({ path: '/scan' })

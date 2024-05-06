@@ -28,28 +28,20 @@ Branch:
 
 ## 2.User story | Issue
 
-- [x] 使用者使用LINE登入(透過Line LIFF實現)
-- [x] 使用者在活動大廳(/)觀看有興趣的活動
-  - [ ] 樣式
-- [x] 使用者在活動詳情頁面(/activity)觀看活動說明
-  - [ ] 樣式
-  - [ ] 串接API(待UI完成再進行)
-- [x] 使用者開啟掃描說明(/direction)進行開啟相機
-  - [ ] 樣式
-- [x] 使用者看到所有活動打卡列表(/album)
-  - [ ] 樣式
-- [x] 使用者看到單一活動打卡結果(/collected)
+- 使用者使用LINE登入(透過Line LIFF實現)
+- 使用者在活動大廳(/)觀看有興趣的活動
+- 使用者在活動詳情頁面(/activity)觀看活動說明
+- 使用者開啟掃描說明(/direction)進行開啟相機
+- 使用者看到所有活動打卡列表(/album)
+- 使用者看到單一活動打卡結果(/collected)
   > 開發route說明
   `/collected` -> 回到所有活動打卡列表
   `/collected/1`,`/collected/2`,`/collected/3` -> 顯示單一活動打卡
   點擊門市彈出視窗(使用sweetalert2)
-  - [ ] 樣式
-- [x] 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
-  - [ ] 樣式
-- [x] 使用者查閱過去所有活動打卡紀錄(/album)
-  - [ ] 樣式
-- [x] 使用者使用手機掃描機台qrCode確認所在位置
-- [x] 驗證打卡是否成功
+- 使用者透過門市地圖(/mapStore)找到附近或是特色、聯名門市，並可以導航至門市
+- 使用者查閱過去所有活動打卡紀錄(/album)
+- 使用者使用手機掃描機台qrCode確認所在位置
+- 驗證打卡是否成功
 
 
 ### 頁面說明
@@ -62,12 +54,12 @@ Branch:
 |-| ------------- | ------------------ | ---------------------- | ----------- | ---- |
 |I|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |      |
 |I|活動說明        | ActivityView.vue   | HeaderMenu.vue         |             |  V   |
-|I|打卡說明        | DirectionView.vue  | HeaderMenu.vue         |             |  V   |
-|I|相機掃描        | ScanView.vue       | ScanResult.vue         |             |      |
 |I|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu.vue         |             |  V   |
+|I|門市地圖        | MapStoreView.vue   |                        |              |  V   |
 |F|所有活動打卡紀錄 | AlbumView.vue      |                        |             |  V   |
 |F|中獎序號        | WinningView.vue    |                        |             |  V   |
-|F|門市地圖        | MapStoreView.vue   |                        |              |  V   |
+|W|打卡說明        | DirectionView.vue  | HeaderMenu.vue         |             |  V   |
+|W|相機掃描        | ScanView.vue       | ScanResult.vue         |             |      |
 |W|活動已結束      | WrapUpView.vue     |                        |              |  V   |
 |W|ComingSoon     | ComingSoonView.vue |                         | 404page     |  V   |
 
@@ -78,7 +70,7 @@ Branch:
 |-| ---------------------- | ------------ | ------------------------------- |
 |I| HeaderMenu.vue         | 會觸發Line登入| 如一直被轉址請註解部分程式         |
 |I| ActivitiesListItem.vue | 活動列表      | 活動大廳                         |
-|I| ScanResult.vue         | 打卡結果      | 相機掃描                         |
+|W| ScanResult.vue         | 打卡結果      | 相機掃描                         |
 
 
 ### HeaderMenu說明
