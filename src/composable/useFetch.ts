@@ -23,7 +23,7 @@ export function useFetchData() {
     getLocationStorage
   } = useBrowserStorage()
 
-  // 驗證QR Code
+  // 驗證QRCode(ctString)
   const verifyQRCode = (ctStr: string = ''): Promise<boolean | VerifyCodeResultType> => {
     // ct=OP666000031818094ac904
     // 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
@@ -33,15 +33,15 @@ export function useFetchData() {
     } else {
       ctString = getCtCookies()
     }
-    const [latitude, longitude] = getLocationStorage()
+    // const [latitude, longitude] = getLocationStorage()
     return new Promise((resolve, reject) => {
       if (ctString) {
         axios
           .post('/api/ScanEntry/IbonEntry', {
             data: {
               qrCode: ctString,
-              longitude: longitude,
-              latitude: latitude
+              // longitude: longitude,
+              // latitude: latitude
             }
           })
           .then((res) => {
@@ -79,16 +79,25 @@ export function useFetchData() {
           // }else if(!userId){
           //   reject('訪客無法進行打卡')
         } else {
-          // 驗證成功
+          // 驗證
           // axios
-          // .post(`${VITE_MOCKAPI_URL}/checkIn`, {
+          // .post('/api/CheckIn/CheckInVerify', {
           //   data: {
-          //     uid: userId,
-          //     aid: acStr,
-          //     token: '123',
-          //     qrcode: ct
-          //     // lon: lon,
-          //     // lat: lat
+          //     storeId: 4,
+          // //     eventId: 4,
+          // //     key: 'AAA',
+          // //     longitude: longitude,
+          // //     latitude: latitude,
+          //     sourceType: 'A'
+          //   }
+          // },
+          // {
+          //   headers: {
+          //     key: 'AAA|||AAA',
+          //     store: '931356',
+          //     FV: '1.0.0',
+          //     Auth1: '123132',
+          //     Auth2: '123132'
           //   }
           // })
           // .then((res) => {
@@ -129,10 +138,11 @@ export function useFetchData() {
   const fetchAdData = (): Promise<ActivityListType[]> => {
     return new Promise((resolve, reject) => {
       axios
-        .post('/api/ScanEntry/GetAdsData', {})
+        .post('/api/ScanEntry/GetAdsData')
         .then((res) => {
-          // axios.get(`${VITE_MOCKAPI_URL}/GetAdsData`).then((res) => {
-          resolve(res.data || [])
+          if(res.data && res.data.result){
+            resolve(res.data.result.queryList || [])
+          }
         })
         .catch((err) => {
           reject(err)
@@ -206,6 +216,42 @@ export function useFetchData() {
       })
   }
 
+  const checkLineLoginVerify = (accessToken:string) => {
+    return new Promise((resolve, reject) => {
+      if (accessToken) {
+        axios
+          .post('/api/ScanEntry/LineLoginVerify', {
+            data: {
+              key: accessToken,
+              partnerId: 2
+            }
+          })
+          .then((res) => {
+            if (res && res.data) {
+              console.log(res);
+            //   if (res.data.result.token) {
+            //     setCtCookies(ctString)
+            //     setTokenCookies(res.data.result.token)
+            //     resolve({
+            //       c: ctString,
+            //       t: res.data.result.token
+            //     })
+            //   } else {
+            //     resetCtCookies()
+            //     reject(res.data.msg)
+            //   }
+            } else {
+              console.log(res);
+            //   resetCtCookies()
+            //   reject('發生了例外錯誤')
+            }
+          })
+      } else {
+        resolve(false)
+      }
+    })
+  }
+
   return {
     verifyQRCode,
     commitStoreCheckIn,
@@ -214,6 +260,7 @@ export function useFetchData() {
     fetchAlbumData,
     fetchCollectData,
     confirmActivity,
-    fetchLayerData
+    fetchLayerData,
+    checkLineLoginVerify
   }
 }

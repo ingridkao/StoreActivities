@@ -6,6 +6,16 @@ export interface ActivityListType {
   link?: string
 }
 
+export interface AdListType {
+  id?: number
+  adType?: string
+  title?: string
+  content?: string
+  link?: string
+  isEnable?: boolean
+  imageFilePath?: string
+}
+
 export interface AlbumType {
   event_id?: string
   event_name?: string

@@ -8,7 +8,7 @@
  */
 import { ref, onMounted, watchEffect, computed } from 'vue'
 
-import type { ActivityListType } from '@/composable/configurable'
+import type { ActivityListType, AdListType } from '@/composable/configurable'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useLink } from '@/composable/useLink'
@@ -17,13 +17,14 @@ import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
 import ActivitiesListItem from '@/components/ActivitiesListItem.vue'
+import AdsListItem from '@/components/AdsListItem.vue'
 
 // step0
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { fetchActivityData, verifyQRCode } = useFetchData()
+const { fetchActivityData, fetchAdData, verifyQRCode } = useFetchData()
 const { getQueryParam } = useLink()
 
 let getPosition = false
@@ -50,14 +51,15 @@ watchEffect(async () => {
 
 const loadStore = useLoadingStore()
 const activitiesList = ref<ActivityListType[]>([])
+const adsList = ref<AdListType[]>([])
 onMounted(async () => {
   try {
     //step2-1
     //step2-2
     loadStore.toggle(true)
     Promise.all([
-      fetchActivityData()
-      // fetchAdData(),
+      fetchActivityData(),
+      fetchAdData(),
     ]).then((dataArray) => {
       activitiesList.value = dataArray[0] || []
       loadStore.toggle(false)
@@ -71,6 +73,8 @@ onMounted(async () => {
           statu: 1
         }))
       }
+
+      adsList.value = dataArray[1] || []
     })
   } catch (error) {
     errorAlert(`fetchActivityData:${error}`)
@@ -90,14 +94,15 @@ const siteLoading = computed(() => loadStore.load)
         :key="activities.id"
       />
 
-      <ActivitiesListItem
-        :activities="{
-          title: '集郵冊-打卡紀錄',
-          statu: 1,
-          img: 'https://i.imgur.com/d8ptVfB.png',
-          link: '/album'
-        }"
+      <AdsListItem
+        v-for="item in adsList"
+        :key="item.id"
+        :ads="item"
       />
+
+      <RouterLink to="/album">
+        <img src="https://i.imgur.com/d8ptVfB.png" alt="集郵冊-打卡紀錄" />
+      </RouterLink>
 
       <div class="lobby-view__icon-bar">
         <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />

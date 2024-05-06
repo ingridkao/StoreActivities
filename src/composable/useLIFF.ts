@@ -119,6 +119,8 @@ export function useLIFF() {
         // liff.init()在執行時會自動執行liff.login()
         await liff.init({ liffId: VITE_LIFF_ID })
         const accessToken = liff.getAccessToken()
+        const verifyRes = await checkLineLoginVerify(accessToken || '')
+        console.log(verifyRes);
         const profile = await liff.getProfile()
         return {
           accessToken,
@@ -130,6 +132,8 @@ export function useLIFF() {
           liff.login()
         }
         const accessToken = liff.getAccessToken()
+        const verifyRes = await checkLineLoginVerify(accessToken || '')
+        console.log(verifyRes);
         const profile =  await liff.getProfile()
         return {
           accessToken,
@@ -141,7 +145,7 @@ export function useLIFF() {
     }
   }
 
-  const { verifyQRCode, commitStoreCheckIn } = useFetchData()
+  const { verifyQRCode, commitStoreCheckIn, checkLineLoginVerify } = useFetchData()
   const scanCode = async () => {
     try {
       const isInClient = liff.isInClient()
