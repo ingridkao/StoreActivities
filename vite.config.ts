@@ -1,5 +1,4 @@
 import { fileURLToPath, URL } from 'node:url'
-
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import VueDevTools from 'vite-plugin-vue-devtools'
@@ -24,8 +23,8 @@ export default defineConfig(({ mode }) => {
       }
     },
     build: {
-      outDir: env.VITE_OUTDIR,
+      outDir: env.VITE_OUTDIR || 'dist',
     },
-    base: env.VITE_BASE
+    base: env.VITE_BASEDIR || '/'
   }
 })

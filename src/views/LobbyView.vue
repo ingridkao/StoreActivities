@@ -8,7 +8,7 @@
  */
 import { ref, onMounted, watchEffect, computed } from 'vue'
 
-import type { ActivityListType, AdListType } from '@/composable/configurable'
+import type { ActivityListType, CampaignListType, AdListType } from '@/composable/configurable'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useLink } from '@/composable/useLink'
@@ -17,6 +17,7 @@ import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
 import ActivitiesListItem from '@/components/ActivitiesListItem.vue'
+import CampaignListItem from '@/components/CampaignListItem.vue'
 import AdsListItem from '@/components/AdsListItem.vue'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
@@ -25,7 +26,7 @@ const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { genrateMockQRCode, fetchActivityData, fetchAdData, verifyQRCode } = useFetchData()
+const { genrateMockQRCode, fetchActivityData, fetchCampaign, fetchAdData, verifyQRCode } = useFetchData()
 const { getQueryParam } = useLink()
 
 let getPosition = false
@@ -48,6 +49,7 @@ watchEffect(async () => {
 
 const loadStore = useLoadingStore()
 const activitiesList = ref<ActivityListType[]>([])
+const campaignList = ref<CampaignListType[]>([])
 const adsList = ref<AdListType[]>([])
 const qrString = ref('')
 onMounted(async () => {
@@ -56,12 +58,14 @@ onMounted(async () => {
     //step2-2
     loadStore.toggle(true)
 
-    const [result1, result2] =  await Promise.all([
+    const [result1, result2, result3] =  await Promise.all([
       fetchActivityData(),
+      fetchCampaign(),
       fetchAdData()
     ])
     activitiesList.value = result1 || []
-    adsList.value = result2 || []
+    campaignList.value = result2 || []
+    adsList.value = result3 || []
 
     //TODO: After check api data, remove this
     if (import.meta.env.VITE_UI_MODE) {
@@ -102,6 +106,12 @@ const siteLoading = computed(() => loadStore.load)
         :activities="activities"
         v-for="activities in activitiesList"
         :key="activities.id"
+      />
+
+      <CampaignListItem
+        v-for="campaignItem in campaignList"
+        :campaign="campaignItem"
+        :key="campaignItem.id"
       />
 
       <AdsListItem

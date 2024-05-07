@@ -114,6 +114,14 @@ npm run dev
 npm run build
 ```
 
+### UAT環境部屬
+
+編譯成靜態並部屬到UAT
+
+```sh
+npm run stage
+```
+
 ### 測試環境部屬
 
 編譯成靜態並部屬到[firebase hosting](https://firebase.google.com/docs/hosting/quickstart?hl=zh&authuser=0)上
@@ -149,6 +157,10 @@ VITE_LIFF_ENDPOINT_URL=
 VITE_MOCKAPI_URL=
 VITE_API_URL=
 VITE_BASE_URL=
+
+VITE_OUTDIR=
+VITE_BASEDIR=
+VITE_ASSETS_URL=
 
 VITE_MAPBOX_KEY=
 

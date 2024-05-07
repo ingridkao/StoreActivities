@@ -9,6 +9,7 @@ interface ImportMetaEnv {
     readonly VITE_BASE_URL: string
     readonly VITE_OUTDIR: string
     readonly VITE_BASE: string
+    readonly VITE_ASSETS_URL: string
     readonly VITE_MAPBOX_KEY: string
     // more env variables...
 }

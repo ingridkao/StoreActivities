@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type {
   ActivityListType,
+  CampaignListType,
   CollectedType,
   AlbumType,
   ScanResultType,
@@ -42,10 +43,10 @@ export function useFetchData() {
             if (res.data.result.qrCode) {
               resolve(res.data.result)
             } else {
-              reject(`fetchActivityData:${res.data.msg}`)
+              reject(`genrateMockQRCode:${res.data.msg}`)
             }
           } else {
-            reject('fetchActivityData:發生了例外錯誤')
+            reject('genrateMockQRCode:發生了例外錯誤')
           }
         })
     })
@@ -150,7 +151,22 @@ export function useFetchData() {
           resolve(res.data || [])
         })
         .catch((err) => {
-          reject(`fetchActivityData:${err}`)
+          reject(`fetchAdData:${err}`)
+        })
+    })
+  }
+
+  const fetchCampaign = (): Promise<CampaignListType[]> => {
+    return new Promise((resolve, reject) => {
+      axios
+        .post(`${VITE_API_URL}/ScanEntry/GetCampaignData`)
+        .then((res) => {
+          if(res.data && res.data.result){
+            resolve(res.data.result.queryList || [])
+          }
+        })
+        .catch((err) => {
+          reject(`fetchCampaign:${err}`)
         })
     })
   }
@@ -275,6 +291,7 @@ export function useFetchData() {
     verifyQRCode,
     commitStoreCheckIn,
     fetchActivityData,
+    fetchCampaign,
     fetchAdData,
     fetchAlbumData,
     fetchCollectData,

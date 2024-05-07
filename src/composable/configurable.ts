@@ -6,6 +6,18 @@ export interface ActivityListType {
   link?: string
 }
 
+export interface CampaignListType {
+  id?: number
+  eventName?: string
+  partnerId?: number
+  startTime?: string
+  endTime?: string
+  isEnable?: boolean
+  toLinkUrl?: string
+  imageFilePath?: string
+  pageRouter?: string
+}
+
 export interface AdListType {
   id?: number
   adType?: string

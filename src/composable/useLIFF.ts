@@ -153,6 +153,7 @@ export function useLIFF() {
         await liff.init({ liffId: VITE_LIFF_ID })
         const scanresult = await liff.scanCodeV2()
         if(scanresult && scanresult.value){
+          debugger
           const codeSplit = scanresult.value.split(`${VITE_BASE_URL}/?ct=`)
           console.log(codeSplit);
           const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
