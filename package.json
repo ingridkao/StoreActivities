@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
-    "deploy": "npm run build && firebase deploy --only hosting",
+    "deploy": "vite build && firebase deploy --only hosting",
+    "stage": "vite build --mode uat",
     "test:unit": "vitest",
     "build-only": "vite build",
     "type-check": "vue-tsc --build --force",
@@ -30,6 +31,7 @@
     "sweetalert2": "^11.10.8",
     "ua-parser-js": "^1.0.37",
     "vue": "^3.4.21",
+    "vue-qr": "^4.0.9",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
