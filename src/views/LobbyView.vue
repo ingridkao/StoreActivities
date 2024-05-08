@@ -8,7 +8,7 @@
  */
 import { ref, onMounted, watchEffect, computed } from 'vue'
 
-import type { ActivityListType, CampaignListType, AdListType } from '@/composable/configurable'
+import type { CampaignListType, AdListType } from '@/composable/configurable'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useLink } from '@/composable/useLink'
@@ -16,7 +16,6 @@ import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
-import ActivitiesListItem from '@/components/ActivitiesListItem.vue'
 import CampaignListItem from '@/components/CampaignListItem.vue'
 import AdsListItem from '@/components/AdsListItem.vue'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
@@ -26,7 +25,7 @@ const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { genrateMockQRCode, fetchActivityData, fetchCampaign, fetchAdData, verifyQRCode } = useFetchData()
+const { genrateMockQRCode, fetchCampaign, fetchSpecifyCampaign, fetchAdData, verifyQRCode } = useFetchData()
 const { getQueryParam } = useLink()
 
 let getPosition = false
@@ -48,47 +47,41 @@ watchEffect(async () => {
 })
 
 const loadStore = useLoadingStore()
-const activitiesList = ref<ActivityListType[]>([])
 const campaignList = ref<CampaignListType[]>([])
+const specifyCampaignList = ref<CampaignListType[]>([])
 const adsList = ref<AdListType[]>([])
 const qrString = ref('')
+const storeId = ref<string>('')
 onMounted(async () => {
   try {
-    //step2-1
-    //step2-2
     loadStore.toggle(true)
 
-    const [result1, result2, result3] =  await Promise.all([
-      fetchActivityData(),
-      fetchCampaign(),
-      fetchAdData()
-    ])
-    activitiesList.value = result1 || []
-    campaignList.value = result2 || []
-    adsList.value = result3 || []
-
-    //TODO: After check api data, remove this
-    if (import.meta.env.VITE_UI_MODE) {
-      activitiesList.value = Array.from({ length: 5 }).map((_, i) => ({
-        id: i + 1,
-        img: `./images/lobby/lobby-item-${i + 1}.png`,
-        link: 'https://www.google.com',
-        statu: 1
-      }))
-    }
-
-    loadStore.toggle(false)
-
-    // TODO: After check api flow, remove this
-    const MockCode = await genrateMockQRCode()
-    if(MockCode){
-      setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
-      qrString.value = `${import.meta.env.VITE_BASE_URL}?ct=${MockCode.qrCode}`
-      const pathQuery = getQueryParam(window.location.href, 'ct')
-      if(pathQuery){
-        await verifyQRCode(MockCode.qrCode)
+    const pathQuery = getQueryParam(window.location.href, 'ct')
+    if(pathQuery){
+      storeId.value = pathQuery.substring(2, 8)
+    }else{
+      // TODO: After check api flow, remove this
+      const MockCode = await genrateMockQRCode()
+      if(MockCode){
+        // storeId.value = MockCode.store || ''
+        setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
+        qrString.value = `${import.meta.env.VITE_BASE_URL}?ct=${MockCode.qrCode}`
+        const pathQuery = getQueryParam(window.location.href, 'ct')
+        if(pathQuery){
+          await verifyQRCode(MockCode.qrCode)
+        }
       }
     }
+
+    const [result1, result2, result3] = await Promise.all([
+      fetchCampaign(),
+      fetchSpecifyCampaign(storeId.value),
+      fetchAdData()
+    ])
+    campaignList.value = result1 || []
+    specifyCampaignList.value = result2 || []
+    adsList.value = result3 || []
+    loadStore.toggle(false)
 
   } catch (error) {
     errorAlert(error)
@@ -102,14 +95,14 @@ const siteLoading = computed(() => loadStore.load)
   <main class="lobby-view">
     <div v-if="siteLoading" class="loading">Loading...</div>
     <div v-else class="lobby-view__menu">
-      <ActivitiesListItem
-        :activities="activities"
-        v-for="activities in activitiesList"
-        :key="activities.id"
+      <CampaignListItem
+        v-for="campaignItem in campaignList"
+        :campaign="campaignItem"
+        :key="campaignItem.id"
       />
 
       <CampaignListItem
-        v-for="campaignItem in campaignList"
+        v-for="campaignItem in specifyCampaignList"
         :campaign="campaignItem"
         :key="campaignItem.id"
       />

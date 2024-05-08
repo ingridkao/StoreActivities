@@ -30,6 +30,7 @@ export function useFetchData() {
     qrCode?: string
     lat?: number
     long?: number
+    store?: string
   }> => {
     return new Promise((resolve, reject) => {
       axios
@@ -39,9 +40,14 @@ export function useFetchData() {
           }
         })
         .then((res) => {
-          if (res && res.data) {
-            if (res.data.result.qrCode) {
-              resolve(res.data.result)
+          if (res && res.data && res.data.result) {
+            const {qrCode} = res.data.result
+            const store = qrCode.substring(2, 8)
+            if (qrCode && store) {
+              resolve({
+                ...res.data.result,
+                store
+              })
             } else {
               reject(`genrateMockQRCode:${res.data.msg}`)
             }
@@ -143,31 +149,50 @@ export function useFetchData() {
     })
   }
 
-  const fetchActivityData = (): Promise<ActivityListType[]> => {
-    return new Promise((resolve, reject) => {
-      axios
-        .get(`${VITE_MOCKAPI_URL}/activities`)
-        .then((res) => {
-          resolve(res.data || [])
-        })
-        .catch((err) => {
-          reject(`fetchAdData:${err}`)
-        })
-    })
-  }
+  // const fetchActivityData = (): Promise<ActivityListType[]> => {
+  //   return new Promise((resolve, reject) => {
+  //     axios
+  //       .get(`${VITE_MOCKAPI_URL}/activities`)
+  //       .then((res) => {
+  //         resolve(res.data || [])
+  //       })
+  //       .catch((err) => {
+  //         reject(`fetchAdData:${err}`)
+  //       })
+  //   })
+  // }
 
   const fetchCampaign = (): Promise<CampaignListType[]> => {
     return new Promise((resolve, reject) => {
       axios
-        .post(`${VITE_API_URL}/ScanEntry/GetCampaignData`)
-        .then((res) => {
-          if(res.data && res.data.result){
-            resolve(res.data.result.queryList || [])
-          }
-        })
-        .catch((err) => {
-          reject(`fetchCampaign:${err}`)
-        })
+      .post(`${VITE_API_URL}/ScanEntry/GetCampaignData`)
+      .then((res) => {
+        if(res.data && res.data.result){
+          resolve(res.data.result.queryList || [])
+        }
+      })
+      .catch((err) => {
+        reject(`fetchCampaign:${err}`)
+      })
+    })
+  }
+
+  const fetchSpecifyCampaign = (storeId:string=''): Promise<CampaignListType[]> => {
+    return new Promise((resolve, reject) => {
+      axios
+      .post(`${VITE_API_URL}/ScanEntry/GetSpecifytheCampaignData`, {
+        data: {
+          key: storeId
+        }
+      })
+      .then((res) => {
+        if(res.data && res.data.result){
+          resolve(res.data.result.queryList || [])
+        }
+      })
+      .catch((err) => {
+        reject(`fetchSpecifyCampaign:${err}`)
+      })
     })
   }
 
@@ -217,19 +242,19 @@ export function useFetchData() {
   const confirmActivity = (acStr: string | string[] = ''): Promise<ActivityListType | number> => {
     return new Promise((resolve, reject) => {
       if (acStr === '') resolve(0)
-      fetchActivityData()
-        .then((res: ActivityListType[]) => {
-          const ongoActivity = res.find((item) => String(item.id) === acStr)
-          if (ongoActivity && ongoActivity.statu === 1) {
-            resolve(ongoActivity)
-          } else {
-            const statusCode = ongoActivity ? Number(ongoActivity.statu) : 0
-            resolve(statusCode)
-          }
-        })
-        .catch((e) => {
-          reject(e)
-        })
+      // fetchActivityData()
+      //   .then((res: ActivityListType[]) => {
+      //     const ongoActivity = res.find((item) => String(item.id) === acStr)
+      //     if (ongoActivity && ongoActivity.statu === 1) {
+      //       resolve(ongoActivity)
+      //     } else {
+      //       const statusCode = ongoActivity ? Number(ongoActivity.statu) : 0
+      //       resolve(statusCode)
+      //     }
+      //   })
+      //   .catch((e) => {
+      //     reject(e)
+      //   })
     })
   }
 
@@ -290,8 +315,9 @@ export function useFetchData() {
     genrateMockQRCode,
     verifyQRCode,
     commitStoreCheckIn,
-    fetchActivityData,
+    // fetchActivityData,
     fetchCampaign,
+    fetchSpecifyCampaign,
     fetchAdData,
     fetchAlbumData,
     fetchCollectData,
