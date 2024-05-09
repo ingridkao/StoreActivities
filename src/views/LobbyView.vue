@@ -35,12 +35,6 @@ watchEffect(async () => {
   if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
     getPosition = true
     // setLocationStorage(latitude, longitude)
-    // try {
-    //   const pathQuery = getQueryParam(window.location.href, 'ct')
-    //   await verifyQRCode(pathQuery)
-    // } catch (error) {
-    //   errorAlert(`verifyQRCode:${error}`)
-    // }
   } else if (error.value && error.value.code >= 1) {
     geoErrorHandler(error.value.code)
   }
@@ -59,6 +53,7 @@ onMounted(async () => {
     const pathQuery = getQueryParam(window.location.href, 'ct')
     if(pathQuery){
       storeId.value = pathQuery.substring(2, 8)
+      await verifyQRCode(pathQuery)
     }else{
       // TODO: After check api flow, remove this
       const MockCode = await genrateMockQRCode()
@@ -96,13 +91,12 @@ const siteLoading = computed(() => loadStore.load)
     <div v-if="siteLoading" class="loading">Loading...</div>
     <div v-else class="lobby-view__menu">
       <CampaignListItem
-        v-for="campaignItem in campaignList"
+        v-for="campaignItem in specifyCampaignList"
         :campaign="campaignItem"
         :key="campaignItem.id"
       />
-
       <CampaignListItem
-        v-for="campaignItem in specifyCampaignList"
+        v-for="campaignItem in campaignList"
         :campaign="campaignItem"
         :key="campaignItem.id"
       />

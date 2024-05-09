@@ -2,15 +2,8 @@
 /**
  * ComingSoon
  */
-import { RouterLink, onBeforeRouteLeave  } from 'vue-router'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
-const { deleteSessionStorage } = useBrowserStorage()
+import { RouterLink  } from 'vue-router'
 
-onBeforeRouteLeave((to) => {
-  if (to.name === 'Lobby') {
-		deleteSessionStorage('ac')
-  }
-})
 </script>
 
 <template>

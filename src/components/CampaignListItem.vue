@@ -49,12 +49,15 @@ const linkTo = async () => {
 <style lang="scss" scoped>
 .activities {
   cursor: pointer;
+  border-radius: 15px;
+  overflow: hidden;
 
   img {
     width: 100%;
     height: auto;
     aspect-ratio: 169/50;
     object-fit: contain;
+    background-color: rgba(255,255,255,0.3);
   }
 
   &.invalid {

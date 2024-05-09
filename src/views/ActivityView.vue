@@ -33,7 +33,7 @@ import listMarkerImg from '@/assets/images/list-marker.svg'
 const route = useRoute()
 const router = useRouter()
 const { confirmActivity, verifyQRCode, commitStoreCheckIn } = useFetchData()
-const { getAcStorage, setAcStorage } = useBrowserStorage()
+const { getAcStorage } = useBrowserStorage()
 
 // step0
 const { coords, error } = useGeolocation()
@@ -64,7 +64,7 @@ watchEffect(async () => {
   try {
     const confirmRes = await confirmActivity(activityId)
     if (typeof confirmRes === 'object') {
-      setAcStorage(activityId)
+      localStorage.setItem('ac', String(activityId))
       content.value = confirmRes
     } else if (confirmRes === 2) {
       router.push({ path: '/wrapup' })

@@ -2,35 +2,21 @@
 /**
  * 測試環境會被導轉到line登入頁14, 23-27註解就可以避免被轉址
  */
-import { ref, onMounted, watchEffect } from 'vue'
-import { RouterLink, onBeforeRouteLeave  } from 'vue-router'
+import { ref, watchEffect } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-const { getAcStorage, deleteSessionStorage } = useBrowserStorage()
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+const { getAcStorage } = useBrowserStorage()
 const { 
-  getOpenInClient, useLineLogout, 
-  // getLineProfileAndAccessToken,
+  getOpenInClient, useLineLogout
 } = useLIFF()
 const openInLIFF = getOpenInClient()
-const userProfile = ref()
-const accessToken = ref()
 const props = defineProps<{
   knowActivity: boolean
 }>()
-
-onMounted(async() => {
-  // const userData = await getLineProfileAndAccessToken()
-  // if(userData){
-  //   userProfile.value = userData.profile
-  //   accessToken.value = userData.accessToken
-  // }
-})
-
-onBeforeRouteLeave((to) => {
-  if (to.name === 'Lobby') {
-		deleteSessionStorage('ac')
-  }
-})
 
 const navOpen = ref<Boolean>(false)
 const togggle = () => {
@@ -49,7 +35,7 @@ const menuList = ref<
   
 watchEffect(
   () => {
-    if(props.knowActivity && userProfile.value){
+    if(props.knowActivity && userStore.userProfile){
       const acString = getAcStorage()
       menuList.value = [
         ...menuList.value,
@@ -94,17 +80,15 @@ watchEffect(
           {{ item.name }}
         </RouterLink>
         <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
-        <div v-if="userProfile" class="userProfile">
+        <div v-if="userStore.userProfile" class="userProfile">
           <img
-            v-if="userProfile.pictureUrl"
-            :src="userProfile.pictureUrl"
-            :alt="userProfile.displayName"
+            v-if="userStore.userProfile.pictureUrl"
+            :src="userStore.userProfile.pictureUrl"
+            :alt="userStore.userProfile.displayName"
           />
           <div>
-            <p>{{ userProfile.displayName || '' }}</p>
-            <p>{{ userProfile.userId || '' }}</p>
-            <hr />
-            <p>{{ accessToken || '' }}</p>
+            <p>{{ userStore.userProfile.displayName || '' }}</p>
+            <p>{{ userStore.userProfile.userId || '' }}</p>
             <button v-if="!openInLIFF" @click="useLineLogout">登出</button>
           </div>
         </div>

@@ -1,8 +1,9 @@
 // import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-import type { ProfileType, ProfileAccessType } from '@/composable/configurable'
+import type { ProfileType } from '@/composable/configurable'
 import { useFetchData } from '@/composable/useFetch'
+import { useUserStore } from '@/stores/user'
 const { VITE_LIFF_ID, VITE_BASE_URL, VITE_LIFF_ENDPOINT_URL } = import.meta.env
 
 // https://developers.line.biz/en/docs/liff/pluggable-sdk/#activate-liff-api
@@ -69,33 +70,33 @@ export function useLIFF() {
     })
   }
 
-  const useLineLogin = (): Promise<boolean|ProfileType> => {
-    const redirectUri: URL = new URL(VITE_LIFF_ENDPOINT_URL)
-    return new Promise((resolve, reject) => {
-      if (liff.isLoggedIn()) {
-        liff
-          .getProfile()
-          .then((profile) => resolve(profile))
-          .catch((e: Error) => reject(Error(`取得失敗${e}`)))
-      } else {
-        const { getAcStorage, getCtCookies } = useBrowserStorage()
-        const ctStr = getCtCookies()
-        const acStr = getAcStorage()
-        const params = {} as { ct?: string; ac?: string }
-        if (ctStr) params['ct'] = String(ctStr)
-        if (acStr) params['ac'] = String(acStr)
-        const searchParams: URLSearchParams = new URLSearchParams(params)
-        redirectUri.search = searchParams.toString()
-        liff.login({
-          redirectUri: redirectUri.href
-        })
-        liff
-        .getProfile()
-        .then((profile) => resolve(profile))
-        .catch((e: Error) => reject(Error(`取得失敗${e}`)))
-      }
-    })
-  }
+  // const useLineLogin = (): Promise<boolean|ProfileType> => {
+  //   const redirectUri: URL = new URL(VITE_LIFF_ENDPOINT_URL)
+  //   return new Promise((resolve, reject) => {
+  //     if (liff.isLoggedIn()) {
+  //       liff
+  //         .getProfile()
+  //         .then((profile) => resolve(profile))
+  //         .catch((e: Error) => reject(Error(`取得失敗${e}`)))
+  //     } else {
+  //       const { getAcStorage, getCtCookies } = useBrowserStorage()
+  //       const ctStr = getCtCookies()
+  //       const acStr = getAcStorage()
+  //       const params = {} as { ct?: string; ac?: string }
+  //       if (ctStr) params['ct'] = String(ctStr)
+  //       if (acStr) params['ac'] = String(acStr)
+  //       const searchParams: URLSearchParams = new URLSearchParams(params)
+  //       redirectUri.search = searchParams.toString()
+  //       liff.login({
+  //         redirectUri: redirectUri.href
+  //       })
+  //       liff
+  //       .getProfile()
+  //       .then((profile) => resolve(profile))
+  //       .catch((e: Error) => reject(Error(`取得失敗${e}`)))
+  //     }
+  //   })
+  // }
 
   const router = useRouter()
   const useLineLogout = () => {
@@ -111,41 +112,38 @@ export function useLIFF() {
     }
   }
 
+  const { verifyQRCode, commitStoreCheckIn, checkLineLoginVerify } = useFetchData()
+  const userStore = useUserStore()
+
   // https://developers.line.biz/en/reference/liff/#get-access-token
-  const getLineProfileAndAccessToken = async (): Promise<ProfileAccessType | undefined> => {
+  const getLineProfileAndAccess = async (): Promise<ProfileType | undefined> => {
     try {
       const isInClient = liff.isInClient()
+      await liff.init({ liffId: VITE_LIFF_ID })
       if(isInClient){
         // liff.init()在執行時會自動執行liff.login()
-        await liff.init({ liffId: VITE_LIFF_ID })
-        const accessToken = liff.getAccessToken()
-        const verifyRes = await checkLineLoginVerify(accessToken || '')
-        console.log(verifyRes);
-        const profile = await liff.getProfile()
-        return {
-          accessToken,
-          profile
-        }
-      }else{
-        await liff.init({ liffId: VITE_LIFF_ID })
-        if (!liff.isLoggedIn()) {
-          liff.login()
-        }
-        const accessToken = liff.getAccessToken()
-        const verifyRes = await checkLineLoginVerify(accessToken || '')
-        console.log(verifyRes);
-        const profile =  await liff.getProfile()
-        return {
-          accessToken,
-          profile
-        }
-      }
+      }else if(!liff.isLoggedIn()){
+        const { getAcStorage } = useBrowserStorage()
+        const acString = getAcStorage()
+        const redirectUri: URL = new URL(`${VITE_LIFF_ENDPOINT_URL}/${acString}`)
+        console.log(redirectUri);
+        
+        liff.login({
+          redirectUri: redirectUri.href
+        })
+      }  
+      const lineAccessT0ken = liff.getAccessToken()
+      const serviceT0ken = await checkLineLoginVerify(lineAccessT0ken || '')
+      // TODO
+      console.log(serviceT0ken);
+      const profile = await liff.getProfile()
+      userStore.updateProfile(profile)
+      return profile
     } catch (err) {
       console.log(err)
     }
   }
 
-  const { verifyQRCode, commitStoreCheckIn, checkLineLoginVerify } = useFetchData()
   const scanCode = async () => {
     try {
       const isInClient = liff.isInClient()
@@ -179,7 +177,7 @@ export function useLIFF() {
     getOpenInClient,
     useLineInit,
     useLineLogout,
-    getLineProfileAndAccessToken,
+    getLineProfileAndAccess,
     scanCode
   }
 }
