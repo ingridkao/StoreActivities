@@ -4,74 +4,107 @@
  * API待後端開發完成
  */
 import { ref, onMounted, computed } from 'vue'
-  import HeaderMenu from '@/components/HeaderMenu.vue'
-  import type { AlbumType } from '@/composable/configurable'
-  import { useFetchData } from '@/composable/useFetch'
-  import { useSweetAlert } from '@/composable/useSweetAlert'
-  import { useLink } from '@/composable/useLink'
-  import { useLoadingStore } from '@/stores/loading'
+import HeaderMenu from '@/components/HeaderMenu.vue'
+import type { AlbumType } from '@/composable/configurable'
+import { useFetchData } from '@/composable/useFetch'
+import { useSweetAlert } from '@/composable/useSweetAlert'
+import { useLink } from '@/composable/useLink'
+import { useLoadingStore } from '@/stores/loading'
+
+import emptyStampImg from '@/assets/images/album/empty-stamp.png'
+import checkedStampImg from '@/assets/images/album/checked-stamp.svg'
 
 const { linkToCollect } = useLink()
-  const { fetchAlbumData } = useFetchData()
-const { errorAlert, storeInfoAlert } = useSweetAlert()
 
-  const loadStore = useLoadingStore()
-  const albumStore = ref<AlbumType[]>([])
+const { fetchAlbumData } = useFetchData()
+const { errorAlert, openStoreInfo } = useSweetAlert()
 
-  const accumulation = computed(() => {
-    let storeCount = 0
-    albumStore.value.map(item=>{
-      storeCount += Number(item.collection)
-    })
-    if(storeCount === 0)return '0000'
-    const numberStr = String(storeCount)
-    return numberStr.padStart(5 - numberStr.length, '0')
+const loadStore = useLoadingStore()
+const albumStore = ref<AlbumType[]>([])
+
+const accumulation = computed(() => {
+  let storeCount = 0
+  albumStore.value.map((item) => {
+    storeCount += Number(item.collection)
   })
+  if (storeCount === 0) return '0000'
+  const numberStr = String(storeCount)
+  return numberStr.padStart(5 - numberStr.length, '0')
+})
 
-  onMounted(async () => {
-    loadStore.toggle(true)
-    try {
-      const res = await fetchAlbumData()
-      albumStore.value = res || []
-      loadStore.toggle(false)
-    } catch (error) {
-      const errorStr = String(error)
-      errorAlert(errorStr)
-      loadStore.toggle(false)
-    }
-  })
+onMounted(async () => {
+  loadStore.toggle(true)
 
-const footImportUrl = new URL('@/assets/images/cats/foot.png', import.meta.url).href
-const catImportUrl = new URL('@/assets/images/cats/cat1.png', import.meta.url).href
-const storeIcon = new URL('@/assets/images/7-11logo.jpg', import.meta.url).href
-const openStoreInfo = async () => {
-  storeInfoAlert({}, catImportUrl, storeIcon)
-}
+  try {
+    const res = await fetchAlbumData()
+    albumStore.value = res || []
+    loadStore.toggle(false)
+  } catch (error) {
+    const errorStr = String(error)
+    errorAlert(errorStr)
+    loadStore.toggle(false)
+  }
 
+  //TODO: After check api data, remove this
+  if (import.meta.env.VITE_UI_MODE) {
+    albumStore.value = [
+      ...Array.from({ length: 100 }, (_, index) => ({
+        event_id: `${index}`,
+        event_name: `打卡`,
+        collection: index + 1,
+        limit: 20
+      }))
+    ]
+  }
+})
 </script>
 
 <template>
-  <HeaderMenu :knowActivity="false"/>
-
-  <main>
-
-    <section class="info">
-      <div>
-        <h5>目前累積蒐集門市</h5>
-        <div>
-          <p>
-            {{ accumulation }}
-            <span>家</span>
+  <main class="album-view">
+    <HeaderMenu :knowActivity="true" />
+    <div class="album-view__header">
+      <p class="album-view__header--title">目前累積搜集門市</p>
+      <div class="album-view__header--info">
+        <p>{{ accumulation }}<span>家</span></p>
+      </div>
+    </div>
+    <div class="album-view__body">
+      <div
+        class="album-view__body--stamp"
+        v-for="albumItem in albumStore"
+        :key="albumItem.event_id"
+      >
+        <div
+          v-if="albumItem.collection && albumItem.limit && albumItem.collection >= albumItem.limit"
+          @click="
+            () =>
+              openStoreInfo({
+                storeName: albumItem.event_name,
+                lastCheckInTime: new Date().toLocaleDateString()
+              })
+          "
+          class="album-view__body--stamp-wrapper"
+        >
+          <p
+            class="album-view__body--stamp-text"
+            :class="{
+              'three-characters': albumItem.event_name?.length === 3,
+              'four-characters': albumItem.event_name?.length === 4,
+              'five-characters': albumItem.event_name?.length === 5,
+              'six-characters': albumItem.event_name?.length === 6
+            }"
+          >
+            {{ albumItem.event_name }}
           </p>
+          <img :src="checkedStampImg" alt="checked stamp" />
         </div>
+        <img v-else :src="emptyStampImg" alt="empty stamp" />
       </div>
-      <div class="info_img">
-        <img :src="catImportUrl" alt="喵喵人" />
-      </div>
-    </section>
-  
-    <section class="album">
-      <!-- API待後端開發完成，可覆蓋此區域 -->
+    </div>
+  </main>
+
+  <!-- TODO: I can't understand these code so I keep them.-->
+  <!--  <section class="album">`
       <div v-for="albumItem in albumStore" :key="albumItem.event_id">
         <div class="album_title">
           <h6>{{ albumItem.event_name || '打卡活動' }}</h6>
@@ -89,78 +122,105 @@ const openStoreInfo = async () => {
           </div>
         </div>
       </div>
-    </section>
-  </main>
+    </section> -->
 </template>
 
 <style lang="scss" scope>
-img {
-  width: 100%;
-}
+.album-view {
+  background: url('@/assets/images/background/pink-bg.png');
+  overflow: auto;
 
-.info {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  max-width: 22rem;
-  &_img {
-    width: 40%;
-  }
-}
-.album{
-  width: 100%;
-  max-width: 22rem;
-  &_title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  &_base {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    > div {
-      width: 5rem;
-      height: 5rem;
-      margin: 0.25rem;
-      flex: 1 0 auto;
-      background-color: #ddd;
+  &__header {
+    width: 336px;
+    height: 188px;
+    background: url('@/assets/images/album/main-cat.png') no-repeat center;
+    background-size: contain;
+    margin: auto;
+    margin-top: 38px;
+    margin-bottom: 16px;
+
+    &--title {
+      color: #fff;
+      font-weight: 700;
+      font-size: 15px;
+      padding-top: 30px;
+      padding-left: 17px;
+      padding-bottom: 4px;
+    }
+
+    &--info {
+      background: url('@/assets/images/album/main-dialog.svg') no-repeat center;
       background-size: contain;
-      > div {
-        display: flex;
-        align-items: center;
+      width: 190px;
+      height: 82px;
+      font-weight: 700;
+      color: #5f5d5d;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      p {
+        font-size: 40px;
+        transform: translateX(-15px);
+      }
+
+      span {
+        font-size: 20px;
+        margin-left: 6px;
+      }
+    }
+  }
+
+  &__body {
+    display: grid;
+    gap: 12px;
+    padding: 0 20px;
+    margin-bottom: 16px;
+    grid-template-columns: repeat(4, 1fr);
+
+    &--stamp {
+      &-wrapper {
+        position: relative;
+      }
+
+      &-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
         height: 100%;
-        img {
-          width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        font-size: 28px;
+        text-align: left;
+        line-height: 120%;
+        font-weight: 700;
+
+        &.three-characters {
+          font-size: 22px;
+          padding: 0 6px;
+        }
+
+        &.four-characters {
+          text-align: center;
+          font-size: 26px;
+          padding: 0 10px;
+        }
+
+        &.five-characters {
+          font-size: 22px;
+          padding: 0 6px;
+        }
+
+        &.six-characters {
+          text-align: center;
+          font-size: 22px;
+          padding: 0 6px;
         }
       }
     }
   }
 }
 </style>
-
-<style lang="scss">
-// For sweetalert2 custom class
-.cat {
-  &.swal2-html-container {
-    display: flex !important;
-    flex-direction: row;
-    position: relative;
-    background-color: #ddd;
-    overflow: visible;
-    .imgBox {
-      position: absolute;
-      top: -5rem;
-      left: 0;
-      width: 10rem;
-      img {
-        width: 100%;
-      }
-    }
-    .textBox {
-      height: 5rem;
-    }
-  }
-}
-</style>
-

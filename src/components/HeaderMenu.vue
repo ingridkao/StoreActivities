@@ -118,7 +118,7 @@ watchEffect(
   display: block;
   width: 24px;
   height: 1px;
-  background: white;
+  background: #000;
   transition: all 0.3s ease;
 }
 
@@ -149,20 +149,6 @@ watchEffect(
     &--bottom {
       @extend %line;
       transform: translateY(12px);
-    }
-
-    &.active {
-      .sidemenu__btn--top {
-        background: black;
-      }
-
-      .sidemenu__btn--mid {
-        background: black;
-      }
-
-      .sidemenu__btn--bottom {
-        background: black;
-      }
     }
   }
 
