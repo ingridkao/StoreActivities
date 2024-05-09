@@ -1,10 +1,10 @@
 export default {
   activity: {
     title: '歡樂\n一夏',
-    'date-title': '活動期間',
+    dateTitle: '活動期間',
     year: '2024',
-    'start-date': '7.15',
-    'end-date': '8.31',
+    startDate: '7.15',
+    endDate: '8.31',
     content: [
       {
         title: '活動辦法',
@@ -24,5 +24,25 @@ export default {
     step1Text: '掃描門市 ibon 右上角 QRcode',
     step1Tip: '＊ QRcode掃描失效時，請點選更新',
     step2Text: '手機畫面確認打卡成功！'
+  },
+  storeInfoDialog: {
+    lastCheckInTime: '最後打卡時間'
+  },
+  collected: {
+    title: '歡樂一夏',
+    startDate: '2024.07.15',
+    endDate: '08.31',
+    specialStampIndexList: [5, 10, 15, 30]
+  },
+  winning: {
+    explanationTitle: '使用方式',
+    serialNumber: '序號',
+    deadline: '兌換期限',
+    accumulate: '累積',
+    store: '家門市'
+  },
+  mapStore: {
+    storeLabel: '門市',
+    addressLabel: '地址'
   }
 }

@@ -37,7 +37,9 @@ const startScanning = async () => {
       <img :src="DecoCatImg" alt="deco cat" />
     </div>
     <div class="direction-view__step1">
-      <img :src="step1IconImg" alt="step 1 icon" />
+      <div class="direction-view__step1--icon">
+        <img :src="step1IconImg" alt="step 1 icon" />
+      </div>
       <div class="direction-view__step1--text">
         <p>{{ data.direction.step1Text }}</p>
         <p class="direction-view__step1--text-tip">{{ data.direction.step1Tip }}</p>
@@ -47,9 +49,13 @@ const startScanning = async () => {
       <img :src="step1PictureImg" alt="step 1 image" />
     </div>
     <div class="direction-view__step2">
-      <img :src="step2PictureImg" alt="step 2 image" class="direction-view__step2--image" />
+      <div class="direction-view__step2--image">
+        <img :src="step2PictureImg" alt="step 2 image" />
+      </div>
       <div class="direction-view__step2--text">
-        <img :src="step2IconImg" alt="step 2 icon" />
+        <div class="direction-view__step2--text-icon">
+          <img :src="step2IconImg" alt="step 2 icon" />
+        </div>
         <p>{{ data.direction.step2Text }}</p>
       </div>
     </div>
@@ -67,10 +73,14 @@ const startScanning = async () => {
   &__deco-cat {
     margin: auto;
     width: 208px;
+    height: 194px;
+    overflow: hidden;
+    transform: translateX(24px);
+
     img {
       width: 100%;
-      height: auto;
-      transform: translateX(24px);
+      height: 100%;
+      object-fit: contain;
     }
   }
 
@@ -80,6 +90,18 @@ const startScanning = async () => {
     color: #fff;
     gap: 12px;
     justify-content: center;
+
+    &--icon {
+      width: 53px;
+      height: 68px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
 
     &--text {
       font-size: 18px;
@@ -97,8 +119,16 @@ const startScanning = async () => {
     &--image {
       margin: auto;
       width: 230px;
-      transform: translateX(24px);
+      height: 177px;
+      overflow: hidden;
       margin-bottom: 38px;
+      transform: translateX(24px);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
   }
 
@@ -109,7 +139,15 @@ const startScanning = async () => {
     gap: 8px;
 
     &--image {
-      width: 86px;
+      width: 102px;
+      height: 205px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
 
     &--text {
@@ -117,6 +155,18 @@ const startScanning = async () => {
       justify-content: center;
       align-items: flex-end;
       gap: 8px;
+
+      &-icon {
+        width: 53px;
+        height: 68px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
 
       p {
         width: 130px;

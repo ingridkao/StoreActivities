@@ -8,7 +8,14 @@ import MapNavigationIcon from '@/components/icon/IconMapNavigation.vue'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import { useMapbox } from '@/composable/useMapbox'
 import { useLink } from '@/composable/useLink'
-const { storeFilterOptions, storeFilterSelectd, targetBoxData, toggleStoreInfo, updateChecked, mapNavigation } = useMapbox()
+
+import data from '@/assets/data'
+import centerIconButtonImg from '@/assets/images/mapStore/center-icon-button.svg'
+import checkInButtonImg from '@/assets/images/mapStore/check-in-button.svg'
+import mapCatImg from '@/assets/images/mapStore/map-cat.png'
+
+const { storeFilterOptions, storeFilterSelectd, targetBoxData, updateChecked, mapNavigation } =
+  useMapbox()
 const { linkToDirection } = useLink()
 
 // 點選門市後出現資訊drawerBox >> 點選drawerBox以外則toggleStoreInfo()
@@ -28,44 +35,54 @@ const goToDirection = () => {
   // TODO: 提示離開此頁面
   linkToDirection()
 }
+
 </script>
 
 <template>
-  <main id="mapMain">
-    <HeaderMenu :knowActivity="true"/>
-
+  <main class="map-store-view">
+    <HeaderMenu :knowActivity="true" />
+    <!-- <a href="https://qwaretest-9b8d6.web.app/map8">先看這個</a> -->
     <div id="mapboxBasic"></div>
 
-    <div class="drawerBox" :class="{ active: !targetBoxData.toggle }">
-      <div class="scanBox">
-        <button class="scanBox_btn" @click="goToDirection">我要打卡</button>
-      </div>
-      <div class="filterBox">
-        <button
-          v-for="item in storeFilterOptions"
-          :key="item.value"
-          @click="updateChecked(item.value)"
-          class="filterBox_btn"
-          :class="{ active: storeFilterSelectd === item.value }"
-        >
-          {{ item.nameTw }}
-        </button>
-      </div>
-    </div>
-
-    <div class="drawerBox infoBox" :class="{ active: targetBoxData.toggle }">
-      <div class="infoBox_img">
-        <img src="~@/assets/images/7-11logo.jpg" :alt="targetBoxData.info['store_name']" />
-      </div>
-      <div v-if="targetBoxData.info['store_id']" class="infoBox_content">
-        <p class="infoBox_content_p">門市：{{ targetBoxData.info['store_id'] }} {{ targetBoxData.info['store_name'] }}</p>
-        <p class="infoBox_content_p">地址：{{ targetBoxData.info['address'] }}</p>
-      </div>
-      <KeepAlive>
-        <button v-if="targetBoxData.toggle" class="infoBox_navigation" @click="mapNavigation">
+    <div class="map-store-view__panel">
+      <div v-if="targetBoxData.toggle" class="map-store-view__panel--info">
+        <div class="map-store-view__panel--info-center-button">
+          <img :src="centerIconButtonImg" alt="center icon button" />
+        </div>
+        <div class="map-store-view__panel--info-logo">
+          <img src="/images/example-logo.svg" alt="logo point" />
+        </div>
+        <div v-if="targetBoxData.info" class="map-store-view__panel--info-content">
+          <p>{{ data.mapStore.storeLabel }}：</p>
+          <p>{{ targetBoxData.info['store_id'] }} {{ targetBoxData.info['store_name'] }}</p>
+          <p>{{ data.mapStore.addressLabel }}：</p>
+          <p>{{ targetBoxData.info['address'] }}</p>
+        </div>
+        <!-- TODO: If this button isn't used, remove it. -->
+        <!-- <button class="mapBtn" @click="mapNavigation">
           <MapNavigationIcon />
-        </button>
-      </KeepAlive>
+        </button> -->
+      </div>
+      <div v-else class="map-store-view__panel--filter">
+        <div class="map-store-view__panel--cat">
+          <img :src="mapCatImg" />
+        </div>
+        <div class="map-store-view__panel--button">
+          <img :src="checkInButtonImg" alt="check in button" />
+        </div>
+        <div class="map-store-view__panel--store-button">
+          <div
+            v-for="item in storeFilterOptions"
+            :key="item.value"
+            class="map-store-view__panel--store-button-item"
+            @click="updateChecked(item.value)"
+            :class="{ active: storeFilterSelectd === item.value }"
+          >
+            <p>{{ item.nameTw }}</p>
+          </div>
+        </div>
+      </div>
+
     </div>
   </main>
 </template>
@@ -89,67 +106,125 @@ const goToDirection = () => {
   }
 }
 
-.scanBox{
-  .scanBox{
-    // &_btn {}
-  }
-}
-
-.filterBox {
-  &_btn {
-    opacity: 0.5;
-    &.active {
-      opacity: 1;
-    }
-  }
-}
-.drawerBox {
-  position: absolute;
-  background: #fff;
-  color: #555;
-  padding: 0.75rem;
-  box-sizing: border-box;
-  z-index: 500;
-  width: 100%;
-  height: 7rem;
-  display: flex;
-  flex-direction: row;
-
-  will-change: bottom;
-  transition-property: bottom;
-  transition-duration: 600ms;
-  left: 0;
-  bottom: -7rem;
-  &.active {
+.map-store-view {
+  &__panel {
+    position: fixed;
     bottom: 0;
-  }
+    left: 0;
+    width: 100%;
+    height: 125px;
+    background: url('@/assets/images/background/gray-2-bg.png') repeat;
 
-}
-.infoBox{
-  &_content {
-    padding: 0.5rem 1rem;
-  }
-  &_navigation {
-    top: -1.5rem;
-    right: 0.5rem;
-    position: absolute;
-    width: 3rem;
-    height: 3rem;
-    border-radius: 3rem;
-    z-index: 100;
-    cursor: pointer;
-    svg {
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
+    &--info {
+      padding: 20px 25px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      position: relative;
+
+      &-center-button {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 4px;
+        right: 16px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      &-logo {
+        width: 84px;
+        height: 84px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      &-content {
+        display: grid;
+        grid-template-columns: 50px 1fr;
+        grid-template-row: 1fr 1fr;
+        row-gap: 12px;
+        p {
+          color: #fff;
+          font-size: 16px;
+          line-height: 120%;
+        }
+      }
     }
-  }
-  &_img {
-    width: 5.5rem;
-    height: 5.5rem;
-    img {
-      width: 100%;
-      pointer-events: none;
+
+    &--filter {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 13px;
+    }
+
+    &--cat {
+      width: 157px;
+      height: 200px;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &--button {
+      width: 143px;
+      height: 40px;
+      position: relative;
+      z-index: 5;
+      transform: translateY(-50%);
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &--store-button {
+      display: flex;
+      align-self: end;
+      padding-right: 12px;
+      gap: 9px;
+
+      &-item {
+        padding: 9px 23px;
+        width: 71px;
+        height: 55px;
+        text-align: center;
+        background-size: cover;
+        background-image: url('@/assets/images/mapStore/inactive-button.svg');
+
+        &.active {
+          background-image: url('@/assets/images/mapStore/active-button.svg');
+
+          p {
+            color: #000;
+          }
+        }
+
+        p {
+          white-space: pre-line;
+          font-size: 12px;
+          line-height: 120%;
+          font-weight: 700;
+          color: #8995a1;
+        }
+      }
     }
   }
 }

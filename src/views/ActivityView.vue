@@ -10,9 +10,10 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, watchEffect, onMounted, onUnmounted } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue'
+import ParagraphItem from '@/components/ParagraphItem.vue'
 
 // import type { ProfileType } from '@/composable/configurable'
 import { useFetchData } from '@/composable/useFetch'
@@ -28,7 +29,6 @@ import titleDecoBottomImg from '@/assets/images/activity/title-deco-bottom.svg'
 import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
 import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
 import enterButtonImg from '@/assets/images/activity/enter-button.svg'
-import listMarkerImg from '@/assets/images/list-marker.svg'
 
 const route = useRoute()
 const router = useRouter()
@@ -105,7 +105,6 @@ const enterActivity = async () => {
 <template>
   <main class="activity-view">
     <HeaderMenu :knowActivity="true" />
-
     <div class="activity-view__top-bg"></div>
 
     <div class="activity-view__main">
@@ -115,40 +114,37 @@ const enterActivity = async () => {
           <h1 class="activity-view__title--text-block-bg">{{ data.activity.title }}</h1>
         </div>
         <div class="activity-view__title--deco">
-          <img :src="titleDecoTopImg" alt="title deco top" />
-          <img :src="titleDecoBottomImg" alt="title deco bottom" />
+          <div class="activity-view__title--deco-top">
+            <img :src="titleDecoTopImg" alt="title deco top" />
+          </div>
+          <div class="activity-view__title--deco-bottom">
+            <img :src="titleDecoBottomImg" alt="title deco bottom" />
+          </div>
         </div>
       </div>
       <img :src="activityMainCatImg" alt="activity main cat" />
       <div class="activity-view__date">
         <p class="activity-view__date--year">
-          {{ data.activity['date-title'] }} {{ data.activity.year }}
+          {{ data.activity.dateTitle }} {{ data.activity.year }}
         </p>
         <div class="activity-view__date--day-block">
-          <p class="activity-view__date--day">{{ data.activity['start-date'] }}</p>
+          <p class="activity-view__date--day">{{ data.activity.startDate }}</p>
           <div class="activity-view__date--connect-line"></div>
-          <p class="activity-view__date--day">{{ data.activity['end-date'] }}</p>
+          <p class="activity-view__date--day">{{ data.activity.endDate }}</p>
         </div>
       </div>
     </div>
-    <button class="activity-view__info-icon-button" @click="gotoDirection">
-      <img :src="infoIconButtonImg" alt="info icon button" />
-    </button>
+    <img class="activity-view__info-icon-button" :src="infoIconButtonImg" alt="info icon button" />
     <div class="activity-view__content">
-      <div
+      <ParagraphItem
         :key="title"
         v-for="{ title, text } in data.activity.content"
-        class="activity-view__content--item"
-      >
-        <div class="activity-view__content--item-title">
-          <img :src="listMarkerImg" alt="list marker" />
-          <p>{{ title }}</p>
-        </div>
-        <p class="activity-view__content--item-text">{{ text }}</p>
-      </div>
-      <button class="activity-view__content--button" @click="enterActivity">
+        :title="title"
+        :content="text"
+      />
+      <div class="activity-view__content--button">
         <img :src="enterButtonImg" alt="enter button" />
-      </button>
+      </div>
     </div>
   </main>
 </template>
@@ -178,12 +174,14 @@ const enterActivity = async () => {
   &__main {
     position: relative;
     width: 100%;
+    height: 598px;
     padding-top: 68px;
 
     > img {
       width: 100%;
-      height: auto;
+      height: 100%;
       position: relative;
+      object-fit: contain;
       z-index: 2;
     }
   }
@@ -222,6 +220,19 @@ const enterActivity = async () => {
       display: flex;
       flex-direction: column;
       justify-content: center;
+
+      &-top,
+      &-bottom {
+        width: 68px;
+        height: 64px;
+        overflow: hidden;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
     }
   }
 
@@ -268,34 +279,9 @@ const enterActivity = async () => {
     padding: 25px 43px 32px 26px;
     position: relative;
 
-    &--item {
-      display: flex;
-      flex-direction: column;
-      gap: 11px;
-      margin-bottom: 25px;
-
-      &-title {
-        display: flex;
-        gap: 5px;
-
-        img {
-          width: 20px;
-        }
-      }
-
-      &-text {
-        font-size: 14px;
-        line-height: 18px;
-        color: #000000;
-        padding-left: 25px;
-      }
-    }
-
     &--button {
-      display: block;
-      border: none;
-      background: transparent;
-      margin: 10px auto;
+      margin-top: 10px;
+      text-align: center;
     }
   }
 
@@ -306,11 +292,6 @@ const enterActivity = async () => {
     right: 20px;
     z-index: 3;
     transform: translateY(-50%);
-    border: none;
-    background: transparent;
-    >img{
-      width: 100%;
-    }
   }
 }
 
