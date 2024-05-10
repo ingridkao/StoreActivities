@@ -33,7 +33,7 @@ const linkTo = async () => {
 <template>
   <div class="activities" :class="{ invalid: !props.campaign.isEnable }" @click="linkTo()">
     <img
-      :src="VITE_UI_MODE? 'https://i.imgur.com/QAgmBa5_d.webp?maxwidth=760&fidelity=grand': `${VITE_ASSETS_URL}${props.campaign.imageFilePath}`"
+      :src="VITE_UI_MODE? 'https://i.imgur.com/tvJMsuH_d.jpg?maxwidth=520&shape=thumb&fidelity=high': `${VITE_ASSETS_URL}${props.campaign.imageFilePath}`"
       :alt="'' || props.campaign.eventName"
       width="169"
       height="50"
@@ -44,9 +44,8 @@ const linkTo = async () => {
 <style lang="scss" scoped>
 .activities {
   cursor: pointer;
-  border-radius: 15px;
-  overflow: hidden;
-
+	border-radius: 20px 20px 30px 30px;
+	overflow: hidden;
   img {
     width: 100%;
     height: auto;

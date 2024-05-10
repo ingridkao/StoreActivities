@@ -40,144 +40,96 @@ liff.use(new scanCodeV2())
 // liff.use(new isApiAvailable())
 
 export function useLIFF() {
-  // ios || android || web
-  const getUserOS = () => {
-    return liff.getOS()
-  }
+	// ios || android || web
+	const getUserOS = () => liff.getOS()
 
-  // 判斷目前網頁是否跑在 LIFF Browser 底下
-  // - 是否要初始化 LIFF SDK
-  // - 是否要透過 liff.closeWindow() 關閉視窗！
-  const getOpenInClient = (): boolean => {
-    return liff.isInClient()
-  }
+	// 判斷目前網頁是否跑在 LIFF Browser 底下
+	// - 是否要初始化 LIFF SDK
+	// - 是否要透過 liff.closeWindow() 關閉視窗！
+	const getOpenInClient = (): boolean => liff.isInClient()
 
-  // ============================
-  // then  初始成功
-  // catch 初始失敗
-  const useLineInit = (): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      liff
-        .init({
-          liffId: VITE_LIFF_ID
-        })
-        .then(() => {
-          resolve(true)
-        })
-        .catch((e: Error) => {
-          reject(Error(`初始失敗${e}`))
-        })
-    })
-  }
+	const router = useRouter()
+	const useLineLogout = () => {
+		const isLogging = liff.isLoggedIn()
+		if (!isLogging) return
+		const isInLiff = liff.isInClient()
+		if (isInLiff) {
+			// liff.closeWindow();
+			// 開啟外部瀏覽器去大廳頁
+		} else {
+			liff.logout()
+			router.push({ path: '/' })
+		}
+	}
 
-  // const useLineLogin = (): Promise<boolean|ProfileType> => {
-  //   const redirectUri: URL = new URL(VITE_LIFF_ENDPOINT_URL)
-  //   return new Promise((resolve, reject) => {
-  //     if (liff.isLoggedIn()) {
-  //       liff
-  //         .getProfile()
-  //         .then((profile) => resolve(profile))
-  //         .catch((e: Error) => reject(Error(`取得失敗${e}`)))
-  //     } else {
-  //       const { getAcStorage, getCtCookies } = useBrowserStorage()
-  //       const ctStr = getCtCookies()
-  //       const acStr = getAcStorage()
-  //       const params = {} as { ct?: string; ac?: string }
-  //       if (ctStr) params['ct'] = String(ctStr)
-  //       if (acStr) params['ac'] = String(acStr)
-  //       const searchParams: URLSearchParams = new URLSearchParams(params)
-  //       redirectUri.search = searchParams.toString()
-  //       liff.login({
-  //         redirectUri: redirectUri.href
-  //       })
-  //       liff
-  //       .getProfile()
-  //       .then((profile) => resolve(profile))
-  //       .catch((e: Error) => reject(Error(`取得失敗${e}`)))
-  //     }
-  //   })
-  // }
+	const { 
+		verifyQRCode, 
+		commitStoreCheckIn, 
+		checkLineLoginVerify
+	} = useFetchData()
+	const userStore = useUserStore()
 
-  const router = useRouter()
-  const useLineLogout = () => {
-    const isLogging = liff.isLoggedIn()
-    if (!isLogging) return
-    const isInLiff = liff.isInClient()
-    if (isInLiff) {
-      // liff.closeWindow();
-      // 開啟外部瀏覽器去大廳頁
-    } else {
-      liff.logout()
-      router.push({ path: '/' })
-    }
-  }
+	// https://developers.line.biz/en/reference/liff/#get-access-token
+	const getLineProfileAndAccess = async (): Promise<ProfileType | undefined> => {
+		try {
+			const isInClient = liff.isInClient()
+			await liff.init({ liffId: VITE_LIFF_ID })
+			if(isInClient){
+				// liff.init()在執行時會自動執行liff.login()
+			}else if(!liff.isLoggedIn()){
+				const { getAcStorage } = useBrowserStorage()
+				const acString = getAcStorage()
+				const redirectUri: URL = new URL(`${VITE_LIFF_ENDPOINT_URL}/${acString}`)
+				console.log(redirectUri);
+				
+				liff.login({
+					redirectUri: redirectUri.href
+				})
+			}  
+			const lineAccessT0ken = liff.getAccessToken()
+			const serviceT0ken = await checkLineLoginVerify(lineAccessT0ken || '')
+			// TODO
+			console.log(serviceT0ken);
+			const profile = await liff.getProfile()
+			userStore.updateProfile(profile)
+			return profile
+		} catch (err) {
+			console.log(err)
+		}
+	}
 
-  const { verifyQRCode, commitStoreCheckIn, checkLineLoginVerify } = useFetchData()
-  const userStore = useUserStore()
+	const scanCode = async () => {
+		try {
+			const isInClient = liff.isInClient()
+			if(isInClient){
+				await liff.init({ liffId: VITE_LIFF_ID })
+				const scanresult = await liff.scanCodeV2()
+				if(scanresult && scanresult.value){
+					const codeSplit = scanresult.value.split(`${VITE_BASE_URL}/?ct=`)
+					console.log(codeSplit);
+					const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
+					const verifyRes = await verifyQRCode(ctCode)
+					console.log(verifyRes);
+					// const commitRes = await commitStoreCheckIn(verifyRes) 
+					const qrcodeOk = (codeSplit.length === 2 && codeSplit[1])?true: false
+					const commitRes = await commitStoreCheckIn(qrcodeOk)
+					console.log(commitRes);
+				}
+				console.log(scanresult)
+			}else{
+				router.push({ path: '/scan' })
+			}
+		} catch (err) {
+			console.log(err)
+			router.push({ path: '/scan' })
+		}
+	}
 
-  // https://developers.line.biz/en/reference/liff/#get-access-token
-  const getLineProfileAndAccess = async (): Promise<ProfileType | undefined> => {
-    try {
-      const isInClient = liff.isInClient()
-      await liff.init({ liffId: VITE_LIFF_ID })
-      if(isInClient){
-        // liff.init()在執行時會自動執行liff.login()
-      }else if(!liff.isLoggedIn()){
-        const { getAcStorage } = useBrowserStorage()
-        const acString = getAcStorage()
-        const redirectUri: URL = new URL(`${VITE_LIFF_ENDPOINT_URL}/${acString}`)
-        console.log(redirectUri);
-        
-        liff.login({
-          redirectUri: redirectUri.href
-        })
-      }  
-      const lineAccessT0ken = liff.getAccessToken()
-      const serviceT0ken = await checkLineLoginVerify(lineAccessT0ken || '')
-      // TODO
-      console.log(serviceT0ken);
-      const profile = await liff.getProfile()
-      userStore.updateProfile(profile)
-      return profile
-    } catch (err) {
-      console.log(err)
-    }
-  }
-
-  const scanCode = async () => {
-    try {
-      const isInClient = liff.isInClient()
-      if(isInClient){
-        await liff.init({ liffId: VITE_LIFF_ID })
-        const scanresult = await liff.scanCodeV2()
-        if(scanresult && scanresult.value){
-          debugger
-          const codeSplit = scanresult.value.split(`${VITE_BASE_URL}/?ct=`)
-          console.log(codeSplit);
-          const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
-          const verifyRes = await verifyQRCode(ctCode)
-          console.log(verifyRes);
-          // const commitRes = await commitStoreCheckIn(verifyRes) 
-          const qrcodeOk = (codeSplit.length === 2 && codeSplit[1])?true: false
-          const commitRes = await commitStoreCheckIn(qrcodeOk)
-          console.log(commitRes);
-        }
-        console.log(scanresult)
-      }else{
-        router.push({ path: '/scan' })
-      }
-    } catch (err) {
-      console.log(err)
-      router.push({ path: '/scan' })
-    }
-  }
-
-  return {
-    getUserOS,
-    getOpenInClient,
-    useLineInit,
-    useLineLogout,
-    getLineProfileAndAccess,
-    scanCode
-  }
+	return {
+		getUserOS,
+		getOpenInClient,
+		useLineLogout,
+		getLineProfileAndAccess,
+		scanCode
+	}
 }

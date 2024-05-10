@@ -4,6 +4,7 @@ import type {
   CampaignListType,
   CollectedType,
   AlbumType,
+  AdListType,
   ScanResultType,
   VerifyCodeResultType
 } from '@/composable/configurable'
@@ -35,7 +36,15 @@ export function useFetchData() {
     store?: string
   }> => {
     return new Promise((resolve, reject) => {
-      axios
+      if(VITE_UI_MODE){
+        resolve({
+          lat: 24.2953944,
+          long: 120.72697555,
+          qrCode: "OP113252051016433ee780c2024",
+          store: '113252'
+        })
+      }else{
+        axios
         .post(`${VITE_API_URL}/ScanEntry/MockQRCodeData`, {
           data: {
             id: 1
@@ -57,6 +66,7 @@ export function useFetchData() {
             reject('genrateMockQRCode:發生了例外錯誤')
           }
         })
+      }
     })
   }
 
@@ -186,7 +196,31 @@ export function useFetchData() {
 
   const fetchCampaign = (): Promise<CampaignListType[]> => {
     return new Promise((resolve, reject) => {
-      axios
+      if(VITE_UI_MODE){
+        resolve([
+          {
+              "id": 3,
+              "eventName": "歡樂一夏夏",
+              "partnerId": 2,
+              "startTime": "2024-04-01T00:00:00",
+              "endTime": "2025-07-31T23:59:59",
+              "isEnable": true,
+              "toLinkUrl": "http://localhost:5173/activity/2",
+              "pageRouter": "2"
+          },
+          {
+              "id": 4,
+              "eventName": "歡樂一夏",
+              "partnerId": 2,
+              "startTime": "2024-04-01T00:00:00",
+              "endTime": "2025-05-01T23:59:59",
+              "isEnable": true,
+              "toLinkUrl": "http://localhost:5173/activity/3",
+              "pageRouter": "3"
+          }
+      ])
+      }else{
+        axios
         .post(`${VITE_API_URL}/ScanEntry/GetCampaignData`)
         .then((res) => {
           if (res?.data?.code === ResponseCodes.SUCCESS) {
@@ -198,12 +232,16 @@ export function useFetchData() {
         .catch((err) => {
           reject(`fetchCampaign:${err}`)
         })
+      }
     })
   }
 
   const fetchSpecifyCampaign = (storeId: string = ''): Promise<CampaignListType[]> => {
     return new Promise((resolve, reject) => {
-      axios
+      if(VITE_UI_MODE){
+        resolve([])
+      }else{
+        axios
         .post(`${VITE_API_URL}/ScanEntry/GetSpecifytheCampaignData`, {
           data: {
             key: storeId
@@ -219,12 +257,25 @@ export function useFetchData() {
         .catch((err) => {
           reject(`fetchSpecifyCampaign:${err}`)
         })
+      }
     })
   }
 
-  const fetchAdData = (): Promise<ActivityListType[]> => {
+  const fetchAdData = (): Promise<AdListType[]> => {
     return new Promise((resolve, reject) => {
-      axios
+      if(VITE_UI_MODE){
+        resolve([{
+            "id": 6,
+            "link": "www.google.com",
+            "isEnable": true,
+        },
+        {
+            "id": 5,
+            "link": "www.google.com",
+            "isEnable": true,
+        }])
+      }else{
+        axios
         .post(`${VITE_API_URL}/ScanEntry/GetAdsData`)
         .then((res) => {
           if (res?.data?.code === ResponseCodes.SUCCESS) {
@@ -236,6 +287,7 @@ export function useFetchData() {
         .catch((err) => {
           reject(`fetchAdData:${err}`)
         })
+      }
     })
   }
 

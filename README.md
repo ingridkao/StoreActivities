@@ -151,7 +151,7 @@ npm run deploy
 ## 5.env
 
 ```
-VITE_UI_MODE=
+VITE_UI_MODE=true
 VITE_LIFF_ID=
 VITE_LIFF_ENDPOINT_URL=
 VITE_MOCKAPI_URL=

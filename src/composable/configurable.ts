@@ -20,9 +20,7 @@ export interface CampaignListType {
 
 export interface AdListType {
   id?: number
-  adType?: string
   title?: string
-  content?: string
   link?: string
   isEnable?: boolean
   imageFilePath?: string
