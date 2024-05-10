@@ -22,6 +22,7 @@ import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
+import { useLink } from '@/composable/useLink'
 
 import data from '@/assets/data'
 import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
@@ -32,6 +33,7 @@ import enterButtonImg from '@/assets/images/activity/enter-button.svg'
 
 const route = useRoute()
 const router = useRouter()
+const { linkToDirection } = useLink()
 const { confirmActivity, verifyQRCode, commitStoreCheckIn } = useFetchData()
 const { getAcStorage } = useBrowserStorage()
 
@@ -77,27 +79,21 @@ watchEffect(async () => {
   }
 })
 
-const gotoDirection = () => {
-  router.push({ path: '/direction' })
-}
-
 const loadStore = useLoadingStore()
 const enterActivity = async () => {
-  loadStore.toggle(true)
   try {
-    // step3
+    loadStore.toggle(true)
     const verifyRes = await verifyQRCode()
     if (verifyRes) {
       const commitRes = await commitStoreCheckIn(verifyRes)
       console.log(commitRes)
     } else {
-      gotoDirection()
+      linkToDirection()
     }
     loadStore.toggle(false)
   } catch (error) {
     const errorStr = String(error)
     errorAlert(errorStr)
-    loadStore.toggle(false)
   }
 }
 </script>
@@ -134,7 +130,9 @@ const enterActivity = async () => {
         </div>
       </div>
     </div>
-    <img class="activity-view__info-icon-button" :src="infoIconButtonImg" alt="info icon button" />
+    <button class="activity-view__info-icon-button" @click="linkToDirection()">
+      <img :src="infoIconButtonImg" alt="info icon button" />
+    </button>
     <div class="activity-view__content">
       <ParagraphItem
         :key="title"
@@ -142,9 +140,9 @@ const enterActivity = async () => {
         :title="title"
         :content="text"
       />
-      <div class="activity-view__content--button">
+      <button class="activity-view__content--button" @click="enterActivity()">
         <img :src="enterButtonImg" alt="enter button" />
-      </div>
+      </button>
     </div>
   </main>
 </template>
@@ -278,10 +276,13 @@ const enterActivity = async () => {
   &__content {
     padding: 25px 43px 32px 26px;
     position: relative;
+    text-align: center;
 
     &--button {
       margin-top: 10px;
-      text-align: center;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
     }
   }
 
@@ -292,6 +293,12 @@ const enterActivity = async () => {
     right: 20px;
     z-index: 3;
     transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    > img{
+      width: 100%;
+    }
   }
 }
 

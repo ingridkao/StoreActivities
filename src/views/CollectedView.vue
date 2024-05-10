@@ -10,8 +10,8 @@ import type { CollectedListType, CollectedType } from '@/composable/configurable
 import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
+import { useLoadingStore } from '@/stores/loading'
 
-import data from '@/assets/data'
 import emptyStampImg from '@/assets/images/collected/empty-stamp.png'
 import checkedStampImg from '@/assets/images/collected/checked-stamp.svg'
 import yellowEmptyStampImg from '@/assets/images/collected/yellow-empty-stamp.png'
@@ -24,26 +24,32 @@ import backToIndexButtonImg from '@/assets/images/collected/back-to-index-button
 const { fetchCollectData } = useFetchData()
 const { errorAlert, openStoreInfo } = useSweetAlert()
 
+const stampBaseCount = 20
+const activityExists = ref<boolean>(false)
 const collectedActivity = ref<CollectedType>({})
 const collectedStore = ref<CollectedListType[]>([])
-const stampBaseCount = ref(20)
 
 const route = useRoute()
 const { linkToAlbum, linkToActivity, linkToWinning } = useLink()
 
+const loadStore = useLoadingStore()
 watchEffect(async () => {
   const activityId = route.params.id
   if (activityId) {
+    loadStore.toggle(true)
     try {
       const res = await fetchCollectData(String(activityId))
       if (res) {
+        activityExists.value = true
         collectedActivity.value = res
         collectedStore.value = res.collection || []
+      }else{
+        // ToDO: 沒有此活動
       }
     } catch (error) {
-      const errorStr = String(error)
-      errorAlert(errorStr)
+      errorAlert(String(error), `/activity/${route.params.id}`)
     }
+    loadStore.toggle(false)
   } else {
     linkToAlbum()
   }
@@ -52,19 +58,19 @@ watchEffect(async () => {
 
 <template>
   <main class="collected-view">
-    <HeaderMenu :knowActivity="false" />
+    <HeaderMenu :knowActivity="true" />
     <div class="collected-view__header">
       <div class="collected-view__header--text-block">
-        <h1 class="collected-view__header--text-block-main">{{ data.collected.title }}</h1>
-        <h1 class="collected-view__header--text-block-bg">{{ data.collected.title }}</h1>
+        <h1 class="collected-view__header--text-block-main">{{ collectedActivity.event_name }}</h1>
+        <h1 class="collected-view__header--text-block-bg">{{ collectedActivity.event_name }}</h1>
       </div>
       <div class="collected-view__header--date">
         <p>
-          {{ data.collected.startDate }}
+          {{ collectedActivity.startDate }}
         </p>
         <div class="collected-view__header--date-line"></div>
         <p>
-          {{ data.collected.endDate }}
+          {{ collectedActivity.endDate }}
         </p>
       </div>
     </div>
@@ -99,44 +105,28 @@ watchEffect(async () => {
           <img :src="checkedStampImg" alt="checked stamp" />
         </div>
         <img
-          v-else
+          v-else-if="collectedActivity.specialStampIndexList"
           :src="
             {
-              [data.collected.specialStampIndexList[0]]: yellowEmptyStampImg,
-              [data.collected.specialStampIndexList[1]]: purpleEmptyStampImg,
-              [data.collected.specialStampIndexList[2]]: orangeEmptyStampImg,
-              [data.collected.specialStampIndexList[3]]: pinkEmptyStampImg
+              [collectedActivity.specialStampIndexList[0]]: yellowEmptyStampImg,
+              [collectedActivity.specialStampIndexList[1]]: purpleEmptyStampImg,
+              [collectedActivity.specialStampIndexList[2]]: orangeEmptyStampImg,
+              [collectedActivity.specialStampIndexList[3]]: pinkEmptyStampImg
             }[index + 1] ?? emptyStampImg
           "
           alt="empty stamp"
         />
       </div>
     </div>
-    <div class="collected-view__footer">
-      <img :src="redeemButtonImg" alt="redeem button" @click="linkToWinning()" />
-      <img
-        :src="backToIndexButtonImg"
-        alt="back to index button"
-        @click="linkToActivity(String(route.params.id))"
-      />
-    </div>
-  </main>
-  <!-- TODO: keep original code and you can remove by yourself -->
-  <!-- <section class="stamp">
-    <div
-      v-for="baseItem in stampBaseCount"
-      :key="baseItem"
-      class="stamp_base"
-      :style="{ backgroundImage: `url('${footImportUrl}')` }"
-    >
-      <button
-        v-if="collectedStore[baseItem - 1] && collectedStore[baseItem - 1]['store_id']"
-        @click="openStoreInfo(collectedStore[baseItem - 1])"
-      >
-        <img :src="storeIcon" :alt="collectedStore[baseItem - 1]['store_name']" />
+    <div v-if="activityExists" class="collected-view__footer">
+      <button @click="linkToWinning()">
+        <img :src="redeemButtonImg" alt="redeem button" />
+      </button>
+      <button @click="linkToActivity(String(route.params.id))">
+        <img :src="backToIndexButtonImg" alt="back to index button" />
       </button>
     </div>
-  </section> -->
+  </main>
 </template>
 <style lang="scss" scope>
 %title {
@@ -261,6 +251,11 @@ watchEffect(async () => {
     justify-content: center;
     align-items: center;
     gap: 14px;
+    >button{
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
+    }
   }
 }
 </style>

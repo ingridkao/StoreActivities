@@ -107,8 +107,8 @@ const siteLoading = computed(() => loadStore.load)
         :ads="item"
       />
 
-      <RouterLink to="/album">
-        <img src="https://i.imgur.com/d8ptVfB.png" alt="集郵冊-打卡紀錄" />
+      <RouterLink to="/album" class="album">
+        <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
       </RouterLink>
 
       <div class="lobby-view__icon-bar">
@@ -166,5 +166,13 @@ const siteLoading = computed(() => loadStore.load)
   align-items: center;
   color: black;
   font-size: 36px;
+}
+.album {
+  img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 169/50;
+    object-fit: contain;
+  }
 }
 </style>

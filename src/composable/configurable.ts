@@ -45,6 +45,9 @@ export interface CollectedType {
   event_id?: string
   event_name?: string
   limit?: number
+  startDate?: string
+  endDate?: string
+  specialStampIndexList?: number[]
   collection?: CollectedListType[]
 }
 

@@ -119,9 +119,9 @@ onMounted(() => {
         :title="data.winning.explanationTitle"
         :content="prizeInfo[prizeIndex].explanation"
       />
-      <div class="winning-view__content--button" @click="linkToActivity">
+      <button class="winning-view__content--button" @click="linkToActivity()">
         <img :src="endButtonImg" alt="enter button" />
-      </div>
+      </button>
     </div>
   </main>
 </template>
@@ -279,6 +279,9 @@ onMounted(() => {
     &--button {
       margin-top: 10px;
       text-align: center;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
     }
   }
 }

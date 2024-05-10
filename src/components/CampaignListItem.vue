@@ -4,11 +4,10 @@
  */
 import { useRouter } from 'vue-router'
 import type { CampaignListType } from '@/composable/configurable'
+const { VITE_ASSETS_URL, VITE_UI_MODE } = import.meta.env
 const props = defineProps<{
   campaign: CampaignListType
 }>()
-const imageFileUrl = import.meta.env.VITE_ASSETS_URL
-
 const router = useRouter()
 const linkTo = async () => {
   const { isEnable, pageRouter } = props.campaign
@@ -32,14 +31,10 @@ const linkTo = async () => {
 </script>
 
 <template>
-  <div 
-    class="activities" 
-    :class="{ invalid: !props.campaign.isEnable}" 
-    @click="linkTo()"
-  >
-    <img 
-      :src="`${imageFileUrl}${props.campaign.imageFilePath}`" 
-      :alt="props.campaign.eventName || ''"
+  <div class="activities" :class="{ invalid: !props.campaign.isEnable }" @click="linkTo()">
+    <img
+      :src="VITE_UI_MODE? 'https://i.imgur.com/QAgmBa5_d.webp?maxwidth=760&fidelity=grand': `${VITE_ASSETS_URL}${props.campaign.imageFilePath}`"
+      :alt="'' || props.campaign.eventName"
       width="169"
       height="50"
     />
@@ -57,7 +52,6 @@ const linkTo = async () => {
     height: auto;
     aspect-ratio: 169/50;
     object-fit: contain;
-    background-color: rgba(255,255,255,0.3);
   }
 
   &.invalid {

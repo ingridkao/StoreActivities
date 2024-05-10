@@ -1,7 +1,4 @@
 <script setup lang="ts">
-/**
- * 測試環境會被導轉到line登入頁14, 23-27註解就可以避免被轉址
- */
 import { ref, watchEffect } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
@@ -10,9 +7,7 @@ import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
 const { getAcStorage } = useBrowserStorage()
-const { 
-  getOpenInClient, useLineLogout
-} = useLIFF()
+const { getOpenInClient, useLineLogout } = useLIFF()
 const openInLIFF = getOpenInClient()
 const props = defineProps<{
   knowActivity: boolean
@@ -27,38 +22,38 @@ const menuList = ref<
     link?: string
     key?: string
     name?: string
-}[]>([          {
-  link: '/',
-  key: 'Lobby',
-  name: '活動大廳'
-}])
-  
-watchEffect(
-  () => {
-    if(props.knowActivity && userStore.userProfile){
-      const acString = getAcStorage()
-      menuList.value = [
-        ...menuList.value,
-        {
-          link: `/activity/${acString}`,
-          key: 'Activity',
-          name: '活動說明'
-        },
-        {
-          link: '/mapStore',
-          key: 'MapStore',
-          name: '門市地圖'
-        },
-        {
-          link: `/collected/${acString}`,
-          key: 'Collected',
-          name: '活動打卡紀錄'
-        }
-      ]
-    }
+  }[]
+>([
+  {
+    link: '/',
+    key: 'Lobby',
+    name: '活動大廳'
   }
-)
+])
 
+watchEffect(() => {
+  if (props.knowActivity && userStore.userProfile) {
+    const acString = getAcStorage()
+    menuList.value = [
+      ...menuList.value,
+      {
+        link: `/activity/${acString}`,
+        key: 'Activity',
+        name: '活動說明'
+      },
+      {
+        link: '/mapStore',
+        key: 'MapStore',
+        name: '門市地圖'
+      },
+      {
+        link: `/collected/${acString}`,
+        key: 'Collected',
+        name: '活動打卡紀錄'
+      }
+    ]
+  }
+})
 </script>
 
 <template>
@@ -80,7 +75,7 @@ watchEffect(
           {{ item.name }}
         </RouterLink>
         <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
-        <div v-if="userStore.userProfile" class="userProfile">
+        <template v-if="userStore.userProfile.userId">
           <img
             v-if="userStore.userProfile.pictureUrl"
             :src="userStore.userProfile.pictureUrl"
@@ -89,9 +84,15 @@ watchEffect(
           <div>
             <p>{{ userStore.userProfile.displayName || '' }}</p>
             <p>{{ userStore.userProfile.userId || '' }}</p>
-            <button v-if="!openInLIFF" @click="useLineLogout">登出</button>
           </div>
-        </div>
+        </template>
+        <button
+          v-if="userStore.userProfile.userId && !openInLIFF"
+          class="sidemenu__item sidemenu__button"
+          @click="useLineLogout"
+        >
+          登出
+        </button>
       </div>
     </transition>
   </div>
@@ -159,6 +160,13 @@ watchEffect(
     &:last-child {
       border-bottom: none;
     }
+  }
+
+  &__button {
+    width: 100%;
+    background-color: transparent;
+    text-align: left;
+    border: none;
   }
 }
 
