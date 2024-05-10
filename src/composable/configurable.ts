@@ -6,6 +6,26 @@ export interface ActivityListType {
   link?: string
 }
 
+export interface CampaignListType {
+  id?: number
+  eventName?: string
+  partnerId?: number
+  startTime?: string
+  endTime?: string
+  isEnable?: boolean
+  toLinkUrl?: string
+  imageFilePath?: string
+  pageRouter?: string
+}
+
+export interface AdListType {
+  id?: number
+  title?: string
+  link?: string
+  isEnable?: boolean
+  imageFilePath?: string
+}
+
 export interface AlbumType {
   event_id?: string
   event_name?: string
@@ -23,6 +43,9 @@ export interface CollectedType {
   event_id?: string
   event_name?: string
   limit?: number
+  startDate?: string
+  endDate?: string
+  specialStampIndexList?: number[]
   collection?: CollectedListType[]
 }
 
@@ -31,11 +54,6 @@ export interface ProfileType {
   displayName?: string
   pictureUrl?: string
 }
-export interface ProfileAccessType {
-  accessToken?: string | null,
-  profile : ProfileType | undefined
-}
-
 export interface ScanResultType {
   event_id?: string
   id?: string

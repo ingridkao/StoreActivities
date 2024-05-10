@@ -1,5 +1,8 @@
 declare let mapboxgl: any
 import { UAParser } from 'ua-parser-js'
+import { point } from '@turf/helpers'
+import buffer from '@turf/buffer'
+
 import { ref, reactive, onMounted } from 'vue'
 import { useFetchData } from '@/composable/useFetch'
 import { useMap } from '@/composable/useMap'
@@ -11,16 +14,20 @@ export function useMapbox() {
   // const loadStore = useLoadingStore()
 
   const sourceName = 'store-source'
+  const radiusRangeName = 'radius-range'
   const layerName = 'all-layer'
   const markerId = 'common-marker'
+	let mapboxEl = null as any
+  let geolocateEl = null as any
+  // let popup = null as any
   // zoom: 初始 ZOOM LEVEL; [0-20, 0 為最小 (遠), 20 ;最大 (近)]
   // minZoom: 最大區域新北
   // center: 初始中心座標，格式為 [lng, lat]
   // maxBounds: 台灣地圖區域
-  const mapConfig = reactive({
-    minZoom: 9,
-    zoom: 16.5,
-    maxZoom: 18.99,
+  const mapConfig = {
+    minZoom: 14,
+    zoom: 16,
+    maxZoom: 16.5,
     taipeiCenter: [121.54885, 25.03625],
     taipeiBound: [
       [24.396308, 121.2827],
@@ -30,10 +37,7 @@ export function useMapbox() {
       [105, 15],
       [138.45858, 33.4]
     ]
-  })
-  const map = ref()
-  const geolocate = ref()
-  // const popup = ref()
+  }
 
   const storeFilterSelectd = ref<String>('all')
   // 從後端取回
@@ -52,7 +56,7 @@ export function useMapbox() {
     }
   ])
 
-  const loadMultIconImage = async() => {
+  const loadMultIconImage = async () => {
     const iconImages = [
       { url: '/711_sl_36X36.gif', id: 'common-marker' },
       { url: '/images/map/1.png', id: 'songshan' },
@@ -64,28 +68,28 @@ export function useMapbox() {
       { url: '/images/map/7.png', id: 'xinyi' },
       { url: '/images/map/8.png', id: 'beitou' },
       { url: '/images/map/9.png', id: 'zhongshan' },
-      { url: '/images/map/10.png', id: 'zhongzheng' },
+      { url: '/images/map/10.png', id: 'zhongzheng' }
     ]
     return Promise.all(
       iconImages.map(async (img) => {
         return new Promise((resolve, reject) => {
-          map.value.loadImage(img.url, (error: any, iconImage: ImageBitmap) => {              
-            if (error){
+          mapboxEl.loadImage(img.url, (error: any, iconImage: ImageBitmap) => {
+            if (error) {
               reject(error)
-            }else{
-              map.value.addImage(img.id, iconImage)
-              resolve(map.value.hasImage(img.id))
+            } else {
+              mapboxEl.addImage(img.id, iconImage)
+              resolve(mapboxEl.hasImage(img.id))
             }
           })
         })
       })
     )
-    .then(icons => icons)
-    .catch(error => error)
+      .then((icons) => icons)
+      .catch((error) => error)
   }
 
   const addLayerData = () => {
-    map.value.addLayer({
+    mapboxEl.addLayer({
       id: layerName,
       type: 'symbol',
       source: sourceName,
@@ -100,12 +104,7 @@ export function useMapbox() {
           ]
         },
         'icon-allow-overlap': true,
-        'icon-image': [
-          'case',
-          ["has", 'do'],
-          ['get', 'do'],
-          markerId
-        ],
+        'icon-image': ['case', ['has', 'do'], ['get', 'do'], markerId],
         'icon-size': [
           'interpolate',
           ['linear'],
@@ -122,14 +121,39 @@ export function useMapbox() {
     })
   }
 
+	// Radius: 5km
+	const addRadiusRange = (coordinates: number[]) => {
+    const geojsonSource = mapboxEl.getSource(`${radiusRangeName}-source`)
+		const pt = point(coordinates)
+		const mapBuffered = buffer(pt, 5)
+    if(geojsonSource){
+			geojsonSource.setData(mapBuffered)
+		}else{
+			mapboxEl.addSource(`${radiusRangeName}-source`, {
+				type: 'geojson',
+				data: mapBuffered
+			})
+			mapboxEl.addLayer({
+				'id': `${radiusRangeName}-layer`,
+				'type': 'fill',
+				'source': `${radiusRangeName}-source`,
+				'layout': {},
+				'paint': {
+					'fill-color': '#F2F12D',
+					'fill-opacity': 0.5
+				}
+			})
+		}
+	}
+
   const updateChecked = (target: String) => {
     storeFilterSelectd.value = target
-    // if (popup.value) popup.value.remove()
-    if (!map.value.getLayer(layerName)) return
+    // if (popup) popup.remove()
+    if (!mapboxEl.getLayer(layerName)) return
     if (target === 'all') {
-      map.value.setFilter(layerName, null)
+      mapboxEl.setFilter(layerName, null)
     } else {
-      map.value.setFilter(layerName, ['in', 'store_type', target])
+      mapboxEl.setFilter(layerName, ['in', 'store_type', target])
     }
   }
 
@@ -142,18 +166,18 @@ export function useMapbox() {
   const closeStoreInfo = () => {
     targetBoxData.toggle = false
     targetBoxData.location = {}
-    targetBoxData.info =  {}
+    targetBoxData.info = {}
   }
 
   let cacheStore_id = ''
-  const toggleStoreInfo = (classList:string) => {
-    if(Object.keys(targetBoxData.location).length === 0) return
-    if(!targetBoxData.toggle){
+  const toggleStoreInfo = (classList: string) => {
+    if (Object.keys(targetBoxData.location).length === 0) return
+    if (!targetBoxData.toggle) {
       targetBoxData.toggle = true
       cacheStore_id = targetBoxData.info.store_id
-    }else if(targetBoxData.toggle && cacheStore_id === targetBoxData.info.store_id){
-      const trigger = ['infoBox'].some(className => classList.includes(className))
-      if(!trigger) closeStoreInfo()
+    } else if (targetBoxData.toggle && cacheStore_id === targetBoxData.info.store_id) {
+      const trigger = ['infoBox'].some((className) => classList.includes(className))
+      if (!trigger) closeStoreInfo()
     }
   }
 
@@ -183,13 +207,14 @@ export function useMapbox() {
   }
 
   // 將地圖中心點移動至店位置
-  const mapMoveToCenter = (coordinates: any) => {
-    map.value.easeTo({
+  const mapMoveToCenter = (coordinates: [number, number]) => {
+    mapboxEl.easeTo({
       center: coordinates,
       zoom: mapConfig.zoom,
       duration: 600,
       easing: (easeEvent: any) => easeEvent
     })
+		// addRadiusRange(coordinates)
   }
 
   // https://docs.uaparser.js.org/v2/api/ua-parser-js/get-device.html
@@ -225,7 +250,7 @@ export function useMapbox() {
         mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY
 
         // Initialize the Popup.
-        // popup.value = new mapboxgl.Popup({
+        // popup = new mapboxgl.Popup({
         //   anchor: 'bottom',
         //   closeButton: true,
         //   closeOnClick: false,
@@ -233,7 +258,7 @@ export function useMapbox() {
         // })
 
         // Initialize the GeolocateControl / Mapbox location button
-        geolocate.value = new mapboxgl.GeolocateControl({
+        geolocateEl = new mapboxgl.GeolocateControl({
           positionOptions: {
             enableHighAccuracy: true
           },
@@ -247,8 +272,7 @@ export function useMapbox() {
           console.log('2. A geolocate event has occurred.')
         })
 
-
-        map.value = new mapboxgl.Map({
+        mapboxEl = new mapboxgl.Map({
           container: 'mapboxBasic', // 地圖容器 ID
           style: 'mapbox://styles/mapbox/outdoors-v12',
           maxBounds: mapConfig.maxBounds,
@@ -265,12 +289,12 @@ export function useMapbox() {
         // 另一個加marker的方法
         // https://docs.mapbox.com/mapbox-gl-js/example/set-popup/
         // mapbox不支援GIF僅靜態圖片和canvas
-        map.value.on('load', async() => {
-          console.log('mapbox loaded');
+        mapboxEl.on('load', async () => {
+          console.log('mapbox loaded')
 
-          map.value.scrollZoom.enable({ around: 'center' }) // 改為根據地圖中心縮放
-          map.value.scrollZoom.setZoomRate(1 / 1600) // 觸控板縮放, 分母越大級距越小
-          map.value.scrollZoom.setWheelZoomRate(1 / 100) // 滑鼠滾輪縮放, 分母越大級距越小
+          mapboxEl.scrollZoom.enable({ around: 'center' }) // 改為根據地圖中心縮放
+          mapboxEl.scrollZoom.setZoomRate(1 / 1600) // 觸控板縮放, 分母越大級距越小
+          mapboxEl.scrollZoom.setWheelZoomRate(1 / 100) // 滑鼠滾輪縮放, 分母越大級距越小
 
           try {
             const storeResults = await fetchLayerData(clientLocationCity.value)
@@ -278,22 +302,23 @@ export function useMapbox() {
               // TODO: alert
               console.error('不合法的geojson')
             } else {
-              map.value.addSource(sourceName, {
+              mapboxEl.addSource(sourceName, {
                 type: 'geojson',
                 data: storeResults
               })
+							// addRadiusRange(mapConfig.taipeiCenter)
 
               const rr = await loadMultIconImage()
-              if(!rr) return
+              if (!rr) return
               addLayerData()
             }
           } catch (error) {
             // TODO: alert
-            console.error(error);
+            console.error(error)
           }
 
           // When user clicking on the map, close the store bottom popup if it is not 'all-layer'.
-          map.value.on('click', (e:any) => {
+          mapboxEl.on('click', (e: any) => {
             if (e.defaultPrevented) return
             if (!targetBoxData.toggle) return
             try {
@@ -301,49 +326,49 @@ export function useMapbox() {
                 [e.point.x - 5, e.point.y - 5],
                 [e.point.x + 5, e.point.y + 5]
               ]
-              const selectedFeatures = map.value.queryRenderedFeatures(bbox, { layers: [layerName] })
-              if(selectedFeatures.length === 0) closeStoreInfo()
+              const selectedFeatures = mapboxEl.queryRenderedFeatures(bbox, {
+                layers: [layerName]
+              })
+              if (selectedFeatures.length === 0) closeStoreInfo()
             } catch (error) {
-              console.error(error);
+              console.error(error)
             }
           })
 
           // Clicking on a store icon on the map retrieves information about this store
           // properties: the data source is the features object in GeoJSON
-          map.value.on('click', layerName, (e: any) => {
-            map.value.getCanvas().style.cursor = 'pointer'
-            // if (popup.value) popup.value.remove()
-
+          mapboxEl.on('click', layerName, (e: any) => {
+            mapboxEl.getCanvas().style.cursor = 'pointer'
+            // if (popup) popup.remove()
             const { features, lngLat } = e
             const coordinates = features[0].geometry.coordinates.slice()
             const properties = features[0].properties
-            if(properties) {
+            if (properties) {
               targetBoxData.info = properties
-              if(lngLat) targetBoxData.location = lngLat
-              if(coordinates) mapMoveToCenter(coordinates)
+              if (lngLat) targetBoxData.location = lngLat
+              if (coordinates) mapMoveToCenter(coordinates)
             }
           })
 
-
-          // map.value.on('zoomend', (event: Event) => {
-          // console.log(map.value.getZoom());
-          // console.log(map.value.getBounds());
+          // mapboxEl.on('zoomend', (event: Event) => {
+          // console.log(mapboxEl.getZoom());
+          // console.log(mapboxEl.getBounds());
           // })
 
           // Add the control to the map.
-          map.value.addControl(new mapboxgl.NavigationControl())
-          map.value.addControl(
+          mapboxEl.addControl(new mapboxgl.NavigationControl())
+          mapboxEl.addControl(
             new mapboxgl.AttributionControl({
               compact: false
             })
           )
-          map.value.addControl(geolocate.value)
+          mapboxEl.addControl(geolocateEl)
         })
 
         // After the last frame rendered before the map enters an "idle" state.
-        map.value.on('idle', () => {
+        mapboxEl.on('idle', () => {
           // If these two layers were not added to the map, abort
-          if (!map.value.getLayer(layerName)) return
+          if (!mapboxEl.getLayer(layerName)) return
         })
       })
   })
@@ -352,10 +377,6 @@ export function useMapbox() {
     storeFilterSelectd,
     storeFilterOptions,
     targetBoxData,
-    // mapConfig,
-    // map,
-    // geolocate,
-    // popup,
     updateChecked,
     toggleStoreInfo,
     mapNavigation

@@ -2,18 +2,17 @@
 /**
  * 中獎序號s
  */
-
 import { ref, onMounted } from 'vue'
 import { useLink } from '@/composable/useLink'
-import ParagraphItem from '@/components/ParagraphItem.vue'
 
+import ParagraphItem from '@/components/ParagraphItem.vue'
 import data from '@/assets/data'
 import winningCatImg from '@/assets/images/winning/winning-cat.png'
 import endButtonImg from '@/assets/images/winning/end-button.svg'
 import nextArrowImg from '@/assets/images/winning/next-arrow.svg'
 import prevArrowImg from '@/assets/images/winning/prev-arrow.svg'
 
-const { backCollect } = useLink()
+const { linkToActivity } = useLink()
 
 //TODO: Remove prizeIndex and prizeInfo after api finish
 const prizeIndex = ref(0)
@@ -120,9 +119,9 @@ onMounted(() => {
         :title="data.winning.explanationTitle"
         :content="prizeInfo[prizeIndex].explanation"
       />
-      <div class="winning-view__content--button" @click="backCollect">
+      <button class="winning-view__content--button" @click="linkToActivity()">
         <img :src="endButtonImg" alt="enter button" />
-      </div>
+      </button>
     </div>
   </main>
 </template>
@@ -280,6 +279,9 @@ onMounted(() => {
     &--button {
       margin-top: 10px;
       text-align: center;
+      cursor: pointer;
+      border: none;
+      background-color: transparent;
     }
   }
 }

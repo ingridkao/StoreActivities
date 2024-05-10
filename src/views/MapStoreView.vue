@@ -4,7 +4,6 @@
  */
 import { onMounted, onUnmounted } from 'vue'
 
-import MapNavigationIcon from '@/components/icon/IconMapNavigation.vue'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import { useMapbox } from '@/composable/useMapbox'
 import { useLink } from '@/composable/useLink'
@@ -14,39 +13,42 @@ import centerIconButtonImg from '@/assets/images/mapStore/center-icon-button.svg
 import checkInButtonImg from '@/assets/images/mapStore/check-in-button.svg'
 import mapCatImg from '@/assets/images/mapStore/map-cat.png'
 
-const { storeFilterOptions, storeFilterSelectd, targetBoxData, updateChecked, mapNavigation } =
-  useMapbox()
+const {
+  storeFilterOptions,
+  storeFilterSelectd,
+  targetBoxData,
+  toggleStoreInfo,
+  updateChecked,
+  mapNavigation
+} = useMapbox()
 const { linkToDirection } = useLink()
-
-// 點選門市後出現資訊drawerBox >> 點選drawerBox以外則toggleStoreInfo()
-const handleOutsideClick = (event: Event) => {
-	const inputTarget = event.target as HTMLInputElement
-  toggleStoreInfo(String(inputTarget.classList.value))
-}
-
-onMounted(() => {
-	document.addEventListener('click', handleOutsideClick)
-})
-onUnmounted(() => {
-	document.removeEventListener('click', handleOutsideClick)
-})
-
 const goToDirection = () => {
   // TODO: 提示離開此頁面
   linkToDirection()
 }
 
+// 點選門市後出現資訊drawerBox >> 點選drawerBox以外則toggleStoreInfo()
+const handleOutsideClick = (event: Event) => {
+  const inputTarget = event.target as HTMLInputElement
+  toggleStoreInfo(String(inputTarget.classList.value))
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleOutsideClick)
+})
+onUnmounted(() => {
+  document.removeEventListener('click', handleOutsideClick)
+})
 </script>
 
 <template>
   <main class="map-store-view">
     <HeaderMenu :knowActivity="true" />
-    <!-- <a href="https://qwaretest-9b8d6.web.app/map8">先看這個</a> -->
     <div id="mapboxBasic"></div>
 
     <div class="map-store-view__panel">
       <div v-if="targetBoxData.toggle" class="map-store-view__panel--info">
-        <div class="map-store-view__panel--info-center-button">
+        <div class="map-store-view__panel--info-center-button" @click="mapNavigation">
           <img :src="centerIconButtonImg" alt="center icon button" />
         </div>
         <div class="map-store-view__panel--info-logo">
@@ -58,16 +60,12 @@ const goToDirection = () => {
           <p>{{ data.mapStore.addressLabel }}：</p>
           <p>{{ targetBoxData.info['address'] }}</p>
         </div>
-        <!-- TODO: If this button isn't used, remove it. -->
-        <!-- <button class="mapBtn" @click="mapNavigation">
-          <MapNavigationIcon />
-        </button> -->
       </div>
       <div v-else class="map-store-view__panel--filter">
         <div class="map-store-view__panel--cat">
           <img :src="mapCatImg" />
         </div>
-        <div class="map-store-view__panel--button">
+        <div class="map-store-view__panel--button" @click="goToDirection">
           <img :src="checkInButtonImg" alt="check in button" />
         </div>
         <div class="map-store-view__panel--store-button">
@@ -82,7 +80,6 @@ const goToDirection = () => {
           </div>
         </div>
       </div>
-
     </div>
   </main>
 </template>
@@ -93,7 +90,7 @@ const goToDirection = () => {
   height: 100dvh;
   padding: 0;
   overflow: hidden;
-  #sidemenu{
+  #sidemenu {
     position: absolute;
     left: 0;
     --color-background: transparent;
@@ -102,8 +99,6 @@ const goToDirection = () => {
 #mapboxBasic {
   width: 100%;
   height: calc(100dvh - 5rem);
-  .mapboxgl-map {
-  }
 }
 
 .map-store-view {
@@ -111,6 +106,7 @@ const goToDirection = () => {
     position: fixed;
     bottom: 0;
     left: 0;
+    z-index: 2;
     width: 100%;
     height: 125px;
     background: url('@/assets/images/background/gray-2-bg.png') repeat;

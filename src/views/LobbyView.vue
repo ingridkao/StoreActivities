@@ -8,7 +8,7 @@
  */
 import { ref, onMounted, watchEffect, computed } from 'vue'
 
-import type { ActivityListType } from '@/composable/configurable'
+import type { CampaignListType, AdListType } from '@/composable/configurable'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useLink } from '@/composable/useLink'
@@ -16,14 +16,16 @@ import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
-import ActivitiesListItem from '@/components/ActivitiesListItem.vue'
+import CampaignListItem from '@/components/CampaignListItem.vue'
+import AdsListItem from '@/components/AdsListItem.vue'
+import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 // step0
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { fetchActivityData, verifyQRCode } = useFetchData()
+const { genrateMockQRCode, fetchCampaign, fetchSpecifyCampaign, fetchAdData, verifyQRCode } = useFetchData()
 const { getQueryParam } = useLink()
 
 let getPosition = false
@@ -33,47 +35,51 @@ watchEffect(async () => {
   if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
     getPosition = true
     // setLocationStorage(latitude, longitude)
-    try {
-      // step1
-      const pathQuery1 = getQueryParam(window.location.href, 'ct')
-      const pathQuery2 = getQueryParam(window.location.href, 'lat')
-      const pathQuery3 = getQueryParam(window.location.href, 'lon')
-      setLocationStorage(Number(pathQuery2), Number(pathQuery3))
-      await verifyQRCode(pathQuery1)
-    } catch (error) {
-      errorAlert(`verifyQRCode:${error}`)
-    }
   } else if (error.value && error.value.code >= 1) {
     geoErrorHandler(error.value.code)
   }
 })
 
 const loadStore = useLoadingStore()
-const activitiesList = ref<ActivityListType[]>([])
+const campaignList = ref<CampaignListType[]>([])
+const specifyCampaignList = ref<CampaignListType[]>([])
+const adsList = ref<AdListType[]>([])
+const qrString = ref('')
+const storeId = ref<string>('')
 onMounted(async () => {
   try {
-    //step2-1
-    //step2-2
     loadStore.toggle(true)
-    Promise.all([
-      fetchActivityData()
-      // fetchAdData(),
-    ]).then((dataArray) => {
-      activitiesList.value = dataArray[0] || []
-      loadStore.toggle(false)
 
-      //TODO: After check api data, remove this
-      if (import.meta.env.VITE_UI_MODE) {
-        activitiesList.value = Array.from({ length: 5 }).map((_, i) => ({
-          id: i + 1,
-          img: `./images/lobby/lobby-item-${i + 1}.png`,
-          link: 'https://www.google.com',
-          statu: 1
-        }))
+    const pathQuery = getQueryParam(window.location.href, 'ct')
+    if(pathQuery){
+      storeId.value = pathQuery.substring(2, 8)
+      await verifyQRCode(pathQuery)
+    }else{
+      // TODO: After check api flow, remove this
+      const MockCode = await genrateMockQRCode()
+      if(MockCode){
+        // storeId.value = MockCode.store || ''
+        setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
+        qrString.value = `${import.meta.env.VITE_BASE_URL}?ct=${MockCode.qrCode}`
+        const pathQuery = getQueryParam(window.location.href, 'ct')
+        if(pathQuery){
+          await verifyQRCode(MockCode.qrCode)
+        }
       }
-    })
+    }
+
+    const [result1, result2, result3] = await Promise.all([
+      fetchCampaign(),
+      fetchSpecifyCampaign(storeId.value),
+      fetchAdData()
+    ])
+    campaignList.value = result1 || []
+    specifyCampaignList.value = result2 || []
+    adsList.value = result3 || []
+    loadStore.toggle(false)
+
   } catch (error) {
-    errorAlert(`fetchActivityData:${error}`)
+    errorAlert(error)
   }
 })
 
@@ -84,20 +90,26 @@ const siteLoading = computed(() => loadStore.load)
   <main class="lobby-view">
     <div v-if="siteLoading" class="loading">Loading...</div>
     <div v-else class="lobby-view__menu">
-      <ActivitiesListItem
-        :activities="activities"
-        v-for="activities in activitiesList"
-        :key="activities.id"
+      <CampaignListItem
+        v-for="campaignItem in specifyCampaignList"
+        :campaign="campaignItem"
+        :key="campaignItem.id"
+      />
+      <CampaignListItem
+        v-for="campaignItem in campaignList"
+        :campaign="campaignItem"
+        :key="campaignItem.id"
       />
 
-      <ActivitiesListItem
-        :activities="{
-          title: '集郵冊-打卡紀錄',
-          statu: 1,
-          img: 'https://i.imgur.com/d8ptVfB.png',
-          link: '/album'
-        }"
+      <AdsListItem
+        v-for="item in adsList"
+        :key="item.id"
+        :ads="item"
       />
+
+      <RouterLink to="/album" class="album">
+        <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
+      </RouterLink>
 
       <div class="lobby-view__icon-bar">
         <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
@@ -106,6 +118,14 @@ const siteLoading = computed(() => loadStore.load)
         <img src="@/assets/images/lobby/icon-line.png" alt="line" />
         <img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" />
       </div>
+
+      <!-- TODO: After check api flow, remove this  -->
+      <vueQr 
+        :text="qrString" 
+        :size="100" 
+        :correctLevel="3"
+      />
+      <a :href="qrString" target="_blank">{{qrString}}</a>
     </div>
   </main>
 </template>
@@ -146,5 +166,13 @@ const siteLoading = computed(() => loadStore.load)
   align-items: center;
   color: black;
   font-size: 36px;
+}
+.album {
+  img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 169/50;
+    object-fit: contain;
+  }
 }
 </style>

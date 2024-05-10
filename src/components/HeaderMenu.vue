@@ -1,36 +1,17 @@
 <script setup lang="ts">
-/**
- * 測試環境會被導轉到line登入頁14, 23-27註解就可以避免被轉址
- */
-import { ref, onMounted, watchEffect } from 'vue'
-import { RouterLink, onBeforeRouteLeave  } from 'vue-router'
+import { ref, watchEffect } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-const { getAcStorage, deleteSessionStorage } = useBrowserStorage()
-const { 
-  getOpenInClient, useLineLogout, 
-  // getLineProfileAndAccessToken,
-} = useLIFF()
+import { useUserStore } from '@/stores/user'
+
+const userStore = useUserStore()
+const { getAcStorage } = useBrowserStorage()
+const { getOpenInClient, useLineLogout } = useLIFF()
 const openInLIFF = getOpenInClient()
-const userProfile = ref()
-const accessToken = ref()
 const props = defineProps<{
   knowActivity: boolean
 }>()
-
-onMounted(async() => {
-  // const userData = await getLineProfileAndAccessToken()
-  // if(userData){
-  //   userProfile.value = userData.profile
-  //   accessToken.value = userData.accessToken
-  // }
-})
-
-onBeforeRouteLeave((to) => {
-  if (to.name === 'Lobby') {
-		deleteSessionStorage('ac')
-  }
-})
 
 const navOpen = ref<Boolean>(false)
 const togggle = () => {
@@ -41,38 +22,38 @@ const menuList = ref<
     link?: string
     key?: string
     name?: string
-}[]>([          {
-  link: '/',
-  key: 'Lobby',
-  name: '活動大廳'
-}])
-  
-watchEffect(
-  () => {
-    if(props.knowActivity && userProfile.value){
-      const acString = getAcStorage()
-      menuList.value = [
-        ...menuList.value,
-        {
-          link: `/activity/${acString}`,
-          key: 'Activity',
-          name: '活動說明'
-        },
-        {
-          link: '/mapStore',
-          key: 'MapStore',
-          name: '門市地圖'
-        },
-        {
-          link: `/collected/${acString}`,
-          key: 'Collected',
-          name: '活動打卡紀錄'
-        }
-      ]
-    }
+  }[]
+>([
+  {
+    link: '/',
+    key: 'Lobby',
+    name: '活動大廳'
   }
-)
+])
 
+watchEffect(() => {
+  if (props.knowActivity && userStore.userProfile) {
+    const acString = getAcStorage()
+    menuList.value = [
+      ...menuList.value,
+      {
+        link: `/activity/${acString}`,
+        key: 'Activity',
+        name: '活動說明'
+      },
+      {
+        link: '/mapStore',
+        key: 'MapStore',
+        name: '門市地圖'
+      },
+      {
+        link: `/collected/${acString}`,
+        key: 'Collected',
+        name: '活動打卡紀錄'
+      }
+    ]
+  }
+})
 </script>
 
 <template>
@@ -94,20 +75,24 @@ watchEffect(
           {{ item.name }}
         </RouterLink>
         <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
-        <div v-if="userProfile" class="userProfile">
+        <template v-if="userStore.userProfile.userId">
           <img
-            v-if="userProfile.pictureUrl"
-            :src="userProfile.pictureUrl"
-            :alt="userProfile.displayName"
+            v-if="userStore.userProfile.pictureUrl"
+            :src="userStore.userProfile.pictureUrl"
+            :alt="userStore.userProfile.displayName"
           />
           <div>
-            <p>{{ userProfile.displayName || '' }}</p>
-            <p>{{ userProfile.userId || '' }}</p>
-            <hr />
-            <p>{{ accessToken || '' }}</p>
-            <button v-if="!openInLIFF" @click="useLineLogout">登出</button>
+            <p>{{ userStore.userProfile.displayName || '' }}</p>
+            <p>{{ userStore.userProfile.userId || '' }}</p>
           </div>
-        </div>
+        </template>
+        <button
+          v-if="userStore.userProfile.userId && !openInLIFF"
+          class="sidemenu__item sidemenu__button"
+          @click="useLineLogout"
+        >
+          登出
+        </button>
       </div>
     </transition>
   </div>
@@ -175,6 +160,13 @@ watchEffect(
     &:last-child {
       border-bottom: none;
     }
+  }
+
+  &__button {
+    width: 100%;
+    background-color: transparent;
+    text-align: left;
+    border: none;
   }
 }
 

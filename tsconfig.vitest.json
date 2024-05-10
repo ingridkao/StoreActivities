@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.app.json",
-  "include": ["env.d.ts", "src/composable/configurable.ts"],
+  "include": ["env.d.ts", "src/composable/configurable.ts", "src/composable/ResponseHandle.ts"],
   "exclude": [],
   "compilerOptions": {
     "composite": true,

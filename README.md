@@ -50,18 +50,18 @@ Branch:
 - I: 等待UI切版，不更動相關頁面
 - F: 功能變動未完成，建議暫緩UI
 
-| | Page          | @/view             | @/component            | Description | Auth |
-|-| ------------- | ------------------ | ---------------------- | ----------- | ---- |
-|I|活動大廳        | LobbyView.vue      | ActivitiesListItem.vue | 活動列表組件 |      |
-|I|活動說明        | ActivityView.vue   | HeaderMenu.vue         |             |  V   |
-|I|單一活動打卡紀錄 | CollectedView.vue  | HeaderMenu.vue         |             |  V   |
-|I|門市地圖        | MapStoreView.vue   |                        |              |  V   |
-|F|所有活動打卡紀錄 | AlbumView.vue      |                        |             |  V   |
-|F|中獎序號        | WinningView.vue    |                        |             |  V   |
-|W|打卡說明        | DirectionView.vue  | HeaderMenu.vue         |             |  V   |
-|W|相機掃描        | ScanView.vue       | ScanResult.vue         |             |      |
-|W|活動已結束      | WrapUpView.vue     |                        |              |  V   |
-|W|ComingSoon     | ComingSoonView.vue |                         | 404page     |  V   |
+| | Page          | @/view             | Description | Auth |
+|-| ------------- | ------------------ | ----------- | ---- |
+|I|活動大廳        | LobbyView.vue      | 活動廣告列表 |      |
+|I|活動說明        | ActivityView.vue   |             |  V   |
+|I|單一活動打卡紀錄 | CollectedView.vue  |             |  V   |
+|I|門市地圖        | MapStoreView.vue   |             |  V   |
+|F|所有活動打卡紀錄 | AlbumView.vue      |             |  V   |
+|F|中獎序號        | WinningView.vue    |             |  V   |
+|W|打卡說明        | DirectionView.vue  |             |  V   |
+|W|相機掃描        | ScanView.vue       |             |      |
+|W|活動已結束      | WrapUpView.vue     |             |  V   |
+|W|ComingSoon     | ComingSoonView.vue |404page       |  V   |
 
 
 ### 組件說明
@@ -70,6 +70,7 @@ Branch:
 |-| ---------------------- | ------------ | ------------------------------- |
 |I| HeaderMenu.vue         | 會觸發Line登入| 如一直被轉址請註解部分程式         |
 |I| ActivitiesListItem.vue | 活動列表      | 活動大廳                         |
+|I| AdsListItem.vue        | 廣告列表      | 活動大廳                         |
 |W| ScanResult.vue         | 打卡結果      | 相機掃描                         |
 
 
@@ -113,6 +114,14 @@ npm run dev
 npm run build
 ```
 
+### UAT環境部屬
+
+編譯成靜態並部屬到UAT
+
+```sh
+npm run stage
+```
+
 ### 測試環境部屬
 
 編譯成靜態並部屬到[firebase hosting](https://firebase.google.com/docs/hosting/quickstart?hl=zh&authuser=0)上
@@ -142,13 +151,15 @@ npm run deploy
 ## 5.env
 
 ```
+VITE_UI_MODE=true
 VITE_LIFF_ID=
 VITE_LIFF_ENDPOINT_URL=
-
 VITE_MOCKAPI_URL=
 VITE_API_URL=
 VITE_BASE_URL=
-
+VITE_OUTDIR=
+VITE_BASEDIR=
+VITE_ASSETS_URL=
 VITE_MAPBOX_KEY=
 
 ```
