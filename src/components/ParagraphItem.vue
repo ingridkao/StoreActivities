@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import listMarkerImg from '@/assets/images/list-marker.svg'
+import ParagraphTitle from './ParagraphTitle.vue'
+
 const props = defineProps<{
   title: string
   content: string
@@ -8,10 +9,7 @@ const props = defineProps<{
 
 <template>
   <div class="paragraph">
-    <div class="paragraph__title">
-      <img :src="listMarkerImg" alt="list marker" />
-      <p>{{ props.title }}</p>
-    </div>
+    <ParagraphTitle :title="props.title" />
     <p class="paragraph__content">
       {{ props.content }}
     </p>
@@ -24,18 +22,6 @@ const props = defineProps<{
   flex-direction: column;
   gap: 14px;
   margin-bottom: 20px;
-
-  &__title {
-    display: flex;
-    gap: 5px;
-    color: #2d2a2a;
-    font-weight: 700;
-    font-size: 18px;
-
-    img {
-      width: 20px;
-    }
-  }
 
   &__content {
     font-size: 14px;
