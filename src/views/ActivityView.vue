@@ -276,13 +276,14 @@ const enterActivity = async () => {
   &__content {
     padding: 25px 43px 32px 26px;
     position: relative;
-    text-align: center;
 
     &--button {
       margin-top: 10px;
       background-color: transparent;
       border: none;
       cursor: pointer;
+      width: 100%;
+      text-align: center;
     }
   }
 
