@@ -129,7 +129,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .winning-view {
   overflow: auto;
-  background: url('@/assets/images/background/green-bg.png');
+  background: url('@/assets/images/winning/bg.png');
   display: flex;
   align-items: center;
   flex-direction: column;

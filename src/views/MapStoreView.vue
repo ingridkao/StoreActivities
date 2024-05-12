@@ -112,7 +112,7 @@ onUnmounted(() => {
     z-index: 2;
     width: 100%;
     height: 125px;
-    background: url('@/assets/images/background/gray-2-bg.png') repeat;
+    background: url('@/assets/images/mapStore/bg.png') repeat;
 
     &--info {
       padding: 20px 25px;

@@ -152,7 +152,7 @@ const siteLoading = computed(() => loadStore.load)
   background-color: #efefea;
 
   &__main {
-    background: url('@/assets/images/background/light-green-bg.png');
+    background: url('@/assets/images/lobby/top-bg.png');
     padding: 22px 26px 0 26px;
     width: 100%;
 

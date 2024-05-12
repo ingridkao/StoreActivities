@@ -67,7 +67,7 @@ const startScanning = async () => {
 
 <style lang="scss" scoped>
 .direction-view {
-  background: url('@/assets/images/background/green-bg.png') repeat;
+  background: url('@/assets/images/direction/bg.png') repeat;
   padding-top: 60px;
 
   &__deco-cat {
