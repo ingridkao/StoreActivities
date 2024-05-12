@@ -1,4 +1,9 @@
 export default {
+  lobby: {
+    title: '門市打卡',
+    eventTitle: '活動列表',
+    pastEventTitle: '過去活動紀錄'
+  },
   activity: {
     title: '歡樂\n一夏',
     dateTitle: '活動期間',
