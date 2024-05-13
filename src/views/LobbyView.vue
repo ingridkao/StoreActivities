@@ -18,7 +18,7 @@ import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
 import CampaignListItem from '@/components/CampaignListItem.vue'
-import AdsListItem from '@/components/AdsListItem.vue'
+// import AdsListItem from '@/components/AdsListItem.vue'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 import data from '@/assets/data'
 
@@ -47,8 +47,7 @@ watchEffect(async () => {
 })
 
 const loadStore = useLoadingStore()
-const campaignList = ref<CampaignListType[]>([])
-const specifyCampaignList = ref<CampaignListType[]>([])
+const displayCampaignList = ref<CampaignListType[]>([])
 const adsList = ref<AdListType[]>([])
 const qrString = ref('')
 const storeId = ref<string>('')
@@ -79,8 +78,7 @@ onMounted(async () => {
       fetchSpecifyCampaign(storeId.value),
       fetchAdData()
     ])
-    campaignList.value = result1 || []
-    specifyCampaignList.value = result2 || []
+    displayCampaignList.value = [...result1, ...result2] || []
     adsList.value = result3 || []
     loadStore.toggle(false)
   } catch (error) {
@@ -106,31 +104,30 @@ const siteLoading = computed(() => loadStore.load)
           <div class="lobby-view__main--cat-dialog">{{ data.lobby.title }}</div>
         </div>
       </div>
+
       <div class="lobby-view__menu">
         <div class="lobby-view__menu--category">
           <ParagraphTitle :title="data.lobby.eventTitle" />
         </div>
         <CampaignListItem
-          v-for="campaignItem in specifyCampaignList"
+          v-for="campaignItem in displayCampaignList"
           :campaign="campaignItem"
           :key="campaignItem.id"
         />
+
         <div class="lobby-view__menu--category">
           <ParagraphTitle :title="data.lobby.pastEventTitle" />
         </div>
         <div class="lobby-view__menu--items">
-          <CampaignListItem
-            v-for="campaignItem in campaignList"
-            :campaign="campaignItem"
-            :key="campaignItem.id"
-          />
+          <RouterLink to="/album" class="album">
+            <div class="album__img">
+              <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
+            </div>
+          </RouterLink>
         </div>
       </div>
-      <!--<AdsListItem v-for="item in adsList" :key="item.id" :ads="item" />
 
-      <RouterLink to="/album" class="album">
-        <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
-      </RouterLink> -->
+      <!--<AdsListItem v-for="item in adsList" :key="item.id" :ads="item" /> -->
 
       <div class="lobby-view__icon-bar">
         <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
@@ -141,8 +138,8 @@ const siteLoading = computed(() => loadStore.load)
       </div>
 
       <!-- TODO: After check api flow, remove this  -->
-      <!--<vueQr :text="qrString" :size="100" :correctLevel="3" />
-      <a :href="qrString" target="_blank">{{ qrString }}</a> -->
+      <vueQr :text="qrString" :size="100" :correctLevel="3" />
+      <a :href="qrString" target="_blank">{{ qrString }}</a>
     </div>
   </main>
 </template>
@@ -211,6 +208,10 @@ const siteLoading = computed(() => loadStore.load)
 
     &--category {
       padding-bottom: 20px;
+      padding-top: 20px;
+      &:first-child{
+        padding-top: 0px;
+      }
     }
 
     &--items {
@@ -245,12 +246,21 @@ const siteLoading = computed(() => loadStore.load)
   color: black;
   font-size: 36px;
 }
+
 .album {
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  &__img{
+    width: 338px;
+    height: 100px;
+  }
   img {
     width: 100%;
     height: auto;
     aspect-ratio: 169/50;
-    object-fit: contain;
+    object-fit: cover;
   }
 }
 </style>

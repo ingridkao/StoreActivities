@@ -2,13 +2,13 @@
 import { describe, it } from 'vitest'
 
 // import { mount } from '@vue/test-utils'
-// import ActivitiesListItem from '../ActivitiesListItem.vue'
+// import CampaignListItem from '../CampaignListItem.vue'
 
-describe('ActivitiesItem', () => {
+describe('CampaignListItem', () => {
   it('renders properly', () => {
-    // const wrapper = mount(ActivitiesListItem, {
+    // const wrapper = mount(CampaignListItem, {
     //   props: {
-    //     activities: {}
+    //     campaign: {}
     //   }
     // })
     // expect(wrapper.text()).toContain('活動名稱')

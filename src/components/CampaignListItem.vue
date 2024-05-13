@@ -58,6 +58,10 @@ const linkTo = async () => {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0px 4px 4px 0px #00000040;
+  margin-bottom: 12px;
+  &.invalid {
+    opacity: 0.3;
+  }
 
   &__img {
     width: 338px;
@@ -68,10 +72,6 @@ const linkTo = async () => {
       height: 100%;
       object-fit: cover;
     }
-  }
-
-  &.invalid {
-    opacity: 0.3;
   }
 
   &__info {

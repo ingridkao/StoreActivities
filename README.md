@@ -69,7 +69,7 @@ Branch:
 | | Component              | Description  | Used for                        |
 |-| ---------------------- | ------------ | ------------------------------- |
 |I| HeaderMenu.vue         | 會觸發Line登入| 如一直被轉址請註解部分程式         |
-|I| ActivitiesListItem.vue | 活動列表      | 活動大廳                         |
+|I| CampaignListItem.vue | 活動列表      | 活動大廳                         |
 |I| AdsListItem.vue        | 廣告列表      | 活動大廳                         |
 |W| ScanResult.vue         | 打卡結果      | 相機掃描                         |
 
