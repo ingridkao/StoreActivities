@@ -16,16 +16,22 @@ import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
+import ParagraphTitle from '@/components/ParagraphTitle.vue'
 import CampaignListItem from '@/components/CampaignListItem.vue'
-import AdsListItem from '@/components/AdsListItem.vue'
+// import AdsListItem from '@/components/AdsListItem.vue'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
+import data from '@/assets/data'
+
+import topCatImg from '@/assets/images/lobby/top-cat.png'
+import topLogoImg from '@/assets/images/lobby/top-logo.png'
 
 // step0
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { genrateMockQRCode, fetchCampaign, fetchSpecifyCampaign, fetchAdData, verifyQRCode } = useFetchData()
+const { genrateMockQRCode, fetchCampaign, fetchSpecifyCampaign, fetchAdData, verifyQRCode } =
+  useFetchData()
 const { getQueryParam } = useLink()
 
 let getPosition = false
@@ -41,8 +47,7 @@ watchEffect(async () => {
 })
 
 const loadStore = useLoadingStore()
-const campaignList = ref<CampaignListType[]>([])
-const specifyCampaignList = ref<CampaignListType[]>([])
+const displayCampaignList = ref<CampaignListType[]>([])
 const adsList = ref<AdListType[]>([])
 const qrString = ref('')
 const storeId = ref<string>('')
@@ -51,18 +56,18 @@ onMounted(async () => {
     loadStore.toggle(true)
 
     const pathQuery = getQueryParam(window.location.href, 'ct')
-    if(pathQuery){
+    if (pathQuery) {
       storeId.value = pathQuery.substring(2, 8)
       await verifyQRCode(pathQuery)
-    }else{
+    } else {
       // TODO: After check api flow, remove this
       const MockCode = await genrateMockQRCode()
-      if(MockCode){
+      if (MockCode) {
         // storeId.value = MockCode.store || ''
         setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
         qrString.value = `${import.meta.env.VITE_BASE_URL}?ct=${MockCode.qrCode}`
         const pathQuery = getQueryParam(window.location.href, 'ct')
-        if(pathQuery){
+        if (pathQuery) {
           await verifyQRCode(MockCode.qrCode)
         }
       }
@@ -73,11 +78,9 @@ onMounted(async () => {
       fetchSpecifyCampaign(storeId.value),
       fetchAdData()
     ])
-    campaignList.value = result1 || []
-    specifyCampaignList.value = result2 || []
+    displayCampaignList.value = [...result1, ...result2] || []
     adsList.value = result3 || []
     loadStore.toggle(false)
-
   } catch (error) {
     errorAlert(error)
   }
@@ -89,27 +92,42 @@ const siteLoading = computed(() => loadStore.load)
 <template>
   <main class="lobby-view">
     <div v-if="siteLoading" class="loading">Loading...</div>
-    <div v-else class="lobby-view__menu">
-      <CampaignListItem
-        v-for="campaignItem in specifyCampaignList"
-        :campaign="campaignItem"
-        :key="campaignItem.id"
-      />
-      <CampaignListItem
-        v-for="campaignItem in campaignList"
-        :campaign="campaignItem"
-        :key="campaignItem.id"
-      />
+    <div v-else>
+      <div class="lobby-view__main">
+        <div class="lobby-view__main--logo">
+          <img :src="topLogoImg" alt="top logo" />
+        </div>
+        <div class="lobby-view__main--cat">
+          <div class="lobby-view__main--cat-img">
+            <img :src="topCatImg" alt="top cat" />
+          </div>
+          <div class="lobby-view__main--cat-dialog">{{ data.lobby.title }}</div>
+        </div>
+      </div>
 
-      <AdsListItem
-        v-for="item in adsList"
-        :key="item.id"
-        :ads="item"
-      />
+      <div class="lobby-view__menu">
+        <div class="lobby-view__menu--category">
+          <ParagraphTitle :title="data.lobby.eventTitle" />
+        </div>
+        <CampaignListItem
+          v-for="campaignItem in displayCampaignList"
+          :campaign="campaignItem"
+          :key="campaignItem.id"
+        />
 
-      <RouterLink to="/album" class="album">
-        <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
-      </RouterLink>
+        <div class="lobby-view__menu--category">
+          <ParagraphTitle :title="data.lobby.pastEventTitle" />
+        </div>
+        <div class="lobby-view__menu--items">
+          <RouterLink to="/album" class="album">
+            <div class="album__img">
+              <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
+            </div>
+          </RouterLink>
+        </div>
+      </div>
+
+      <!--<AdsListItem v-for="item in adsList" :key="item.id" :ads="item" /> -->
 
       <div class="lobby-view__icon-bar">
         <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
@@ -120,37 +138,98 @@ const siteLoading = computed(() => loadStore.load)
       </div>
 
       <!-- TODO: After check api flow, remove this  -->
-      <vueQr 
-        :text="qrString" 
-        :size="100" 
-        :correctLevel="3"
-      />
-      <a :href="qrString" target="_blank">{{qrString}}</a>
+      <vueQr :text="qrString" :size="100" :correctLevel="3" />
+      <a :href="qrString" target="_blank">{{ qrString }}</a>
     </div>
   </main>
 </template>
 
 <style lang="scss" scoped>
 .lobby-view {
-  padding: 62px 26px 82px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url('@/assets/images/background/light-green-bg.png');
+  background-color: #efefea;
+
+  &__main {
+    background: url('@/assets/images/lobby/top-bg.png');
+    padding: 22px 26px 0 26px;
+    width: 100%;
+
+    &--logo {
+      width: 73px;
+      height: 31px;
+      margin-bottom: 8px;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &--cat {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: end;
+      gap: 8px;
+      padding-bottom: 8px;
+
+      &-img {
+        width: 135px;
+        height: 125px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+
+      &-dialog {
+        width: 163px;
+        height: 70px;
+        background: url('@/assets/images/lobby/top-dialog.svg');
+        background-size: 100% 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #5f5d5d;
+        font-size: 24px;
+        line-height: 100%;
+        font-weight: 700;
+        padding-left: 24px;
+        transform: translateY(-12px);
+      }
+    }
+  }
 
   &__menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 26px;
-    width: 100%;
+    min-height: calc(100vh - 186px - 125px);
+    padding: 26px;
+
+    &--category {
+      padding-bottom: 20px;
+      padding-top: 20px;
+      &:first-child{
+        padding-top: 0px;
+      }
+    }
+
+    &--items {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
   }
 
   &__icon-bar {
+    background: url('@/assets/images/lobby/bottom-bg.png');
+    width: 100%;
     display: flex;
     flex-direction: row;
     gap: 16px;
     align-items: center;
+    justify-content: center;
+    padding: 28px 0 52px 0;
 
     img {
       width: 45px;
@@ -167,12 +246,21 @@ const siteLoading = computed(() => loadStore.load)
   color: black;
   font-size: 36px;
 }
+
 .album {
+  cursor: pointer;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 4px 0px #00000040;
+  &__img{
+    width: 338px;
+    height: 100px;
+  }
   img {
     width: 100%;
     height: auto;
     aspect-ratio: 169/50;
-    object-fit: contain;
+    object-fit: cover;
   }
 }
 </style>

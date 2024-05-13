@@ -9,7 +9,7 @@ import { useMapbox } from '@/composable/useMapbox'
 import { useLink } from '@/composable/useLink'
 
 import data from '@/assets/data'
-import centerIconButtonImg from '@/assets/images/mapStore/center-icon-button.svg'
+import mapIconButtonImg from '@/assets/images/mapStore/map-button.svg'
 import checkInButtonImg from '@/assets/images/mapStore/check-in-button.svg'
 import mapCatImg from '@/assets/images/mapStore/map-cat.png'
 
@@ -49,7 +49,7 @@ onUnmounted(() => {
     <div class="map-store-view__panel">
       <div v-if="targetBoxData.toggle" class="map-store-view__panel--info">
         <div class="map-store-view__panel--info-center-button" @click="mapNavigation">
-          <img :src="centerIconButtonImg" alt="center icon button" />
+          <img :src="mapIconButtonImg" alt="center icon button" />
         </div>
         <div class="map-store-view__panel--info-logo">
           <img src="/images/example-logo.svg" alt="logo point" />
@@ -102,6 +102,9 @@ onUnmounted(() => {
 }
 
 .map-store-view {
+  z-index: 2;
+  position: relative;
+
   &__panel {
     position: fixed;
     bottom: 0;
@@ -109,7 +112,7 @@ onUnmounted(() => {
     z-index: 2;
     width: 100%;
     height: 125px;
-    background: url('@/assets/images/background/gray-2-bg.png') repeat;
+    background: url('@/assets/images/mapStore/bg.png') repeat;
 
     &--info {
       padding: 20px 25px;

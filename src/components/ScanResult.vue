@@ -71,10 +71,10 @@ const scanAgain = async () => {
   overflow: scroll;
   top: 0;
   left: 0;
-  background: url('@/assets/images/background/light-green-bg.png') repeat;
+  background: url('@/assets/images/scan/success-bg.png') repeat;
 
   &.fail {
-    background: url('@/assets/images/background/gray-bg.png') repeat;
+    background: url('@/assets/images/scan/fail-bg.png') repeat;
   }
 
   &__content {

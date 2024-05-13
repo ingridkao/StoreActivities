@@ -18,7 +18,7 @@ const stampBaseCount = 20
 const albumStore = ref<AlbumType[]>([])
 
 const accumulation = computed(() => {
-	if (albumStore.value.length === 0) return '0000'
+  if (albumStore.value.length === 0) return '0000'
   const numberStr = String(albumStore.value.length)
   return numberStr.padStart(5 - numberStr.length, '0')
 })
@@ -83,7 +83,7 @@ onMounted(async () => {
 
 <style lang="scss" scope>
 .album-view {
-  background: url('@/assets/images/background/pink-bg.png');
+  background: url('@/assets/images/album/bg.png');
   overflow: auto;
 
   &__header {

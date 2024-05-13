@@ -8,7 +8,7 @@ import { useLink } from '@/composable/useLink'
 import ParagraphItem from '@/components/ParagraphItem.vue'
 import data from '@/assets/data'
 import winningCatImg from '@/assets/images/winning/winning-cat.png'
-import endButtonImg from '@/assets/images/winning/end-button.svg'
+import backButtonImg from '@/assets/images/winning/back-button.svg'
 import nextArrowImg from '@/assets/images/winning/next-arrow.svg'
 import prevArrowImg from '@/assets/images/winning/prev-arrow.svg'
 
@@ -88,12 +88,12 @@ onMounted(() => {
           }"
         >
           <p>{{ prizeInfo[prizeIndex].title }}</p>
+          <span>
+            ({{ prizeInfo[prizeIndex].usedCount }}/{{ prizeInfo[prizeIndex].usableCount }})
+          </span>
         </div>
         <div class="winning-view__prize-wrapper--middle">
           <p>{{ prizeInfo[prizeIndex].content }}</p>
-          <span
-            >{{ prizeInfo[prizeIndex].usedCount }} / {{ prizeInfo[prizeIndex].usableCount }}</span
-          >
         </div>
         <div class="winning-view__prize-wrapper--bottom">
           <p class="winning-view__prize-wrapper--bottom-number">
@@ -119,9 +119,9 @@ onMounted(() => {
         :title="data.winning.explanationTitle"
         :content="prizeInfo[prizeIndex].explanation"
       />
-      <button class="winning-view__content--button" @click="linkToActivity()">
-        <img :src="endButtonImg" alt="enter button" />
-      </button>
+      <div class="winning-view__content--button" @click="linkToActivity()">
+        <img :src="backButtonImg" alt="back button" />
+      </div>
     </div>
   </main>
 </template>
@@ -129,7 +129,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 .winning-view {
   overflow: auto;
-  background: url('@/assets/images/background/green-bg.png');
+  background: url('@/assets/images/winning/bg.png');
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -178,11 +178,22 @@ onMounted(() => {
       flex: 0 0 63px;
       width: 100%;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
       font-size: 20px;
       font-weight: 700;
       color: #473423;
+      gap: 4px;
+
+      p {
+        margin-top: 6px;
+      }
+
+      span {
+        font-size: 15px;
+        font-weight: 500;
+      }
 
       &--type1 {
         background-color: #efdc2b;
@@ -202,7 +213,8 @@ onMounted(() => {
       width: 100%;
       background-color: #f7f7f7;
       display: flex;
-      justify-content: end;
+      justify-content: center;
+
       align-items: center;
       font-size: 24px;
       font-weight: 700;
@@ -213,12 +225,8 @@ onMounted(() => {
 
       p {
         padding: 0 12px;
+        margin-top: 12px;
         text-align: center;
-      }
-
-      span {
-        font-size: 13.5px;
-        font-weight: 500;
       }
     }
 
@@ -271,13 +279,15 @@ onMounted(() => {
   }
 
   &__content {
-    padding: 42px 57px 42px 27px;
+    padding: 42px 27px 42px 27px;
     background-color: #fff;
     width: 100%;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 
     &--button {
-      margin-top: 10px;
       text-align: center;
       cursor: pointer;
       border: none;

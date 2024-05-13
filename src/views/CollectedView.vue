@@ -43,7 +43,7 @@ watchEffect(async () => {
         activityExists.value = true
         collectedActivity.value = res
         collectedStore.value = res.collection || []
-      }else{
+      } else {
         // ToDO: 沒有此活動
       }
     } catch (error) {
@@ -137,7 +137,7 @@ watchEffect(async () => {
 
 .collected-view {
   overflow: auto;
-  background: url('@/assets/images/background/green-bg.png');
+  background: url('@/assets/images/collected/bg.png');
 
   &__header {
     height: 145px;
@@ -251,7 +251,7 @@ watchEffect(async () => {
     justify-content: center;
     align-items: center;
     gap: 14px;
-    >button{
+    > button {
       cursor: pointer;
       border: none;
       background-color: transparent;

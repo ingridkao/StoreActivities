@@ -166,7 +166,7 @@ const enterActivity = async () => {
     left: 0;
     width: 100%;
     height: 500px;
-    background: url('@/assets/images/background/green-bg.png') repeat;
+    background: url('@/assets/images/activity/bg.png') repeat;
   }
 
   &__main {
@@ -276,13 +276,14 @@ const enterActivity = async () => {
   &__content {
     padding: 25px 43px 32px 26px;
     position: relative;
-    text-align: center;
 
     &--button {
       margin-top: 10px;
       background-color: transparent;
       border: none;
       cursor: pointer;
+      width: 100%;
+      text-align: center;
     }
   }
 
@@ -296,7 +297,7 @@ const enterActivity = async () => {
     background-color: transparent;
     border: none;
     cursor: pointer;
-    > img{
+    > img {
       width: 100%;
     }
   }
