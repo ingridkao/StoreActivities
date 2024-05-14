@@ -13,7 +13,6 @@ export interface CampaignListType {
   startTime?: string
   endTime?: string
   isEnable?: boolean
-  toLinkUrl?: string
   imageFilePath?: string
   pageRouter?: string
 }

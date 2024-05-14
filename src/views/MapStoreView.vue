@@ -5,14 +5,15 @@
 import { onMounted, onUnmounted } from 'vue'
 
 import HeaderMenu from '@/components/HeaderMenu.vue'
-import { useMapbox } from '@/composable/useMapbox'
 import { useLink } from '@/composable/useLink'
+import { useMapbox } from '@/composable/useMapbox'
 
 import data from '@/assets/data'
 import mapIconButtonImg from '@/assets/images/mapStore/map-button.svg'
 import checkInButtonImg from '@/assets/images/mapStore/check-in-button.svg'
 import mapCatImg from '@/assets/images/mapStore/map-cat.png'
 
+const { linkToCatchDirection } = useLink()
 const {
   storeFilterOptions,
   storeFilterSelectd,
@@ -21,11 +22,6 @@ const {
   updateChecked,
   mapNavigation
 } = useMapbox()
-const { linkToDirection } = useLink()
-const goToDirection = () => {
-  // TODO: 提示離開此頁面
-  linkToDirection()
-}
 
 // 點選門市後出現資訊drawerBox >> 點選drawerBox以外則toggleStoreInfo()
 const handleOutsideClick = (event: Event) => {
@@ -43,7 +39,7 @@ onUnmounted(() => {
 
 <template>
   <main class="map-store-view">
-    <HeaderMenu :knowActivity="true" />
+    <HeaderMenu />
     <div id="mapboxBasic"></div>
 
     <div class="map-store-view__panel">
@@ -65,7 +61,7 @@ onUnmounted(() => {
         <div class="map-store-view__panel--cat">
           <img :src="mapCatImg" />
         </div>
-        <div class="map-store-view__panel--button" @click="goToDirection">
+        <div class="map-store-view__panel--button" @click="linkToCatchDirection">
           <img :src="checkInButtonImg" alt="check in button" />
         </div>
         <div class="map-store-view__panel--store-button">
@@ -149,7 +145,7 @@ onUnmounted(() => {
       &-content {
         display: grid;
         grid-template-columns: 50px 1fr;
-        grid-template-row: 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
         row-gap: 12px;
         p {
           color: #fff;

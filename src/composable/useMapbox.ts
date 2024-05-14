@@ -12,12 +12,13 @@ export function useMapbox() {
   const { fetchLayerData } = useFetchData()
   const { clientLocationCity } = useMap()
   // const loadStore = useLoadingStore()
+  const { VITE_OUTDIR, VITE_MAPBOX_KEY } = import.meta.env
 
   const sourceName = 'store-source'
   const radiusRangeName = 'radius-range'
   const layerName = 'all-layer'
   const markerId = 'common-marker'
-	let mapboxEl = null as any
+  let mapboxEl = null as any
   let geolocateEl = null as any
   // let popup = null as any
   // zoom: 初始 ZOOM LEVEL; [0-20, 0 為最小 (遠), 20 ;最大 (近)]
@@ -56,19 +57,21 @@ export function useMapbox() {
     }
   ])
 
+  const originURL = window.location.origin
+  const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
   const loadMultIconImage = async () => {
     const iconImages = [
-      { url: '/711_sl_36X36.gif', id: 'common-marker' },
-      { url: '/images/map/1.png', id: 'songshan' },
-      { url: '/images/map/2.png', id: 'nangang' },
-      { url: '/images/map/3.png', id: 'daan' },
-      { url: '/images/map/4.png', id: 'shilin' },
-      { url: '/images/map/5.png', id: 'neihu' },
-      { url: '/images/map/6.png', id: 'wenshan' },
-      { url: '/images/map/7.png', id: 'xinyi' },
-      { url: '/images/map/8.png', id: 'beitou' },
-      { url: '/images/map/9.png', id: 'zhongshan' },
-      { url: '/images/map/10.png', id: 'zhongzheng' }
+      { url: `${fileOrigin}/711_sl_36X36.gif`, id: 'common-marker' },
+      { url: `${fileOrigin}/images/map/1.png`, id: 'songshan' },
+      { url: `${fileOrigin}/images/map/2.png`, id: 'nangang' },
+      { url: `${fileOrigin}/images/map/3.png`, id: 'daan' },
+      { url: `${fileOrigin}/images/map/4.png`, id: 'shilin' },
+      { url: `${fileOrigin}/images/map/5.png`, id: 'neihu' },
+      { url: `${fileOrigin}/images/map/6.png`, id: 'wenshan' },
+      { url: `${fileOrigin}/images/map/7.png`, id: 'xinyi' },
+      { url: `${fileOrigin}/images/map/8.png`, id: 'beitou' },
+      { url: `${fileOrigin}/images/map/9.png`, id: 'zhongshan' },
+      { url: `${fileOrigin}/images/map/10.png`, id: 'zhongzheng' }
     ]
     return Promise.all(
       iconImages.map(async (img) => {
@@ -121,30 +124,30 @@ export function useMapbox() {
     })
   }
 
-	// Radius: 5km
-	const addRadiusRange = (coordinates: number[]) => {
+  // Radius: 5km
+  const addRadiusRange = (coordinates: number[]) => {
     const geojsonSource = mapboxEl.getSource(`${radiusRangeName}-source`)
-		const pt = point(coordinates)
-		const mapBuffered = buffer(pt, 5)
-    if(geojsonSource){
-			geojsonSource.setData(mapBuffered)
-		}else{
-			mapboxEl.addSource(`${radiusRangeName}-source`, {
-				type: 'geojson',
-				data: mapBuffered
-			})
-			mapboxEl.addLayer({
-				'id': `${radiusRangeName}-layer`,
-				'type': 'fill',
-				'source': `${radiusRangeName}-source`,
-				'layout': {},
-				'paint': {
-					'fill-color': '#F2F12D',
-					'fill-opacity': 0.5
-				}
-			})
-		}
-	}
+    const pt = point(coordinates)
+    const mapBuffered = buffer(pt, 5)
+    if (geojsonSource) {
+      geojsonSource.setData(mapBuffered)
+    } else {
+      mapboxEl.addSource(`${radiusRangeName}-source`, {
+        type: 'geojson',
+        data: mapBuffered
+      })
+      mapboxEl.addLayer({
+        id: `${radiusRangeName}-layer`,
+        type: 'fill',
+        source: `${radiusRangeName}-source`,
+        layout: {},
+        paint: {
+          'fill-color': '#F2F12D',
+          'fill-opacity': 0.5
+        }
+      })
+    }
+  }
 
   const updateChecked = (target: String) => {
     storeFilterSelectd.value = target
@@ -214,7 +217,7 @@ export function useMapbox() {
       duration: 600,
       easing: (easeEvent: any) => easeEvent
     })
-		// addRadiusRange(coordinates)
+    // addRadiusRange(coordinates)
   }
 
   // https://docs.uaparser.js.org/v2/api/ua-parser-js/get-device.html
@@ -247,7 +250,7 @@ export function useMapbox() {
         console.log(error)
       })
       .then(() => {
-        mapboxgl.accessToken = import.meta.env.VITE_MAPBOX_KEY
+        mapboxgl.accessToken = VITE_MAPBOX_KEY
 
         // Initialize the Popup.
         // popup = new mapboxgl.Popup({
@@ -306,7 +309,7 @@ export function useMapbox() {
                 type: 'geojson',
                 data: storeResults
               })
-							// addRadiusRange(mapConfig.taipeiCenter)
+              // addRadiusRange(mapConfig.taipeiCenter)
 
               const rr = await loadMultIconImage()
               if (!rr) return

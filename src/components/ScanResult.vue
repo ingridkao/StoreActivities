@@ -13,13 +13,15 @@ import keepCheckButtonImg from '@/assets/images/scan/keep-check-button.svg'
 import recordButtonImg from '@/assets/images/scan/record-button.svg'
 import checkSuccessImageImg from '@/assets/images/scan/check-success-image.png'
 
-const { linkToCollect } = useLink()
+const { linkToTargetActivityIdPage } = useLink()
 
 const props = defineProps<{
   result: ScanResultType
 }>()
-
 const successResult = computed(() => Object.keys(props.result).length > 0)
+const activityId = computed(() =>
+  props.result && props.result.event_id ? props.result.event_id : ''
+)
 
 const scanAgain = async () => {
   window.location.reload()
@@ -53,10 +55,14 @@ const scanAgain = async () => {
       </div>
       <div class="scan-result__buttons">
         <div class="scan-result__buttons--wrapper">
-          <img @click="linkToCollect(props.result)" :src="recordButtonImg" alt="record button" />
+          <img
+            @click="linkToTargetActivityIdPage(activityId, 'Collected')"
+            :src="recordButtonImg"
+            alt="查看紀錄"
+          />
         </div>
         <div class="scan-result__buttons--wrapper">
-          <img @click="scanAgain" :src="keepCheckButtonImg" alt="keep check button" />
+          <img @click="scanAgain" :src="keepCheckButtonImg" alt="繼續打卡" />
         </div>
       </div>
     </div>

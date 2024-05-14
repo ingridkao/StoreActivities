@@ -7,6 +7,7 @@ import HeaderMenu from '@/components/HeaderMenu.vue'
 import type { AlbumType } from '@/composable/configurable'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useLoadingStore } from '@/stores/loading'
 
 import emptyStampImg from '@/assets/images/album/empty-stamp.png'
@@ -14,6 +15,9 @@ import checkedStampImg from '@/assets/images/album/checked-stamp.svg'
 
 const { fetchAlbumData } = useFetchData()
 const { errorAlert, openStoreInfo } = useSweetAlert()
+const { setAcStringStorage } = useBrowserStorage()
+setAcStringStorage('')
+
 const stampBaseCount = 20
 const albumStore = ref<AlbumType[]>([])
 
@@ -38,7 +42,7 @@ onMounted(async () => {
 
 <template>
   <main class="album-view">
-    <HeaderMenu :knowActivity="false" />
+    <HeaderMenu />
     <div class="album-view__header">
       <p class="album-view__header--title">目前累積搜集門市</p>
       <div class="album-view__header--info">

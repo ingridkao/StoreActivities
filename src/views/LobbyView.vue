@@ -11,7 +11,6 @@ import { ref, onMounted, watchEffect, computed } from 'vue'
 import type { CampaignListType, AdListType } from '@/composable/configurable'
 import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
-import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
@@ -28,11 +27,11 @@ import topLogoImg from '@/assets/images/lobby/top-logo.png'
 // step0
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
-const { setLocationStorage } = useBrowserStorage()
+const { setLocationStorage, setAcStringStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
 const { genrateMockQRCode, fetchCampaign, fetchSpecifyCampaign, fetchAdData, verifyQRCode } =
   useFetchData()
-const { getQueryParam } = useLink()
+setAcStringStorage('')
 
 let getPosition = false
 watchEffect(async () => {
@@ -52,27 +51,8 @@ const adsList = ref<AdListType[]>([])
 const qrString = ref('')
 const storeId = ref<string>('')
 onMounted(async () => {
+  loadStore.toggle(true)
   try {
-    loadStore.toggle(true)
-
-    const pathQuery = getQueryParam(window.location.href, 'ct')
-    if (pathQuery) {
-      storeId.value = pathQuery.substring(2, 8)
-      await verifyQRCode(pathQuery)
-    } else {
-      // TODO: After check api flow, remove this
-      const MockCode = await genrateMockQRCode()
-      if (MockCode) {
-        // storeId.value = MockCode.store || ''
-        setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
-        qrString.value = `${import.meta.env.VITE_BASE_URL}?ct=${MockCode.qrCode}`
-        const pathQuery = getQueryParam(window.location.href, 'ct')
-        if (pathQuery) {
-          await verifyQRCode(MockCode.qrCode)
-        }
-      }
-    }
-
     const [result1, result2, result3] = await Promise.all([
       fetchCampaign(),
       fetchSpecifyCampaign(storeId.value),
@@ -80,7 +60,28 @@ onMounted(async () => {
     ])
     displayCampaignList.value = [...result1, ...result2] || []
     adsList.value = result3 || []
-    loadStore.toggle(false)
+  } catch (error) {
+    errorAlert(error)
+  }
+  loadStore.toggle(false)
+
+  try {
+    const originURL = window.location.origin
+    const newPath = new URL(window.location.href, originURL)
+    if (newPath.origin === originURL && newPath && newPath.search) {
+      const codeSplit = newPath.search.split('?ct=')
+      const ctCode = codeSplit.length === 2 && codeSplit[1] ? codeSplit[1] : ''
+      storeId.value = ctCode.substring(2, 8)
+      await verifyQRCode(ctCode)
+      qrString.value = ''
+    } else {
+      // TODO: After check api flow, remove this
+      const MockCode = await genrateMockQRCode()
+      if (MockCode) {
+        setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
+        qrString.value = `${originURL}?ct=${MockCode.qrCode}`
+      }
+    }
   } catch (error) {
     errorAlert(error)
   }
@@ -138,8 +139,10 @@ const siteLoading = computed(() => loadStore.load)
       </div>
 
       <!-- TODO: After check api flow, remove this  -->
-      <vueQr :text="qrString" :size="100" :correctLevel="3" />
-      <a :href="qrString" target="_blank">{{ qrString }}</a>
+      <template v-if="qrString">
+        <vueQr :text="qrString" :size="100" :correctLevel="3" />
+        <a :href="qrString" target="_blank">{{ qrString }}</a>
+      </template>
     </div>
   </main>
 </template>
@@ -209,7 +212,7 @@ const siteLoading = computed(() => loadStore.load)
     &--category {
       padding-bottom: 20px;
       padding-top: 20px;
-      &:first-child{
+      &:first-child {
         padding-top: 0px;
       }
     }
@@ -236,15 +239,16 @@ const siteLoading = computed(() => loadStore.load)
       height: 45px;
     }
   }
-}
-.loading {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  font-size: 36px;
+
+  .loading {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 36px;
+  }
 }
 
 .album {
@@ -252,7 +256,7 @@ const siteLoading = computed(() => loadStore.load)
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0px 4px 4px 0px #00000040;
-  &__img{
+  &__img {
     width: 338px;
     height: 100px;
   }
