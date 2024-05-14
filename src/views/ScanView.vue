@@ -6,7 +6,6 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import jsQR from 'jsqr'
 import { useFetchData } from '@/composable/useFetch'
 import ScanResult from '@/components/ScanResult.vue'
-const { VITE_BASE_URL } = import.meta.env
 const { commitStoreCheckIn } = useFetchData()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
@@ -87,11 +86,20 @@ const updateOutPutData = async (imageData: any) => {
     qrCodeOutputData.value = code.data
 
     try {
-      const codeSplit = code.data.split(`${VITE_BASE_URL}/?ct=`)
+      const originURL = window.location.origin
+      const newPath = new URL(code.data, originURL)
+      console.log(newPath)
+      let qrcodeOk = false
+      if (newPath.origin !== originURL) {
+        qrcodeOk = false
+      } else if (newPath && newPath.search) {
+        const codeSplit = newPath.search.split('?ct=')
+        qrcodeOk = codeSplit.length === 2 && codeSplit[1] ? true : false
+      }
+      console.log(qrcodeOk)
       // const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
       // const verifyRes = await verifyQRCode(ctCode)
       // const commitRes = await commitStoreCheckIn(verifyRes)
-      const qrcodeOk = codeSplit.length === 2 && codeSplit[1] ? true : false
       const commitRes = await commitStoreCheckIn(qrcodeOk)
       if (commitRes) {
         // 打卡成功蓋版
@@ -112,27 +120,27 @@ const updateOutPutData = async (imageData: any) => {
   }
 }
 const cleanOutPutData = () => {
-    qrCodeOutputData.value = ''
+  qrCodeOutputData.value = ''
 }
 
 const isMobile = ref(false)
 const tick = () => {
-    if (!canvasElement || !canvasCtx || !video) return
-    videoLoading.value = true
-    if (video.readyState == video.HAVE_ENOUGH_DATA) {
-        videoLoading.value = false
-        canvasCtx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
-        // 添加遮罩層
-        if (isMobile.value) {
-            drawOverlayTopDown()
-        } else {
-            drawOverlayLeftRight();
-        }
-        const imageData = canvasCtx.getImageData(0, 0, canvasElement.width, canvasElement.height);
-        updateOutPutData(imageData)
+  if (!canvasElement || !canvasCtx || !video) return
+  videoLoading.value = true
+  if (video.readyState == video.HAVE_ENOUGH_DATA) {
+    videoLoading.value = false
+    canvasCtx.drawImage(video, 0, 0, canvasElement.width, canvasElement.height)
+    // 添加遮罩層
+    if (isMobile.value) {
+      drawOverlayTopDown()
+    } else {
+      drawOverlayLeftRight()
     }
-    // 持續執行動畫
-    animationId = requestAnimationFrame(tick)
+    const imageData = canvasCtx.getImageData(0, 0, canvasElement.width, canvasElement.height)
+    updateOutPutData(imageData)
+  }
+  // 持續執行動畫
+  animationId = requestAnimationFrame(tick)
 }
 
 let streamInstance: any = null

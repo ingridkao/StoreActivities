@@ -4,6 +4,7 @@
  */
 import { ref, onMounted } from 'vue'
 import { useLink } from '@/composable/useLink'
+import { useRoute } from 'vue-router'
 
 import ParagraphItem from '@/components/ParagraphItem.vue'
 import data from '@/assets/data'
@@ -12,7 +13,8 @@ import backButtonImg from '@/assets/images/winning/back-button.svg'
 import nextArrowImg from '@/assets/images/winning/next-arrow.svg'
 import prevArrowImg from '@/assets/images/winning/prev-arrow.svg'
 
-const { linkToActivity } = useLink()
+const { linkToTargetActivityIdPage } = useLink()
+const route = useRoute()
 
 //TODO: Remove prizeIndex and prizeInfo after api finish
 const prizeIndex = ref(0)
@@ -119,8 +121,11 @@ onMounted(() => {
         :title="data.winning.explanationTitle"
         :content="prizeInfo[prizeIndex].explanation"
       />
-      <div class="winning-view__content--button" @click="linkToActivity()">
-        <img :src="backButtonImg" alt="back button" />
+      <div
+        class="winning-view__content--button"
+        @click="linkToTargetActivityIdPage(route?.params?.id, 'Collected')"
+      >
+        <img :src="backButtonImg" alt="返回打卡紀錄" />
       </div>
     </div>
   </main>

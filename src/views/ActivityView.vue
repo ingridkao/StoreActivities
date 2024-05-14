@@ -22,7 +22,6 @@ import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
-import { useLink } from '@/composable/useLink'
 
 import data from '@/assets/data'
 import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
@@ -31,11 +30,9 @@ import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
 import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
 import enterButtonImg from '@/assets/images/activity/enter-button.svg'
 
-const route = useRoute()
 const router = useRouter()
-const { linkToDirection } = useLink()
 const { confirmActivity, verifyQRCode, commitStoreCheckIn } = useFetchData()
-const { getAcStorage } = useBrowserStorage()
+const { setAcStringStorage } = useBrowserStorage()
 
 // step0
 const { coords, error } = useGeolocation()
@@ -45,29 +42,13 @@ let getPosition = false
 // step1
 const { errorAlert } = useSweetAlert()
 const content = ref({})
-
-watchEffect(async () => {
-  // step0
-  const { latitude, longitude } = coords.value
-  if (getPosition) return
-  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
-    getPosition = true
-    // setLocationStorage(latitude, longitude)
-  } else if (error.value && error.value.code >= 1) {
-    geoErrorHandler(error.value.code)
-  }
-  // step1
-  let activityId: string | string[] = ''
-  if (route.params && route.params.id) {
-    activityId = route.params.id
-  } else {
-    activityId = getAcStorage()
-  }
+const route = useRoute()
+const confirmActivityId = async (activityId: string | string[]) => {
   try {
     const confirmRes = await confirmActivity(activityId)
     if (typeof confirmRes === 'object') {
-      localStorage.setItem('ac', String(activityId))
       content.value = confirmRes
+      setAcStringStorage(activityId)
     } else if (confirmRes === 2) {
       router.push({ path: '/wrapup' })
     } else {
@@ -76,6 +57,17 @@ watchEffect(async () => {
   } catch (error) {
     const errorStr = String(error)
     errorAlert(errorStr)
+  }
+}
+watchEffect(() => {
+  confirmActivityId(route?.params?.id)
+  const { latitude, longitude } = coords.value
+  if (getPosition) return
+  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+    getPosition = true
+    // setLocationStorage(latitude, longitude)
+  } else if (error.value && error.value.code >= 1) {
+    geoErrorHandler(error.value.code)
   }
 })
 
@@ -96,11 +88,19 @@ const enterActivity = async () => {
     errorAlert(errorStr)
   }
 }
+const linkToDirection = () => {
+  router.push({
+    name: 'Direction',
+    params: {
+      id: String(route?.params?.id)
+    }
+  })
+}
 </script>
 
 <template>
   <main class="activity-view">
-    <HeaderMenu :knowActivity="true" />
+    <HeaderMenu />
     <div class="activity-view__top-bg"></div>
 
     <div class="activity-view__main">

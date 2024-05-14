@@ -1,7 +1,3 @@
-// export interface ActivityListType {
-//   id?: number
-//   title?: string
-// }
 export type ErrorLogDataType = {
   code?: number
   msg?: string

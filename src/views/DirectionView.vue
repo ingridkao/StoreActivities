@@ -7,6 +7,7 @@
  * step2.開啟打卡頁面|功能
  */
 import HeaderMenu from '@/components/HeaderMenu.vue'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useLIFF } from '@/composable/useLIFF'
 
 import data from '@/assets/data'
@@ -16,6 +17,9 @@ import step1PictureImg from '@/assets/images/direction/step-1-picture.png'
 import step2IconImg from '@/assets/images/direction/step-2-icon.svg'
 import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
 import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
+
+const { setParamsIdStorage } = useBrowserStorage()
+setParamsIdStorage()
 
 const { scanCode } = useLIFF()
 const startScanning = async () => {
@@ -32,7 +36,7 @@ const startScanning = async () => {
 
 <template>
   <main class="direction-view">
-    <HeaderMenu :knowActivity="true" />
+    <HeaderMenu />
     <div class="direction-view__deco-cat">
       <img :src="DecoCatImg" alt="deco cat" />
     </div>

@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-import { RouterLink } from 'vue-router'
+import { useRoute, RouterLink } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
-const { getAcStorage } = useBrowserStorage()
 const { getOpenInClient, useLineLogout } = useLIFF()
 const openInLIFF = getOpenInClient()
-const props = defineProps<{
-  knowActivity: boolean
-}>()
 
 const navOpen = ref<Boolean>(false)
 const togggle = () => {
@@ -23,35 +18,26 @@ const menuList = ref<
     key?: string
     name?: string
   }[]
->([
-  {
-    link: '/',
-    key: 'Lobby',
-    name: '活動大廳'
-  }
-])
+>([])
 
+const route = useRoute()
 watchEffect(() => {
-  if (props.knowActivity && userStore.userProfile) {
-    const acString = getAcStorage()
-    menuList.value = [
-      ...menuList.value,
-      {
-        link: `/activity/${acString}`,
-        key: 'Activity',
-        name: '活動說明'
-      },
-      {
-        link: '/mapStore',
-        key: 'MapStore',
-        name: '門市地圖'
-      },
-      {
-        link: `/collected/${acString}`,
-        key: 'Collected',
-        name: '活動打卡紀錄'
-      }
-    ]
+  if (Object.keys(userStore.userProfile).length > 0) {
+    if (route.params && route.params.id) {
+      menuList.value = [
+        { link: '/', key: 'Lobby', name: '活動大廳' },
+        { link: `/activity/${route.params.id}`, key: 'Activity', name: '活動說明' },
+        { link: '/mapStore', key: 'MapStore', name: '門市地圖' },
+        { link: `/collected/${route.params.id}`, key: 'Collected', name: '活動打卡紀錄' }
+      ]
+    } else {
+      menuList.value = [
+        { link: '/', key: 'Lobby', name: '活動大廳' },
+        { link: '/mapStore', key: 'MapStore', name: '門市地圖' }
+      ]
+    }
+  } else {
+    menuList.value = [{ link: '/', key: 'Lobby', name: '活動大廳' }]
   }
 })
 </script>
@@ -75,7 +61,10 @@ watchEffect(() => {
           {{ item.name }}
         </RouterLink>
         <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
-        <template v-if="userStore.userProfile.userId">
+        <div
+          v-if="Object.keys(userStore.userProfile).length > 0"
+          class="sidemenu__item sidemenu__avendar"
+        >
           <img
             v-if="userStore.userProfile.pictureUrl"
             :src="userStore.userProfile.pictureUrl"
@@ -83,16 +72,9 @@ watchEffect(() => {
           />
           <div>
             <p>{{ userStore.userProfile.displayName || '' }}</p>
-            <p>{{ userStore.userProfile.userId || '' }}</p>
+            <button v-if="!openInLIFF" class="sidemenu__button" @click="useLineLogout">登出</button>
           </div>
-        </template>
-        <button
-          v-if="userStore.userProfile.userId && !openInLIFF"
-          class="sidemenu__item sidemenu__button"
-          @click="useLineLogout"
-        >
-          登出
-        </button>
+        </div>
       </div>
     </transition>
   </div>
@@ -162,11 +144,23 @@ watchEffect(() => {
     }
   }
 
-  &__button {
-    width: 100%;
-    background-color: transparent;
-    text-align: left;
-    border: none;
+  &__avendar {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    > img {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+    }
+    > div {
+      font-size: 12px;
+      > button {
+        background-color: transparent;
+        text-align: left;
+        border: none;
+      }
+    }
   }
 }
 

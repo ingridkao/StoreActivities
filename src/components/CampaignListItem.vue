@@ -4,7 +4,7 @@
  */
 import { useRouter } from 'vue-router'
 import type { CampaignListType } from '@/composable/configurable'
-const { VITE_ASSETS_URL, VITE_UI_MODE } = import.meta.env
+const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
 const props = defineProps<{
   campaign: CampaignListType
 }>()
@@ -12,22 +12,17 @@ const router = useRouter()
 const linkTo = async () => {
   const { isEnable, pageRouter } = props.campaign
   if (!isEnable) return
-  // toLinkUrl: LIFF URL
-  // if (toLinkUrl){
-  //   window.open(encodeURI(toLinkUrl), '_blank', 'noreferrer,noopener')
-  // }
   if (pageRouter) {
     router.push({
       name: 'Activity',
       params: {
         id: pageRouter
-      },
-      query: {
-        ac: pageRouter
       }
     })
   }
 }
+const originURL = window.location.origin
+const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
 </script>
 
 <template>
@@ -35,9 +30,9 @@ const linkTo = async () => {
     <div class="activities__img">
       <img
         :src="
-          VITE_UI_MODE
-            ? './images/lobby/lobby-item-1.png'
-            : `${VITE_ASSETS_URL}${props.campaign.imageFilePath}`
+          VITE_ASSETS_URL && props.campaign.imageFilePath
+            ? `${VITE_ASSETS_URL}${props.campaign.imageFilePath}`
+            : `${fileOrigin}/images/lobby/lobby-item-1.png`
         "
         :alt="props.campaign.eventName ?? ''"
       />

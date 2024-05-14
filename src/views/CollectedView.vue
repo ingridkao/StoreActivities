@@ -25,40 +25,44 @@ const { fetchCollectData } = useFetchData()
 const { errorAlert, openStoreInfo } = useSweetAlert()
 
 const stampBaseCount = 20
+const activityId = ref<string>('')
 const activityExists = ref<boolean>(false)
 const collectedActivity = ref<CollectedType>({})
 const collectedStore = ref<CollectedListType[]>([])
 
 const route = useRoute()
-const { linkToAlbum, linkToActivity, linkToWinning } = useLink()
+const { linkToAlbum, linkToTargetActivityIdPage } = useLink()
 
 const loadStore = useLoadingStore()
 watchEffect(async () => {
-  const activityId = route.params.id
-  if (activityId) {
+  const activityParamsId = String(route.params.id)
+  if (!activityParamsId) {
+    linkToAlbum()
+  } else {
     loadStore.toggle(true)
     try {
-      const res = await fetchCollectData(String(activityId))
+      const res = await fetchCollectData(activityParamsId)
       if (res) {
         activityExists.value = true
         collectedActivity.value = res
         collectedStore.value = res.collection || []
+        activityId.value = activityParamsId
       } else {
-        // ToDO: 沒有此活動
+        activityId.value = ''
+        linkToTargetActivityIdPage('', 'Activity')
       }
     } catch (error) {
-      errorAlert(String(error), `/activity/${route.params.id}`)
+      errorAlert(String(error), `/activity/${activityParamsId}`)
     }
     loadStore.toggle(false)
-  } else {
-    linkToAlbum()
   }
 })
+
 </script>
 
 <template>
   <main class="collected-view">
-    <HeaderMenu :knowActivity="true" />
+    <HeaderMenu />
     <div class="collected-view__header">
       <div class="collected-view__header--text-block">
         <h1 class="collected-view__header--text-block-main">{{ collectedActivity.event_name }}</h1>
@@ -119,15 +123,16 @@ watchEffect(async () => {
       </div>
     </div>
     <div v-if="activityExists" class="collected-view__footer">
-      <button @click="linkToWinning()">
-        <img :src="redeemButtonImg" alt="redeem button" />
+      <button @click="linkToTargetActivityIdPage(activityId, 'Winning')">
+        <img :src="redeemButtonImg" alt="前往兌獎" />
       </button>
-      <button @click="linkToActivity(String(route.params.id))">
-        <img :src="backToIndexButtonImg" alt="back to index button" />
+      <button @click="linkToTargetActivityIdPage(activityId, 'Activity')">
+        <img :src="backToIndexButtonImg" alt="回活動首頁" />
       </button>
     </div>
   </main>
 </template>
+
 <style lang="scss" scope>
 %title {
   font-size: 55px;
