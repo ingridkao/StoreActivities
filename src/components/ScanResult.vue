@@ -61,7 +61,7 @@ const scanAgain = async () => {
             alt="查看紀錄"
           />
         </div>
-        <div class="scan-result__buttons--wrapper">
+        <div class="scan-result__buttons--wrapper-keep">
           <img @click="scanAgain" :src="keepCheckButtonImg" alt="繼續打卡" />
         </div>
       </div>
@@ -102,7 +102,7 @@ const scanAgain = async () => {
       img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
     }
 
@@ -121,7 +121,7 @@ const scanAgain = async () => {
         img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
         }
       }
 
@@ -172,7 +172,7 @@ const scanAgain = async () => {
       &-image {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
     }
   }
@@ -187,10 +187,16 @@ const scanAgain = async () => {
       height: 40px;
       overflow: hidden;
 
+      &-keep {
+        width: 143px;
+        height: 40px;
+        overflow: hidden;
+      }
+
       img {
         width: 100%;
         height: 100%;
-        object-fit: cover;
+        object-fit: contain;
       }
     }
   }
