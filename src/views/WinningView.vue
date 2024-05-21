@@ -73,48 +73,45 @@ onMounted(() => {
     <p v-if="prizeInfo[prizeIndex].storeCount > 0" class="winning-view__tip">
       {{ `${data.winning.accumulate}${prizeInfo[prizeIndex].storeCount}${data.winning.store}` }}
     </p>
-    <div class="winning-view__prize-container">
+    <div class="winning-view__prize-wrapper">
       <div
-        class="winning-view__prize-container--prev-arrow"
-        @click="() => prizeIndex > 0 && prizeIndex--"
+        class="winning-view__prize-wrapper--top"
+        :class="{
+          'winning-view__prize-wrapper--top--type1': prizeInfo[prizeIndex].type === 1,
+          'winning-view__prize-wrapper--top--type2': prizeInfo[prizeIndex].type === 2,
+          'winning-view__prize-wrapper--top--type3': prizeInfo[prizeIndex].type === 3
+        }"
       >
+        <p>{{ prizeInfo[prizeIndex].title }}</p>
+        <span>
+          ({{ prizeInfo[prizeIndex].usedCount }}/{{ prizeInfo[prizeIndex].usableCount }})
+        </span>
+      </div>
+      <div class="winning-view__prize-wrapper--middle">
+        <p>{{ prizeInfo[prizeIndex].content }}</p>
+      </div>
+      <div class="winning-view__prize-wrapper--bottom">
+        <p class="winning-view__prize-wrapper--bottom-number">
+          {{ data.winning.serialNumber }} <span>{{ prizeInfo[prizeIndex].serialNumber }}</span>
+        </p>
+        <p class="winning-view__prize-wrapper--bottom-date">
+          {{ data.winning.deadline }} <span>{{ prizeInfo[prizeIndex].deadline }}</span>
+        </p>
+      </div>
+    </div>
+    <div class="winning-view__cat">
+      <div class="winning-view__cat--prev-arrow" @click="() => prizeIndex > 0 && prizeIndex--">
         <img v-show="prizeIndex !== 0" :src="prevArrowImg" alt="prev arrow" />
       </div>
-      <div class="winning-view__prize-wrapper">
-        <div
-          class="winning-view__prize-wrapper--top"
-          :class="{
-            'winning-view__prize-wrapper--top--type1': prizeInfo[prizeIndex].type === 1,
-            'winning-view__prize-wrapper--top--type2': prizeInfo[prizeIndex].type === 2,
-            'winning-view__prize-wrapper--top--type3': prizeInfo[prizeIndex].type === 3
-          }"
-        >
-          <p>{{ prizeInfo[prizeIndex].title }}</p>
-          <span>
-            ({{ prizeInfo[prizeIndex].usedCount }}/{{ prizeInfo[prizeIndex].usableCount }})
-          </span>
-        </div>
-        <div class="winning-view__prize-wrapper--middle">
-          <p>{{ prizeInfo[prizeIndex].content }}</p>
-        </div>
-        <div class="winning-view__prize-wrapper--bottom">
-          <p class="winning-view__prize-wrapper--bottom-number">
-            {{ data.winning.serialNumber }} <span>{{ prizeInfo[prizeIndex].serialNumber }}</span>
-          </p>
-          <p class="winning-view__prize-wrapper--bottom-date">
-            {{ data.winning.deadline }} <span>{{ prizeInfo[prizeIndex].deadline }}</span>
-          </p>
-        </div>
+      <div class="winning-view__cat--image">
+        <img :src="winningCatImg" alt="winning cat" />
       </div>
       <div
-        class="winning-view__prize-container--next-arrow"
+        class="winning-view__cat--next-arrow"
         @click="() => prizeIndex < prizeInfo.length - 1 && prizeIndex++"
       >
         <img v-show="prizeIndex !== prizeInfo.length - 1" :src="nextArrowImg" alt="next arrow" />
       </div>
-    </div>
-    <div class="winning-view__cat">
-      <img :src="winningCatImg" alt="winning cat" />
     </div>
     <div class="winning-view__content">
       <ParagraphItem
@@ -147,26 +144,6 @@ onMounted(() => {
     font-size: 20px;
     position: absolute;
     top: 60px;
-  }
-
-  &__prize-container {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    &--next-arrow,
-    &--prev-arrow {
-      cursor: pointer;
-      width: 32px;
-      height: 37px;
-      overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
   }
 
   &__prize-wrapper {
@@ -271,15 +248,36 @@ onMounted(() => {
   }
 
   &__cat {
-    width: 152px;
-    height: 190px;
-    overflow: hidden;
-    margin: -10px 0;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: space-around;
 
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+    &--image {
+      width: 152px;
+      height: 190px;
+      overflow: hidden;
+      margin: -10px 0;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+    }
+
+    &--next-arrow,
+    &--prev-arrow {
+      cursor: pointer;
+      width: 32px;
+      height: 37px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
     }
   }
 
