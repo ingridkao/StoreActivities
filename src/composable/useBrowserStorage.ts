@@ -1,7 +1,40 @@
 import Cookies from 'js-cookie'
 import { useRoute } from 'vue-router'
+import type { GenrateMockQRCodeState } from '@/types/StateHandle'
 
 export function useBrowserStorage() {
+  // - 儲存網站抓取的經緯度
+  // TODO: 如果位置會一直移動好像存在store會比較好
+  const setLocationStorage = (latitude: null | number = null, longitude: null | number = null) => {
+    const toString = `${latitude},${longitude}`
+    localStorage.setItem('location', toString)
+  }
+  const getLocationStorage = () => {
+    const locationStorage = localStorage.getItem('location')
+    return locationStorage ? locationStorage.split(',') : []
+  }
+
+  // - 儲存QRcode
+  const setQRcodeCookies = (value: string = '') => {
+    if (!value) return
+    // 15分鐘後自動刪掉
+    const inFiveMinutes = new Date(new Date().getTime() + 15 * 60 * 1000)
+    Cookies.set('ct1', value, {
+      expires: inFiveMinutes
+    })
+  }
+  const getQRcodeCookies = () : GenrateMockQRCodeState => {
+    const ctStr = Cookies.get('ct1')
+    if(ctStr){
+      return {
+        qrCode: ctStr,
+        store: ctStr.substring(2, 8)
+      }
+    }else{
+      return {}
+    }
+  }
+
   const getAcStringStorage = (): string => {
     return localStorage.getItem('ac') || ''
   }
@@ -22,26 +55,17 @@ export function useBrowserStorage() {
     }
   }
 
-  // const getCtStringCookies = () => Cookies.get('ct1') || ''
-  const setCtStringCookies = (value: string = '') => {
-    if (!value) return
-    // 需要五分鐘後自動刪掉
-    const inFiveMinutes = new Date(new Date().getTime() + 5 * 60 * 1000)
-    Cookies.set('ct1', value, {
-      expires: inFiveMinutes
-    })
-  }
   // For ct response
   const getCtTokenCookies = () => Cookies.get('ct2') || ''
   const setCtTokenCookies = (value: string = '') => {
     if (!value) return
-    // 需要五分鐘後自動刪掉
-    const inFiveMinutes = new Date(new Date().getTime() + 5 * 60 * 1000)
+    // 15分鐘後自動刪掉
+    const inFiveMinutes = new Date(new Date().getTime() + 15 * 60 * 1000)
     Cookies.set('ct2', value, {
       expires: inFiveMinutes
     })
   }
-  const resetCtStringCookies = () => {
+  const resetQRcodeCookies = () => {
     Cookies.remove('ct1')
     Cookies.remove('ct2')
   }
@@ -60,16 +84,6 @@ export function useBrowserStorage() {
       sessionStorage.removeItem(item)
     }
   }
-
-  const setLocationStorage = (latitude: null | number = null, longitude: null | number = null) => {
-    const toString = `${latitude},${longitude}`
-    localStorage.setItem('location', toString)
-  }
-
-  // const getLocationStorage = () => {
-  //   const locationStorage = localStorage.getItem('location')
-  //   return locationStorage ? locationStorage.split(',') : []
-  // }
 
   const getLineTokenCookies = () => Cookies.get('t1') || ''
   const setLineTokenCookies = (value: string = '') => {
@@ -92,18 +106,19 @@ export function useBrowserStorage() {
   }
 
   return {
+    setLocationStorage,
+    getLocationStorage,
+
     getAcStringStorage,
     setAcStringStorage,
     setParamsIdStorage,
-    // getCtStringCookies,
-    setCtStringCookies,
+    getQRcodeCookies,
+    setQRcodeCookies,
     getCtTokenCookies,
     setCtTokenCookies,
-    resetCtStringCookies,
+    resetQRcodeCookies,
     deleteStorage,
     deleteSessionStorage,
-    setLocationStorage,
-    // getLocationStorage,
     getLineTokenCookies,
     setLineTokenCookies,
     getServiceTokenCookies,

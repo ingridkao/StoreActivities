@@ -25,6 +25,14 @@ export interface AdListType {
   imageFilePath?: string
 }
 
+export interface AlbumType {
+  storeId?: string
+  storeName?: string
+  iconFilePath?: string  //圖片路徑
+  checkinTime?: string   //最後打卡時間
+  storeTimes?: number    //打卡次數
+}
+
 export interface CollectedListType {
   store_id?: string
   store_name?: string
@@ -52,6 +60,7 @@ export interface ScanResultType {
   name?: string
   date?: string
 }
+
 
 export interface VerifyCodeResultType {
   c?: string

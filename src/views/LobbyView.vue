@@ -1,16 +1,14 @@
 <script setup lang="ts">
 /**
  * 活動大廳
- * step0.  確認使用者同意裝置位置資料
  * step1.  確認URL是否有ct參數 >> 驗證是否合法 >> 合法則存起來
- * step2-1.請求所有活動列表    >> 連結至指定活動
- * step2-2.請求所有廣告列表    >> 連結至指定廣告
+ * step2-1.請求所有指定門市活動列表
+ * step2-2.請求所有  非門市活動列表
+ * step2-3.請求所有廣告列表
  */
-import { ref, onMounted, watchEffect, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
 import type { CampaignListType, AdListType } from '@/composable/configurable'
-import { useGeolocation } from '@vueuse/core'
-import { useGeo } from '@/composable/useGeo'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
@@ -24,33 +22,22 @@ import data from '@/assets/data'
 import topCatImg from '@/assets/images/lobby/top-cat.png'
 import topLogoImg from '@/assets/images/lobby/top-logo.png'
 
-// step0
-const { coords, error } = useGeolocation()
-const { geoErrorHandler } = useGeo()
 const { setLocationStorage, setAcStringStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
 const { genrateMockQRCode, fetchCampaign, fetchSpecifyCampaign, fetchAdData, verifyQRCode } =
   useFetchData()
-setAcStringStorage('')
-
-let getPosition = false
-watchEffect(async () => {
-  const { latitude, longitude } = coords.value
-  if (getPosition) return
-  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
-    getPosition = true
-    // setLocationStorage(latitude, longitude)
-  } else if (error.value && error.value.code >= 1) {
-    geoErrorHandler(error.value.code)
-  }
-})
 
 const loadStore = useLoadingStore()
 const displayCampaignList = ref<CampaignListType[]>([])
 const adsList = ref<AdListType[]>([])
-const qrString = ref('')
+const qrString = ref<string>('')
 const storeId = ref<string>('')
+const siteLoading = computed(() => loadStore.load)
+
+setAcStringStorage('')
 onMounted(async () => {
+  qrString.value = ''
+
   loadStore.toggle(true)
   try {
     const [result1, result2, result3] = await Promise.all([
@@ -72,8 +59,9 @@ onMounted(async () => {
       const codeSplit = newPath.search.split('?ct=')
       const ctCode = codeSplit.length === 2 && codeSplit[1] ? codeSplit[1] : ''
       storeId.value = ctCode.substring(2, 8)
-      await verifyQRCode(ctCode)
-      qrString.value = ''
+      const res = await verifyQRCode(ctCode)
+      console.log(res);
+
     } else {
       // TODO: After check api flow, remove this
       const MockCode = await genrateMockQRCode()
@@ -87,7 +75,6 @@ onMounted(async () => {
   }
 })
 
-const siteLoading = computed(() => loadStore.load)
 </script>
 
 <template>

@@ -4,7 +4,7 @@
  */
 import { ref, onMounted, computed } from 'vue'
 import HeaderMenu from '@/components/HeaderMenu.vue'
-import type { AlbumType } from '@/composable/configurable'
+import type { AlbumType } from '@/types/configurable'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
@@ -38,6 +38,7 @@ onMounted(async () => {
   }
   loadStore.toggle(false)
 })
+
 </script>
 
 <template>
@@ -57,25 +58,27 @@ onMounted(async () => {
       >
         <div
           v-if="albumStore[index]"
+          class="album-view__body--stamp-wrapper"
           @click="
             () =>
               openStoreInfo({
-                storeName: albumStore[index]['event_name'],
-                lastCheckInTime: new Date().toLocaleDateString()
+                storeName: albumStore[index]['storeName'],
+                imageUrl: albumStore[index]['iconFilePath'],
+                lastCheckInTime: albumStore[index]['checkinTime'],
+                count: albumStore[index]['storeTimes']
               })
           "
-          class="album-view__body--stamp-wrapper"
         >
           <p
             class="album-view__body--stamp-text"
             :class="{
-              'three-characters': albumStore[index]['event_name']?.length === 3,
-              'four-characters': albumStore[index]['event_name']?.length === 4,
-              'five-characters': albumStore[index]['event_name']?.length === 5,
-              'six-characters': albumStore[index]['event_name']?.length === 6
+              'three-characters': albumStore[index]['storeName']?.length === 3,
+              'four-characters': albumStore[index]['storeName']?.length === 4,
+              'five-characters': albumStore[index]['storeName']?.length === 5,
+              'six-characters': albumStore[index]['storeName']?.length === 6
             }"
           >
-            {{ albumStore[index]['event_name'] }}
+            {{ albumStore[index]['storeName'] }}
           </p>
           <img :src="checkedStampImg" alt="checked stamp" />
         </div>

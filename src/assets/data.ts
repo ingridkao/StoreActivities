@@ -31,7 +31,8 @@ export default {
     step2Text: '手機畫面確認打卡成功！'
   },
   storeInfoDialog: {
-    lastCheckInTime: '最後打卡時間'
+    lastCheckInTime: '最後打卡時間',
+    checkInCount: '打卡次數'
   },
   collected: {
     title: '歡樂一夏',

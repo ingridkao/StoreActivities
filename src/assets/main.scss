@@ -96,6 +96,11 @@ main {
           margin-bottom: 16px;
         }
 
+        >div{
+          display: inline-flex;
+          gap: 1rem;
+        }
+
         p {
           font-weight: 500;
           font-size: 12px;

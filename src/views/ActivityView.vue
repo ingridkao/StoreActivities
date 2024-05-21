@@ -1,7 +1,7 @@
 <script setup lang="ts">
 /**
  * 活動說明
- * step0.確認裝置是否提供經緯度
+ * step0.確認使用者同意裝置位置資料(經緯度)
  * step1.確認是否為進行中活動
  * step2.取得LINE user profile
  *       - 已登入:網頁導轉到此頁
@@ -31,13 +31,25 @@ import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
 import enterButtonImg from '@/assets/images/activity/enter-button.svg'
 
 const router = useRouter()
-const { confirmActivity, verifyQRCode, commitStoreCheckIn } = useFetchData()
-const { setAcStringStorage } = useBrowserStorage()
+const { confirmActivity, commitStoreCheckIn } = useFetchData()
+const { setLocationStorage, setAcStringStorage } = useBrowserStorage()
 
 // step0
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 let getPosition = false
+watchEffect(() => {
+  confirmActivityId(route?.params?.id)
+  const { latitude, longitude } = coords.value
+  if (getPosition) return
+  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
+    getPosition = true
+    // !! 正式環境要打開
+    // setLocationStorage(latitude, longitude)
+  } else if (error.value && error.value.code >= 1) {
+    geoErrorHandler(error.value.code)
+  }
+})
 
 // step1
 const { errorAlert } = useSweetAlert()
@@ -59,29 +71,16 @@ const confirmActivityId = async (activityId: string | string[]) => {
     errorAlert(errorStr)
   }
 }
-watchEffect(() => {
-  confirmActivityId(route?.params?.id)
-  const { latitude, longitude } = coords.value
-  if (getPosition) return
-  if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
-    getPosition = true
-    // setLocationStorage(latitude, longitude)
-  } else if (error.value && error.value.code >= 1) {
-    geoErrorHandler(error.value.code)
-  }
-})
 
 const loadStore = useLoadingStore()
 const enterActivity = async () => {
   try {
     loadStore.toggle(true)
-    const verifyRes = await verifyQRCode()
-    if (verifyRes) {
-      const commitRes = await commitStoreCheckIn(verifyRes)
-      console.log(commitRes)
-    } else {
-      linkToDirection()
-    }
+
+    //   const commitRes = await commitStoreCheckIn(route?.params?.id)
+    // } else {
+    //   linkToDirection()
+    // }
     loadStore.toggle(false)
   } catch (error) {
     const errorStr = String(error)
