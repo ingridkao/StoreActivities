@@ -1,5 +1,5 @@
 import { useRouter } from 'vue-router'
-import type { ProfileType } from '@/composable/configurable'
+import type { ProfileType } from '@/types/configurable'
 import { useFetchData } from '@/composable/useFetch'
 import { useUserStore } from '@/stores/user'
 
@@ -131,8 +131,8 @@ export function useLIFF() {
           }
           const verifyRes = await verifyQRCode(ctCode)
           console.log(verifyRes)
-          const commitRes = await commitStoreCheckIn(qrcodeOk)
-          console.log(commitRes)
+          // const commitRes = await commitStoreCheckIn(qrcodeOk)
+          // console.log(commitRes)
         }
         console.log(scanresult)
       } else {

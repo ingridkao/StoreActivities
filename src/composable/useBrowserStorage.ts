@@ -1,40 +1,50 @@
 import Cookies from 'js-cookie'
 import { useRoute } from 'vue-router'
-import type { GenrateMockQRCodeState } from '@/types/StateHandle'
+// import type { GenrateMockQRCodeState } from '@/types/StateHandle'
 
 export function useBrowserStorage() {
+  // 15分鐘後自動刪掉
+  const inFiveMinutes = new Date(new Date().getTime() + 15 * 60 * 1000)
+  // 12小時後自動刪掉
+  const inTwelveMinutes = new Date(new Date().getTime() + 12 * 60 * 60 * 1000)
+
   // - 儲存網站抓取的經緯度
   // TODO: 如果位置會一直移動好像存在store會比較好
   const setLocationStorage = (latitude: null | number = null, longitude: null | number = null) => {
     const toString = `${latitude},${longitude}`
-    localStorage.setItem('location', toString)
+    localStorage.setItem('STORE_LOCATION', toString)
   }
   const getLocationStorage = () => {
-    const locationStorage = localStorage.getItem('location')
+    const locationStorage = localStorage.getItem('STORE_LOCATION')
     return locationStorage ? locationStorage.split(',') : []
   }
 
-  // - 儲存QRcode
-  const setQRcodeCookies = (value: string = '') => {
+  // 處理ct參數
+  const setQRcodeString = (value: string = '') => {
     if (!value) return
-    // 15分鐘後自動刪掉
-    const inFiveMinutes = new Date(new Date().getTime() + 15 * 60 * 1000)
-    Cookies.set('ct1', value, {
+    Cookies.set('STORE_CT', value, {
       expires: inFiveMinutes
     })
   }
-  const getQRcodeCookies = () : GenrateMockQRCodeState => {
-    const ctStr = Cookies.get('ct1')
-    if(ctStr){
-      return {
-        qrCode: ctStr,
-        store: ctStr.substring(2, 8)
-      }
-    }else{
-      return {}
+  const getQRcodeString = (value: string = '') => {
+    if (!value) return null
+    const obj = Cookies.get('STORE_CT')
+    if (!obj) return null
+    return {
+      storeId: obj.substring(2, 8)
     }
   }
 
+  // 驗證QRCode後取得token
+  // const getCtTokenCookies = () => Cookies.get('STORE_CT_T') || ''
+  const setCtTokenCookies = (value: string = '') => {
+    if (!value) return
+    Cookies.set('STORE_CT_T', value, {
+      expires: inFiveMinutes
+    })
+  }
+
+  // 
   const getAcStringStorage = (): string => {
     return localStorage.getItem('ac') || ''
   }
@@ -55,30 +65,6 @@ export function useBrowserStorage() {
     }
   }
 
-  // For ct response
-  const getCtTokenCookies = () => Cookies.get('ct2') || ''
-  const setCtTokenCookies = (value: string = '') => {
-    if (!value) return
-    // 15分鐘後自動刪掉
-    const inFiveMinutes = new Date(new Date().getTime() + 15 * 60 * 1000)
-    Cookies.set('ct2', value, {
-      expires: inFiveMinutes
-    })
-  }
-  const resetQRcodeCookies = () => {
-    Cookies.remove('ct1')
-    Cookies.remove('ct2')
-  }
-
-  const deleteStorage = (item: string) => {
-    if (localStorage.getItem(item)) {
-      localStorage.removeItem(item)
-    }
-    if (sessionStorage.getItem(item)) {
-      sessionStorage.removeItem(item)
-    }
-  }
-
   const deleteSessionStorage = (item: string) => {
     if (sessionStorage.getItem(item)) {
       sessionStorage.removeItem(item)
@@ -88,8 +74,6 @@ export function useBrowserStorage() {
   const getLineTokenCookies = () => Cookies.get('t1') || ''
   const setLineTokenCookies = (value: string = '') => {
     if (!value) return
-    // 需要12小時後自動刪掉
-    const inTwelveMinutes = new Date(new Date().getTime() + 12 * 60 * 60 * 1000)
     Cookies.set('t1', value, {
       expires: inTwelveMinutes
     })
@@ -99,7 +83,6 @@ export function useBrowserStorage() {
   const setServiceTokenCookies = (value: string = '') => {
     if (!value) return
     // 需要12小時後自動刪掉
-    const inTwelveMinutes = new Date(new Date().getTime() + 12 * 60 * 60 * 1000)
     Cookies.set('t2', value, {
       expires: inTwelveMinutes
     })
@@ -108,16 +91,15 @@ export function useBrowserStorage() {
   return {
     setLocationStorage,
     getLocationStorage,
+    setQRcodeString,
+    getQRcodeString,
+    // getCtTokenCookies,
+    setCtTokenCookies,
 
     getAcStringStorage,
     setAcStringStorage,
     setParamsIdStorage,
-    getQRcodeCookies,
-    setQRcodeCookies,
-    getCtTokenCookies,
-    setCtTokenCookies,
-    resetQRcodeCookies,
-    deleteStorage,
+
     deleteSessionStorage,
     getLineTokenCookies,
     setLineTokenCookies,

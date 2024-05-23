@@ -7,8 +7,9 @@
  * step2-3.請求所有廣告列表
  */
 import { ref, onMounted, computed } from 'vue'
+import type { EventInterface } from '@/types/ResponseHandle'
 
-import type { CampaignListType, AdListType } from '@/composable/configurable'
+import type { AdsInterface } from '@/types/ResponseHandle'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
@@ -22,59 +23,55 @@ import data from '@/assets/data'
 import topCatImg from '@/assets/images/lobby/top-cat.png'
 import topLogoImg from '@/assets/images/lobby/top-logo.png'
 
-const { setLocationStorage, setAcStringStorage } = useBrowserStorage()
+const { setLocationStorage, setQRcodeString, setAcStringStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { genrateMockQRCode, fetchCampaign, fetchSpecifyCampaign, fetchAdData, verifyQRCode } =
-  useFetchData()
+const { genrateMockQRCode, fetchAllCampaign, fetchAdData, verifyQRCode } = useFetchData()
 
 const loadStore = useLoadingStore()
-const displayCampaignList = ref<CampaignListType[]>([])
-const adsList = ref<AdListType[]>([])
-const qrString = ref<string>('')
-const storeId = ref<string>('')
+const displayCampaignList = ref<EventInterface[]>([])
+const adsList = ref<AdsInterface[]>([])
 const siteLoading = computed(() => loadStore.load)
+const qrString = ref<string>('')
 
 setAcStringStorage('')
 onMounted(async () => {
-  qrString.value = ''
+  const originURL = window.location.origin
+  const newPath = new URL(window.location.href, originURL)
+  let ctCode = ''
+  let storeId = ''
+  if (newPath.origin === originURL && newPath && newPath.search) {
+    const codeSplit = newPath.search.split('?ct=')
+    ctCode = codeSplit.length === 2 && codeSplit[1] ? codeSplit[1] : ''
+    storeId = ctCode.substring(2, 8)
+    setQRcodeString(ctCode)
+  }
 
   loadStore.toggle(true)
   try {
-    const [result1, result2, result3] = await Promise.all([
-      fetchCampaign(),
-      fetchSpecifyCampaign(storeId.value),
-      fetchAdData()
-    ])
-    displayCampaignList.value = [...result1, ...result2] || []
-    adsList.value = result3 || []
+    const [result1, result2] = await Promise.all([fetchAllCampaign(storeId), fetchAdData()])
+    displayCampaignList.value = result1 || []
+    adsList.value = result2 || []
   } catch (error) {
     errorAlert(error)
   }
   loadStore.toggle(false)
 
   try {
-    const originURL = window.location.origin
-    const newPath = new URL(window.location.href, originURL)
-    if (newPath.origin === originURL && newPath && newPath.search) {
-      const codeSplit = newPath.search.split('?ct=')
-      const ctCode = codeSplit.length === 2 && codeSplit[1] ? codeSplit[1] : ''
-      storeId.value = ctCode.substring(2, 8)
+    if (ctCode) {
       const res = await verifyQRCode(ctCode)
-      console.log(res);
-
+      console.log(res)
     } else {
       // TODO: After check api flow, remove this
       const MockCode = await genrateMockQRCode()
       if (MockCode) {
         setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
-        qrString.value = `${originURL}?ct=${MockCode.qrCode}`
       }
+      qrString.value = `${originURL}?ct=${MockCode.qrCode}`
     }
   } catch (error) {
     errorAlert(error)
   }
 })
-
 </script>
 
 <template>
@@ -126,8 +123,8 @@ onMounted(async () => {
       </div>
 
       <!-- TODO: After check api flow, remove this  -->
+      <vueQr :text="qrString" :size="100" :correctLevel="3" />
       <template v-if="qrString">
-        <vueQr :text="qrString" :size="100" :correctLevel="3" />
         <a :href="qrString" target="_blank">{{ qrString }}</a>
       </template>
     </div>

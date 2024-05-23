@@ -1,36 +1,9 @@
-export interface ActivityListType {
-  id?: number
-  title?: string
-  statu?: number
-  img?: string
-  link?: string
-}
-
-export interface CampaignListType {
-  id?: number
-  eventName?: string
-  partnerId?: number
-  startTime?: string
-  endTime?: string
-  isEnable?: boolean
-  imageFilePath?: string
-  pageRouter?: string
-}
-
-export interface AdListType {
-  id?: number
-  title?: string
-  link?: string
-  isEnable?: boolean
-  imageFilePath?: string
-}
-
 export interface AlbumType {
   storeId?: string
   storeName?: string
-  iconFilePath?: string  //圖片路徑
-  checkinTime?: string   //最後打卡時間
-  storeTimes?: number    //打卡次數
+  iconFilePath?: string //圖片路徑
+  checkinTime?: string //最後打卡時間
+  storeTimes?: number //打卡次數
 }
 
 export interface CollectedListType {
@@ -59,21 +32,4 @@ export interface ScanResultType {
   id?: string
   name?: string
   date?: string
-}
-
-
-export interface VerifyCodeResultType {
-  c?: string
-  t?: string
-}
-
-export interface CityStoreDataValue {
-  city?: string
-  type?: string
-  storeData?: any
-  disabled?: boolean
-}
-
-export interface CityStoreDataType {
-  [key: string]: CityStoreDataValue
 }

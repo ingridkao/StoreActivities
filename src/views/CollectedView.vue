@@ -6,7 +6,7 @@ import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
-import type { CollectedListType, CollectedType } from '@/composable/configurable'
+import type { CollectedListType, CollectedType } from '@/types/configurable'
 import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
@@ -57,7 +57,6 @@ watchEffect(async () => {
     loadStore.toggle(false)
   }
 })
-
 </script>
 
 <template>

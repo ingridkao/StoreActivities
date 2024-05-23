@@ -12,13 +12,14 @@
  */
 import { ref, watchEffect } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import type { EventInfoInterface } from '@/types/ResponseHandle'
+
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import ParagraphItem from '@/components/ParagraphItem.vue'
 
-// import type { ProfileType } from '@/composable/configurable'
+import { useGeolocation } from '@vueuse/core'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
-import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLoadingStore } from '@/stores/loading'
@@ -31,15 +32,13 @@ import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
 import enterButtonImg from '@/assets/images/activity/enter-button.svg'
 
 const router = useRouter()
-const { confirmActivity, commitStoreCheckIn } = useFetchData()
+const { confirmCampaign, commitStoreCheckIn } = useFetchData()
 const { setLocationStorage, setAcStringStorage } = useBrowserStorage()
 
-// step0
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 let getPosition = false
-watchEffect(() => {
-  confirmActivityId(route?.params?.id)
+const confirmCoords = () => {
   const { latitude, longitude } = coords.value
   if (getPosition) return
   if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
@@ -49,34 +48,38 @@ watchEffect(() => {
   } else if (error.value && error.value.code >= 1) {
     geoErrorHandler(error.value.code)
   }
-})
+}
 
-// step1
 const { errorAlert } = useSweetAlert()
-const content = ref({})
+const eventInfo = ref<EventInfoInterface>()
 const route = useRoute()
-const confirmActivityId = async (activityId: string | string[]) => {
+const confirmActivityId = async () => {
   try {
-    const confirmRes = await confirmActivity(activityId)
-    if (typeof confirmRes === 'object') {
-      content.value = confirmRes
-      setAcStringStorage(activityId)
-    } else if (confirmRes === 2) {
-      router.push({ path: '/wrapup' })
-    } else {
-      router.push({ name: 'ComingSoon' })
-    }
+    const activityId = route?.params?.id
+    const confirmRes = await confirmCampaign(activityId)
+    eventInfo.value = confirmRes
+    setAcStringStorage(activityId)
+    confirmCoords()
   } catch (error) {
-    const errorStr = String(error)
-    errorAlert(errorStr)
+    if (error === 1) {
+      errorAlert('活動已過期', '/wrapup')
+    } else if (error === 2) {
+      errorAlert('沒有此活動')
+    } else {
+      const errorStr = String(error)
+      errorAlert(errorStr)
+    }
   }
 }
+
+watchEffect(() => {
+  confirmActivityId()
+})
 
 const loadStore = useLoadingStore()
 const enterActivity = async () => {
   try {
     loadStore.toggle(true)
-
     //   const commitRes = await commitStoreCheckIn(route?.params?.id)
     // } else {
     //   linkToDirection()
@@ -105,8 +108,8 @@ const linkToDirection = () => {
     <div class="activity-view__main">
       <div class="activity-view__title">
         <div class="activity-view__title--text-block">
-          <h1 class="activity-view__title--text-block-main">{{ data.activity.title }}</h1>
-          <h1 class="activity-view__title--text-block-bg">{{ data.activity.title }}</h1>
+          <h1 class="activity-view__title--text-block-main">{{ eventInfo?.eventName }}</h1>
+          <h1 class="activity-view__title--text-block-bg">{{ eventInfo?.eventName }}</h1>
         </div>
         <div class="activity-view__title--deco">
           <div class="activity-view__title--deco-top">
@@ -119,25 +122,23 @@ const linkToDirection = () => {
       </div>
       <img :src="activityMainCatImg" alt="activity main cat" />
       <div class="activity-view__date">
-        <p class="activity-view__date--year">
-          {{ data.activity.dateTitle }} {{ data.activity.year }}
-        </p>
+        <p class="activity-view__date--year">{{ data.activity.dateTitle }} {{ eventInfo?.year }}</p>
         <div class="activity-view__date--day-block">
-          <p class="activity-view__date--day">{{ data.activity.startDate }}</p>
+          <p class="activity-view__date--day">{{ eventInfo?.startDate }}</p>
           <div class="activity-view__date--connect-line"></div>
-          <p class="activity-view__date--day">{{ data.activity.endDate }}</p>
+          <p class="activity-view__date--day">{{ eventInfo?.endDate }}</p>
         </div>
       </div>
     </div>
     <button class="activity-view__info-icon-button" @click="linkToDirection()">
       <img :src="infoIconButtonImg" alt="info icon button" />
     </button>
-    <div class="activity-view__content">
+    <div class="activity-view__content" v-if="eventInfo && eventInfo.content">
       <ParagraphItem
+        v-for="{ title, text } in eventInfo.content"
         :key="title"
-        v-for="{ title, text } in data.activity.content"
         :title="title"
-        :content="text"
+        :content="text || ''"
       />
       <button class="activity-view__content--button" @click="enterActivity()">
         <img :src="enterButtonImg" alt="enter button" />

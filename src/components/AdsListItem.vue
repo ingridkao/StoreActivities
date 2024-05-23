@@ -2,10 +2,10 @@
 /**
  * 廣告
  */
-import type { AdListType } from '@/composable/configurable'
+import type { AdsInterface } from '@/types/ResponseHandle'
 const { VITE_ASSETS_URL, VITE_UI_MODE } = import.meta.env
 const props = defineProps<{
-  ads: AdListType
+  ads: AdsInterface
 }>()
 </script>
 

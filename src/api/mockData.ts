@@ -5,7 +5,7 @@ const data = {
     qrCode: 'OP113252051016433ee780c2024',
     store: '113252'
   },
-  fetchCampaign: [
+  eventMockData: [
     {
       id: 3,
       eventName: '歡樂一夏夏',
@@ -25,7 +25,7 @@ const data = {
       pageRouter: '3'
     }
   ],
-  fetchSpecifyCampaign: [
+  specifyEventMockData: [
     {
       id: 4,
       eventName: '秋耶',
@@ -36,7 +36,7 @@ const data = {
       pageRouter: '4'
     }
   ],
-  fetchAdData: [
+  adsData: [
     {
       id: 6,
       link: 'www.google.com',
@@ -48,27 +48,27 @@ const data = {
       isEnable: true
     }
   ],
-  fetchAlbumData: [
+  albumData: [
     {
       storeId: '1',
       storeName: '歡樂一夏',
       iconFilePath: '',
       checkinTime: '',
-      storeTimes: 2,
+      storeTimes: 2
     },
     {
       storeId: '2',
       storeName: '歡樂一夏夏',
       iconFilePath: '',
       checkinTime: '',
-      storeTimes: 1,
+      storeTimes: 1
     },
     {
       storeId: '3',
       storeName: '道生',
       iconFilePath: '',
       checkinTime: '',
-      storeTimes: 1,
+      storeTimes: 1
     }
   ]
 }

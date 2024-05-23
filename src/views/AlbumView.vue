@@ -38,7 +38,6 @@ onMounted(async () => {
   }
   loadStore.toggle(false)
 })
-
 </script>
 
 <template>

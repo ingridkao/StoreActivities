@@ -3,9 +3,9 @@ export type GenrateMockQRCodeState = {
   lat?: number
   long?: number
   store?: string
-};
+}
 
 export type VerifyCodeState = {
   ctStr?: string
   token?: string
-};
+}
