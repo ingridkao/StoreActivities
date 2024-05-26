@@ -306,7 +306,7 @@ const linkToDirection = () => {
 .event {
   flex-direction: column;
   @media (min-width: 1024px) {
-    min-height: 100vh;
+    min-height: calc(100 * var(--vh));
     display: flex;
     align-items: center;
   }

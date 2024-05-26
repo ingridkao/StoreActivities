@@ -4,12 +4,18 @@ import { onMounted, onUnmounted } from 'vue'
 
 //TODO: RWD scale function
 const handleResize = () => {
-  var siteWidth = 390
-  var scale = screen.width / siteWidth
+  const siteWidth = 390
+  const scale = window.screen.width / siteWidth
 
-  const meta = document?.querySelector('meta[name="viewport"]')
+  if (window.screen.width > 390) {
+    document.documentElement.style.height = '100%'
+  } else {
+    document.documentElement.style.height = `${window.screen.height * scale}px`
+  }
 
-  meta?.setAttribute('content', `width=${siteWidth}, initial-scale=${scale}`)
+  document.body.style.width = `${siteWidth}px`
+  document.body.style.transform = `scale(${scale})`
+  document.body.style.setProperty('--vh', `calc(1vh / ${scale})`)
 }
 
 onMounted(() => {

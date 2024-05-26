@@ -83,7 +83,7 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 #mapMain {
   position: relative;
-  height: 100dvh;
+  height: calc(100 * var(--vh));
   padding: 0;
   overflow: hidden;
   #sidemenu {
@@ -94,7 +94,7 @@ onUnmounted(() => {
 }
 #mapboxBasic {
   width: 100%;
-  height: calc(100dvh - 5rem);
+  height: calc(100 * var(--vh) - 5rem);
 }
 
 .map-store-view {

@@ -206,7 +206,7 @@ const siteLoading = computed(() => loadStore.load)
   }
 
   &__menu {
-    min-height: calc(100vh - 186px - 125px);
+    min-height: calc(100 * var(--vh) - 186px - 125px);
     padding: 26px;
 
     &--category {
@@ -242,7 +242,7 @@ const siteLoading = computed(() => loadStore.load)
 
   .loading {
     width: 100%;
-    height: 100dvh;
+    height: calc(100 * var(--vh));
     display: flex;
     justify-content: center;
     align-items: center;
