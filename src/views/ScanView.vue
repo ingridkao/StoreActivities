@@ -210,24 +210,25 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="cameraBox">
-    <div v-if="!canvasVisible" class="loadingMessage">
-      🎥 Unable to access video stream (please make sure you have a webcam enabled)
-    </div>
-    <div v-if="videoLoading" class="loadingMessage">⌛ Loading video...</div>
-    <!-- videoW:{{ videoW }} | videoH: {{videoH}} -->
-    <canvas ref="canvas" id="canvas" v-show="canvasVisible && !videoLoading"></canvas>
-    <div id="output" class="outputBox">
-      <div v-if="qrCodeOutputData">
-        <b>Data:</b>
-        <span>{{ qrCodeOutputData }}</span>
+  <main>
+    <div class="cameraBox">
+      <div v-if="!canvasVisible" class="loadingMessage">
+        🎥 Unable to access video stream (please make sure you have a webcam enabled)
       </div>
-      <div v-else>No QR code detected.</div>
+      <div v-if="videoLoading" class="loadingMessage">⌛ Loading video...</div>
+      <!-- videoW:{{ videoW }} | videoH: {{videoH}} -->
+      <canvas ref="canvas" id="canvas" v-show="canvasVisible && !videoLoading"></canvas>
+      <div id="output" class="outputBox">
+        <div v-if="qrCodeOutputData">
+          <b>Data:</b>
+          <span>{{ qrCodeOutputData }}</span>
+        </div>
+        <div v-else>No QR code detected.</div>
+      </div>
+      <button @click="cleanOutPutData">重新抓取</button>
+      <button @click="stopMediaTracks">關閉攝影機</button>
     </div>
-    <button @click="cleanOutPutData">重新抓取</button>
-    <button @click="stopMediaTracks">關閉攝影機</button>
-  </div>
-
+  </main>
   <ScanResult v-if="showsScanResult" :result="scanResultContent" />
 </template>
 
