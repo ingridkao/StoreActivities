@@ -5,6 +5,7 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import jsQR from 'jsqr'
 import { useFetchData } from '@/composable/useFetch'
+
 import ScanResult from '@/components/ScanResult.vue'
 const { commitStoreCheckIn } = useFetchData()
 
@@ -86,21 +87,7 @@ const updateOutPutData = async (imageData: any) => {
     qrCodeOutputData.value = code.data
 
     try {
-      const originURL = window.location.origin
-      const newPath = new URL(code.data, originURL)
-      console.log(newPath)
-      let qrcodeOk = false
-      if (newPath.origin !== originURL) {
-        qrcodeOk = false
-      } else if (newPath && newPath.search) {
-        const codeSplit = newPath.search.split('?ct=')
-        qrcodeOk = codeSplit.length === 2 && codeSplit[1] ? true : false
-      }
-      console.log(qrcodeOk)
-      // const ctCode = (codeSplit.length === 2 && codeSplit[1])?codeSplit[1]: ''
-      // const verifyRes = await verifyQRCode(ctCode)
-      // const commitRes = await commitStoreCheckIn(verifyRes)
-      const commitRes = await commitStoreCheckIn(qrcodeOk)
+      const commitRes = await commitStoreCheckIn()
       if (commitRes) {
         // 打卡成功蓋版
         showsScanResult.value = true

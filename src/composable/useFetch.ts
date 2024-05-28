@@ -1,127 +1,111 @@
 import axios from 'axios'
+import dayjs from 'dayjs'
+import isBetween from 'dayjs/plugin/isBetween'
+dayjs.extend(isBetween)
+
+import { ResponseCodes } from '@/types/ResponseHandle'
 import type {
-  ActivityListType,
-  CampaignListType,
-  CollectedType,
-  AlbumType,
-  AdListType,
-  ScanResultType,
-  VerifyCodeResultType
-} from '@/composable/configurable'
-import { ResponseCodes } from '@/composable/ResponseHandle'
+  GenrateMockQRCodeResType,
+  VerifyCodeApiResType,
+  EventInterface,
+  EventInfoInterface,
+  AdsInterface,
+  AdListResType
+} from '@/types/ResponseHandle'
+import type { GenrateMockQRCodeState, VerifyCodeState } from '@/types/StateHandle'
+import type { AlbumType, CollectedType, ScanResultType } from '@/types/configurable'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
+import { useEventStorage } from '@/composable/useEventStorage'
 // import { useLIFF } from '@/composable/useLIFF'
 
 import { useLoadingStore } from '@/stores/loading'
+import apis from '@/api/apiRoutes'
+import mockDatas from '@/api/mockData'
+import EventContent from '@/assets/events'
+
 const { VITE_API_URL, VITE_UI_MODE, VITE_OUTDIR } = import.meta.env
 
 export function useFetchData() {
+  const { scanEntry, checkIn } = apis
   const loadStore = useLoadingStore()
   const {
-    // getCtStringCookies,
-    setCtStringCookies,
+    getLocationStorage,
+    setQRcodeString,
     setCtTokenCookies,
-    resetCtStringCookies,
     getAcStringStorage,
-    // getLocationStorage,
     setLineTokenCookies,
     setServiceTokenCookies,
-    getServiceTokenCookies
+    getServiceTokenCookies,
+    getQRcodeString
   } = useBrowserStorage()
+  const { getEventStorage, setEventStorage } = useEventStorage()
 
   // MockQRCodeData
-  const genrateMockQRCode = (): Promise<{
-    qrCode?: string
-    lat?: number
-    long?: number
-    store?: string
-  }> => {
+  const genrateMockQRCode = (): Promise<GenrateMockQRCodeState> => {
     return new Promise((resolve, reject) => {
       if (VITE_API_URL) {
-        axios
-          .post(`${VITE_API_URL}/ScanEntry/MockQRCodeData`, {
-            data: {
-              id: 1
-            }
-          })
-          .then((res) => {
-            if (res?.data?.code === ResponseCodes.SUCCESS) {
-              const qrCodeString = res.data.result.qrCode || ''
-              if (qrCodeString) {
-                const store = qrCodeString.substring(2, 8)
-                resolve({
-                  ...res.data.result,
-                  store
-                })
-              } else {
-                reject(`genrateMockQRCode:${res.data.msg}`)
-              }
-            } else {
-              reject('genrateMockQRCode:發生了例外錯誤')
-            }
-          })
+        scanEntry.genrateMockQRCode().then((res: GenrateMockQRCodeResType) => {
+          if (res.qrCode) {
+            resolve({
+              ...res,
+              store: res.qrCode.substring(2, 8)
+            })
+          } else {
+            reject(`genrateMockQRCode:${res.error || '發生了例外錯誤'}`)
+          }
+        })
       } else {
-        resolve({
-          lat: 24.2953944,
-          long: 120.72697555,
-          qrCode: 'OP113252051016433ee780c2024',
-          store: '113252'
+        resolve(mockDatas.genrateMockQRCode)
+      }
+    })
+  }
+
+  /**
+   * 驗證QRCode
+   * ct=OP666000031818094ac904
+   * 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
+   */
+  const verifyQRCode = (ctStr: string = ''): Promise<VerifyCodeState> => {
+    return new Promise((resolve, reject) => {
+      if (ctStr === '') {
+        reject('請選擇活動')
+      } else if (!VITE_API_URL) {
+        reject('服務中斷')
+      } else {
+        checkIn
+        scanEntry.verifyQRCode(ctStr).then((res: VerifyCodeApiResType) => {
+          if (res.token) {
+            setQRcodeString(ctStr)
+            setCtTokenCookies(res.token)
+            resolve({
+              ctStr: ctStr,
+              // store: ctStr.substring(2, 8),
+              token: res.token
+            })
+          } else {
+            reject(`verifyQRCode:${res.error || '發生了例外錯誤'}`)
+          }
         })
       }
     })
   }
 
-  // 驗證QRCode(ctString)
-  const verifyQRCode = (ctStr: string = ''): Promise<boolean | VerifyCodeResultType> => {
-    // ct=OP666000031818094ac904
-    // 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
-    return new Promise((resolve, reject) => {
-      if (ctStr) {
-        axios
-          .post(`${VITE_API_URL}/ScanEntry/IbonEntry`, {
-            data: {
-              qrCode: ctStr
-            }
-          })
-          .then((res) => {
-            if (res?.data?.code === ResponseCodes.SUCCESS) {
-              setCtStringCookies(ctStr)
-              setCtTokenCookies(res.data.result.token)
-              resolve({
-                c: ctStr,
-                t: res.data.result.token
-              })
-            } else {
-              resetCtStringCookies()
-              reject(`verifyQRCode:${res.data.msg || '發生了例外錯誤'}`)
-            }
-          })
-      } else {
-        resolve(false)
-      }
-    })
-  }
-
+  /**
+   * Line login換access token
+   */
   const checkLineLoginVerify = (accessToken: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       if (accessToken) {
         setLineTokenCookies(accessToken)
-        axios
-          .post(`${VITE_API_URL}/ScanEntry/LineLoginVerify`, {
-            data: {
-              key: accessToken,
-              partnerId: 2
-            }
-          })
-          .then((res) => {
-            if (res?.data?.code === ResponseCodes.SUCCESS) {
-              const serviceT0ken = res.data.result.token || ''
-              setServiceTokenCookies(serviceT0ken)
-              resolve(serviceT0ken)
-            } else {
-              reject(`checkLineLoginVerify:${res.data.msg || '發生了例外錯誤'}`)
-            }
-          })
+        scanEntry.checkLineLoginVerify(accessToken).then((res: VerifyCodeApiResType) => {
+          if (res.result) {
+            const serviceT0ken = res.token || ''
+            setServiceTokenCookies(serviceT0ken)
+            resolve(serviceT0ken)
+          } else {
+            reject(`checkLineLoginVerify:${res.error || '發生了例外錯誤'}`)
+          }
+        })
       } else {
         resolve('')
       }
@@ -129,247 +113,192 @@ export function useFetchData() {
   }
 
   /**
-   *
+   * 打卡驗證
    */
-  const commitStoreCheckIn = async (
-    verifyRes: boolean | VerifyCodeResultType
-  ): Promise<boolean | ScanResultType> => {
-    const acStr = getAcStringStorage()
-    console.log(acStr)
-
+  const commitStoreCheckIn = async (activityId: string = ''): Promise<boolean | ScanResultType> => {
     const serviceT0ken = getServiceTokenCookies()
+    const [latitude, longitude] = getLocationStorage()
+    if (activityId === '') {
+      activityId = getAcStringStorage()
+    }
     return new Promise((resolve, reject) => {
-      if (verifyRes) {
-        console.log(verifyRes)
-        if (acStr === '') {
-          reject('活動錯誤')
-        } else if (!serviceT0ken) {
-          reject('訪客無法進行打卡')
-        } else {
-          // axios
-          // .post(`${VITE_API_URL}/CheckIn/CheckInVerify`, {
-          //   data: {
-          //     sourceType: 'A',
-          //     eventId: Number(acStr),
-          //     storeId: 4,
-          //     key: 'AAA',
-          //     longitude: longitude,
-          //     latitude: latitude,
-          //   }
-          // },
-          // {
-          //   headers: {
-          //     key: 'AAA|||AAA',
-          //     store: '931356',
-          //     FV: '1.0.0',
-          //     Auth1: '123132',
-          //     Auth2: serviceT0ken
-          //   }
-          // })
-          // .then((res) => {
-          //   if (res?.data?.code === ResponseCodes.SUCCESS) {
-          //     if (res.data.data) {
-          //       resolve(res.data.data)
-          //     } else {
-          //       resolve(false)
-          //     }
-          //   } else {
-          //     reject('後端發生了例外錯誤')
-          //   }
-          // })
-          resolve({
-            event_id: String(acStr)
-          })
-        }
+      if (activityId === '') {
+        reject('未選擇活動')
+      } else if (serviceT0ken === '') {
+        reject('訪客無法進行打卡')
+      } else if (!VITE_API_URL) {
+        reject('服務中斷')
       } else {
-        reject('參數錯誤')
-      }
-    })
-  }
+        checkIn
+          .checkInVerify(Number(activityId), Number(longitude), Number(latitude))
+          .then((res: any) => {
+            console.log(res)
 
-  const fetchCampaign = (): Promise<CampaignListType[]> => {
-    return new Promise((resolve, reject) => {
-      if (VITE_API_URL) {
-        axios
-          .post(`${VITE_API_URL}/ScanEntry/GetCampaignData`)
-          .then((res) => {
-            if (res?.data?.code === ResponseCodes.SUCCESS) {
-              resolve(res.data.result.queryList || [])
-            } else {
-              reject(`fetchCampaign:${res.data.msg || '發生了例外錯誤'}`)
-            }
+            //   if (res?.data?.code === ResponseCodes.SUCCESS) {
+            //     if (res.data.data) {
+            //       resolve(res.data.data)
+            //     } else {
+            //       resolve(false)
+            //     }
+            //   } else {
+            //     reject('後端發生了例外錯誤')
+            //   }
+            // resolve({
+            //   event_id: String(activityId)
+            // })
           })
-          .catch((err) => {
-            reject(`fetchCampaign:${err}`)
-          })
-      } else {
-        resolve([
-          {
-            id: 3,
-            eventName: '歡樂一夏夏',
-            partnerId: 2,
-            startTime: '2024-04-01T00:00:00',
-            endTime: '2025-07-31T23:59:59',
-            isEnable: true,
-            pageRouter: '2'
-          },
-          {
-            id: 4,
-            eventName: '歡樂一夏',
-            partnerId: 2,
-            startTime: '2024-04-01T00:00:00',
-            endTime: '2025-05-01T23:59:59',
-            isEnable: true,
-            pageRouter: '3'
-          }
-        ])
-      }
-    })
-  }
-
-  const fetchSpecifyCampaign = (storeId: string = ''): Promise<CampaignListType[]> => {
-    return new Promise((resolve, reject) => {
-      if (VITE_API_URL) {
-        axios
-          .post(`${VITE_API_URL}/ScanEntry/GetSpecifytheCampaignData`, {
-            data: {
-              key: storeId
-            }
-          })
-          .then((res) => {
-            if (res?.data?.code === ResponseCodes.SUCCESS) {
-              resolve(res.data.result.queryList || [])
-            } else {
-              reject(`fetchSpecifyCampaign:${res.data.msg || '發生了例外錯誤'}`)
-            }
-          })
-          .catch((err) => {
-            reject(`fetchSpecifyCampaign:${err}`)
-          })
-      } else {
-        resolve([
-          {
-            id: 4,
-            eventName: '秋耶',
-            partnerId: 2,
-            startTime: '2024-06-01T00:00:00',
-            endTime: '2025-09-31T23:59:59',
-            isEnable: true,
-            pageRouter: '4'
-          }
-        ])
-      }
-    })
-  }
-
-  const fetchAdData = (): Promise<AdListType[]> => {
-    return new Promise((resolve, reject) => {
-      if (VITE_API_URL) {
-        axios
-          .post(`${VITE_API_URL}/ScanEntry/GetAdsData`)
-          .then((res) => {
-            if (res?.data?.code === ResponseCodes.SUCCESS) {
-              resolve(res.data.result.queryList || [])
-            } else {
-              reject(`fetchAdData:${res.data.msg || '發生了例外錯誤'}`)
-            }
-          })
-          .catch((err) => {
-            reject(`fetchAdData:${err}`)
-          })
-      } else {
-        resolve([
-          {
-            id: 6,
-            link: 'www.google.com',
-            isEnable: true
-          },
-          {
-            id: 5,
-            link: 'www.google.com',
-            isEnable: true
-          }
-        ])
       }
     })
   }
 
   /**
-   * --header 'Authorization;' \ service accesstoken
-   * --header 'Key;' \           service accesstoken第5取6
-   * --header 'FV;'              version
+   * 取得活動列表
    */
-  const fetchAlbumData = (): Promise<AlbumType[]> => {
-    const serviceT0ken = getServiceTokenCookies()
+  // const fetchCampaign = (): Promise<EventInterface[]> => {
+  //   return new Promise((resolve, reject) => {
+  //     if (VITE_API_URL) {
+  //       scanEntry.fetchCampaign().then((res: EventListResType) => {
+  //         if (res.error) {
+  //           reject(`fetchCampaign:${res.error}`)
+  //         } else {
+  //           resolve(res.queryList || [])
+  //         }
+  //       })
+  //     } else {
+  //       resolve(mockDatas.eventMockData)
+  //     }
+  //   })
+  // }
+  // const fetchSpecifyCampaign = (storeId: string = ''): Promise<EventInterface[]> => {
+  //   return new Promise((resolve, reject) => {
+  //     if (VITE_API_URL) {
+  //       scanEntry.fetchSpecifyCampaign(storeId).then((res: EventListResType) => {
+  //         if (res.error) {
+  //           reject(`fetchSpecifyCampaign:${res.error}`)
+  //         } else {
+  //           resolve(res.queryList || [])
+  //         }
+  //       })
+  //     } else {
+  //       resolve(mockDatas.specifyEventMockData)
+  //     }
+  //   })
+  // }
+  const fetchAllCampaign = (storeId: string = ''): Promise<EventInterface[]> => {
     return new Promise((resolve, reject) => {
-      if (VITE_API_URL && serviceT0ken) {
-        axios
-          .post(
-            `${VITE_API_URL}/CheckIn/GetUserHistoryByStore`,
-            {},
-            {
-              headers: {
-                Authorization: serviceT0ken,
-                Key: serviceT0ken.slice(4, 10),
-                FV: '1.0.0'
-              }
-            }
-          )
-          .then((res) => {
-            if (res?.data?.code === ResponseCodes.SUCCESS) {
-              if(res.data.result.historyList){
-                resolve(res.data.result.historyList || [])
-              }else{
-                // TODO: remove this
-                resolve([
-                  {
-                    event_id: '1',
-                    event_name: '歡樂一夏',
-                    collection: 2,
-                    limit: 8
-                  },
-                  {
-                    event_id: '2',
-                    event_name: '歡樂一夏夏',
-                    collection: 1,
-                    limit: 4
-                  },
-                  {
-                    event_id: '3',
-                    event_name: '道生',
-                    collection: 1,
-                    limit: 4
-                  }
-                ])
-              }
+      if (VITE_API_URL) {
+        Promise.all([scanEntry.fetchCampaign(), scanEntry.fetchSpecifyCampaign(storeId)])
+          .then(([res1, res2]) => {
+            if (res1.error) {
+              reject(`fetchCampaign:${res1.error}`)
+            } else if (res2.error) {
+              reject(`fetchSpecifyCampaign:${res1.error}`)
             } else {
-              reject(`fetchAlbumData:${res.data.msg || '發生了例外錯誤'}`)
+              const eventList = [...res1.queryList, ...res2.queryList]
+              // 轉換數據
+              const eventStorage = eventList.map((item) => {
+                return {
+                  id: item.id,
+                  eventName: item.eventName,
+                  startTime: item.startTime,
+                  endTime: item.endTime,
+                  isEnable: item.isEnable,
+                  pageRouter: item.pageRouter
+                }
+              })
+              // 存在localstorage供後續頁面使用
+              setEventStorage(eventStorage)
+              resolve(eventList || [])
             }
           })
           .catch((err) => {
-            reject(err)
+            console.error(err)
           })
-      } else if (VITE_API_URL || VITE_UI_MODE) {
-        resolve([
-          {
-            event_id: '1',
-            event_name: '歡樂一夏',
-            collection: 2,
-            limit: 8
-          },
-          {
-            event_id: '2',
-            event_name: '歡樂一夏夏',
-            collection: 1,
-            limit: 4
-          },
-          {
-            event_id: '3',
-            event_name: '道生',
-            collection: 1,
-            limit: 4
+      } else {
+        resolve([...mockDatas.eventMockData, ...mockDatas.specifyEventMockData])
+      }
+    })
+  }
+
+  const confirmCampaign = (parameter: string | string[] = ''): Promise<EventInfoInterface> => {
+    return new Promise((resolve, reject) => {
+      const activityId = String(parameter)
+
+      // 取出localstorage活動的簡化資料
+      let enevtList: EventInterface[] = getEventStorage()
+      if (enevtList.length === 0) {
+        const parseQrStringObj = getQRcodeString()
+        const storeId = parseQrStringObj ? parseQrStringObj.storeId || '' : ''
+        debugger
+        fetchAllCampaign(storeId).then((res: EventInterface[]) => {
+          enevtList = res
+        })
+      }
+
+      const target = enevtList.find((item) => String(item.pageRouter) === activityId)
+      if (!target) {
+        // 找不到此活動
+        reject(2)
+      } else {
+        const isEventActive = dayjs().isBetween(target.startTime, target.endTime, 'day', '[)')
+        console.log(isEventActive)
+        if (!target.isEnable || !isEventActive) {
+          // 活動已關閉||活動時間未舉行
+          reject(1)
+        } else {
+          // mapping活動內頁資料(src/assets/events.ts)
+          const eventInfo = EventContent[activityId]
+            ? EventContent[activityId]
+            : EventContent['default']
+          // 活動名稱換行
+          const eventName =
+            target.eventName && eventInfo.nameBreak
+              ? target.eventName.slice(0, eventInfo.nameBreak) + '\n' + target.eventName.slice(2)
+              : ''
+          const year = dayjs(target.startTime).year() || ''
+          const startDate = dayjs(target.startTime).format('M.D') || ''
+          const endDate = dayjs(target.endTime).format('M.D') || ''
+          resolve({
+            eventName,
+            year,
+            startDate,
+            endDate,
+            content: eventInfo.content || []
+          })
+        }
+      }
+    })
+  }
+
+  const fetchAdData = (): Promise<AdsInterface[]> => {
+    return new Promise((resolve, reject) => {
+      if (VITE_API_URL) {
+        scanEntry.fetchAdData().then((res: AdListResType) => {
+          if (res.error) {
+            reject(`fetchAdData:${res.error}`)
+          } else {
+            resolve(res.queryList || [])
           }
-        ])
+        })
+      } else {
+        resolve(mockDatas.adsData)
+      }
+    })
+  }
+
+  const fetchAlbumData = (): Promise<AlbumType[]> => {
+    const serviceT0ken = getServiceTokenCookies()
+    return new Promise((resolve, reject) => {
+      if (serviceT0ken) {
+        checkIn.fetchAlbum(serviceT0ken).then((res: any) => {
+          if (res.error) {
+            reject(`fetchAlbumData:${res.error}`)
+          } else {
+            resolve(res.historyList || [])
+          }
+        })
+      } else if (VITE_API_URL || VITE_UI_MODE) {
+        resolve(mockDatas.albumData)
       } else {
         reject('沒有登入')
       }
@@ -385,7 +314,7 @@ export function useFetchData() {
     const serviceT0ken = getServiceTokenCookies()
     return new Promise((resolve, reject) => {
       if (VITE_API_URL && serviceT0ken) {
-        // 
+        //
         axios
           .post(
             `${VITE_API_URL}/CheckIn/GetUserEventHistory`,
@@ -404,16 +333,16 @@ export function useFetchData() {
           )
           .then((res) => {
             if (res?.data?.code === ResponseCodes.SUCCESS) {
-              if(res.data.result.historyList){
+              if (res.data.result.historyList) {
                 // res.data.result.storeIconList
                 //   const newData = {
-                  //     ...res.data.data,
-                  //     startDate: '2024.07.15',
-                  //     endDate: '08.31',
-                  //     specialStampIndexList: [5, 10, 15, 30],
-                  //   }
+                //     ...res.data.data,
+                //     startDate: '2024.07.15',
+                //     endDate: '08.31',
+                //     specialStampIndexList: [5, 10, 15, 30],
+                //   }
                 resolve(res.data.result.historyList || [])
-              }else{
+              } else {
                 // TODO: remove this
                 resolve({
                   event_id: activityId,
@@ -460,12 +389,6 @@ export function useFetchData() {
     })
   }
 
-  const confirmActivity = (acStr: string | string[] = ''): Promise<ActivityListType | number> => {
-    return new Promise((resolve, reject) => {
-      if (acStr === '') resolve(0)
-    })
-  }
-
   const originURL = window.location.origin
   const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
 
@@ -493,12 +416,13 @@ export function useFetchData() {
     verifyQRCode,
     checkLineLoginVerify,
     commitStoreCheckIn,
-    fetchCampaign,
-    fetchSpecifyCampaign,
+    // fetchCampaign,
+    // fetchSpecifyCampaign,
+    fetchAllCampaign,
+    confirmCampaign,
     fetchAdData,
     fetchAlbumData,
     fetchCollectData,
-    confirmActivity,
     fetchLayerData
   }
 }

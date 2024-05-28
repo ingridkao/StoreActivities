@@ -3,7 +3,7 @@
  * 打卡結果
  */
 import { computed } from 'vue'
-import type { ScanResultType } from '@/composable/configurable'
+import type { ScanResultType } from '@/types/configurable'
 import { useLink } from '@/composable/useLink'
 
 import checkFailImg from '@/assets/images/scan/check-fail.svg'

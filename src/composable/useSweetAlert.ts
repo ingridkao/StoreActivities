@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2'
 import { useRouter } from 'vue-router'
 
-import type { CollectedListType } from '@/composable/configurable'
+import type { CollectedListType } from '@/types/configurable'
 import data from '@/assets/data'
 import closeIconImg from '@/assets/images/close-icon.svg'
 import dialogCatImg from '@/assets/images/dialog-cat.png'
@@ -28,17 +28,19 @@ export function useSweetAlert() {
   const openStoreInfo = ({
     imageUrl,
     storeName,
-    lastCheckInTime
+    lastCheckInTime,
+    count
   }: {
     imageUrl?: string
     storeName?: string
     lastCheckInTime?: string
+    count?: number
   }) => {
     Swal.fire({
       html: `
 				<div class="store-info-dialog__dialog-container--content">
 					<div class="store-info-dialog__dialog-container--content-image">
-						<img src="${imageUrl ?? baseImgURL}" alt="store"/>
+						<img src="${imageUrl ? imageUrl : baseImgURL}" alt="${storeName ?? 'store'}門市"/>
 					</div>
 				</div>
 				<div class="store-info-dialog__dialog-container--footer">
@@ -47,8 +49,16 @@ export function useSweetAlert() {
 					</div>
 					<div class="store-info-dialog__dialog-container--footer-info">
 						<h6>${storeName ?? '7-11門市'}</h6>
-						<p>${data.storeInfoDialog.lastCheckInTime}</p>
-						<p>${lastCheckInTime ?? 'YYYY-MM-DD HH:mm:ss'}</p>
+            <div>
+              <div>
+                <p>${data.storeInfoDialog.lastCheckInTime}</p>
+                <p>${lastCheckInTime ? lastCheckInTime : new Date().toLocaleDateString()}</p>
+              </div> 
+              <div>
+                <p>${data.storeInfoDialog.checkInCount}</p>
+                <p>${count ?? count}</p>
+              </div> 
+            </div> 
 					</div>
 				</div>
 			`,

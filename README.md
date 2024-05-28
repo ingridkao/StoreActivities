@@ -254,6 +254,13 @@ npm i js-cookie
       });
     ```
 
+### 9.[Day.js](https://day.js.org/)
+用於處理時間的輕量級 JavaScript API
+```sh
+npm i dayjs
+```
+
+
 
 ## 7.Lint with [ESLint](https://eslint.org/)
 
@@ -268,6 +275,7 @@ npm i js-cookie
   - eslint-plugin-vue 會自動幫我們修正程式碼撰寫風格、HTML 標籤內的屬性順序、Vue 方法的排序等等都調整成 Vue Style Guide 的建議並存檔。
 
   [參考文章](https://pjchender.blogspot.com/2019/07/vue-vue-style-guide-eslint-plugin-vue.html)
+
 
 ## 8.開發中碰到的問題
 

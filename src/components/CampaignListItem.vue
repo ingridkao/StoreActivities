@@ -3,10 +3,10 @@
  * 進行中活動 || 預告中活動 || 已結束活動
  */
 import { useRouter } from 'vue-router'
-import type { CampaignListType } from '@/composable/configurable'
+import type { EventInterface } from '@/types/ResponseHandle'
 const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
 const props = defineProps<{
-  campaign: CampaignListType
+  campaign: EventInterface
 }>()
 const router = useRouter()
 const linkTo = async () => {

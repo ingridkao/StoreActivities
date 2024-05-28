@@ -97,11 +97,8 @@ const router = createRouter({
     },
     {
       path: '/:pathMatch(.*)*',
-      name: 'ComingSoon',
-      component: () => import('../views/ComingSoonView.vue'),
-      meta: {
-        title: 'Coming Soon'
-      }
+      name: 'NotFound',
+      component: () => import('../views/ComingSoonView.vue')
     }
   ]
 })
