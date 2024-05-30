@@ -2,12 +2,13 @@
 /**
  * 開啟相機掃描QR Code
  */
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import jsQR from 'jsqr'
 import { useFetchData } from '@/composable/useFetch'
-
 import ScanResult from '@/components/ScanResult.vue'
-const { commitStoreCheckIn } = useFetchData()
+import { useLayoutStore } from '@/stores/layout'
+const { parseParamCT, verifyCtString, commitStoreCheckIn } = useFetchData()
+const layoutStore = useLayoutStore()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
 const canvasVisible = ref(false)
@@ -69,15 +70,17 @@ declare function requestAnimationFrame(callback: AnimationFunction): AnimationRe
 declare function cancelAnimationFrame(requestId: AnimationRequestId): void
 let animationId: AnimationRequestId | null = null
 
-const showsScanResult = ref(false)
 const scanResultContent = ref({})
+const scanErrorMsg = ref('')
+const showsScanResult = computed(() => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== '')
 
 const updateOutPutData = async (imageData: any) => {
   if (qrCodeOutputData.value !== '') return
   const code = jsQR(imageData.data, imageData.width, imageData.height, {
     inversionAttempts: 'dontInvert'
   })
-  // codes.value = code
+  scanResultContent.value = {}
+  scanErrorMsg.value = ''
   if (code) {
     // 標示出QRcode的紅框
     drawLine(code.location.topLeftCorner, code.location.topRightCorner)
@@ -87,27 +90,33 @@ const updateOutPutData = async (imageData: any) => {
     qrCodeOutputData.value = code.data
 
     try {
-      const commitRes = await commitStoreCheckIn()
+      layoutStore.loadToggle(true)
+
+      // QRcode掃瞄出網址將ct取出
+      const ctStr = parseParamCT(code.data)
+      // 驗證ct
+      const t0kenObj = await verifyCtString(ctStr)
+      // 打卡驗證
+      const commitRes = await commitStoreCheckIn('', t0kenObj)
       if (commitRes) {
         // 打卡成功蓋版
-        showsScanResult.value = true
+        console.log(commitRes);
         scanResultContent.value = commitRes
-      } else {
-        // 打卡失敗蓋版
-        showsScanResult.value = true
-        scanResultContent.value = {}
       }
     } catch (error) {
       // 打卡失敗蓋版
-      showsScanResult.value = true
-      scanResultContent.value = {}
-      console.error(error)
+      scanErrorMsg.value = String(error)
     }
-    // pauseAnimation()
+    layoutStore.loadToggle(true)
   }
 }
+
 const cleanOutPutData = () => {
   qrCodeOutputData.value = ''
+}
+
+const scanAgain = () => {
+  window.location.reload()
 }
 
 const isMobile = ref(false)
@@ -197,26 +206,31 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main>
-    <div class="cameraBox">
-      <div v-if="!canvasVisible" class="loadingMessage">
-        🎥 Unable to access video stream (please make sure you have a webcam enabled)
-      </div>
-      <div v-if="videoLoading" class="loadingMessage">⌛ Loading video...</div>
-      <!-- videoW:{{ videoW }} | videoH: {{videoH}} -->
-      <canvas ref="canvas" id="canvas" v-show="canvasVisible && !videoLoading"></canvas>
-      <div id="output" class="outputBox">
-        <div v-if="qrCodeOutputData">
-          <b>Data:</b>
-          <span>{{ qrCodeOutputData }}</span>
-        </div>
-        <div v-else>No QR code detected.</div>
-      </div>
-      <button @click="cleanOutPutData">重新抓取</button>
-      <button @click="stopMediaTracks">關閉攝影機</button>
+
+  <main class="cameraBox">
+    <div v-if="!canvasVisible" class="loadingMessage">
+      🎥 無法存取視訊串流（請確保您已啟用網路攝影機）
     </div>
+    <div v-if="videoLoading" class="loadingMessage">Loading...</div>
+    <canvas ref="canvas" id="canvas" v-show="canvasVisible && !videoLoading"></canvas>
+    <!-- TODO: 刪除 -->
+    <div id="output" class="outputBox">
+      <div v-if="qrCodeOutputData">
+        <b>Data:</b>
+        <span>{{ qrCodeOutputData }}</span>
+      </div>
+      <div v-else>No QR code detected.</div>
+    </div>
+
+    <button @click="cleanOutPutData" class="cameraBox__button">重新抓取</button>
+    <button @click="stopMediaTracks" class="cameraBox__button">關閉攝影機</button>
   </main>
-  <ScanResult v-if="showsScanResult" :result="scanResultContent" />
+  <ScanResult
+    v-if="showsScanResult"
+    :result="scanResultContent"
+    :error="scanErrorMsg"
+    @scanAgain="scanAgain"
+  />
 </template>
 
 <style lang="scss" scoped>
@@ -231,7 +245,11 @@ video {
   padding: 1rem;
 
   .loadingMessage {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    font-size: 36px;
     padding: 40px;
     background-color: #eee;
   }
@@ -245,6 +263,14 @@ video {
     div {
       word-wrap: break-word;
     }
+  }
+
+  &__button{
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    padding: 27px 0 42px;
+    text-align: center;
   }
 }
 </style>

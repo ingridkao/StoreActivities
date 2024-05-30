@@ -2,6 +2,8 @@
 /**
  * 進行中活動 || 預告中活動 || 已結束活動
  */
+import { computed } from 'vue'
+import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import type { EventInterface } from '@/types/ResponseHandle'
 const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
@@ -23,6 +25,9 @@ const linkTo = async () => {
 }
 const originURL = window.location.origin
 const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
+const startTime = computed(() => dayjs(props.campaign.startTime).format('YYYY/MM/DD') || '')
+const endTime = computed(() => dayjs(props.campaign.endTime).format('YYYY/MM/DD') || '')
+
 </script>
 
 <template>
@@ -41,7 +46,7 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
     <div class="activities__info">
       <p class="activities__info--title">{{ props.campaign.eventName }}</p>
       <p class="activities__info--date">
-        {{ props.campaign.startTime }} - {{ props.campaign.endTime }}
+        {{ startTime }} - {{ endTime }}
       </p>
     </div>
   </div>

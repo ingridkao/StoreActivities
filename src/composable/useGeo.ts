@@ -7,13 +7,13 @@ export function useGeo() {
     '資訊回傳了錯誤',
     '取得地理資訊超過時限'
   ]
-  
+
   //可以控制是否要顯示提示
   const { geoLocationErrorAlert } = useSweetAlert()
   const { resume } = useGeolocation()
   const geoErrorHandler = (errorCode: number) => {
     const GeolocationErrorString = GeolocationPositionError[errorCode - 1]
-    geoLocationErrorAlert(GeolocationErrorString, ()=>{
+    geoLocationErrorAlert(GeolocationErrorString, () => {
       resume()
     })
   }

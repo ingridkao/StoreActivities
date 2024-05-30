@@ -6,7 +6,7 @@ const ScanEntryApi = (axios: any, event: any) => ({
       }
     })
   },
-  verifyQRCode(ctStr: string) {
+  verifyQRString(ctStr: string) {
     return axios.post(`${event}/IbonEntry`, {
       data: {
         qrCode: ctStr

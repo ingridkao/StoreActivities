@@ -25,7 +25,7 @@ export function useLink() {
       errorAlert('找不到此活動，回到活動大廳')
     } else {
       router.push({
-        name: 'Direction',
+        name: 'Activity',
         params: {
           id: String(activityId)
         }

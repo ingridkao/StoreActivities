@@ -10,6 +10,7 @@ export type ApiResType = {
   result?: {}
 }
 
+// 
 export type GenrateMockQRCodeResType = {
   lat?: number
   long?: number
@@ -17,7 +18,7 @@ export type GenrateMockQRCodeResType = {
   error?: string
 }
 
-export type VerifyCodeApiResType = {
+export type VerifyCodeResType = {
   result: boolean
   token?: string | null
   error?: string
@@ -50,10 +51,10 @@ export interface EventContentType {
   title: string
   text?: string
 }
+
 // 存在localstorage的簡化資料
 export type EventInfoInterface = {
   nameBreak?: number // 供UI幾個字換行判斷
-
   eventName?: string
   year?: string | number //轉換後的年份
   startDate?: string //轉換後的開始時間
@@ -74,6 +75,7 @@ export type AdListResType = {
   queryList?: AdsInterface[]
   error?: string
 }
+
 //
 export interface EventInterface {
   id?: number

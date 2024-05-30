@@ -3,22 +3,23 @@ import dayjs from 'dayjs'
 import isBetween from 'dayjs/plugin/isBetween'
 dayjs.extend(isBetween)
 
+import type { checkInVerifyBodyType, checkInVerifyHeaderType } from '@/types/RequestHandle'
 import { ResponseCodes } from '@/types/ResponseHandle'
 import type {
   GenrateMockQRCodeResType,
-  VerifyCodeApiResType,
+  VerifyCodeResType,
   EventInterface,
   EventInfoInterface,
   AdsInterface,
   AdListResType
 } from '@/types/ResponseHandle'
-import type { GenrateMockQRCodeState, VerifyCodeState } from '@/types/StateHandle'
+import type { GenrateMockQRCodeState, ParseCtStringState } from '@/types/StateHandle'
 import type { AlbumType, CollectedType, ScanResultType } from '@/types/configurable'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useEventStorage } from '@/composable/useEventStorage'
 // import { useLIFF } from '@/composable/useLIFF'
 
-import { useLoadingStore } from '@/stores/loading'
+import { useLayoutStore } from '@/stores/layout'
 import apis from '@/api/apiRoutes'
 import mockDatas from '@/api/mockData'
 import EventContent from '@/assets/events'
@@ -27,18 +28,29 @@ const { VITE_API_URL, VITE_UI_MODE, VITE_OUTDIR } = import.meta.env
 
 export function useFetchData() {
   const { scanEntry, checkIn } = apis
-  const loadStore = useLoadingStore()
+  const layoutStore = useLayoutStore()
   const {
     getLocationStorage,
     setQRcodeString,
-    setCtTokenCookies,
+    parseCtT0ken,
+    setCtT0kenCookies,
+    getCtT0kenCookies,
+    setLineT0kenCookies,
+    setLoginT0kenCookies,
+    getLoginT0kenCookies,
+    setAcStringStorage,
     getAcStringStorage,
-    setLineTokenCookies,
-    setServiceTokenCookies,
-    getServiceTokenCookies,
-    getQRcodeString
   } = useBrowserStorage()
   const { getEventStorage, setEventStorage } = useEventStorage()
+
+  /**
+   * 從URL字串中取出ct參數
+   * <URL>?ct=OP1134580513153032440f32024
+   */
+  const parseParamCT = (url: string):string => {
+    const codeSplit = url.split('?ct=')
+    return codeSplit.length === 2 && codeSplit[1] ? String(codeSplit[1]) : ''
+  }
 
   // MockQRCodeData
   const genrateMockQRCode = (): Promise<GenrateMockQRCodeState> => {
@@ -61,29 +73,29 @@ export function useFetchData() {
   }
 
   /**
-   * 驗證QRCode
+   * Lobby and after scan 
+   * 取的CT驗證QRCode(CT字串)
    * ct=OP666000031818094ac904
    * 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
    */
-  const verifyQRCode = (ctStr: string = ''): Promise<VerifyCodeState> => {
+  const verifyCtString = (ctStr: string = ''): Promise<ParseCtStringState|null> => {
     return new Promise((resolve, reject) => {
-      if (ctStr === '') {
+      if (ctStr === '') {        
         reject('請選擇活動')
       } else if (!VITE_API_URL) {
         reject('服務中斷')
       } else {
         checkIn
-        scanEntry.verifyQRCode(ctStr).then((res: VerifyCodeApiResType) => {
+        scanEntry.verifyQRString(ctStr).then((res: VerifyCodeResType) => {
           if (res.token) {
             setQRcodeString(ctStr)
-            setCtTokenCookies(res.token)
-            resolve({
-              ctStr: ctStr,
-              // store: ctStr.substring(2, 8),
-              token: res.token
-            })
+            setCtT0kenCookies(res.token)
+            if (!ctStr || !res.token) return resolve(null)
+            const obj = parseCtT0ken(ctStr, res.token)
+            console.log(obj);
+            resolve(obj)
           } else {
-            reject(`verifyQRCode:${res.error || '發生了例外錯誤'}`)
+            reject(`verifyCtString:${res.error || '發生了例外錯誤'}`)
           }
         })
       }
@@ -96,11 +108,11 @@ export function useFetchData() {
   const checkLineLoginVerify = (accessToken: string): Promise<string> => {
     return new Promise((resolve, reject) => {
       if (accessToken) {
-        setLineTokenCookies(accessToken)
-        scanEntry.checkLineLoginVerify(accessToken).then((res: VerifyCodeApiResType) => {
+        setLineT0kenCookies(accessToken)
+        scanEntry.checkLineLoginVerify(accessToken).then((res: VerifyCodeResType) => {
           if (res.result) {
             const serviceT0ken = res.token || ''
-            setServiceTokenCookies(serviceT0ken)
+            setLoginT0kenCookies(serviceT0ken)
             resolve(serviceT0ken)
           } else {
             reject(`checkLineLoginVerify:${res.error || '發生了例外錯誤'}`)
@@ -112,28 +124,45 @@ export function useFetchData() {
     })
   }
 
-  /**
-   * 打卡驗證
-   */
-  const commitStoreCheckIn = async (activityId: string = ''): Promise<boolean | ScanResultType> => {
-    const serviceT0ken = getServiceTokenCookies()
-    const [latitude, longitude] = getLocationStorage()
+  // 打卡驗證
+  const commitStoreCheckIn = async (activityId: string | string[] = '', t0kenObj: ParseCtStringState|null=null): Promise<boolean | ScanResultType> => {
+    const loginT0kenObj = getLoginT0kenCookies()
+    const locationObj = getLocationStorage()
     if (activityId === '') {
       activityId = getAcStringStorage()
     }
     return new Promise((resolve, reject) => {
       if (activityId === '') {
-        reject('未選擇活動')
-      } else if (serviceT0ken === '') {
-        reject('訪客無法進行打卡')
+        reject(1)
       } else if (!VITE_API_URL) {
-        reject('服務中斷')
+        reject(2)
+      } else if (t0kenObj === null) {
+        reject(3)
+      } else if (loginT0kenObj === null) {
+        reject(4)
       } else {
-        checkIn
-          .checkInVerify(Number(activityId), Number(longitude), Number(latitude))
-          .then((res: any) => {
-            console.log(res)
+        const {storeId,number,token} = t0kenObj
+        const {loginT0ken} = loginT0kenObj
+        const [latitude, longitude] = locationObj
 
+        const data = {
+          eventId: String(activityId),
+          longitude: Number(longitude),
+          latitude: Number(latitude),
+          storeId: storeId,
+          key: number,
+        } as checkInVerifyBodyType
+        const headerKey = loginT0ken? loginT0ken.slice(4, 10):''
+        const headers = {
+          store: storeId,
+          key: `${number}|||${headerKey}`,
+          Auth1: token,
+          Auth2: loginT0ken
+        } as checkInVerifyHeaderType
+        checkIn
+          .checkInVerify(data, headers)
+          .then((res: any) => {
+            resolve(res)
             //   if (res?.data?.code === ResponseCodes.SUCCESS) {
             //     if (res.data.data) {
             //       resolve(res.data.data)
@@ -227,9 +256,8 @@ export function useFetchData() {
       // 取出localstorage活動的簡化資料
       let enevtList: EventInterface[] = getEventStorage()
       if (enevtList.length === 0) {
-        const parseQrStringObj = getQRcodeString()
+        const parseQrStringObj = getCtT0kenCookies()
         const storeId = parseQrStringObj ? parseQrStringObj.storeId || '' : ''
-        debugger
         fetchAllCampaign(storeId).then((res: EventInterface[]) => {
           enevtList = res
         })
@@ -238,18 +266,21 @@ export function useFetchData() {
       const target = enevtList.find((item) => String(item.pageRouter) === activityId)
       if (!target) {
         // 找不到此活動
-        reject(2)
+        reject(1)
+
       } else {
         const isEventActive = dayjs().isBetween(target.startTime, target.endTime, 'day', '[)')
-        console.log(isEventActive)
         if (!target.isEnable || !isEventActive) {
           // 活動已關閉||活動時間未舉行
-          reject(1)
+          reject(2)
+
         } else {
+          setAcStringStorage(activityId)
           // mapping活動內頁資料(src/assets/events.ts)
           const eventInfo = EventContent[activityId]
             ? EventContent[activityId]
             : EventContent['default']
+
           // 活動名稱換行
           const eventName =
             target.eventName && eventInfo.nameBreak
@@ -287,10 +318,10 @@ export function useFetchData() {
   }
 
   const fetchAlbumData = (): Promise<AlbumType[]> => {
-    const serviceT0ken = getServiceTokenCookies()
+    const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
-      if (serviceT0ken) {
-        checkIn.fetchAlbum(serviceT0ken).then((res: any) => {
+      if (loginT0ken && loginT0ken.loginT0ken) {
+        checkIn.fetchAlbum(loginT0ken.loginT0ken).then((res: any) => {
           if (res.error) {
             reject(`fetchAlbumData:${res.error}`)
           } else {
@@ -311,9 +342,9 @@ export function useFetchData() {
    * --header 'FV;'              version
    */
   const fetchCollectData = (activityId: string = ''): Promise<CollectedType> => {
-    const serviceT0ken = getServiceTokenCookies()
+    const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
-      if (VITE_API_URL && serviceT0ken) {
+      if (VITE_API_URL && loginT0ken && loginT0ken.loginT0ken) {
         //
         axios
           .post(
@@ -325,8 +356,8 @@ export function useFetchData() {
             },
             {
               headers: {
-                Authorization: serviceT0ken,
-                Key: serviceT0ken.slice(4, 10),
+                Authorization: loginT0ken.loginT0ken,
+                Key: loginT0ken.loginT0ken.slice(4, 10),
                 FV: '1.0.0'
               }
             }
@@ -396,7 +427,7 @@ export function useFetchData() {
   const fetchLayerData = async (selectCity: string = '') => {
     const targerCity = String(selectCity)
     if (!targerCity) return false
-    loadStore.toggle(true)
+    layoutStore.loadToggle(true)
     return await axios
       .get(`${fileOrigin}/stores/map_${targerCity}.geojson`)
       .then((geoRes) => {
@@ -407,15 +438,16 @@ export function useFetchData() {
         console.log(error)
       })
       .finally(() => {
-        loadStore.toggle(false)
+        layoutStore.loadToggle(false)
       })
   }
 
   return {
+    parseParamCT,
     genrateMockQRCode,
-    verifyQRCode,
-    checkLineLoginVerify,
+    verifyCtString,
     commitStoreCheckIn,
+    checkLineLoginVerify,
     // fetchCampaign,
     // fetchSpecifyCampaign,
     fetchAllCampaign,

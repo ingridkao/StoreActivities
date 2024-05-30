@@ -1,43 +1,34 @@
+import type { checkInVerifyBodyType, checkInVerifyHeaderType, VerifyHeaderType } from '@/types/RequestHandle'
+const { VITE_VERSION } = import.meta.env
+
 const CheckInServiceApi = (axios: any, event: any) => ({
-  checkInVerify(activityId: number, longitude: number, latitude: number) {
+  checkInVerify(data:checkInVerifyBodyType, header:checkInVerifyHeaderType) {
     return axios.post(
       `${event}/CheckInVerify`,
       {
         data: {
           sourceType: 'A',
-          eventId: activityId,
-          longitude: longitude,
-          latitude: latitude
-          // storeId: 1,
-          //     key: 'AAA',
+          ...data
         }
       },
       {
         headers: {
-          //     key: 'AAA|||AAA',
-          //     store: '931356',
-          //     FV: '1.0.0',
-          //     Auth1: '123132',
-          //     Auth2: serviceT0ken
+          FV: VITE_VERSION,
+          ...header
         }
       }
     )
   },
-  /**
-   * --header 'Authorization;' \ service accesstoken
-   * --header 'Key;' \           service accesstoken第5取6
-   * --header 'FV;'              version
-   */
-  fetchAlbum(serviceT0ken: string) {
+  fetchAlbum(loginT0ken: string) {
     return axios.post(
       `${event}/GetUserHistoryByStore`,
       {},
       {
         headers: {
-          Authorization: serviceT0ken,
-          Key: serviceT0ken.slice(4, 10),
-          FV: '1.0.0'
-        }
+          Authorization: loginT0ken,
+          Key: loginT0ken.slice(4, 10),
+          FV: VITE_VERSION
+        } as VerifyHeaderType
       }
     )
   }

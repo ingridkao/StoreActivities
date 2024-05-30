@@ -7,16 +7,13 @@ import HeaderMenu from '@/components/HeaderMenu.vue'
 import type { AlbumType } from '@/types/configurable'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
-import { useLoadingStore } from '@/stores/loading'
+import { useLayoutStore } from '@/stores/layout'
 
 import emptyStampImg from '@/assets/images/album/empty-stamp.png'
 import checkedStampImg from '@/assets/images/album/checked-stamp.svg'
 
 const { fetchAlbumData } = useFetchData()
 const { errorAlert, openStoreInfo } = useSweetAlert()
-const { setAcStringStorage } = useBrowserStorage()
-setAcStringStorage('')
 
 const stampBaseCount = 20
 const albumStore = ref<AlbumType[]>([])
@@ -27,16 +24,16 @@ const accumulation = computed(() => {
   return numberStr.padStart(5 - numberStr.length, '0')
 })
 
-const loadStore = useLoadingStore()
+const layoutStore = useLayoutStore()
 onMounted(async () => {
-  loadStore.toggle(true)
+  layoutStore.loadToggle(true)
   try {
     const res = await fetchAlbumData()
     albumStore.value = res || []
   } catch (error) {
     errorAlert(String(error))
   }
-  loadStore.toggle(false)
+  layoutStore.loadToggle(false)
 })
 </script>
 

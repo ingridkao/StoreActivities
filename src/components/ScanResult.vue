@@ -16,16 +16,28 @@ import checkSuccessImageImg from '@/assets/images/scan/check-success-image.png'
 const { linkToTargetActivityIdPage } = useLink()
 
 const props = defineProps<{
-  result: ScanResultType
+  result: ScanResultType,
+  error: Number | String,
 }>()
 const successResult = computed(() => Object.keys(props.result).length > 0)
 const activityId = computed(() =>
   props.result && props.result.event_id ? props.result.event_id : ''
 )
-
-const scanAgain = async () => {
-  window.location.reload()
-}
+const errorMsg = computed(() => {
+  if(props.error == 1){
+    return '此活動異常，請重新操作'
+  }else if(props.error == 2){
+    return '服務中斷'
+  }else if(props.error == 3){
+    return '請重新進行掃描打卡'
+  }else if(props.error == 4){
+    return '訪客無法進行打卡，請重新操作'
+  // }else if(props.error == 2){
+  //   return '此活動異常，請重新操作'
+  }else{
+    return String(props.error)
+  }
+})
 </script>
 
 <template>
@@ -40,6 +52,7 @@ const scanAgain = async () => {
         <img v-if="successResult" :src="checkSuccessImg" alt="check success" />
         <img v-else :src="checkFailImg" alt="check fail" />
       </div>
+
       <div v-if="successResult" class="scan-result__content--success">
         <div class="scan-result__content--success-image">
           <img :src="checkSuccessImageImg" alt="check success" />
@@ -51,19 +64,23 @@ const scanAgain = async () => {
         </div>
       </div>
       <div v-else class="scan-result__content--fail">
-        <img :src="checkFailImageImg" alt="check fail" class="scan-result__content--fail-image" />
+        <div class="scan-result__content--fail-image">
+          <img :src="checkFailImageImg" alt="check fail" />
+        </div>
+        <div class="scan-result__content--fail-msg">{{ errorMsg }}</div>
       </div>
-      <div class="scan-result__buttons">
-        <div class="scan-result__buttons--wrapper">
+
+      <div class="scan-result__button">
+        <div class="scan-result__button--wrapper">
           <img
             @click="linkToTargetActivityIdPage(activityId, 'Collected')"
             :src="recordButtonImg"
             alt="查看紀錄"
           />
         </div>
-        <div class="scan-result__buttons--wrapper-keep">
-          <img @click="scanAgain" :src="keepCheckButtonImg" alt="繼續打卡" />
-        </div>
+        <button class="scan-result__button--wrapper-keep" @click="$emit('scanAgain')">
+          <img :src="keepCheckButtonImg" alt="繼續打卡" />
+        </button>
       </div>
     </div>
   </div>
@@ -72,6 +89,7 @@ const scanAgain = async () => {
 <style lang="scss" scoped>
 .scan-result {
   position: fixed;
+      z-index: 2;
   width: 100%;
   height: 100%;
   overflow: scroll;
@@ -165,19 +183,23 @@ const scanAgain = async () => {
       justify-content: center;
       margin-bottom: 78px;
       padding-top: 20px;
-      width: 300px;
-      height: 380px;
-      overflow: hidden;
-
       &-image {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
+        width: 300px;
+        height: 278px;
+        overflow: hidden;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+      &-msg{
+        margin-top: 16px;
       }
     }
   }
 
-  &__buttons {
+  &__button {
     display: flex;
     justify-content: center;
     gap: 24px;

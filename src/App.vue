@@ -1,6 +1,9 @@
 <script setup lang="ts">
+import { onMounted, onUnmounted, watch } from 'vue'
 import { RouterView } from 'vue-router'
-import { onMounted, onUnmounted } from 'vue'
+import { useLayoutStore } from '@/stores/layout'
+
+const layoutStore = useLayoutStore()
 
 //TODO: RWD scale function
 const handleResize = () => {
@@ -26,8 +29,31 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
+
+watch(
+  () => layoutStore.showDirection,
+  (bodyScrollForbid) => {
+    document.body.style.overflowY = bodyScrollForbid? 'hidden': 'scroll'
+  }
+)
 </script>
 
 <template>
-  <RouterView />
+  <main>
+    <div v-show="layoutStore.load || layoutStore.pageLoad" class="loading">Loading...</div>
+    <RouterView />
+  </main>
 </template>
+
+<style lang="scss" scoped>
+  .loading {
+    width: 100%;
+    height: calc(100 * var(--vh));
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    background-color: #efefea;
+    font-size: 36px;
+  }
+</style>

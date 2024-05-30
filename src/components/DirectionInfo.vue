@@ -1,15 +1,7 @@
 <script setup lang="ts">
 /**
  * 打卡教學
- * step1.取得LINE user profile
- *       - 已登入:繼續step2
- *       - 未登入:LINE Login redirect到活動說明頁面
- * step2.開啟打卡頁面|功能
  */
-import HeaderMenu from '@/components/HeaderMenu.vue'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
-import { useLIFF } from '@/composable/useLIFF'
-
 import data from '@/assets/data'
 import DecoCatImg from '@/assets/images/direction/deco-cat.png'
 import step1IconImg from '@/assets/images/direction/step-1-icon.svg'
@@ -17,26 +9,10 @@ import step1PictureImg from '@/assets/images/direction/step-1-picture.png'
 import step2IconImg from '@/assets/images/direction/step-2-icon.svg'
 import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
 import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
-
-const { setParamsIdStorage } = useBrowserStorage()
-setParamsIdStorage()
-
-const { scanCode } = useLIFF()
-const startScanning = async () => {
-  try {
-    await scanCode()
-  } catch (error) {
-    // 異常
-    console.error(error)
-    // 顯示提示錯誤dialog
-    // 倒數10秒reset
-  }
-}
 </script>
 
 <template>
-  <main class="direction-view">
-    <HeaderMenu />
+  <div class="direction-view">
     <div class="direction-view__deco-cat">
       <img :src="DecoCatImg" alt="deco cat" />
     </div>
@@ -63,14 +39,23 @@ const startScanning = async () => {
         <p>{{ data.direction.step2Text }}</p>
       </div>
     </div>
-    <div class="direction-view__button" @click="startScanning">
+    <div class="direction-view__button" @click="$emit('checkin')">
       <img :src="checkInButtonImg" alt="check in button" />
     </div>
-  </main>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .direction-view {
+  position: fixed;
+  width: 100%;
+  height: 100dvh;
+  top: 0;
+  left: 0;
+  z-index: 4;
+  overflow: scroll;
+
+  background-color: #55bf6f;
   background: url('@/assets/images/direction/bg.png') repeat;
   padding-top: 60px;
 
