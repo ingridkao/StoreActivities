@@ -1,7 +1,8 @@
 import Swal from 'sweetalert2'
+import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 
-import type { CollectedListType } from '@/types/configurable'
+import type { EventInterface } from '@/types/ResponseHandle'
 import data from '@/assets/data'
 import closeIconImg from '@/assets/images/close-icon.svg'
 import dialogCatImg from '@/assets/images/dialog-cat.png'
@@ -26,16 +27,25 @@ export function useSweetAlert() {
   }
 
   const openStoreInfo = ({
+    countShow,
     imageUrl,
     storeName,
     lastCheckInTime,
     count
   }: {
+    countShow?: boolean
     imageUrl?: string
     storeName?: string
     lastCheckInTime?: string
     count?: number
   }) => {
+    const countHTML = countShow? `
+      <div >
+        <p>${data.storeInfoDialog.checkInCount}</p>
+        <p>${count ?? count}</p>
+      </div> 
+    `: ''
+
     Swal.fire({
       html: `
 				<div class="store-info-dialog__dialog-container--content">
@@ -52,12 +62,9 @@ export function useSweetAlert() {
             <div>
               <div>
                 <p>${data.storeInfoDialog.lastCheckInTime}</p>
-                <p>${lastCheckInTime ? lastCheckInTime : new Date().toLocaleDateString()}</p>
+                <p>${lastCheckInTime ? dayjs(lastCheckInTime).format('YYYY/MM/DD HH:mm') : new Date().toLocaleDateString()}</p>
               </div> 
-              <div>
-                <p>${data.storeInfoDialog.checkInCount}</p>
-                <p>${count ?? count}</p>
-              </div> 
+              ${countHTML}
             </div> 
 					</div>
 				</div>
@@ -76,7 +83,7 @@ export function useSweetAlert() {
   }
 
   const storeInfoAlert = (
-    storeItem: CollectedListType,
+    storeItem: EventInterface,
     imgImportUrl: string = '',
     storeIcon: string = ''
   ) => {
@@ -92,14 +99,14 @@ export function useSweetAlert() {
       html: `
 					${imgBox}
 					<div class="textBox">
-						<h6>${storeItem.store_name || '7-11'}門市</h6>
-						<p>最後打卡時間</p><p>${storeItem.checkInTime || 'YYYY-MM-DD HH:mm:ss'}</p>
+						<h6>${storeItem.storeName || '7-11'}門市</h6>
+						<p>最後打卡時間</p><p>${storeItem.createTime || 'YYYY-MM-DD HH:mm:ss'}</p>
 					</div>
 				`,
       imageUrl: storeIcon ? storeIcon : null,
       imageWidth: 300,
       imageHeight: 300,
-      imageAlt: `${storeItem.store_name || '7-11'}門市`,
+      imageAlt: `${storeItem.storeName || '7-11'}門市`,
       showCloseButton: true,
       showConfirmButton: false,
       customClass: {

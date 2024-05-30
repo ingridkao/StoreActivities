@@ -3,7 +3,8 @@
  * 打卡結果
  */
 import { computed } from 'vue'
-import type { ScanResultType } from '@/types/configurable'
+import dayjs from 'dayjs'
+import type { ScanResultType } from '@/types/ResponseHandle'
 import { useLink } from '@/composable/useLink'
 
 import checkFailImg from '@/assets/images/scan/check-fail.svg'
@@ -20,9 +21,6 @@ const props = defineProps<{
   error: Number | String,
 }>()
 const successResult = computed(() => Object.keys(props.result).length > 0)
-const activityId = computed(() =>
-  props.result && props.result.event_id ? props.result.event_id : ''
-)
 const errorMsg = computed(() => {
   if(props.error == 1){
     return '此活動異常，請重新操作'
@@ -32,8 +30,8 @@ const errorMsg = computed(() => {
     return '請重新進行掃描打卡'
   }else if(props.error == 4){
     return '訪客無法進行打卡，請重新操作'
-  // }else if(props.error == 2){
-  //   return '此活動異常，請重新操作'
+  }else if(props.error == 5){
+    return '你不在門市所在位置，請重新操作'
   }else{
     return String(props.error)
   }
@@ -58,9 +56,9 @@ const errorMsg = computed(() => {
           <img :src="checkSuccessImageImg" alt="check success" />
         </div>
         <div class="scan-result__content--success-info">
-          <p class="scan-result__content--success-info-id">{{ props.result['event_id'] }}</p>
-          <p class="scan-result__content--success-info-name">{{ props.result.name }}</p>
-          <p class="scan-result__content--success-info-date">{{ props.result.date }}</p>
+          <p class="scan-result__content--success-info-id">{{ props.result.storeId }}</p>
+          <p class="scan-result__content--success-info-name">{{ props.result.storeName }}門市</p>
+          <p class="scan-result__content--success-info-date">{{ props.result.date || dayjs().format('YYYY_MM_DD_HH:mm') }}</p>
         </div>
       </div>
       <div v-else class="scan-result__content--fail">
@@ -73,7 +71,7 @@ const errorMsg = computed(() => {
       <div class="scan-result__button">
         <div class="scan-result__button--wrapper">
           <img
-            @click="linkToTargetActivityIdPage(activityId, 'Collected')"
+            @click="linkToTargetActivityIdPage(props.result.eventId, 'Collected')"
             :src="recordButtonImg"
             alt="查看紀錄"
           />
@@ -89,7 +87,7 @@ const errorMsg = computed(() => {
 <style lang="scss" scoped>
 .scan-result {
   position: fixed;
-      z-index: 2;
+  z-index: 4;
   width: 100%;
   height: 100%;
   overflow: scroll;

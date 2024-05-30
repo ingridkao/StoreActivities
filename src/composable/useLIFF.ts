@@ -31,7 +31,7 @@ liff.use(new getAccessToken())
 liff.use(new closeWindow())
 liff.use(new scanCodeV2())
 
-const { VITE_LIFF_ID } = import.meta.env
+const { VITE_LIFF_ID, VITE_ORIGIN_URL } = import.meta.env
 export function useLIFF() {
   // ios || android || web
   const getUserOS = () => liff.getOS()
@@ -66,8 +66,9 @@ export function useLIFF() {
       await liff.init({ liffId: VITE_LIFF_ID })
       if (liff.isInClient()) {
         // liff.init()在執行時會自動執行liff.login()
+
       } else if (!liff.isLoggedIn()) {
-        const redirectUri = `${window.location.origin}/activity/${activityId}`
+        const redirectUri = `${VITE_ORIGIN_URL}/activity/${activityId}`
         liff.login({
           redirectUri: redirectUri
         })
@@ -126,7 +127,7 @@ export function useLIFF() {
         const scanresult = await liff.scanCodeV2()
         if (scanresult && scanresult.value) {
           // 掃瞄出網址取出ct
-          const newPath = new URL(scanresult.value, window.location.origin)
+          const newPath = new URL(scanresult.value, VITE_ORIGIN_URL)
           return (newPath && newPath.search)? parseParamCT(newPath.search): ''
         }else{
           return ''

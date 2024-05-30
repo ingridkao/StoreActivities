@@ -1,7 +1,12 @@
 export enum ResponseCodes {
   SUCCESS = 20000,
   QRCODE_TIMEOUT = 1010003,
-  LINE_NOAUTH = 1010007
+  LOCATION_ERROR = 1010006,   // 你不在門市所在位置
+  LINE_NOAUTH = 1010007,
+  NO_EVENT = 1010008,
+  EXPIRED_ACCESS_TOKEN = 50012,
+  ERROR = 50000,
+
 }
 
 export type ApiResType = {
@@ -81,7 +86,7 @@ export interface EventInterface {
   id?: number
   storeId?: number
   storeName?: string
-  createTime?: Date
+  createTime?: string
 }
 
 export interface IconInterface {
@@ -92,8 +97,31 @@ export interface IconInterface {
   iconFilePath?: string
 }
 
-export type CollectedListType = {
+// 活動打卡紀錄 via GetUserEventHistory
+export type EventListType = {
   historyList?: EventInterface[]
-  storeIconList?: IconInterface[]
+  storeIconList: IconInterface[] | null
+  error?: string
+}
+
+export interface ScanResultType {
+  eventId?: string
+  storeId?: string
+  storeName?: string
+  date?: string
+}
+
+// 門市打卡紀錄 via GetUserHistoryByStore
+export interface AlbumType {
+  storeId?: string
+  storeName?: string
+  checkinTime?: string //最後打卡時間
+  storeTimes?: number //打卡次數
+  iconFilePath?: string //圖片路徑
+}
+
+export type AlbumListType = {
+  historyList?: AlbumType[]
+  storeIconList: IconInterface[] | null
   error?: string
 }

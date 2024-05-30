@@ -22,6 +22,7 @@ import data from '@/assets/data'
 
 import topCatImg from '@/assets/images/lobby/top-cat.png'
 import topLogoImg from '@/assets/images/lobby/top-logo.png'
+const { VITE_ORIGIN_URL } = import.meta.env
 
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
@@ -33,9 +34,7 @@ const adsList = ref<AdsInterface[]>([])
 const qrString = ref<string>('')
 
 onMounted(async () => {
-  const originURL = window.location.origin
-
-  const newPath = new URL(window.location.href, originURL)
+  const newPath = new URL(window.location.href, VITE_ORIGIN_URL)
   const ctStr = (newPath && newPath.search)? parseParamCT(newPath.search): ''
   layoutStore.loadToggle(true)
   try {
@@ -52,13 +51,14 @@ onMounted(async () => {
     if (ctStr) {
       // 驗證ct
       await verifyCtString(ctStr)
+
     } else {
       // TODO: After check api flow, remove this
       const MockCode = await genrateMockQRCode()
       if (MockCode) {
         setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
       }
-      qrString.value = `${originURL}?ct=${MockCode.qrCode}`
+      qrString.value = `${VITE_ORIGIN_URL}?ct=${MockCode.qrCode}`
     }
   } catch (error) {
     errorAlert(error)

@@ -11,10 +11,12 @@ import type {
   EventInterface,
   EventInfoInterface,
   AdsInterface,
-  AdListResType
+  AdListResType,
+  ScanResultType,
+  AlbumListType,
+  EventListType
 } from '@/types/ResponseHandle'
 import type { GenrateMockQRCodeState, ParseCtStringState } from '@/types/StateHandle'
-import type { AlbumType, CollectedType, ScanResultType } from '@/types/configurable'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useEventStorage } from '@/composable/useEventStorage'
 // import { useLIFF } from '@/composable/useLIFF'
@@ -144,9 +146,8 @@ export function useFetchData() {
         const {storeId,number,token} = t0kenObj
         const {loginT0ken} = loginT0kenObj
         const [latitude, longitude] = locationObj
-
         const data = {
-          eventId: String(activityId),
+          eventId: Number(activityId),
           longitude: Number(longitude),
           latitude: Number(latitude),
           storeId: storeId,
@@ -162,19 +163,30 @@ export function useFetchData() {
         checkIn
           .checkInVerify(data, headers)
           .then((res: any) => {
-            resolve(res)
-            //   if (res?.data?.code === ResponseCodes.SUCCESS) {
-            //     if (res.data.data) {
-            //       resolve(res.data.data)
-            //     } else {
-            //       resolve(false)
-            //     }
-            //   } else {
-            //     reject('後端發生了例外錯誤')
-            //   }
-            // resolve({
-            //   event_id: String(activityId)
-            // })
+            console.log(res);  
+
+            switch (res?.code) {
+              case ResponseCodes.SUCCESS:
+                resolve({
+                  eventId: String(activityId),
+                  storeId: storeId,
+                  storeName: "",
+                  date: "",
+                })
+                break;
+              case ResponseCodes.NO_EVENT:
+                reject(1)
+                break;
+              case ResponseCodes.LOCATION_ERROR:
+                reject(5)
+                break;
+              default:
+                resolve(res)
+                break;
+            }
+          }).catch((error:any)=>{
+            console.log(error);
+            reject(3)
           })
       }
     })
@@ -317,7 +329,7 @@ export function useFetchData() {
     })
   }
 
-  const fetchAlbumData = (): Promise<AlbumType[]> => {
+  const fetchAlbumData = (): Promise<AlbumListType> => {
     const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
       if (loginT0ken && loginT0ken.loginT0ken) {
@@ -325,7 +337,7 @@ export function useFetchData() {
           if (res.error) {
             reject(`fetchAlbumData:${res.error}`)
           } else {
-            resolve(res.historyList || [])
+            resolve(res)
           }
         })
       } else if (VITE_API_URL || VITE_UI_MODE) {
@@ -336,83 +348,35 @@ export function useFetchData() {
     })
   }
 
-  /**
-   * --header 'Authorization;' \ service accesstoken
-   * --header 'Key;' \           service accesstoken第5取6
-   * --header 'FV;'              version
-   */
-  const fetchCollectData = (activityId: string = ''): Promise<CollectedType> => {
+  const fetchCollectData = (activityId: string = ''): Promise<EventListType> => {
     const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
       if (VITE_API_URL && loginT0ken && loginT0ken.loginT0ken) {
-        //
-        axios
-          .post(
-            `${VITE_API_URL}/CheckIn/GetUserEventHistory`,
-            {
-              data: {
-                eventId: Number(activityId)
-              }
-            },
-            {
-              headers: {
-                Authorization: loginT0ken.loginT0ken,
-                Key: loginT0ken.loginT0ken.slice(4, 10),
-                FV: '1.0.0'
-              }
-            }
-          )
-          .then((res) => {
-            if (res?.data?.code === ResponseCodes.SUCCESS) {
-              if (res.data.result.historyList) {
-                // res.data.result.storeIconList
-                //   const newData = {
-                //     ...res.data.data,
-                //     startDate: '2024.07.15',
-                //     endDate: '08.31',
-                //     specialStampIndexList: [5, 10, 15, 30],
-                //   }
-                resolve(res.data.result.historyList || [])
-              } else {
-                // TODO: remove this
-                resolve({
-                  event_id: activityId,
-                  event_name: '歡樂一夏',
-                  limit: 4,
-                  startDate: '2024.07.15',
-                  endDate: '08.31',
-                  specialStampIndexList: [5, 10, 15, 30],
-                  collection: [
-                    {
-                      store_id: '870504',
-                      store_name: '道生',
-                      checkInTime: '2024/01/12 09:12'
-                    }
-                  ]
-                })
-              }
-            } else {
-              reject(`fetchCollectData:${res.data.msg || '發生了例外錯誤'}`)
-            }
-          })
-          .catch((err) => {
-            reject(err)
-          })
+        checkIn.fetchCollect(activityId, loginT0ken.loginT0ken).then((res: any) => {
+          if (res.error) {
+            reject(`fetchCollectData:${res.error}`)
+          } else {
+            resolve({
+              ...res
+            })
+          }
+        })
       } else if (VITE_API_URL || VITE_UI_MODE) {
         resolve({
-          event_id: activityId,
-          event_name: '歡樂一夏',
-          limit: 4,
-          startDate: '2024.07.15',
-          endDate: '08.31',
-          specialStampIndexList: [5, 10, 15, 30],
-          collection: [
+          // event_id: activityId,
+          // event_name: '歡樂一夏',
+          // limit: 4,
+          // startDate: '2024.07.15',
+          // endDate: '08.31',
+          // specialStampIndexList: [5, 10, 15, 30],
+          historyList: [
             {
-              store_id: '870504',
-              store_name: '道生',
-              checkInTime: '2024/01/12 09:12'
+              storeId: 870504,
+              storeName: '道生',
+              createTime: '2024/01/12 09:12'
             }
-          ]
+          ],
+          storeIconList: []
         })
       } else {
         reject('沒有登入')

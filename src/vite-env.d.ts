@@ -7,6 +7,7 @@ interface ImportMetaEnv {
   readonly VITE_UI_MODE: boolean
   readonly VITE_ASSETS_URL: string
   readonly VITE_API_URL: string
+  readonly VITE_ORIGIN_URL: string
 
   readonly VITE_OUTDIR: string
   readonly VITE_BASE: string
