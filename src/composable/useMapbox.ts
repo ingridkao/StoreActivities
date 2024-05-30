@@ -6,12 +6,10 @@ import buffer from '@turf/buffer'
 import { ref, reactive, onMounted } from 'vue'
 import { useFetchData } from '@/composable/useFetch'
 import { useMap } from '@/composable/useMap'
-// import { useLoadingStore } from '@/stores/loading'
 
 export function useMapbox() {
   const { fetchLayerData } = useFetchData()
   const { clientLocationCity } = useMap()
-  // const loadStore = useLoadingStore()
   const { VITE_OUTDIR, VITE_MAPBOX_KEY } = import.meta.env
 
   const sourceName = 'store-source'

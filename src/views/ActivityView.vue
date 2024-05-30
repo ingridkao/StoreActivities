@@ -10,19 +10,22 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, watchEffect } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { ref, watchEffect, computed } from 'vue'
+import { useRoute } from 'vue-router'
 import type { EventInfoInterface } from '@/types/ResponseHandle'
 
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import ParagraphItem from '@/components/ParagraphItem.vue'
+import DirectionInfo from '@/components/DirectionInfo.vue'
+import ScanResult from '@/components/ScanResult.vue'
 
 import { useGeolocation } from '@vueuse/core'
+import { useLIFF } from '@/composable/useLIFF'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useGeo } from '@/composable/useGeo'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useLoadingStore } from '@/stores/loading'
+import { useLayoutStore } from '@/stores/layout'
 
 import data from '@/assets/data'
 import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
@@ -31,9 +34,9 @@ import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
 import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
 import enterButtonImg from '@/assets/images/activity/enter-button.svg'
 
-const router = useRouter()
-const { confirmCampaign, commitStoreCheckIn } = useFetchData()
-const { setLocationStorage, setAcStringStorage } = useBrowserStorage()
+const { confirmCampaign, verifyCtString, commitStoreCheckIn } = useFetchData()
+const { getCtT0kenCookies, setLocationStorage } = useBrowserStorage()
+const { scanCode } = useLIFF()
 
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
@@ -53,21 +56,19 @@ const confirmCoords = () => {
 const { errorAlert } = useSweetAlert()
 const eventInfo = ref<EventInfoInterface>()
 const route = useRoute()
+const activityId = route?.params?.id
 const confirmActivityId = async () => {
   try {
-    const activityId = route?.params?.id
     const confirmRes = await confirmCampaign(activityId)
     eventInfo.value = confirmRes
-    setAcStringStorage(activityId)
     confirmCoords()
   } catch (error) {
     if (error === 1) {
-      errorAlert('活動已過期', '/wrapup')
-    } else if (error === 2) {
       errorAlert('沒有此活動')
+    } else if (error === 2) {
+      errorAlert('活動已過期', '/wrapup')
     } else {
-      const errorStr = String(error)
-      errorAlert(errorStr)
+      errorAlert(String(error))
     }
   }
 }
@@ -76,28 +77,48 @@ watchEffect(() => {
   confirmActivityId()
 })
 
-const loadStore = useLoadingStore()
-const enterActivity = async () => {
+const scanResultContent = ref({})
+const scanErrorMsg = ref<String>('')
+const showsScanResult = computed(() => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== '')
+
+const commitScan = async () => {
+  scanResultContent.value = {}
+  scanErrorMsg.value = ''
+  let ctTokenCookiesObj = getCtT0kenCookies()
+
   try {
-    loadStore.toggle(true)
-    //   const commitRes = await commitStoreCheckIn(route?.params?.id)
-    // } else {
-    //   linkToDirection()
-    // }
-    loadStore.toggle(false)
-  } catch (error) {
-    const errorStr = String(error)
-    errorAlert(errorStr)
-  }
-}
-const linkToDirection = () => {
-  router.push({
-    name: 'Direction',
-    params: {
-      id: String(route?.params?.id)
+    layoutStore.loadToggle(true)
+    if (ctTokenCookiesObj === null) {
+      // 打開手機鏡頭
+      const ctStr = await scanCode()
+      // 驗證ct
+      ctTokenCookiesObj = await verifyCtString(ctStr||'')
     }
-  })
+
+    // 打卡驗證
+    const commitRes = await commitStoreCheckIn(activityId, ctTokenCookiesObj)
+    if (commitRes) {
+      // 打卡成功蓋版
+      console.log(commitRes);
+      scanResultContent.value = commitRes
+    }
+  } catch (error) {
+    // 打卡失敗蓋版
+    scanErrorMsg.value = String(error)
+  }
+  layoutStore.loadToggle(false)
 }
+
+const layoutStore = useLayoutStore()
+const openDirection = () => {
+  layoutStore.toggleDirection(true)
+  layoutStore.closeNav()
+}
+const directionStartScan = () => {
+  layoutStore.toggleDirection(false)
+  commitScan()
+}
+
 </script>
 
 <template>
@@ -130,7 +151,7 @@ const linkToDirection = () => {
         </div>
       </div>
     </div>
-    <button class="activity-view__info-icon-button" @click="linkToDirection()">
+    <button class="activity-view__info-icon-button" @click="openDirection">
       <img :src="infoIconButtonImg" alt="info icon button" />
     </button>
     <div class="activity-view__content" v-if="eventInfo && eventInfo.content">
@@ -140,10 +161,20 @@ const linkToDirection = () => {
         :title="title"
         :content="text || ''"
       />
-      <button class="activity-view__content--button" @click="enterActivity()">
-        <img :src="enterButtonImg" alt="enter button" />
-      </button>
+      <footer class="activity-view__footer">
+        <button @click="commitScan">
+          <img :src="enterButtonImg" alt="enter button" />
+        </button>
+      </footer>
     </div>
+
+    <DirectionInfo v-show="layoutStore.showDirection" @checkin="directionStartScan" />
+    <ScanResult 
+      v-if="showsScanResult" 
+      :result="scanResultContent" 
+      :error="scanErrorMsg"
+      @scanAgain="commitScan"
+    />
   </main>
 </template>
 
@@ -274,19 +305,17 @@ const linkToDirection = () => {
   }
 
   &__content {
-    padding: 25px 43px 32px 26px;
     position: relative;
-
-    &--button {
-      margin-top: 10px;
-      background-color: transparent;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      text-align: center;
+    padding: 25px 43px 0 26px;
+  }
+  &__footer {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 32px;
+    >button{
+      width: 150px;
     }
   }
-
   &__info-icon-button {
     position: absolute;
     width: 40px;
@@ -294,12 +323,6 @@ const linkToDirection = () => {
     right: 20px;
     z-index: 3;
     transform: translateY(-50%);
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-    > img {
-      width: 100%;
-    }
   }
 }
 

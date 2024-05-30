@@ -6,14 +6,14 @@
  * step2-2.請求所有  非門市活動列表
  * step2-3.請求所有廣告列表
  */
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import type { EventInterface } from '@/types/ResponseHandle'
 
 import type { AdsInterface } from '@/types/ResponseHandle'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useLoadingStore } from '@/stores/loading'
+import { useLayoutStore } from '@/stores/layout'
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
 import CampaignListItem from '@/components/CampaignListItem.vue'
 // import AdsListItem from '@/components/AdsListItem.vue'
@@ -23,43 +23,35 @@ import data from '@/assets/data'
 import topCatImg from '@/assets/images/lobby/top-cat.png'
 import topLogoImg from '@/assets/images/lobby/top-logo.png'
 
-const { setLocationStorage, setQRcodeString, setAcStringStorage } = useBrowserStorage()
+const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { genrateMockQRCode, fetchAllCampaign, fetchAdData, verifyQRCode } = useFetchData()
+const { genrateMockQRCode, fetchAllCampaign, fetchAdData, verifyCtString, parseParamCT } = useFetchData()
 
-const loadStore = useLoadingStore()
+const layoutStore = useLayoutStore()
 const displayCampaignList = ref<EventInterface[]>([])
 const adsList = ref<AdsInterface[]>([])
-const siteLoading = computed(() => loadStore.load)
 const qrString = ref<string>('')
 
-setAcStringStorage('')
 onMounted(async () => {
   const originURL = window.location.origin
-  const newPath = new URL(window.location.href, originURL)
-  let ctCode = ''
-  let storeId = ''
-  if (newPath.origin === originURL && newPath && newPath.search) {
-    const codeSplit = newPath.search.split('?ct=')
-    ctCode = codeSplit.length === 2 && codeSplit[1] ? codeSplit[1] : ''
-    storeId = ctCode.substring(2, 8)
-    setQRcodeString(ctCode)
-  }
 
-  loadStore.toggle(true)
+  const newPath = new URL(window.location.href, originURL)
+  const ctStr = (newPath && newPath.search)? parseParamCT(newPath.search): ''
+  layoutStore.loadToggle(true)
   try {
+    const storeId = ctStr? ctStr.substring(2, 8): ''
     const [result1, result2] = await Promise.all([fetchAllCampaign(storeId), fetchAdData()])
     displayCampaignList.value = result1 || []
     adsList.value = result2 || []
   } catch (error) {
     errorAlert(error)
   }
-  loadStore.toggle(false)
+  layoutStore.loadToggle(false)
 
   try {
-    if (ctCode) {
-      const res = await verifyQRCode(ctCode)
-      console.log(res)
+    if (ctStr) {
+      // 驗證ct
+      await verifyCtString(ctStr)
     } else {
       // TODO: After check api flow, remove this
       const MockCode = await genrateMockQRCode()
@@ -76,58 +68,55 @@ onMounted(async () => {
 
 <template>
   <main class="lobby-view">
-    <div v-if="siteLoading" class="loading">Loading...</div>
-    <div v-else>
-      <div class="lobby-view__main">
-        <div class="lobby-view__main--logo">
-          <img :src="topLogoImg" alt="top logo" />
-        </div>
-        <div class="lobby-view__main--cat">
-          <div class="lobby-view__main--cat-img">
-            <img :src="topCatImg" alt="top cat" />
-          </div>
-          <div class="lobby-view__main--cat-dialog">{{ data.lobby.title }}</div>
-        </div>
+    <div class="lobby-view__main">
+      <div class="lobby-view__main--logo">
+        <img :src="topLogoImg" alt="top logo" />
       </div>
-
-      <div class="lobby-view__menu">
-        <div class="lobby-view__menu--category">
-          <ParagraphTitle :title="data.lobby.eventTitle" />
+      <div class="lobby-view__main--cat">
+        <div class="lobby-view__main--cat-img">
+          <img :src="topCatImg" alt="top cat" />
         </div>
-        <CampaignListItem
-          v-for="campaignItem in displayCampaignList"
-          :campaign="campaignItem"
-          :key="campaignItem.id"
-        />
-
-        <div class="lobby-view__menu--category">
-          <ParagraphTitle :title="data.lobby.pastEventTitle" />
-        </div>
-        <div class="lobby-view__menu--items">
-          <RouterLink to="/album" class="album">
-            <div class="album__img">
-              <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
-            </div>
-          </RouterLink>
-        </div>
+        <div class="lobby-view__main--cat-dialog">{{ data.lobby.title }}</div>
       </div>
-
-      <!--<AdsListItem v-for="item in adsList" :key="item.id" :ads="item" /> -->
-
-      <div class="lobby-view__icon-bar">
-        <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
-        <img src="@/assets/images/lobby/icon-instagram.png" alt="instagram" />
-        <img src="@/assets/images/lobby/icon-youtube.png" alt="youtube" />
-        <img src="@/assets/images/lobby/icon-line.png" alt="line" />
-        <img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" />
-      </div>
-
-      <!-- TODO: After check api flow, remove this  -->
-      <vueQr :text="qrString" :size="100" :correctLevel="3" />
-      <template v-if="qrString">
-        <a :href="qrString" target="_blank">{{ qrString }}</a>
-      </template>
     </div>
+
+    <div class="lobby-view__menu">
+      <div class="lobby-view__menu--category">
+        <ParagraphTitle :title="data.lobby.eventTitle" />
+      </div>
+      <CampaignListItem
+        v-for="campaignItem in displayCampaignList"
+        :campaign="campaignItem"
+        :key="campaignItem.id"
+      />
+
+      <div class="lobby-view__menu--category">
+        <ParagraphTitle :title="data.lobby.pastEventTitle" />
+      </div>
+      <div class="lobby-view__menu--items">
+        <RouterLink to="/album" class="album">
+          <div class="album__img">
+            <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
+          </div>
+        </RouterLink>
+      </div>
+    </div>
+
+    <!--<AdsListItem v-for="item in adsList" :key="item.id" :ads="item" /> -->
+
+    <div class="lobby-view__icon-bar">
+      <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
+      <img src="@/assets/images/lobby/icon-instagram.png" alt="instagram" />
+      <img src="@/assets/images/lobby/icon-youtube.png" alt="youtube" />
+      <img src="@/assets/images/lobby/icon-line.png" alt="line" />
+      <img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" />
+    </div>
+
+    <!-- TODO: After check api flow, remove this  -->
+    <vueQr :text="qrString" :size="100" :correctLevel="3" />
+    <template v-if="qrString">
+      <a :href="qrString" target="_blank">{{ qrString }}</a>
+    </template>
   </main>
 </template>
 
@@ -222,16 +211,6 @@ onMounted(async () => {
       width: 45px;
       height: 45px;
     }
-  }
-
-  .loading {
-    width: 100%;
-    height: calc(100 * var(--vh));
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    font-size: 36px;
   }
 }
 

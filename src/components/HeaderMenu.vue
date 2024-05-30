@@ -3,15 +3,12 @@ import { ref, watchEffect } from 'vue'
 import { useRoute, RouterLink } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
 import { useUserStore } from '@/stores/user'
+import { useLayoutStore } from '@/stores/layout'
 
 const userStore = useUserStore()
+const layoutStore = useLayoutStore()
 const { getOpenInClient, useLineLogout } = useLIFF()
 const openInLIFF = getOpenInClient()
-
-const navOpen = ref<Boolean>(false)
-const togggle = () => {
-  navOpen.value = !navOpen.value
-}
 const menuList = ref<
   {
     link?: string
@@ -21,37 +18,50 @@ const menuList = ref<
 >([])
 
 const route = useRoute()
+const activityId = route?.params?.id
 watchEffect(() => {
-  if (Object.keys(userStore.userProfile).length > 0) {
-    if (route.params && route.params.id) {
-      menuList.value = [
-        { link: '/', key: 'Lobby', name: '活動大廳' },
-        { link: `/activity/${route.params.id}`, key: 'Activity', name: '活動說明' },
-        { link: '/mapStore', key: 'MapStore', name: '門市地圖' },
-        { link: `/collected/${route.params.id}`, key: 'Collected', name: '活動打卡紀錄' }
-      ]
-    } else {
-      menuList.value = [
-        { link: '/', key: 'Lobby', name: '活動大廳' },
-        { link: '/mapStore', key: 'MapStore', name: '門市地圖' }
-      ]
-    }
-  } else {
-    menuList.value = [{ link: '/', key: 'Lobby', name: '活動大廳' }]
+  if (activityId && Object.keys(userStore.userProfile).length > 0) {
+    menuList.value = [
+      { link: '/mapStore', key: 'MapStore', name: '門市地圖' },
+      { link: `/collected/${activityId}`, key: 'Collected', name: '活動打卡紀錄' }
+    ]
   }
 })
+const closeAside = () => {
+  layoutStore.toggleDirection(false)
+  layoutStore.closeNav()
+}
+
 </script>
 
 <template>
   <div class="sidemenu">
-    <div class="sidemenu__btn" @click="togggle" :class="{ active: navOpen }">
+    <div 
+      class="sidemenu__btn"
+      @click="layoutStore.toggleNav()"
+      :class="{ active: layoutStore.navOpen }"
+    >
       <span class="sidemenu__btn--top"></span>
       <span class="sidemenu__btn--mid"></span>
       <span class="sidemenu__btn--bottom"></span>
     </div>
 
     <transition name="fade">
-      <div v-show="navOpen" class="sidemenu__wrapper">
+      <div v-show="layoutStore.navOpen" class="sidemenu__wrapper">
+        <RouterLink to="/" class="sidemenu__item">活動大廳</RouterLink>
+        <button
+          v-if="layoutStore.showDirection && route.name === 'Activity'"
+          @click="closeAside"
+          class="sidemenu__item"
+        >
+          活動說明
+        </button>
+        <RouterLink
+          v-else-if="layoutStore.showDirection && activityId"
+          :to="`/activity/${activityId}`"
+          class="sidemenu__item"
+          >活動說明</RouterLink
+        >
         <RouterLink
           v-for="item in menuList"
           :to="item.link ?? '/'"
@@ -155,11 +165,6 @@ watchEffect(() => {
     }
     > div {
       font-size: 12px;
-      > button {
-        background-color: transparent;
-        text-align: left;
-        border: none;
-      }
     }
   }
 }

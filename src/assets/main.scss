@@ -19,6 +19,15 @@ main {
   width: 100%;
 }
 
+button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  > img {
+    width: 100%;
+  }
+}
+
 /************ store info dialog ************/
 
 .store-info-dialog {

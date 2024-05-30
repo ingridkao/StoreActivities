@@ -56,7 +56,7 @@ export function useLIFF() {
     }
   }
 
-  const { verifyQRCode, commitStoreCheckIn, checkLineLoginVerify } = useFetchData()
+  const { checkLineLoginVerify, parseParamCT } = useFetchData()
 
   // https://developers.line.biz/en/reference/liff/#get-access-token
   const getLineProfileAndAccess = async (
@@ -74,6 +74,7 @@ export function useLIFF() {
       }
       const lineAccessT0ken = liff.getAccessToken()
       await checkLineLoginVerify(lineAccessT0ken || '')
+
       if (Object.keys(userStore.userProfile).length > 0) {
         return userStore.userProfile
       } else {
@@ -111,36 +112,28 @@ export function useLIFF() {
     }
   }
 
-  const scanCode = async () => {
+  // InLIFFClient: 開啟LINE SCAN，開啟相機掃描QRcode取得qrcode string
+  // Out LIFF app: 導轉到掃描頁面
+  const scanCode = async (): Promise<string|void> => {
     try {
       const isInClient = liff.isInClient()
-      if (isInClient) {
+      if (!isInClient) {
+        router.push({ path: '/scan' })
+
+      }else{
         await liff.init({ liffId: VITE_LIFF_ID })
+
         const scanresult = await liff.scanCodeV2()
         if (scanresult && scanresult.value) {
+          // 掃瞄出網址取出ct
           const newPath = new URL(scanresult.value, window.location.origin)
-          console.log(newPath)
-          let ctCode = ''
-          let qrcodeOk = false
-          if (newPath.origin !== window.location.origin) {
-            qrcodeOk = false
-          } else if (newPath && newPath.search) {
-            const codeSplit = newPath.search.split('?ct=')
-            ctCode = codeSplit.length === 2 && codeSplit[1] ? codeSplit[1] : ''
-            qrcodeOk = codeSplit.length === 2 && codeSplit[1] ? true : false
-          }
-          const verifyRes = await verifyQRCode(ctCode)
-          console.log(verifyRes)
-          // const commitRes = await commitStoreCheckIn(qrcodeOk)
-          // console.log(commitRes)
+          return (newPath && newPath.search)? parseParamCT(newPath.search): ''
+        }else{
+          return ''
         }
-        console.log(scanresult)
-      } else {
-        router.push({ path: '/scan' })
       }
     } catch (err) {
-      console.log(err)
-      router.push({ path: '/scan' })
+      throw new Error('Failed: '+ err);
     }
   }
 

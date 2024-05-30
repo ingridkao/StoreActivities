@@ -10,7 +10,7 @@ import type { CollectedListType, CollectedType } from '@/types/configurable'
 import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useLoadingStore } from '@/stores/loading'
+import { useLayoutStore } from '@/stores/layout'
 
 import emptyStampImg from '@/assets/images/collected/empty-stamp.png'
 import checkedStampImg from '@/assets/images/collected/checked-stamp.svg'
@@ -33,13 +33,13 @@ const collectedStore = ref<CollectedListType[]>([])
 const route = useRoute()
 const { linkToAlbum, linkToTargetActivityIdPage } = useLink()
 
-const loadStore = useLoadingStore()
+const layoutStore = useLayoutStore()
 watchEffect(async () => {
   const activityParamsId = String(route.params.id)
   if (!activityParamsId) {
     linkToAlbum()
   } else {
-    loadStore.toggle(true)
+    layoutStore.loadToggle(true)
     try {
       const res = await fetchCollectData(activityParamsId)
       if (res) {
@@ -54,7 +54,7 @@ watchEffect(async () => {
     } catch (error) {
       errorAlert(String(error), `/activity/${activityParamsId}`)
     }
-    loadStore.toggle(false)
+    layoutStore.loadToggle(false)
   }
 })
 </script>
@@ -255,11 +255,6 @@ watchEffect(async () => {
     justify-content: center;
     align-items: center;
     gap: 14px;
-    > button {
-      cursor: pointer;
-      border: none;
-      background-color: transparent;
-    }
   }
 }
 </style>

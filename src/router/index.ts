@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import LobbyView from '../views/LobbyView.vue'
 import { useLIFF } from '@/composable/useLIFF'
+import { useLayoutStore } from '@/stores/layout'
 
 const DevMode = import.meta.env.MODE === 'development'
 
@@ -10,7 +11,7 @@ const DevMode = import.meta.env.MODE === 'development'
 // }
 
 const removeActivityID = (to: { query: { ac?: any }; path: any }) => {
-  if (sessionStorage.getItem('ac')) sessionStorage.removeItem('ac')
+  if (localStorage.getItem('ac')) localStorage.removeItem('ac')
   if (to?.query?.ac) {
     const queryObj = to.query
     delete queryObj['ac']
@@ -25,7 +26,6 @@ const router = createRouter({
       path: '/',
       name: 'Lobby',
       component: LobbyView,
-      beforeEnter: [removeActivityID],
       meta: {
         title: '活動大廳'
       }
@@ -37,11 +37,6 @@ const router = createRouter({
       meta: {
         requiresAuth: true
       }
-    },
-    {
-      path: '/direction/:id?',
-      name: 'Direction',
-      component: () => import('../views/DirectionView.vue')
     },
     {
       path: '/collected/:id?',
@@ -104,9 +99,19 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  console.log('global beforeEach');
   if (to.meta.title) {
     document.title = to.meta.title as string
   }
+  
+  const layoutStore = useLayoutStore()
+  // Reset all layout
+  layoutStore.toggleDirection(false)
+  layoutStore.loadToggle(false)
+  layoutStore.closeNav()
+
+  layoutStore.pageLoadToggle(true)
+  
   if (to.name == 'Lobby') return next()
   if (!(to.meta && to.meta.requiresAuth)) return next()
   if (DevMode) return next()
@@ -131,6 +136,12 @@ router.beforeEach(async (to, from, next) => {
 
   if (!canAccess) return next({ name: 'Lobby' })
   return next()
+})
+
+router.afterEach(() => {
+  console.log('global afterEach');
+  const layoutStore = useLayoutStore()
+  layoutStore.pageLoadToggle(false)
 })
 
 export default router

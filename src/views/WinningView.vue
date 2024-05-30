@@ -292,9 +292,6 @@ onMounted(() => {
 
     &--button {
       text-align: center;
-      cursor: pointer;
-      border: none;
-      background-color: transparent;
     }
   }
 }

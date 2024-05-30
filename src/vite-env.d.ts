@@ -10,6 +10,8 @@ interface ImportMetaEnv {
 
   readonly VITE_OUTDIR: string
   readonly VITE_BASE: string
+
+  readonly VITE_VERSION: string
   // more env variables...
 }
 

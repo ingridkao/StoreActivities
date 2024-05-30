@@ -31,7 +31,7 @@ Branch:
 - 使用者使用LINE登入(透過Line LIFF實現)
 - 使用者在活動大廳(/)觀看有興趣的活動
 - 使用者在活動詳情頁面(/activity)觀看活動說明
-- 使用者開啟掃描說明(/direction)進行開啟相機
+- 使用者開啟掃描說明進行開啟相機
 - 使用者看到所有活動打卡列表(/album)
 - 使用者看到單一活動打卡結果(/collected)
   > 開發route說明
@@ -58,7 +58,6 @@ Branch:
 |I|門市地圖        | MapStoreView.vue   |             |  V   |
 |F|所有活動打卡紀錄 | AlbumView.vue      |             |  V   |
 |F|中獎序號        | WinningView.vue    |             |  V   |
-|W|打卡說明        | DirectionView.vue  |             |  V   |
 |W|相機掃描        | ScanView.vue       |             |      |
 |W|活動已結束      | WrapUpView.vue     |             |  V   |
 |W|ComingSoon     | ComingSoonView.vue |404page       |  V   |
@@ -68,11 +67,11 @@ Branch:
 
 | | Component              | Description  | Used for                        |
 |-| ---------------------- | ------------ | ------------------------------- |
-|I| HeaderMenu.vue         | 會觸發Line登入| 如一直被轉址請註解部分程式         |
-|I| CampaignListItem.vue | 活動列表      | 活動大廳                         |
+|W| HeaderMenu.vue         | 會觸發Line登入| 如一直被轉址請註解部分程式         |
+|W| CampaignListItem.vue   | 活動列表      | 活動大廳  
 |I| AdsListItem.vue        | 廣告列表      | 活動大廳                         |
 |W| ScanResult.vue         | 打卡結果      | 相機掃描                         |
-
+|W| DirectionInfo.vue      | 打卡說明      | 活動說明                         |
 
 ### HeaderMenu說明
 由於流程部分頁面選單會有以下差異：
@@ -160,6 +159,8 @@ VITE_API_URL=
 
 VITE_OUTDIR=
 VITE_BASEDIR=
+
+VITE_VERSION=
 
 ```
 
