@@ -2,7 +2,6 @@
 
 門市打卡
 [demo](https://qwaretest2.web.app/)
-~~[LIFF](https://liff.line.me/2003380973-6NBnrB5K)~~
 
 
 ## 1.Git Flow
@@ -156,6 +155,7 @@ VITE_MAPBOX_KEY=
 VITE_UI_MODE=true
 VITE_ASSETS_URL=
 VITE_API_URL=
+VITE_ORIGIN_URL=
 
 VITE_OUTDIR=
 VITE_BASEDIR=

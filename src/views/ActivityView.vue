@@ -99,7 +99,6 @@ const commitScan = async () => {
     const commitRes = await commitStoreCheckIn(activityId, ctTokenCookiesObj)
     if (commitRes) {
       // 打卡成功蓋版
-      console.log(commitRes);
       scanResultContent.value = commitRes
     }
   } catch (error) {

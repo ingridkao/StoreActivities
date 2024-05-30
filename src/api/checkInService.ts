@@ -19,6 +19,23 @@ const CheckInServiceApi = (axios: any, event: any) => ({
       }
     )
   },
+  fetchCollect(activityId:string, loginT0ken: string) {
+    return axios.post(
+      `${event}/GetUserEventHistory`,
+      {
+        data: {
+          eventId: Number(activityId)
+        }
+      },
+      {
+        headers: {
+          Authorization: loginT0ken,
+          Key: loginT0ken.slice(4, 10),
+          FV: VITE_VERSION
+        } as VerifyHeaderType
+      }
+    )
+  },
   fetchAlbum(loginT0ken: string) {
     return axios.post(
       `${event}/GetUserHistoryByStore`,

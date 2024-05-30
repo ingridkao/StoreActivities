@@ -17,20 +17,18 @@ const onRequest = (config: any) => {
 }
 
 const onResponse = (response: any) => {
-  const { status, data } = response
-  if (status < 200 || status > 299) return data
-
+  const { data } = response
   if (data.code === ResponseCodes.SUCCESS) {
     return data.result
   } else {
-    return {
-      error: data.msg
-    }
+    return data
   }
 }
 
 const onError = (error: any) => {
-  const { response } = error
+  const { response, data } = error
+  console.log(response);
+  console.log(data);
   if (response) {
     return response.data?.message || response.data?.errorMessage || '服務異常'
   } else {

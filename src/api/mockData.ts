@@ -48,28 +48,31 @@ const data = {
       isEnable: true
     }
   ],
-  albumData: [
-    {
-      storeId: '1',
-      storeName: '歡樂一夏',
-      iconFilePath: '',
-      checkinTime: '',
-      storeTimes: 2
-    },
-    {
-      storeId: '2',
-      storeName: '歡樂一夏夏',
-      iconFilePath: '',
-      checkinTime: '',
-      storeTimes: 1
-    },
-    {
-      storeId: '3',
-      storeName: '道生',
-      iconFilePath: '',
-      checkinTime: '',
-      storeTimes: 1
-    }
-  ]
+  albumData: {
+    historyList: [
+      {
+        storeId: '1',
+        storeName: '歡樂一夏',
+        iconFilePath: '',
+        createTime: '',
+        storeTimes: 2
+      },
+      {
+        storeId: '2',
+        storeName: '歡樂一夏夏',
+        iconFilePath: '',
+        createTime: '',
+        storeTimes: 1
+      },
+      {
+        storeId: '3',
+        storeName: '道生',
+        iconFilePath: '',
+        createTime: '',
+        storeTimes: 1
+      }
+    ],
+    storeIconList:[]
+  }
 }
 export default data

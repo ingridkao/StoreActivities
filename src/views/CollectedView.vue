@@ -6,7 +6,7 @@ import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
-import type { CollectedListType, CollectedType } from '@/types/configurable'
+import type { EventListType, EventInterface } from '@/types/ResponseHandle'
 import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
@@ -27,8 +27,8 @@ const { errorAlert, openStoreInfo } = useSweetAlert()
 const stampBaseCount = 20
 const activityId = ref<string>('')
 const activityExists = ref<boolean>(false)
-const collectedActivity = ref<CollectedType>({})
-const collectedStore = ref<CollectedListType[]>([])
+const collectedActivity = ref<EventListType>({})
+const collectedStore = ref<EventInterface[]>([])
 
 const route = useRoute()
 const { linkToAlbum, linkToTargetActivityIdPage } = useLink()
@@ -45,7 +45,7 @@ watchEffect(async () => {
       if (res) {
         activityExists.value = true
         collectedActivity.value = res
-        collectedStore.value = res.collection || []
+        collectedStore.value = res.historyList || []
         activityId.value = activityParamsId
       } else {
         activityId.value = ''
@@ -57,6 +57,8 @@ watchEffect(async () => {
     layoutStore.loadToggle(false)
   }
 })
+
+const specialStampIndexList = [5, 10, 15, 30]
 </script>
 
 <template>
@@ -64,32 +66,38 @@ watchEffect(async () => {
     <HeaderMenu />
     <div class="collected-view__header">
       <div class="collected-view__header--text-block">
-        <h1 class="collected-view__header--text-block-main">{{ collectedActivity.event_name }}</h1>
-        <h1 class="collected-view__header--text-block-bg">{{ collectedActivity.event_name }}</h1>
+        <!-- <h1 class="collected-view__header--text-block-main">{{ collectedActivity.event_name }}</h1> -->
+        <!-- <h1 class="collected-view__header--text-block-bg">{{ collectedActivity.event_name }}</h1> -->
+        <h1 class="collected-view__header--text-block-main">歡樂一夏</h1>
+        <h1 class="collected-view__header--text-block-bg">歡樂一夏</h1>
       </div>
       <div class="collected-view__header--date">
         <p>
-          {{ collectedActivity.startDate }}
+          <!-- {{ collectedActivity.startDate }} -->
+          2024.07.15
         </p>
         <div class="collected-view__header--date-line"></div>
         <p>
-          {{ collectedActivity.endDate }}
+          <!-- {{ collectedActivity.endDate }} -->
+          08.31
         </p>
       </div>
     </div>
     <div class="collected-view__body">
       <div
         class="collected-view__body--stamp"
-        v-for="(baseItem, index) in stampBaseCount"
+        v-for="(baseItem) in stampBaseCount"
         :key="baseItem"
       >
         <div
-          v-if="collectedStore[baseItem - 1] && collectedStore[baseItem - 1]['store_id']"
+          v-if="collectedStore[baseItem - 1] && Object.keys(collectedStore[baseItem - 1]).length > 0"
           @click="
             () =>
               openStoreInfo({
-                storeName: collectedStore[baseItem - 1]['store_name'],
-                lastCheckInTime: collectedStore[baseItem - 1]['checkInTime']
+                countShow: false,
+                storeName: collectedStore[baseItem - 1]['storeName'],
+                imageUrl: '',
+                lastCheckInTime: collectedStore[baseItem - 1]['createTime'] || ''
               })
           "
           class="collected-view__body--stamp-wrapper"
@@ -97,25 +105,25 @@ watchEffect(async () => {
           <p
             class="collected-view__body--stamp-text"
             :class="{
-              'three-characters': collectedStore[baseItem - 1]['store_name']?.length === 3,
-              'four-characters': collectedStore[baseItem - 1]['store_name']?.length === 4,
-              'five-characters': collectedStore[baseItem - 1]['store_name']?.length === 5,
-              'six-characters': collectedStore[baseItem - 1]['store_name']?.length === 6
+              'three-characters': collectedStore[baseItem - 1]['storeName']?.length === 3,
+              'four-characters': collectedStore[baseItem - 1]['storeName']?.length === 4,
+              'five-characters': collectedStore[baseItem - 1]['storeName']?.length === 5,
+              'six-characters': collectedStore[baseItem - 1]['storeName']?.length === 6
             }"
           >
-            {{ collectedStore[baseItem - 1]['store_name'] }}
+            {{ collectedStore[baseItem - 1]['storeName'] }}
           </p>
           <img :src="checkedStampImg" alt="checked stamp" />
         </div>
         <img
-          v-else-if="collectedActivity.specialStampIndexList"
+          v-else-if="specialStampIndexList"
           :src="
             {
-              [collectedActivity.specialStampIndexList[0]]: yellowEmptyStampImg,
-              [collectedActivity.specialStampIndexList[1]]: purpleEmptyStampImg,
-              [collectedActivity.specialStampIndexList[2]]: orangeEmptyStampImg,
-              [collectedActivity.specialStampIndexList[3]]: pinkEmptyStampImg
-            }[index + 1] ?? emptyStampImg
+              [specialStampIndexList[0]]: yellowEmptyStampImg,
+              [specialStampIndexList[1]]: purpleEmptyStampImg,
+              [specialStampIndexList[2]]: orangeEmptyStampImg,
+              [specialStampIndexList[3]]: pinkEmptyStampImg
+            }[baseItem] ?? emptyStampImg
           "
           alt="empty stamp"
         />
@@ -249,6 +257,7 @@ watchEffect(async () => {
 
   &__footer {
     position: fixed;
+    z-index: 4;
     bottom: 60px;
     width: 100%;
     display: flex;

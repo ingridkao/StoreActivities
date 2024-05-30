@@ -4,7 +4,7 @@
  */
 import { ref, onMounted, computed } from 'vue'
 import HeaderMenu from '@/components/HeaderMenu.vue'
-import type { AlbumType } from '@/types/configurable'
+import type { AlbumType } from '@/types/ResponseHandle'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLayoutStore } from '@/stores/layout'
@@ -29,7 +29,10 @@ onMounted(async () => {
   layoutStore.loadToggle(true)
   try {
     const res = await fetchAlbumData()
-    albumStore.value = res || []
+    if (res) {
+      albumStore.value = res.historyList || []
+    }
+
   } catch (error) {
     errorAlert(String(error))
   }
@@ -58,6 +61,7 @@ onMounted(async () => {
           @click="
             () =>
               openStoreInfo({
+                countShow: true,
                 storeName: albumStore[index]['storeName'],
                 imageUrl: albumStore[index]['iconFilePath'],
                 lastCheckInTime: albumStore[index]['checkinTime'],

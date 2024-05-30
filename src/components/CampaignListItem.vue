@@ -12,13 +12,13 @@ const props = defineProps<{
 }>()
 const router = useRouter()
 const linkTo = async () => {
-  const { isEnable, pageRouter } = props.campaign
+  const { id, isEnable, pageRouter } = props.campaign
   if (!isEnable) return
   if (pageRouter) {
     router.push({
       name: 'Activity',
       params: {
-        id: pageRouter
+        id: id
       }
     })
   }
