@@ -8,7 +8,8 @@ import { ResponseCodes } from '@/types/ResponseHandle'
 import type {
   GenrateMockQRCodeResType,
   VerifyCodeResType,
-  EventInterface,
+  CampaignBaseInterface,
+  CampaignInterface,
   EventInfoInterface,
   AdsInterface,
   AdListResType,
@@ -39,17 +40,16 @@ export function useFetchData() {
     getCtT0kenCookies,
     setLineT0kenCookies,
     setLoginT0kenCookies,
-    getLoginT0kenCookies,
-    setAcStringStorage,
-    getAcStringStorage,
+    getLoginT0kenCookies
   } = useBrowserStorage()
-  const { getEventStorage, setEventStorage } = useEventStorage()
+  const { getEventsStorage, setEventsStorage, setTargetEventStorage, getTargetEventStorage } =
+    useEventStorage()
 
   /**
    * 從URL字串中取出ct參數
    * <URL>?ct=OP1134580513153032440f32024
    */
-  const parseParamCT = (url: string):string => {
+  const parseParamCT = (url: string): string => {
     const codeSplit = url.split('?ct=')
     return codeSplit.length === 2 && codeSplit[1] ? String(codeSplit[1]) : ''
   }
@@ -75,14 +75,14 @@ export function useFetchData() {
   }
 
   /**
-   * Lobby and after scan 
+   * Lobby and after scan
    * 取的CT驗證QRCode(CT字串)
    * ct=OP666000031818094ac904
    * 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
    */
-  const verifyCtString = (ctStr: string = ''): Promise<ParseCtStringState|null> => {
+  const verifyCtString = (ctStr: string = ''): Promise<ParseCtStringState | null> => {
     return new Promise((resolve, reject) => {
-      if (ctStr === '') {        
+      if (ctStr === '') {
         reject('請選擇活動')
       } else if (!VITE_API_URL) {
         reject('服務中斷')
@@ -94,7 +94,7 @@ export function useFetchData() {
             setCtT0kenCookies(res.token)
             if (!ctStr || !res.token) return resolve(null)
             const obj = parseCtT0ken(ctStr, res.token)
-            console.log(obj);
+            console.log(obj)
             resolve(obj)
           } else {
             reject(`verifyCtString:${res.error || '發生了例外錯誤'}`)
@@ -127,11 +127,15 @@ export function useFetchData() {
   }
 
   // 打卡驗證
-  const commitStoreCheckIn = async (activityId: string | string[] = '', t0kenObj: ParseCtStringState|null=null): Promise<boolean | ScanResultType> => {
+  const commitStoreCheckIn = async (
+    activityId: string | string[] = '',
+    t0kenObj: ParseCtStringState | null = null
+  ): Promise<boolean | ScanResultType> => {
     const loginT0kenObj = getLoginT0kenCookies()
     const locationObj = getLocationStorage()
     if (activityId === '') {
-      activityId = getAcStringStorage()
+      const obj = getTargetEventStorage()
+      activityId = String(obj?.id)
     }
     return new Promise((resolve, reject) => {
       if (activityId === '') {
@@ -143,17 +147,17 @@ export function useFetchData() {
       } else if (loginT0kenObj === null) {
         reject(4)
       } else {
-        const {storeId,number,token} = t0kenObj
-        const {loginT0ken} = loginT0kenObj
+        const { storeId, number, token } = t0kenObj
+        const { loginT0ken } = loginT0kenObj
         const [latitude, longitude] = locationObj
         const data = {
           eventId: Number(activityId),
           longitude: Number(longitude),
           latitude: Number(latitude),
           storeId: storeId,
-          key: number,
+          key: number
         } as checkInVerifyBodyType
-        const headerKey = loginT0ken? loginT0ken.slice(4, 10):''
+        const headerKey = loginT0ken ? loginT0ken.slice(4, 10) : ''
         const headers = {
           store: storeId,
           key: `${number}|||${headerKey}`,
@@ -163,30 +167,48 @@ export function useFetchData() {
         checkIn
           .checkInVerify(data, headers)
           .then((res: any) => {
-            console.log(res);  
-
-            switch (res?.code) {
-              case ResponseCodes.SUCCESS:
-                resolve({
-                  eventId: String(activityId),
-                  storeId: storeId,
-                  storeName: "",
-                  date: "",
-                })
-                break;
-              case ResponseCodes.NO_EVENT:
-                reject(1)
-                break;
-              case ResponseCodes.LOCATION_ERROR:
-                reject(5)
-                break;
-              default:
-                resolve(res)
-                break;
+            console.log(res)
+            const { code, msg, checkInStoreInfo } = res
+            if (code === ResponseCodes.NO_EVENT) {
+              reject('此活動不存在，請重新操作')
+            } else if (code === ResponseCodes.LOCATION_ERROR) {
+              reject('你不在門市所在位置，請重新操作')
+            } else if (code === ResponseCodes.LINE_NOAUTH) {
+              reject('訪客無法進行打卡，請重新操作')
+            } else if (checkInStoreInfo) {
+              resolve({
+                eventId: String(activityId),
+                storeId: checkInStoreInfo.storeId,
+                storeName: checkInStoreInfo.storeName,
+                date: checkInStoreInfo.checkInTime
+              })
+            } else if (
+              [
+                ResponseCodes.SCAN_ONCE,
+                ResponseCodes.CHECKIN_EXIST,
+                ResponseCodes.CHECKIN_TODAY
+              ].includes(code)
+            ) {
+              reject('此門市已經打卡過了')
+            } else if ([ResponseCodes.VERIFY_FAIL, ResponseCodes.CHECKIN_FAIL].includes(code)) {
+              reject('驗證錯誤，請重新操作')
+            } else if (
+              [
+                ResponseCodes.QRCODE_STRING,
+                ResponseCodes.QRCODE_FORMAT,
+                ResponseCodes.QRCODE_TIMEOUT,
+                ResponseCodes.QRCODE_NUMBER,
+                ResponseCodes.STORE_ERROR
+              ].includes(code)
+            ) {
+              reject('請重新進行掃描打卡')
+            } else {
+              reject(`服務異常，${msg}`)
             }
-          }).catch((error:any)=>{
-            console.log(error);
-            reject(3)
+          })
+          .catch((error: any) => {
+            console.log(error)
+            reject(`服務異常，${error.msg}`)
           })
       }
     })
@@ -195,7 +217,7 @@ export function useFetchData() {
   /**
    * 取得活動列表
    */
-  // const fetchCampaign = (): Promise<EventInterface[]> => {
+  // const fetchCampaign = (): Promise<CampaignInterface[]> => {
   //   return new Promise((resolve, reject) => {
   //     if (VITE_API_URL) {
   //       scanEntry.fetchCampaign().then((res: EventListResType) => {
@@ -210,7 +232,7 @@ export function useFetchData() {
   //     }
   //   })
   // }
-  // const fetchSpecifyCampaign = (storeId: string = ''): Promise<EventInterface[]> => {
+  // const fetchSpecifyCampaign = (storeId: string = ''): Promise<CampaignInterface[]> => {
   //   return new Promise((resolve, reject) => {
   //     if (VITE_API_URL) {
   //       scanEntry.fetchSpecifyCampaign(storeId).then((res: EventListResType) => {
@@ -225,7 +247,7 @@ export function useFetchData() {
   //     }
   //   })
   // }
-  const fetchAllCampaign = (storeId: string = ''): Promise<EventInterface[]> => {
+  const fetchAllCampaign = (storeId: string = ''): Promise<CampaignInterface[]> => {
     return new Promise((resolve, reject) => {
       if (VITE_API_URL) {
         Promise.all([scanEntry.fetchCampaign(), scanEntry.fetchSpecifyCampaign(storeId)])
@@ -244,11 +266,12 @@ export function useFetchData() {
                   startTime: item.startTime,
                   endTime: item.endTime,
                   isEnable: item.isEnable,
-                  pageRouter: item.pageRouter
+                  pageRouter: item.pageRouter,
+                  redeemPrizeList: item.redeemPrizeList
                 }
               })
               // 存在localstorage供後續頁面使用
-              setEventStorage(eventStorage)
+              setEventsStorage(eventStorage)
               resolve(eventList || [])
             }
           })
@@ -266,28 +289,25 @@ export function useFetchData() {
       const activityId = String(parameter)
 
       // 取出localstorage活動的簡化資料
-      let enevtList: EventInterface[] = getEventStorage()
+      let enevtList: CampaignBaseInterface[] = getEventsStorage()
       if (enevtList.length === 0) {
         const parseQrStringObj = getCtT0kenCookies()
         const storeId = parseQrStringObj ? parseQrStringObj.storeId || '' : ''
-        fetchAllCampaign(storeId).then((res: EventInterface[]) => {
+        fetchAllCampaign(storeId).then((res: CampaignInterface[]) => {
           enevtList = res
         })
       }
 
-      const target = enevtList.find((item) => String(item.pageRouter) === activityId)
+      const target = enevtList.find((item) => String(item.id) === activityId)
       if (!target) {
         // 找不到此活動
         reject(1)
-
       } else {
         const isEventActive = dayjs().isBetween(target.startTime, target.endTime, 'day', '[)')
         if (!target.isEnable || !isEventActive) {
           // 活動已關閉||活動時間未舉行
           reject(2)
-
         } else {
-          setAcStringStorage(activityId)
           // mapping活動內頁資料(src/assets/events.ts)
           const eventInfo = EventContent[activityId]
             ? EventContent[activityId]
@@ -298,16 +318,18 @@ export function useFetchData() {
             target.eventName && eventInfo.nameBreak
               ? target.eventName.slice(0, eventInfo.nameBreak) + '\n' + target.eventName.slice(2)
               : ''
-          const year = dayjs(target.startTime).year() || ''
-          const startDate = dayjs(target.startTime).format('M.D') || ''
-          const endDate = dayjs(target.endTime).format('M.D') || ''
-          resolve({
+          // 級距
+          const redeemPrize = target.redeemPrizeList.map((item: any) => item.reachTarget)
+          const obj = {
+            id: target.id,
+            start: target.startTime,
+            end: target.endTime,
             eventName,
-            year,
-            startDate,
-            endDate,
-            content: eventInfo.content || []
-          })
+            content: eventInfo.content || [],
+            redeemPrize
+          }
+          setTargetEventStorage(obj)
+          resolve(obj)
         }
       }
     })

@@ -5,10 +5,10 @@
 import { computed } from 'vue'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
-import type { EventInterface } from '@/types/ResponseHandle'
+import type { CampaignInterface } from '@/types/ResponseHandle'
 const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
 const props = defineProps<{
-  campaign: EventInterface
+  campaign: CampaignInterface
 }>()
 const router = useRouter()
 const linkTo = async () => {
@@ -27,7 +27,6 @@ const originURL = window.location.origin
 const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
 const startTime = computed(() => dayjs(props.campaign.startTime).format('YYYY/MM/DD') || '')
 const endTime = computed(() => dayjs(props.campaign.endTime).format('YYYY/MM/DD') || '')
-
 </script>
 
 <template>
@@ -45,9 +44,7 @@ const endTime = computed(() => dayjs(props.campaign.endTime).format('YYYY/MM/DD'
     <!-- TODO: Add else statement for past event -->
     <div class="activities__info">
       <p class="activities__info--title">{{ props.campaign.eventName }}</p>
-      <p class="activities__info--date">
-        {{ startTime }} - {{ endTime }}
-      </p>
+      <p class="activities__info--date">{{ startTime }} - {{ endTime }}</p>
     </div>
   </div>
 </template>

@@ -12,6 +12,7 @@
  */
 import { ref, watchEffect, computed } from 'vue'
 import { useRoute } from 'vue-router'
+import dayjs from 'dayjs'
 import type { EventInfoInterface } from '@/types/ResponseHandle'
 
 import HeaderMenu from '@/components/HeaderMenu.vue'
@@ -79,7 +80,16 @@ watchEffect(() => {
 
 const scanResultContent = ref({})
 const scanErrorMsg = ref<String>('')
-const showsScanResult = computed(() => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== '')
+const showsScanResult = computed(
+  () => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== ''
+)
+const year = computed(() => (eventInfo.value ? dayjs(eventInfo.value.start).year() || '' : ''))
+const startDate = computed(() =>
+  eventInfo.value ? dayjs(eventInfo.value.start).format('M.D') || '' : ''
+)
+const endTime = computed(() =>
+  eventInfo.value ? dayjs(eventInfo.value.end).format('M.D') || '' : ''
+)
 
 const commitScan = async () => {
   scanResultContent.value = {}
@@ -92,7 +102,7 @@ const commitScan = async () => {
       // 打開手機鏡頭
       const ctStr = await scanCode()
       // 驗證ct
-      ctTokenCookiesObj = await verifyCtString(ctStr||'')
+      ctTokenCookiesObj = await verifyCtString(ctStr || '')
     }
 
     // 打卡驗證
@@ -117,7 +127,6 @@ const directionStartScan = () => {
   layoutStore.toggleDirection(false)
   commitScan()
 }
-
 </script>
 
 <template>
@@ -142,11 +151,11 @@ const directionStartScan = () => {
       </div>
       <img :src="activityMainCatImg" alt="activity main cat" />
       <div class="activity-view__date">
-        <p class="activity-view__date--year">{{ data.activity.dateTitle }} {{ eventInfo?.year }}</p>
+        <p class="activity-view__date--year">{{ data.activity.dateTitle }} {{ year }}</p>
         <div class="activity-view__date--day-block">
-          <p class="activity-view__date--day">{{ eventInfo?.startDate }}</p>
+          <p class="activity-view__date--day">{{ startDate }}</p>
           <div class="activity-view__date--connect-line"></div>
-          <p class="activity-view__date--day">{{ eventInfo?.endDate }}</p>
+          <p class="activity-view__date--day">{{ endTime }}</p>
         </div>
       </div>
     </div>
@@ -168,9 +177,9 @@ const directionStartScan = () => {
     </div>
 
     <DirectionInfo v-show="layoutStore.showDirection" @checkin="directionStartScan" />
-    <ScanResult 
-      v-if="showsScanResult" 
-      :result="scanResultContent" 
+    <ScanResult
+      v-if="showsScanResult"
+      :result="scanResultContent"
       :error="scanErrorMsg"
       @scanAgain="commitScan"
     />
@@ -311,7 +320,7 @@ const directionStartScan = () => {
     text-align: center;
     padding-top: 10px;
     padding-bottom: 32px;
-    >button{
+    > button {
       width: 150px;
     }
   }

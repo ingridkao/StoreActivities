@@ -99,7 +99,6 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  console.log('global beforeEach');
   if (to.meta.title) {
     document.title = to.meta.title as string
   }
@@ -139,7 +138,6 @@ router.beforeEach(async (to, from, next) => {
 })
 
 router.afterEach(() => {
-  console.log('global afterEach');
   const layoutStore = useLayoutStore()
   layoutStore.pageLoadToggle(false)
 })

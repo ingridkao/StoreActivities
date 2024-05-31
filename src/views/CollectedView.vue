@@ -84,13 +84,11 @@ const specialStampIndexList = [5, 10, 15, 30]
       </div>
     </div>
     <div class="collected-view__body">
-      <div
-        class="collected-view__body--stamp"
-        v-for="(baseItem) in stampBaseCount"
-        :key="baseItem"
-      >
+      <div class="collected-view__body--stamp" v-for="baseItem in stampBaseCount" :key="baseItem">
         <div
-          v-if="collectedStore[baseItem - 1] && Object.keys(collectedStore[baseItem - 1]).length > 0"
+          v-if="
+            collectedStore[baseItem - 1] && Object.keys(collectedStore[baseItem - 1]).length > 0
+          "
           @click="
             () =>
               openStoreInfo({

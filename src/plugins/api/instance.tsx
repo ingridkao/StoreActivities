@@ -9,10 +9,6 @@ const instance = axios.create({
 })
 
 const onRequest = (config: any) => {
-  // const token = getCookie("OUTDOORKA_TOKEN");
-  // if (token) {
-  // 	config.headers.Authorization = `Bearer ${token}`;
-  // }
   return config
 }
 

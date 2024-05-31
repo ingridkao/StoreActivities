@@ -17,25 +17,11 @@ import checkSuccessImageImg from '@/assets/images/scan/check-success-image.png'
 const { linkToTargetActivityIdPage } = useLink()
 
 const props = defineProps<{
-  result: ScanResultType,
-  error: Number | String,
+  result: ScanResultType
+  error: Number | String
 }>()
 const successResult = computed(() => Object.keys(props.result).length > 0)
-const errorMsg = computed(() => {
-  if(props.error == 1){
-    return '此活動異常，請重新操作'
-  }else if(props.error == 2){
-    return '服務中斷'
-  }else if(props.error == 3){
-    return '請重新進行掃描打卡'
-  }else if(props.error == 4){
-    return '訪客無法進行打卡，請重新操作'
-  }else if(props.error == 5){
-    return '你不在門市所在位置，請重新操作'
-  }else{
-    return String(props.error)
-  }
-})
+const errorMsg = computed(() => props.error || '')
 </script>
 
 <template>
@@ -58,7 +44,9 @@ const errorMsg = computed(() => {
         <div class="scan-result__content--success-info">
           <p class="scan-result__content--success-info-id">{{ props.result.storeId }}</p>
           <p class="scan-result__content--success-info-name">{{ props.result.storeName }}門市</p>
-          <p class="scan-result__content--success-info-date">{{ props.result.date || dayjs().format('YYYY_MM_DD_HH:mm') }}</p>
+          <p class="scan-result__content--success-info-date">
+            {{ props.result.date || dayjs().format('YYYY_MM_DD_HH:mm') }}
+          </p>
         </div>
       </div>
       <div v-else class="scan-result__content--fail">
@@ -191,7 +179,7 @@ const errorMsg = computed(() => {
           object-fit: contain;
         }
       }
-      &-msg{
+      &-msg {
         margin-top: 16px;
       }
     }

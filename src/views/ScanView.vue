@@ -72,7 +72,9 @@ let animationId: AnimationRequestId | null = null
 
 const scanResultContent = ref({})
 const scanErrorMsg = ref('')
-const showsScanResult = computed(() => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== '')
+const showsScanResult = computed(
+  () => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== ''
+)
 
 const updateOutPutData = async (imageData: any) => {
   if (qrCodeOutputData.value !== '') return
@@ -100,7 +102,7 @@ const updateOutPutData = async (imageData: any) => {
       const commitRes = await commitStoreCheckIn('', t0kenObj)
       if (commitRes) {
         // 打卡成功蓋版
-        console.log(commitRes);
+        console.log(commitRes)
         scanResultContent.value = commitRes
       }
     } catch (error) {
@@ -206,7 +208,6 @@ onUnmounted(() => {
 </script>
 
 <template>
-
   <main class="cameraBox">
     <div v-if="!canvasVisible" class="loadingMessage">
       🎥 無法存取視訊串流（請確保您已啟用網路攝影機）
@@ -265,7 +266,7 @@ video {
     }
   }
 
-  &__button{
+  &__button {
     display: flex;
     justify-content: center;
     gap: 24px;
