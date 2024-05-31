@@ -1,12 +1,26 @@
 export enum ResponseCodes {
   SUCCESS = 20000,
-  QRCODE_TIMEOUT = 1010003,
-  LOCATION_ERROR = 1010006,   // 你不在門市所在位置
-  LINE_NOAUTH = 1010007,
-  NO_EVENT = 1010008,
-  EXPIRED_ACCESS_TOKEN = 50012,
-  ERROR = 50000,
+  QRCODE_STRING = 1010001, // QRCODE 長度不對
+  QRCODE_FORMAT = 1010002, // QRCODE 格式不對
+  QRCODE_TIMEOUT = 1010003, // QRCODE 逾時
+  QRCODE_NUMBER = 1010004, // 檢查碼錯誤
 
+  STORE_ERROR = 1010005, // 無法取得門市資訊
+  LOCATION_ERROR = 1010006, // 你不在門市所在位置
+
+  LINE_NOAUTH = 1010007, // Line Login 驗證失敗
+  NO_EVENT = 1010008, // 活動不存在
+
+  SCAN_ONCE = 1010009, // QRCode 只能掃描使用一次
+  VERIFY_FAIL = 1010010, // 混合型檢查有誤
+  CHECKIN_EXIST = 1010011, // 此門市已經打卡過了
+  CHECKIN_TODAY = 1010012, // 此門市今天已經打卡過了
+  CHECKIN_FAIL = 1010013, // 打卡Token及Input驗證不對
+
+  AWARD_FAIL = 1010014, // 領取獎項未成功
+
+  EXPIRED_ACCESS_TOKEN = 50012,
+  EXCEPTION = 50000
 }
 
 export type ApiResType = {
@@ -15,7 +29,7 @@ export type ApiResType = {
   result?: {}
 }
 
-// 
+// 模擬
 export type GenrateMockQRCodeResType = {
   lat?: number
   long?: number
@@ -29,17 +43,23 @@ export type VerifyCodeResType = {
   error?: string
 }
 
+export type RedeemPrizeListType = {
+  id: number
+  grade: number
+  reachTarget: number
+}
 // 活動
-export interface EventBaseInterface {
+export interface CampaignBaseInterface {
   id?: number
   eventName?: string
   startTime?: string
   endTime?: string
   isEnable?: boolean
   pageRouter?: string
+  redeemPrizeList: RedeemPrizeListType[]
 }
 
-export interface EventInterface extends EventBaseInterface {
+export interface CampaignInterface extends CampaignBaseInterface {
   partnerId?: number
   imageFilePath?: string
   // toLinkUrl?: string
@@ -47,7 +67,7 @@ export interface EventInterface extends EventBaseInterface {
 }
 
 export type EventListResType = {
-  queryList?: EventInterface[]
+  queryList?: CampaignInterface[]
   error?: string
 }
 
@@ -59,12 +79,13 @@ export interface EventContentType {
 
 // 存在localstorage的簡化資料
 export type EventInfoInterface = {
+  id?: number | string
+  start?: string //開始時間
+  end?: string //結束時間
   nameBreak?: number // 供UI幾個字換行判斷
   eventName?: string
-  year?: string | number //轉換後的年份
-  startDate?: string //轉換後的開始時間
-  endDate?: string //轉換後的結束時間
   content: EventContentType[] // 下方內容，文字來源src/assets/events.ts
+  redeemPrize: number[]
 }
 
 // 廣告

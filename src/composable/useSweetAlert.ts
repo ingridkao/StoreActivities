@@ -39,12 +39,14 @@ export function useSweetAlert() {
     lastCheckInTime?: string
     count?: number
   }) => {
-    const countHTML = countShow? `
+    const countHTML = countShow
+      ? `
       <div >
         <p>${data.storeInfoDialog.checkInCount}</p>
         <p>${count ?? count}</p>
       </div> 
-    `: ''
+    `
+      : ''
 
     Swal.fire({
       html: `

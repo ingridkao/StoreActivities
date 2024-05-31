@@ -13,7 +13,24 @@ const data = {
       startTime: '2024-04-01T00:00:00',
       endTime: '2025-07-31T23:59:59',
       isEnable: true,
-      pageRouter: '2'
+      pageRouter: '2',
+      redeemPrizeList: [
+        {
+          id: 17,
+          grade: 1,
+          reachTarget: 1
+        },
+        {
+          id: 47,
+          grade: 2,
+          reachTarget: 5
+        },
+        {
+          id: 48,
+          grade: 3,
+          reachTarget: 10
+        }
+      ]
     },
     {
       id: 4,
@@ -22,7 +39,24 @@ const data = {
       startTime: '2024-04-01T00:00:00',
       endTime: '2025-05-01T23:59:59',
       isEnable: true,
-      pageRouter: '3'
+      pageRouter: '3',
+      redeemPrizeList: [
+        {
+          id: 17,
+          grade: 1,
+          reachTarget: 1
+        },
+        {
+          id: 47,
+          grade: 2,
+          reachTarget: 3
+        },
+        {
+          id: 48,
+          grade: 3,
+          reachTarget: 5
+        }
+      ]
     }
   ],
   specifyEventMockData: [
@@ -33,7 +67,24 @@ const data = {
       startTime: '2024-06-01T00:00:00',
       endTime: '2025-09-31T23:59:59',
       isEnable: true,
-      pageRouter: '4'
+      pageRouter: '4',
+      redeemPrizeList: [
+        {
+          id: 17,
+          grade: 1,
+          reachTarget: 1
+        },
+        {
+          id: 47,
+          grade: 2,
+          reachTarget: 6
+        },
+        {
+          id: 48,
+          grade: 3,
+          reachTarget: 12
+        }
+      ]
     }
   ],
   adsData: [
@@ -72,7 +123,7 @@ const data = {
         storeTimes: 1
       }
     ],
-    storeIconList:[]
+    storeIconList: []
   }
 }
 export default data

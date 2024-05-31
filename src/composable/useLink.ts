@@ -1,11 +1,12 @@
 import { useRouter } from 'vue-router'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
+import { useEventStorage } from '@/composable/useEventStorage'
 
 export function useLink() {
   const router = useRouter()
   const { errorAlert } = useSweetAlert()
-  const { getAcStringStorage } = useBrowserStorage()
+  const { getTargetEventStorage } = useEventStorage()
+
   const getQueryParam = (url: string, param: string) => {
     // eslint-disable-next-line no-useless-escape
     const newParam = param.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]')
@@ -20,16 +21,16 @@ export function useLink() {
 
   const linkToCatchDirection = () => {
     // TODO: 提示離開此頁面
-    const activityId = getAcStringStorage()
-    if (activityId === '') {
-      errorAlert('找不到此活動，回到活動大廳')
-    } else {
+    const TargetEvent = getTargetEventStorage()
+    if (TargetEvent && TargetEvent.id) {
       router.push({
         name: 'Activity',
         params: {
-          id: String(activityId)
+          id: String(TargetEvent.id)
         }
       })
+    } else {
+      errorAlert('找不到此活動，回到活動大廳')
     }
   }
 
@@ -37,14 +38,17 @@ export function useLink() {
     activityId: string | string[] = '',
     routerName: string = ''
   ) => {
-    const catchActivityId = getAcStringStorage()
-    if (activityId === '' && catchActivityId === '') {
+    if (activityId === '') {
+      const TargetEvent = getTargetEventStorage()
+      activityId = String(TargetEvent?.id)
+    }
+    if (activityId === '') {
       errorAlert('找不到此活動，回到活動大廳')
     } else {
       router.push({
         name: routerName,
         params: {
-          id: String(activityId || catchActivityId)
+          id: activityId
         }
       })
     }

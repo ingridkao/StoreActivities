@@ -7,7 +7,7 @@
  * step2-3.請求所有廣告列表
  */
 import { ref, onMounted } from 'vue'
-import type { EventInterface } from '@/types/ResponseHandle'
+import type { CampaignInterface } from '@/types/ResponseHandle'
 
 import type { AdsInterface } from '@/types/ResponseHandle'
 import { useFetchData } from '@/composable/useFetch'
@@ -22,23 +22,25 @@ import data from '@/assets/data'
 
 import topCatImg from '@/assets/images/lobby/top-cat.png'
 import topLogoImg from '@/assets/images/lobby/top-logo.png'
-const { VITE_ORIGIN_URL } = import.meta.env
+
+const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 
 const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { genrateMockQRCode, fetchAllCampaign, fetchAdData, verifyCtString, parseParamCT } = useFetchData()
+const { genrateMockQRCode, fetchAllCampaign, fetchAdData, verifyCtString, parseParamCT } =
+  useFetchData()
 
 const layoutStore = useLayoutStore()
-const displayCampaignList = ref<EventInterface[]>([])
+const displayCampaignList = ref<CampaignInterface[]>([])
 const adsList = ref<AdsInterface[]>([])
 const qrString = ref<string>('')
 
+const newPath = new URL(window.location.href, ORIGIN_URL)
 onMounted(async () => {
-  const newPath = new URL(window.location.href, VITE_ORIGIN_URL)
-  const ctStr = (newPath && newPath.search)? parseParamCT(newPath.search): ''
+  const ctStr = newPath && newPath.search ? parseParamCT(newPath.search) : ''
   layoutStore.loadToggle(true)
   try {
-    const storeId = ctStr? ctStr.substring(2, 8): ''
+    const storeId = ctStr ? ctStr.substring(2, 8) : ''
     const [result1, result2] = await Promise.all([fetchAllCampaign(storeId), fetchAdData()])
     displayCampaignList.value = result1 || []
     adsList.value = result2 || []
@@ -51,14 +53,13 @@ onMounted(async () => {
     if (ctStr) {
       // 驗證ct
       await verifyCtString(ctStr)
-
     } else {
       // TODO: After check api flow, remove this
       const MockCode = await genrateMockQRCode()
       if (MockCode) {
         setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
       }
-      qrString.value = `${VITE_ORIGIN_URL}?ct=${MockCode.qrCode}`
+      qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}`
     }
   } catch (error) {
     errorAlert(error)

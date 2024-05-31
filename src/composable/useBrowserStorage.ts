@@ -11,18 +11,18 @@ export function useBrowserStorage() {
   // TODO: 如果位置會一直移動好像存在store會比較好
   const setLocationStorage = (latitude: null | number = null, longitude: null | number = null) => {
     const toString = `${latitude},${longitude}`
-    console.log(toString);
+    console.log(toString)
     localStorage.setItem('STORE_LOCATION', toString)
   }
   const getLocationStorage = () => {
     const locationStorage = localStorage.getItem('STORE_LOCATION')
-    console.log(locationStorage);
+    console.log(locationStorage)
     return locationStorage ? locationStorage.split(',') : []
   }
 
   // 儲存ct參數
   const setQRcodeString = (ctStr: string = '') => {
-    if (ctStr){
+    if (ctStr) {
       Cookies.set('STORE_CT', ctStr, {
         expires: inFiveMinutes
       })
@@ -31,16 +31,16 @@ export function useBrowserStorage() {
 
   // 儲存驗證ct後的token
   const setCtT0kenCookies = (t0ken: string = '') => {
-    if (t0ken){
+    if (t0ken) {
       Cookies.set('STORE_CT_T', t0ken, {
         expires: inFiveMinutes
       })
     }
   }
-  
+
   // 解析
   // 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+亂碼(1碼)+驗證碼(6碼)+時間戳記YYYY(4碼)
-  const parseCtT0ken = (ctStr:string, t0ken:string) => {
+  const parseCtT0ken = (ctStr: string, t0ken: string) => {
     return {
       ctStr: ctStr,
       storeId: ctStr.substring(2, 8),
@@ -86,13 +86,6 @@ export function useBrowserStorage() {
     } as AccessT0kenState
   }
 
-  const getAcStringStorage = (): string => {
-    return localStorage.getItem('ac') || ''
-  }
-  const setAcStringStorage = (activityId: string | string[]) => {
-    if (activityId) localStorage.setItem('ac', String(activityId))
-  }
-
   return {
     setLocationStorage,
     getLocationStorage,
@@ -102,8 +95,6 @@ export function useBrowserStorage() {
     setCtT0kenCookies,
     setLineT0kenCookies,
     setLoginT0kenCookies,
-    getLoginT0kenCookies,
-    getAcStringStorage,
-    setAcStringStorage,
+    getLoginT0kenCookies
   }
 }

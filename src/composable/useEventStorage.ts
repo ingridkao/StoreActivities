@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import type { EventBaseInterface } from '@/types/ResponseHandle'
+import type { CampaignBaseInterface, EventInfoInterface } from '@/types/ResponseHandle'
 
 export function useEventStorage() {
   // 5分鐘後自動刪掉
@@ -7,7 +7,7 @@ export function useEventStorage() {
   // 12小時後自動刪掉
   const inTwelveMinutes = new Date(new Date().getTime() + 12 * 60 * 60 * 1000)
 
-  const setEventStorage = (eventStorage: EventBaseInterface[]) => {
+  const setEventsStorage = (eventStorage: CampaignBaseInterface[]) => {
     if (eventStorage && eventStorage.length >= 0) {
       Cookies.set('STORE_EVENTS', JSON.stringify(eventStorage), {
         expires: inTwelveMinutes
@@ -16,7 +16,7 @@ export function useEventStorage() {
       Cookies.remove('STORE_EVENTS')
     }
   }
-  const getEventStorage = (): EventBaseInterface[] => {
+  const getEventsStorage = (): CampaignBaseInterface[] => {
     const enevts = Cookies.get('STORE_EVENTS')
     if (enevts) {
       return JSON.parse(enevts)
@@ -25,8 +25,28 @@ export function useEventStorage() {
     }
   }
 
+  const setTargetEventStorage = (eventStorage: EventInfoInterface) => {
+    if (eventStorage) {
+      Cookies.set('STORE_EVENT', JSON.stringify(eventStorage), {
+        expires: inTwelveMinutes
+      })
+    } else {
+      Cookies.remove('STORE_EVENT')
+    }
+  }
+  const getTargetEventStorage = (): EventInfoInterface | null => {
+    const enevts = Cookies.get('STORE_EVENT')
+    if (enevts) {
+      return JSON.parse(enevts)
+    } else {
+      return null
+    }
+  }
+
   return {
-    setEventStorage,
-    getEventStorage
+    setEventsStorage,
+    getEventsStorage,
+    setTargetEventStorage,
+    getTargetEventStorage
   }
 }
