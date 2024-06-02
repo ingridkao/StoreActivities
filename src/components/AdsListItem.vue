@@ -23,8 +23,6 @@ const props = defineProps<{
           : `${VITE_ASSETS_URL}${props.ads.imageFilePath}`
       "
       :alt="props.ads.title || props.ads.link || ''"
-      width="169"
-      height="50"
     />
   </a>
 </template>
@@ -32,14 +30,17 @@ const props = defineProps<{
 <style lang="scss" scoped>
 .ads {
   cursor: pointer;
-  border-radius: 20px 20px 30px 30px;
+  display: block;
+  border-radius: 15px;
   overflow: hidden;
+  aspect-ratio: 1280/720;
+
   img {
     width: 100%;
-    height: auto;
-    aspect-ratio: 169/50;
-    object-fit: contain;
+    height: 100%;
+    object-fit: cover;
   }
+
   &.invalid {
     opacity: 0.3;
   }
