@@ -3,6 +3,8 @@
 body {
   overflow-x: hidden;
   transform-origin: left top;
+  position: relative;
+  left: 50%;
 }
 
 *,

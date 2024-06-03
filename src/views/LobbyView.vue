@@ -7,6 +7,7 @@
  * step2-3.請求所有廣告列表
  */
 import { ref, onMounted } from 'vue'
+import { Swiper, SwiperSlide } from 'swiper/vue'
 import type { CampaignInterface } from '@/types/ResponseHandle'
 
 import type { AdsInterface } from '@/types/ResponseHandle'
@@ -16,12 +17,14 @@ import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLayoutStore } from '@/stores/layout'
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
 import CampaignListItem from '@/components/CampaignListItem.vue'
-// import AdsListItem from '@/components/AdsListItem.vue'
+import AdsListItem from '@/components/AdsListItem.vue'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 import data from '@/assets/data'
 
 import topCatImg from '@/assets/images/lobby/top-cat.png'
 import topLogoImg from '@/assets/images/lobby/top-logo.png'
+
+import 'swiper/css'
 
 const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 
@@ -103,8 +106,13 @@ onMounted(async () => {
       </div>
     </div>
 
-    <!--<AdsListItem v-for="item in adsList" :key="item.id" :ads="item" /> -->
-
+    <div class="lobby-view__ad-container">
+      <swiper :slides-per-view="'auto'" :space-between="9" :centeredSlides="true">
+        <swiper-slide v-for="item in adsList" :key="item.id">
+          <AdsListItem :ads="item" />
+        </swiper-slide>
+      </swiper>
+    </div>
     <div class="lobby-view__icon-bar">
       <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
       <img src="@/assets/images/lobby/icon-instagram.png" alt="instagram" />
@@ -213,6 +221,11 @@ onMounted(async () => {
       height: 45px;
     }
   }
+
+  &__ad-container {
+    padding-top: 34px;
+    padding-bottom: 66px;
+  }
 }
 
 .album {
@@ -230,5 +243,9 @@ onMounted(async () => {
     aspect-ratio: 169/50;
     object-fit: cover;
   }
+}
+
+.swiper-slide {
+  width: 90%;
 }
 </style>
