@@ -1,8 +1,12 @@
-import type { checkInVerifyBodyType, checkInVerifyHeaderType, VerifyHeaderType } from '@/types/RequestHandle'
+import type {
+  checkInVerifyBodyType,
+  checkInVerifyHeaderType,
+  VerifyHeaderType
+} from '@/types/RequestHandle'
 const { VITE_VERSION } = import.meta.env
 
 const CheckInServiceApi = (axios: any, event: any) => ({
-  checkInVerify(data:checkInVerifyBodyType, header:checkInVerifyHeaderType) {
+  checkInVerify(data: checkInVerifyBodyType, header: checkInVerifyHeaderType) {
     return axios.post(
       `${event}/CheckInVerify`,
       {
@@ -19,7 +23,7 @@ const CheckInServiceApi = (axios: any, event: any) => ({
       }
     )
   },
-  fetchCollect(activityId:string, loginT0ken: string) {
+  fetchCollect(activityId: string, loginT0ken: string) {
     return axios.post(
       `${event}/GetUserEventHistory`,
       {

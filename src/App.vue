@@ -31,12 +31,12 @@ onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
 
-watch(
-  () => layoutStore.showDirection,
-  (bodyScrollForbid) => {
-    document.body.style.overflowY = bodyScrollForbid ? 'hidden' : 'scroll'
-  }
-)
+// watch(
+//   () => layoutStore.showDirection,
+//   (bodyScrollForbid) => {
+//     document.body.style.overflowY = bodyScrollForbid ? 'hidden' : 'scroll'
+//   }
+// )
 </script>
 
 <template>

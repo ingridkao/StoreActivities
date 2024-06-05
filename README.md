@@ -62,16 +62,6 @@ Branch:
 |W|ComingSoon     | ComingSoonView.vue |404page       |  V   |
 
 
-### 組件說明
-
-| | Component              | Description  | Used for                        |
-|-| ---------------------- | ------------ | ------------------------------- |
-|W| HeaderMenu.vue         | 會觸發Line登入| 如一直被轉址請註解部分程式         |
-|W| CampaignListItem.vue   | 活動列表      | 活動大廳  
-|I| AdsListItem.vue        | 廣告列表      | 活動大廳                         |
-|W| ScanResult.vue         | 打卡結果      | 相機掃描                         |
-|W| DirectionInfo.vue      | 打卡說明      | 活動說明                         |
-
 ### HeaderMenu說明
 由於流程部分頁面選單會有以下差異：
 0. 沒有選單

@@ -111,15 +111,19 @@ export function useFetchData() {
     return new Promise((resolve, reject) => {
       if (accessToken) {
         setLineT0kenCookies(accessToken)
-        scanEntry.checkLineLoginVerify(accessToken).then((res: VerifyCodeResType) => {
-          if (res.result) {
-            const serviceT0ken = res.token || ''
-            setLoginT0kenCookies(serviceT0ken)
-            resolve(serviceT0ken)
-          } else {
-            reject(`checkLineLoginVerify:${res.error || '發生了例外錯誤'}`)
-          }
-        })
+        if (!VITE_API_URL) {
+          resolve('template')
+        }else{
+          scanEntry.checkLineLoginVerify(accessToken).then((res: VerifyCodeResType) => {
+            if (res.result) {
+              const serviceT0ken = res.token || ''
+              setLoginT0kenCookies(serviceT0ken)
+              resolve(serviceT0ken)
+            } else {
+              reject(`checkLineLoginVerify:${res.error || '發生了例外錯誤'}`)
+            }
+          })
+        }
       } else {
         resolve('')
       }
@@ -354,7 +358,9 @@ export function useFetchData() {
   const fetchAlbumData = (): Promise<AlbumListType> => {
     const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
-      if (loginT0ken && loginT0ken.loginT0ken) {
+      if (!VITE_API_URL || VITE_UI_MODE) {
+        resolve(mockDatas.albumData)
+      }else if (loginT0ken && loginT0ken.loginT0ken) {
         checkIn.fetchAlbum(loginT0ken.loginT0ken).then((res: any) => {
           if (res.error) {
             reject(`fetchAlbumData:${res.error}`)
@@ -362,8 +368,6 @@ export function useFetchData() {
             resolve(res)
           }
         })
-      } else if (VITE_API_URL || VITE_UI_MODE) {
-        resolve(mockDatas.albumData)
       } else {
         reject('沒有登入')
       }

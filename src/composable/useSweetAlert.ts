@@ -140,10 +140,25 @@ export function useSweetAlert() {
     )
   }
 
+  const authAlert = (error: string = '', route: any, resume: () => void) => {
+    return Swal.fire({
+      icon: 'error',
+      title: '此功能需要進行登入',
+      text: error
+    }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
+      if (result.isConfirmed) {
+        // TODO　進行Ｌｉｎｅ登入後並轉到相對應葉面
+        console.log(route)
+      }
+      // 拒絕登入返回至首頁
+      if (result.isDismissed) resume()
+    })
+  }
   return {
     errorAlert,
     storeInfoAlert,
     geoLocationErrorAlert,
-    openStoreInfo
+    openStoreInfo,
+    authAlert
   }
 }

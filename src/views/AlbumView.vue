@@ -1,8 +1,10 @@
 <script setup lang="ts">
 /**
  * 門市打卡紀錄
+ * 確認LINE login(router.beforeEach判斷)
  */
 import { ref, onMounted, computed } from 'vue'
+
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import type { AlbumType } from '@/types/ResponseHandle'
 import { useFetchData } from '@/composable/useFetch'
@@ -32,7 +34,6 @@ onMounted(async () => {
     if (res) {
       albumStore.value = res.historyList || []
     }
-
   } catch (error) {
     errorAlert(String(error))
   }

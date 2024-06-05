@@ -49,11 +49,10 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
 .direction-view {
   position: fixed;
   width: 100%;
-  height: 100dvh;
+  height: 100%;
   top: 0;
   left: 0;
   z-index: 4;
-  overflow: scroll;
 
   background-color: #55bf6f;
   background: url('@/assets/images/direction/bg.png') repeat;

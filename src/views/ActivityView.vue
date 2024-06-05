@@ -3,10 +3,7 @@
  * 活動說明
  * step0.確認使用者同意裝置位置資料(經緯度)
  * step1.確認是否為進行中活動
- * step2.取得LINE user profile
- *       - 已登入:網頁導轉到此頁
- *       - 未登入:LINE Login redirect到此頁
- * step3.去檢測ct
+ * step2.去檢測ct
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
@@ -196,7 +193,7 @@ const directionStartScan = () => {
 }
 
 .activity-view {
-  background-image: #fff;
+  background-color: #fff;
   padding-top: 30px;
 
   &__top-bg {

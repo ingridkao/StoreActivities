@@ -1,5 +1,5 @@
 import { useRouter } from 'vue-router'
-import type { ProfileType } from '@/types/configurable'
+import type { ProfileType } from '@/types/LineHandle'
 import { useFetchData } from '@/composable/useFetch'
 import { useUserStore } from '@/stores/user'
 
@@ -68,7 +68,6 @@ export function useLIFF() {
       await liff.init({ liffId: VITE_LIFF_ID })
       if (liff.isInClient()) {
         // liff.init()在執行時會自動執行liff.login()
-
       } else if (!liff.isLoggedIn()) {
         const redirectUri = `${ORIGIN_URL}/activity/${activityId}`
         liff.login({
@@ -117,26 +116,25 @@ export function useLIFF() {
 
   // InLIFFClient: 開啟LINE SCAN，開啟相機掃描QRcode取得qrcode string
   // Out LIFF app: 導轉到掃描頁面
-  const scanCode = async (): Promise<string|void> => {
+  const scanCode = async (): Promise<string | void> => {
     try {
       const isInClient = liff.isInClient()
       if (!isInClient) {
         router.push({ path: '/scan' })
-
-      }else{
+      } else {
         await liff.init({ liffId: VITE_LIFF_ID })
 
         const scanresult = await liff.scanCodeV2()
         if (scanresult && scanresult.value) {
           // 掃瞄出網址取出ct
           const newPath = new URL(scanresult.value, ORIGIN_URL)
-          return (newPath && newPath.search)? parseParamCT(newPath.search): ''
-        }else{
+          return newPath && newPath.search ? parseParamCT(newPath.search) : ''
+        } else {
           return ''
         }
       }
     } catch (err) {
-      throw new Error('Failed: '+ err);
+      throw new Error('Failed: ' + err)
     }
   }
 

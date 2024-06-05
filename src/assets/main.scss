@@ -1,12 +1,5 @@
 @import 'font';
 
-body {
-  overflow-x: hidden;
-  transform-origin: left top;
-  position: relative;
-  left: 50%;
-}
-
 *,
 html,
 body {
@@ -14,6 +7,11 @@ body {
   padding: 0;
   box-sizing: border-box;
   font-family: 'GenSenRounded';
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
 }
 
 main {
@@ -25,9 +23,12 @@ button {
   background-color: transparent;
   border: none;
   cursor: pointer;
-  > img {
-    width: 100%;
-  }
+}
+
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /************ store info dialog ************/

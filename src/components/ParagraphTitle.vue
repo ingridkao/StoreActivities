@@ -7,22 +7,26 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="paragraph-title">
+  <div class="lobby__section--title">
     <img :src="listMarkerImg" alt="list marker" />
-    <p>{{ props.title }}</p>
+    <h6>{{ props.title }}</h6>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.paragraph-title {
+.lobby__section--title {
   display: flex;
+  align-items: center;
   gap: 5px;
-  color: #2d2a2a;
-  font-weight: 700;
-  font-size: 18px;
-
+  padding-top: 0;
+  padding-bottom: 20px;
   img {
     width: 20px;
+  }
+  h6 {
+    font-weight: 700;
+    font-size: 18px;
+    color: #2d2a2a;
   }
 }
 </style>

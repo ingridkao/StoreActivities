@@ -7,24 +7,20 @@
  * step2-3.請求所有廣告列表
  */
 import { ref, onMounted } from 'vue'
-import { Swiper, SwiperSlide } from 'swiper/vue'
 import type { CampaignInterface } from '@/types/ResponseHandle'
+import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 import type { AdsInterface } from '@/types/ResponseHandle'
+import data from '@/assets/data'
+
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLayoutStore } from '@/stores/layout'
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
-import CampaignListItem from '@/components/CampaignListItem.vue'
-import AdsListItem from '@/components/AdsListItem.vue'
-import vueQr from 'vue-qr/src/packages/vue-qr.vue'
-import data from '@/assets/data'
-
-import topCatImg from '@/assets/images/lobby/top-cat.png'
-import topLogoImg from '@/assets/images/lobby/top-logo.png'
-
-import 'swiper/css'
+import CampaignItem from '@/components/lobby/CampaignItem.vue'
+import LobbyHeader from '@/components/lobby/LobbyHeader.vue'
+import LobbyAds from '@/components/lobby/LobbyAds.vue'
 
 const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 
@@ -71,49 +67,26 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="lobby-view">
-    <div class="lobby-view__main">
-      <div class="lobby-view__main--logo">
-        <img :src="topLogoImg" alt="top logo" />
-      </div>
-      <div class="lobby-view__main--cat">
-        <div class="lobby-view__main--cat-img">
-          <img :src="topCatImg" alt="top cat" />
-        </div>
-        <div class="lobby-view__main--cat-dialog">{{ data.lobby.title }}</div>
-      </div>
-    </div>
+  <main class="lobby">
+    <LobbyHeader />
 
-    <div class="lobby-view__menu">
-      <div class="lobby-view__menu--category">
-        <ParagraphTitle :title="data.lobby.eventTitle" />
+    <section class="lobby__section">
+      <ParagraphTitle :title="data.lobby.eventTitle" />
+      <div class="lobby__section--list">
+        <CampaignItem v-for="campaignItem in displayCampaignList" :key="campaignItem.id" :campaignItem="campaignItem" />
       </div>
-      <CampaignListItem
-        v-for="campaignItem in displayCampaignList"
-        :campaign="campaignItem"
-        :key="campaignItem.id"
-      />
+    </section>
 
-      <div class="lobby-view__menu--category">
-        <ParagraphTitle :title="data.lobby.pastEventTitle" />
-      </div>
-      <div class="lobby-view__menu--items">
-        <RouterLink to="/album" class="album">
-          <div class="album__img">
-            <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
-          </div>
-        </RouterLink>
-      </div>
-    </div>
+    <section class="lobby__section">
+      <ParagraphTitle :title="data.lobby.pastEventTitle" />
+      <RouterLink to="/album" class="lobby__section--link">
+        <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
+      </RouterLink>
+    </section>
 
-    <div class="lobby-view__ad-container">
-      <swiper :slides-per-view="'auto'" :space-between="9" :centeredSlides="true">
-        <swiper-slide v-for="item in adsList" :key="item.id">
-          <AdsListItem :ads="item" />
-        </swiper-slide>
-      </swiper>
-    </div>
-    <div class="lobby-view__icon-bar">
+    <LobbyAds :adsList="adsList" />
+
+    <div class="lobby__icon-bar">
       <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
       <img src="@/assets/images/lobby/icon-instagram.png" alt="instagram" />
       <img src="@/assets/images/lobby/icon-youtube.png" alt="youtube" />
@@ -121,88 +94,76 @@ onMounted(async () => {
       <img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" />
     </div>
 
-    <!-- TODO: After check api flow, remove this  -->
-    <vueQr :text="qrString" :size="100" :correctLevel="3" />
     <template v-if="qrString">
+      <div style="width: 10rem">
+        <vueQr :text="qrString" :size="100" :correctLevel="3" />
+      </div>
       <a :href="qrString" target="_blank">{{ qrString }}</a>
     </template>
   </main>
 </template>
 
-<style lang="scss" scoped>
-.lobby-view {
+<style lang="scss">
+$card: 396px;
+$medium: 855px;
+.lobby {
   background-color: #efefea;
 
-  &__main {
-    background: url('@/assets/images/lobby/top-bg.png');
-    padding: 22px 26px 0 26px;
-    width: 100%;
+  &__section {
+    display: flex;
+    flex-direction: column;
+    padding: 26px 26px 0 26px;
+    max-width: $medium;
+    margin: auto;
 
-    &--logo {
-      width: 73px;
-      height: 31px;
-      margin-bottom: 8px;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-
-    &--cat {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: end;
-      gap: 8px;
-      padding-bottom: 8px;
-
-      &-img {
-        width: 135px;
-        height: 125px;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-      }
-
-      &-dialog {
-        width: 163px;
-        height: 70px;
-        background: url('@/assets/images/lobby/top-dialog.svg');
-        background-size: 100% 100%;
-        display: flex;
+    &--title{
+      @media screen and (min-width: $medium) {
         justify-content: center;
-        align-items: center;
-        color: #5f5d5d;
-        font-size: 24px;
-        line-height: 100%;
-        font-weight: 700;
-        padding-left: 24px;
-        transform: translateY(-12px);
-      }
-    }
-  }
-
-  &__menu {
-    min-height: calc(100 * var(--vh) - 186px - 125px);
-    padding: 26px;
-
-    &--category {
-      padding-bottom: 20px;
-      padding-top: 20px;
-      &:first-child {
-        padding-top: 0px;
       }
     }
 
-    &--items {
+    &--list{
       display: flex;
       flex-direction: column;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1%;
+      >div{
+          flex-basis: 100%;
+          width: $card;
+          margin: auto;
+        }
+      @media screen and (min-width: $medium) {
+        flex-direction: row;
+        justify-content: space-between;
+        >div{
+          flex-basis: 49%;
+          width: auto;
+          min-width: $card;
+          margin: 0;
+        }
+      }
+    }
+  
+    &--link {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      max-width: $card;
+      margin: 0 auto;
       gap: 14px;
+      @media screen and (min-width: $medium) {
+        max-width: $card*1.25;
+      }
+      img {
+        width: 100%;
+        height: auto;
+        border-radius: 20px;
+        aspect-ratio: 169/50;
+        object-fit: cover;
+        overflow: hidden;
+        box-shadow: 0px 4px 4px 0px #00000040;
+      }
     }
   }
 
@@ -215,37 +176,10 @@ onMounted(async () => {
     align-items: center;
     justify-content: center;
     padding: 28px 0 52px 0;
-
     img {
       width: 45px;
       height: 45px;
     }
   }
-
-  &__ad-container {
-    padding-top: 34px;
-    padding-bottom: 66px;
-  }
-}
-
-.album {
-  cursor: pointer;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0px 4px 4px 0px #00000040;
-  &__img {
-    width: 338px;
-    height: 100px;
-  }
-  img {
-    width: 100%;
-    height: auto;
-    aspect-ratio: 169/50;
-    object-fit: cover;
-  }
-}
-
-.swiper-slide {
-  width: 90%;
 }
 </style>

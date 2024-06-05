@@ -2,17 +2,16 @@
 /**
  * 進行中活動 || 預告中活動 || 已結束活動
  */
-import { computed } from 'vue'
 import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import type { CampaignInterface } from '@/types/ResponseHandle'
 const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
 const props = defineProps<{
-  campaign: CampaignInterface
+  campaignItem: CampaignInterface
 }>()
 const router = useRouter()
-const linkTo = async () => {
-  const { id, isEnable, pageRouter } = props.campaign
+const linkTo = async (campaignItem: CampaignInterface) => {
+  const { id, isEnable, pageRouter } = campaignItem
   if (!isEnable) return
   if (pageRouter) {
     router.push({
@@ -25,48 +24,50 @@ const linkTo = async () => {
 }
 const originURL = window.location.origin
 const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
-const startTime = computed(() => dayjs(props.campaign.startTime).format('YYYY/MM/DD') || '')
-const endTime = computed(() => dayjs(props.campaign.endTime).format('YYYY/MM/DD') || '')
+const parseStartTime = (startTime: string='') => startTime? dayjs(startTime).format('YYYY/MM/DD') : ''
+const parseEndTime = (endTime: string='') => endTime? dayjs(endTime).format('YYYY/MM/DD') : ''
+
 </script>
 
 <template>
-  <div class="activities" :class="{ invalid: !props.campaign.isEnable }" @click="linkTo()">
-    <div class="activities__img">
+  <div
+    class="lobby__activities"
+    :class="{ invalid: !props.campaignItem.isEnable }"
+    @click="linkTo(props.campaignItem)"
+  >
+    <div class="lobby__activities__img">
       <img
         :src="
-          VITE_ASSETS_URL && props.campaign.imageFilePath
-            ? `${VITE_ASSETS_URL}${props.campaign.imageFilePath}`
+          VITE_ASSETS_URL && props.campaignItem.imageFilePath
+            ? `${VITE_ASSETS_URL}${props.campaignItem.imageFilePath}`
             : `${fileOrigin}/images/lobby/lobby-item-1.png`
         "
-        :alt="props.campaign.eventName ?? ''"
+        :alt="props.campaignItem.eventName ?? ''"
       />
     </div>
-    <!-- TODO: Add else statement for past event -->
-    <div class="activities__info">
-      <p class="activities__info--title">{{ props.campaign.eventName }}</p>
-      <p class="activities__info--date">{{ startTime }} - {{ endTime }}</p>
+    <div class="lobby__activities__info">
+      <p class="lobby__activities__info--title">{{ props.campaignItem.eventName }}</p>
+      <p class="lobby__activities__info--date">
+        {{ parseStartTime(props.campaignItem.startTime) }} - {{ parseEndTime(props.campaignItem.endTime) }}
+      </p>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.activities {
+.lobby__activities {
   cursor: pointer;
   border-radius: 12px;
+  margin-bottom: 12px;
   overflow: hidden;
   box-shadow: 0px 4px 4px 0px #00000040;
-  margin-bottom: 12px;
+  background-color: #ddd;
   &.invalid {
     opacity: 0.3;
   }
-
   &__img {
-    width: 338px;
-    height: 100px;
-
+    height: 120px;
     img {
-      width: 100%;
-      height: 100%;
       object-fit: cover;
     }
   }
