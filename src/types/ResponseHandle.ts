@@ -1,5 +1,6 @@
 export enum ResponseCodes {
   SUCCESS = 20000,
+  FAIL = 20001,
   QRCODE_STRING = 1010001, // QRCODE 長度不對
   QRCODE_FORMAT = 1010002, // QRCODE 格式不對
   QRCODE_TIMEOUT = 1010003, // QRCODE 逾時
@@ -43,11 +44,12 @@ export type VerifyCodeResType = {
   error?: string
 }
 
-export type RedeemPrizeListType = {
+export type RedeemPrizeType = {
   id: number
-  grade: number
-  reachTarget: number
+  grade: number // 級距
+  reachTarget: number // 累積reachTarget家門市
 }
+
 // 活動
 export interface CampaignBaseInterface {
   id?: number
@@ -56,7 +58,7 @@ export interface CampaignBaseInterface {
   endTime?: string
   isEnable?: boolean
   pageRouter?: string
-  redeemPrizeList: RedeemPrizeListType[]
+  redeemPrizeList: RedeemPrizeType[]
 }
 
 export interface CampaignInterface extends CampaignBaseInterface {
@@ -77,13 +79,14 @@ export interface EventContentType {
   text?: string
 }
 
-// 存在localstorage的簡化資料
-export type EventInfoInterface = {
+// 簡化後的活動列表for ActivityView.vue, confirmCampaign()
+export type EventSimpleInterface = {
   id?: number | string
   start?: string //開始時間
   end?: string //結束時間
-  nameBreak?: number // 供UI幾個字換行判斷
   eventName?: string
+  eventNameBreak?: string
+  nameBreak?: number // 供UI幾個字換行判斷
   content: EventContentType[] // 下方內容，文字來源src/assets/events.ts
   redeemPrize: number[]
 }
@@ -145,4 +148,27 @@ export type AlbumListType = {
   historyList?: AlbumType[]
   storeIconList: IconInterface[] | null
   error?: string
+}
+
+// 獎項
+export type AwardType = {
+  id: number
+  awardName: string
+}
+
+// 序號
+export type PrizeType = {
+  id: number
+  awardName: string
+  checkinTime?: string //最後打卡時間
+  storeTimes?: number //打卡次數
+  iconFilePath?: string //圖片路徑
+}
+
+export interface ReceivePrizeListType extends RedeemPrizeType {
+  eventId: number // 活動ID
+  isAchieve: boolean // 是否達標
+  isClaimPrize: boolean // 是否領獎
+  awardList?: AwardType[]
+  claimPrizeList?: PrizeType[]
 }

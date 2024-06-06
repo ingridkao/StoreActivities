@@ -31,9 +31,7 @@ onMounted(async () => {
   layoutStore.loadToggle(true)
   try {
     const res = await fetchAlbumData()
-    if (res) {
-      albumStore.value = res.historyList || []
-    }
+    albumStore.value = res && res.historyList? res.historyList : []
   } catch (error) {
     errorAlert(String(error))
   }
@@ -42,58 +40,67 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="album-view">
+  <main class="album">
     <HeaderMenu />
-    <div class="album-view__header">
-      <p class="album-view__header--title">目前累積搜集門市</p>
-      <div class="album-view__header--info">
-        <p>{{ accumulation }}<span>家</span></p>
-      </div>
-    </div>
-    <div class="album-view__body">
-      <div
-        class="album-view__body--stamp"
-        v-for="(baseItem, index) in stampBaseCount"
-        :key="baseItem"
-      >
-        <div
-          v-if="albumStore[index]"
-          class="album-view__body--stamp-wrapper"
-          @click="
-            () =>
-              openStoreInfo({
-                countShow: true,
-                storeName: albumStore[index]['storeName'],
-                imageUrl: albumStore[index]['iconFilePath'],
-                lastCheckInTime: albumStore[index]['checkinTime'],
-                count: albumStore[index]['storeTimes']
-              })
-          "
-        >
-          <p
-            class="album-view__body--stamp-text"
-            :class="{
-              'three-characters': albumStore[index]['storeName']?.length === 3,
-              'four-characters': albumStore[index]['storeName']?.length === 4,
-              'five-characters': albumStore[index]['storeName']?.length === 5,
-              'six-characters': albumStore[index]['storeName']?.length === 6
-            }"
-          >
-            {{ albumStore[index]['storeName'] }}
-          </p>
-          <img :src="checkedStampImg" alt="checked stamp" />
+    <div>
+      <div class="album__header">
+        <p class="album__header--title">目前累積搜集門市</p>
+        <div class="album__header--info">
+          <p>{{ accumulation }}<span>家</span></p>
         </div>
-        <img v-else :src="emptyStampImg" alt="empty stamp" />
+      </div>
+      <div class="album__body">
+        <div
+          class="album__body--stamp"
+          v-for="(baseItem, index) in stampBaseCount"
+          :key="baseItem"
+        >
+          <div
+            v-if="albumStore[index]"
+            class="album__body--stamp-wrapper"
+            @click="
+              () =>
+                openStoreInfo({
+                  countShow: true,
+                  storeName: albumStore[index]['storeName'],
+                  imageUrl: albumStore[index]['iconFilePath'],
+                  lastCheckInTime: albumStore[index]['checkinTime'],
+                  count: albumStore[index]['storeTimes']
+                })
+            "
+          >
+            <p
+              class="album__body--stamp-text"
+              :class="{
+                'three-characters': albumStore[index]['storeName']?.length === 3,
+                'four-characters': albumStore[index]['storeName']?.length === 4,
+                'five-characters': albumStore[index]['storeName']?.length === 5,
+                'six-characters': albumStore[index]['storeName']?.length === 6
+              }"
+            >
+              {{ albumStore[index]['storeName'] }}
+            </p>
+            <img :src="checkedStampImg" alt="checked stamp" />
+          </div>
+          <img v-else :src="emptyStampImg" alt="empty stamp" />
+        </div>
       </div>
     </div>
   </main>
 </template>
 
 <style lang="scss" scope>
-.album-view {
+$card: 396px;
+
+.album {
   background: url('@/assets/images/album/bg.png');
   overflow: auto;
 
+  >div{
+    width: $card;
+    margin: 0 auto;
+    padding-bottom: 1.5rem;
+  }
   &__header {
     width: 336px;
     height: 188px;

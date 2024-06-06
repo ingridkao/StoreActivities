@@ -1,7 +1,7 @@
-import type { EventInfoInterface } from '@/types/ResponseHandle'
+import type { EventSimpleInterface } from '@/types/ResponseHandle'
 // 0: default
-const campaigns: Record<string, EventInfoInterface> = {
-  default: {
+const campaigns: Record<string, EventSimpleInterface> = {
+  'default': {
     nameBreak: 2,
     content: [
       {

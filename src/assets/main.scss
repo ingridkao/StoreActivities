@@ -1,5 +1,7 @@
 @import 'font';
 
+$btn: 143px;
+
 *,
 html,
 body {
@@ -29,6 +31,17 @@ img {
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+/************ content main layout ************/
+.store-content {
+  position: relative;
+  width: 100%;
+  max-width: 586px;
+  margin: auto;
+  &.large{
+    max-width: 855px;
+  }
 }
 
 /************ store info dialog ************/
@@ -128,8 +141,26 @@ img {
   }
 }
 
+/************ store btn ************/
+.store-btn-list{
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+}
+
+.store-btn{
+  position: relative;
+  max-width: 143px;
+  height: 40px;
+  overflow: hidden;
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+}
+
 body {
   &.swal2-shown {
     overflow-y: auto !important;
   }
 }
+

@@ -15,11 +15,16 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .lobby__section--title {
-  display: flex;
-  align-items: center;
   gap: 5px;
+  width: 100%;
+  margin: auto;
   padding-top: 0;
   padding-bottom: 20px;
+  display: flex;
+  align-items: center;
+  @media screen and (min-width: 855px) {
+    justify-content: center;
+  }
   img {
     width: 20px;
   }

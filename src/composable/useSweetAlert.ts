@@ -20,10 +20,35 @@ export function useSweetAlert() {
       title: '出了一點問題',
       text: String(text)
     }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
-      console.log(result)
-      if (result.isConfirmed) router.push({ path: routerPath, replace: true })
-      if (result.isDismissed) router.push({ path: routerPath, replace: true })
+      if (result.isConfirmed) {
+        router.push({ path: routerPath, replace: true })
+      } else if (result.isDismissed) {
+        router.push({ path: routerPath, replace: true })
+      }
     })
+  }
+
+  const activityErrorAlert = (title: string, text: string='') => {
+    Swal.fire({
+      icon: 'question',
+      title: title,
+      text: text,
+      showCancelButton: true,
+      confirmButtonText: '過去活動打卡紀錄',
+      confirmButtonColor: "#ffce00",
+      cancelButtonText: '活動大廳',
+      cancelButtonColor: "#ffce00",
+    }).then(
+      (result: {
+        isConfirmed?: boolean
+        isDenied?: boolean
+        isDismissed?: boolean
+        value?: boolean
+      }) => {
+        if (result.isConfirmed) router.push({ path: '/album', replace: true })
+        if (result.isDismissed) router.push({ path: '/', replace: true })
+      }
+    )
   }
 
   const openStoreInfo = ({
@@ -140,22 +165,21 @@ export function useSweetAlert() {
     )
   }
 
-  const authAlert = (error: string = '', route: any, resume: () => void) => {
+  const authAlert = (error: string = '', goToLogin: () => void, isDismiss: () => void) => {
     return Swal.fire({
-      icon: 'error',
-      title: '此功能需要進行登入',
+      icon: 'info',
+      title: '進行LINE登入驗證',
       text: error
     }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
-      if (result.isConfirmed) {
-        // TODO　進行Ｌｉｎｅ登入後並轉到相對應葉面
-        console.log(route)
-      }
+      // 進行Line登入
+      if (result.isConfirmed) goToLogin()
       // 拒絕登入返回至首頁
-      if (result.isDismissed) resume()
+      if (result.isDismissed) isDismiss()
     })
   }
   return {
     errorAlert,
+    activityErrorAlert,
     storeInfoAlert,
     geoLocationErrorAlert,
     openStoreInfo,

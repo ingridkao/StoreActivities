@@ -104,7 +104,7 @@ const goToActivityInfo = () => {
 .sidemenu {
   position: fixed;
   top: 0;
-  z-index: 999;
+  z-index: 9;
 
   &__btn {
     position: absolute;
@@ -136,7 +136,7 @@ const goToActivityInfo = () => {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 10;
+    z-index: 8;
     width: 168px;
     height: auto;
     padding: 88px 20px 28px 30px;

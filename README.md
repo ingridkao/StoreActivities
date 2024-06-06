@@ -58,7 +58,6 @@ Branch:
 |F|所有活動打卡紀錄 | AlbumView.vue      |             |  V   |
 |F|中獎序號        | WinningView.vue    |             |  V   |
 |W|相機掃描        | ScanView.vue       |             |      |
-|W|活動已結束      | WrapUpView.vue     |             |  V   |
 |W|ComingSoon     | ComingSoonView.vue |404page       |  V   |
 
 
@@ -78,7 +77,6 @@ Branch:
 |2|所有活動打卡紀錄 |
 |1|中獎序號        |
 |1|門市地圖        |
-|2|活動已結束      |
 |2|ComingSoon     |
 
 
@@ -142,7 +140,7 @@ npm run deploy
 VITE_LIFF_ID=
 VITE_MAPBOX_KEY=
 
-VITE_UI_MODE=true
+VITE_UI_MODE=
 VITE_ASSETS_URL=
 VITE_API_URL=
 VITE_ORIGIN_URL=

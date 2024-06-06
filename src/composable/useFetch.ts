@@ -10,12 +10,15 @@ import type {
   VerifyCodeResType,
   CampaignBaseInterface,
   CampaignInterface,
-  EventInfoInterface,
+  EventSimpleInterface,
   AdsInterface,
   AdListResType,
   ScanResultType,
   AlbumListType,
-  EventListType
+  EventListType,
+  ReceivePrizeListType,
+  RedeemPrizeType,
+  AwardType
 } from '@/types/ResponseHandle'
 import type { GenrateMockQRCodeState, ParseCtStringState } from '@/types/StateHandle'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
@@ -30,7 +33,7 @@ import EventContent from '@/assets/events'
 const { VITE_API_URL, VITE_UI_MODE, VITE_OUTDIR } = import.meta.env
 
 export function useFetchData() {
-  const { scanEntry, checkIn } = apis
+  const { scanEntry, checkIn, prize } = apis
   const layoutStore = useLayoutStore()
   const {
     getLocationStorage,
@@ -42,8 +45,12 @@ export function useFetchData() {
     setLoginT0kenCookies,
     getLoginT0kenCookies
   } = useBrowserStorage()
-  const { getEventsStorage, setEventsStorage, setTargetEventStorage, getTargetEventStorage } =
-    useEventStorage()
+  const { 
+    getEventsStorage,
+    setEventsStorage,
+    setTargetEventStorage,
+    getTargetEventStorage
+  } = useEventStorage()
 
   /**
    * 從URL字串中取出ct參數
@@ -85,7 +92,7 @@ export function useFetchData() {
       if (ctStr === '') {
         reject('請選擇活動')
       } else if (!VITE_API_URL) {
-        reject('服務中斷')
+        reject('服務中斷，請稍後再試')
       } else {
         checkIn
         scanEntry.verifyQRString(ctStr).then((res: VerifyCodeResType) => {
@@ -113,7 +120,7 @@ export function useFetchData() {
         setLineT0kenCookies(accessToken)
         if (!VITE_API_URL) {
           resolve('template')
-        }else{
+        } else {
           scanEntry.checkLineLoginVerify(accessToken).then((res: VerifyCodeResType) => {
             if (res.result) {
               const serviceT0ken = res.token || ''
@@ -132,24 +139,21 @@ export function useFetchData() {
 
   // 打卡驗證
   const commitStoreCheckIn = async (
-    activityId: string | string[] = '',
+    id: string | string[] = '',
     t0kenObj: ParseCtStringState | null = null
   ): Promise<boolean | ScanResultType> => {
     const loginT0kenObj = getLoginT0kenCookies()
     const locationObj = getLocationStorage()
-    if (activityId === '') {
-      const obj = getTargetEventStorage()
-      activityId = String(obj?.id)
-    }
+    const activityId = parseActivityId(id)
     return new Promise((resolve, reject) => {
       if (activityId === '') {
-        reject(1)
+        reject('此活動不存在，請重新操作')
       } else if (!VITE_API_URL) {
-        reject(2)
+        reject('服務中斷，請稍後再試')
       } else if (t0kenObj === null) {
-        reject(3)
+        reject('請重新進行掃描打卡')
       } else if (loginT0kenObj === null) {
-        reject(4)
+        reject('訪客無法進行打卡，請重新操作')
       } else {
         const { storeId, number, token } = t0kenObj
         const { loginT0ken } = loginT0kenObj
@@ -218,6 +222,89 @@ export function useFetchData() {
     })
   }
 
+  // 得到活動ID, 如果沒有帶入參數則取得browser storage
+  const parseActivityId = (activityId: number |string | string[] = '') => {
+    if (!activityId) return activityId
+    const TargetEvent = getTargetEventStorage()
+    return String(TargetEvent?.id) || ''
+  }
+
+  // 觸發兌獎
+  const commitReceivePrize = async (
+    id: string | string[] = ''
+  ): Promise<boolean | ScanResultType> => {
+    const loginT0kenObj = getLoginT0kenCookies()
+    const activityId = parseActivityId(id)
+    return new Promise((resolve, reject) => {
+      if (activityId === '') {
+        reject('此活動不存在，請重新操作')
+      } else if (!VITE_API_URL) {
+        reject('服務中斷，請稍後再試')
+      } else if (loginT0kenObj === null) {
+        reject('訪客無法進行操作，請重新操作')
+      } else {
+        prize
+          .commitReceivePrize(activityId, String(loginT0kenObj.loginT0ken))
+          .then((res: any) => {
+            if (res.code === ResponseCodes.SUCCESS) {
+              console.error(res.result)
+            }else{
+              reject(`服務異常，${res.result}`)
+            }
+          })
+          .catch((error: any) => {
+            console.error(error)
+            reject(`服務異常，${error.msg}`)
+          })
+      }
+    })
+  }
+
+  // 取得兌獎列表: 整理API Data >>> UI
+  const fetchReceivePrize = async (
+    id: number | string | string[] = ''
+  ): Promise<boolean | ScanResultType> => {
+    const loginT0kenObj = getLoginT0kenCookies()
+    const activityId = parseActivityId(id)
+    return new Promise((resolve, reject) => {
+      if (activityId === '') {
+        reject('此活動不存在，請重新操作')
+      } else if (!VITE_API_URL) {
+        reject('服務中斷，請稍後再試')
+      } else if (loginT0kenObj === null) {
+        reject('訪客無法進行操作，請重新操作')
+      } else {
+        prize
+        .fetchReceivePrizeResult(activityId, String(loginT0kenObj.loginT0ken))
+        .then((res: any) => {
+          const newPrizeResultList = []
+          if(res && res.claimPrizeResultList){
+            res.claimPrizeResultList.forEach((prizeItem:ReceivePrizeListType)=>{
+              if(prizeItem.awardList){
+                const awardList = prizeItem.awardList
+                const prizeList = prizeItem.claimPrizeList ? prizeItem.claimPrizeList: []
+                awardList.forEach((award:AwardType, index:number)=>{
+                  const obj = {
+                    ...award,
+                    grade: prizeItem.grade,
+                    content: prizeList[index],
+                    usableCount: prizeList.length,
+                    usedCount: prizeList.length,
+  
+                  }
+                  newPrizeResultList.push(obj)
+                })
+              }              
+            })
+          }
+          resolve(newPrizeResultList)
+        })
+        .catch((error: any) => {
+          reject(`服務異常，${error.msg}`)
+        })
+      }
+    })
+  }
   /**
    * 取得活動列表
    */
@@ -253,7 +340,9 @@ export function useFetchData() {
   // }
   const fetchAllCampaign = (storeId: string = ''): Promise<CampaignInterface[]> => {
     return new Promise((resolve, reject) => {
-      if (VITE_API_URL) {
+      if (VITE_UI_MODE) {
+        resolve([...mockDatas.eventMockData, ...mockDatas.specifyEventMockData])
+      }else{
         Promise.all([scanEntry.fetchCampaign(), scanEntry.fetchSpecifyCampaign(storeId)])
           .then(([res1, res2]) => {
             if (res1.error) {
@@ -271,7 +360,7 @@ export function useFetchData() {
                   endTime: item.endTime,
                   isEnable: item.isEnable,
                   pageRouter: item.pageRouter,
-                  redeemPrizeList: item.redeemPrizeList
+                  redeemPrizeList: item.redeemPrizeList || []
                 }
               })
               // 存在localstorage供後續頁面使用
@@ -282,13 +371,11 @@ export function useFetchData() {
           .catch((err) => {
             console.error(err)
           })
-      } else {
-        resolve([...mockDatas.eventMockData, ...mockDatas.specifyEventMockData])
       }
     })
   }
 
-  const confirmCampaign = (parameter: string | string[] = ''): Promise<EventInfoInterface> => {
+  const confirmCampaign = (parameter: string | string[] = ''): Promise<EventSimpleInterface> => {
     return new Promise((resolve, reject) => {
       const activityId = String(parameter)
 
@@ -318,19 +405,19 @@ export function useFetchData() {
             : EventContent['default']
 
           // 活動名稱換行
-          const eventName =
+          const eventNameBreak =
             target.eventName && eventInfo.nameBreak
               ? target.eventName.slice(0, eventInfo.nameBreak) + '\n' + target.eventName.slice(2)
               : ''
           // 級距
-          const redeemPrize = target.redeemPrizeList.map((item: any) => item.reachTarget)
           const obj = {
             id: target.id,
             start: target.startTime,
             end: target.endTime,
-            eventName,
+            eventName: target.eventName,
+            eventNameBreak,
             content: eventInfo.content || [],
-            redeemPrize
+            redeemPrize: target.redeemPrizeList.map((item: RedeemPrizeType) => item.reachTarget)
           }
           setTargetEventStorage(obj)
           resolve(obj)
@@ -341,7 +428,9 @@ export function useFetchData() {
 
   const fetchAdData = (): Promise<AdsInterface[]> => {
     return new Promise((resolve, reject) => {
-      if (VITE_API_URL) {
+      if (VITE_UI_MODE) {
+        resolve(mockDatas.adsData)
+      } else {
         scanEntry.fetchAdData().then((res: AdListResType) => {
           if (res.error) {
             reject(`fetchAdData:${res.error}`)
@@ -349,8 +438,6 @@ export function useFetchData() {
             resolve(res.queryList || [])
           }
         })
-      } else {
-        resolve(mockDatas.adsData)
       }
     })
   }
@@ -358,9 +445,9 @@ export function useFetchData() {
   const fetchAlbumData = (): Promise<AlbumListType> => {
     const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
-      if (!VITE_API_URL || VITE_UI_MODE) {
+      if (VITE_UI_MODE) {
         resolve(mockDatas.albumData)
-      }else if (loginT0ken && loginT0ken.loginT0ken) {
+      } else if (loginT0ken && loginT0ken.loginT0ken) {
         checkIn.fetchAlbum(loginT0ken.loginT0ken).then((res: any) => {
           if (res.error) {
             reject(`fetchAlbumData:${res.error}`)
@@ -377,24 +464,8 @@ export function useFetchData() {
   const fetchCollectData = (activityId: string = ''): Promise<EventListType> => {
     const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
-      if (VITE_API_URL && loginT0ken && loginT0ken.loginT0ken) {
-        checkIn.fetchCollect(activityId, loginT0ken.loginT0ken).then((res: any) => {
-          if (res.error) {
-            reject(`fetchCollectData:${res.error}`)
-          } else {
-            resolve({
-              ...res
-            })
-          }
-        })
-      } else if (VITE_API_URL || VITE_UI_MODE) {
+      if (VITE_UI_MODE) {
         resolve({
-          // event_id: activityId,
-          // event_name: '歡樂一夏',
-          // limit: 4,
-          // startDate: '2024.07.15',
-          // endDate: '08.31',
-          // specialStampIndexList: [5, 10, 15, 30],
           historyList: [
             {
               storeId: 870504,
@@ -403,6 +474,16 @@ export function useFetchData() {
             }
           ],
           storeIconList: []
+        })
+      }else if (loginT0ken && loginT0ken.loginT0ken) {
+        checkIn.fetchCollect(activityId, loginT0ken.loginT0ken).then((res: any) => {
+          if (res.error) {
+            reject(`fetchCollectData:${res.error}`)
+          } else {
+            resolve({
+              ...res
+            })
+          }
         })
       } else {
         reject('沒有登入')
@@ -437,6 +518,10 @@ export function useFetchData() {
     genrateMockQRCode,
     verifyCtString,
     commitStoreCheckIn,
+
+    commitReceivePrize,
+    fetchReceivePrize,
+
     checkLineLoginVerify,
     // fetchCampaign,
     // fetchSpecifyCampaign,

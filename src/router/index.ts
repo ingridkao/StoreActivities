@@ -49,20 +49,21 @@ const router = createRouter({
       }
     },
     {
+      path: '/winning',
+      name: 'Winning',
+      component: () => import('../views/WinningView.vue'),
+      meta: {
+        title: '兌獎',
+        requiresAuth: true
+      }
+    }, 
+    {
       path: '/scan',
       name: 'Scan',
       component: () => import('../views/ScanView.vue'),
       meta: {
         title: '掃描'
         //requiresCamera: true
-      }
-    },
-    {
-      path: '/winning/:id?',
-      name: 'Winning',
-      component: () => import('../views/WinningView.vue'),
-      meta: {
-        title: '兌獎'
       }
     },
     {
@@ -85,19 +86,14 @@ const router = createRouter({
       }
     },
     {
-      path: '/wrapup',
-      name: 'WrapUp',
-      component: () => import('../views/WrapUpView.vue'),
-      meta: {
-        title: '活動已結束'
-      }
-    },
-    {
       path: '/:pathMatch(.*)*',
       name: 'NotFound',
       component: () => import('../views/ComingSoonView.vue')
     }
-  ]
+  ],
+  scrollBehavior () {
+    return { top: 0 }
+  }
 })
 
 /**
@@ -120,29 +116,38 @@ router.beforeEach(async (to, from, next) => {
   if (DevMode) return next()
 
   if (!(to.meta && to.meta.requiresAuth)) return next()
+
+  const { checkLineIsLoggedin, getLineAccess, getLineProfileAndAccess } = useLIFF()
+  const isLoggedin = await checkLineIsLoggedin()
   const { authAlert } = useSweetAlert()
-  const { getLineAccess, getLineProfileAndAccess } = useLIFF()
-  let canAccess = true
-  let errorMsg = ''
-  try {
-    let serviceT0ken = null
-    if (['Album', 'Collected', 'MapStore'].includes(String(to.name))) {
-      serviceT0ken = await getLineAccess(to.path)
-    } else if (to.name === 'Activity' && to.params.id) {
-      serviceT0ken = await getLineProfileAndAccess(String(to.params.id))
+  const verifyLogin = async() => {
+    try {
+      let serviceT0ken = null
+      if (['Album', 'Collected', 'MapStore'].includes(String(to.name))) {
+        serviceT0ken = await getLineAccess(to.path)
+      } else if (to.name === 'Activity' && to.params.id) {
+        serviceT0ken = await getLineProfileAndAccess(String(to.params.id))
+      }      
+      return serviceT0ken ? '' : '失敗'
+    } catch (error) {
+      return String(error)
     }
-    canAccess = serviceT0ken ? true : false
-  } catch (error) {
-    errorMsg = String(error)
-    canAccess = false
   }
 
-  if (!canAccess) {
-    authAlert(errorMsg, to, () => {
+  if (isLoggedin) {
+    verifyLogin()
+    return next()
+  }else{
+    return authAlert('', async () => {
+      const verifyFail = await verifyLogin()
+      if (verifyFail === '') {
+        return next()
+      }else{
+        return next({ name: 'Lobby' })
+      }
+    }, () => {
       return next({ name: 'Lobby' })
     })
-  } else {
-    return next()
   }
 })
 

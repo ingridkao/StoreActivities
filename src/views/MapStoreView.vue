@@ -13,7 +13,7 @@ import mapIconButtonImg from '@/assets/images/mapStore/map-button.svg'
 import checkInButtonImg from '@/assets/images/mapStore/check-in-button.svg'
 import mapCatImg from '@/assets/images/mapStore/map-cat.png'
 
-const { linkToCatchDirection } = useLink()
+const { linkToTargetActivityIdPage } = useLink()
 const {
   storeFilterOptions,
   storeFilterSelectd,
@@ -57,23 +57,23 @@ onUnmounted(() => {
           <p>{{ targetBoxData.info['address'] }}</p>
         </div>
       </div>
-      <div v-else class="map-store-view__panel--filter">
+      <div v-else class="map-store-view__panel--filter store-content">
         <div class="map-store-view__panel--cat">
           <img :src="mapCatImg" />
         </div>
-        <div class="map-store-view__panel--button" @click="linkToCatchDirection">
+        <button class="map-store-view__panel--button store-btn" @click="linkToTargetActivityIdPage('', 'Activity')">
           <img :src="checkInButtonImg" alt="check in button" />
-        </div>
-        <div class="map-store-view__panel--store-button">
-          <div
+        </button>
+        <div class="map-store-view__panel--filterbutton">
+          <button
             v-for="item in storeFilterOptions"
             :key="item.value"
-            class="map-store-view__panel--store-button-item"
+            class="map-store-view__panel--filterbutton-item"
             @click="updateChecked(item.value)"
             :class="{ active: storeFilterSelectd === item.value }"
           >
             <p>{{ item.nameTw }}</p>
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -81,20 +81,9 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
-#mapMain {
-  position: relative;
-  height: calc(100 * var(--vh));
-  padding: 0;
-  overflow: hidden;
-  #sidemenu {
-    position: absolute;
-    left: 0;
-    --color-background: transparent;
-  }
-}
 #mapboxBasic {
   width: 100%;
-  height: calc(100 * var(--vh) - 5rem);
+  height: calc(100vh - 125px);
 }
 
 .map-store-view {
@@ -105,7 +94,7 @@ onUnmounted(() => {
     position: fixed;
     bottom: 0;
     left: 0;
-    z-index: 2;
+    z-index: 4;
     width: 100%;
     height: 125px;
     background: url('@/assets/images/mapStore/bg.png') repeat;
@@ -160,42 +149,32 @@ onUnmounted(() => {
       flex-direction: column;
       align-items: center;
       gap: 13px;
+      height: 100%;
     }
 
     &--cat {
+      position: absolute;
       width: 157px;
       height: 200px;
-      position: absolute;
       bottom: -5px;
       left: 0;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
 
     &--button {
-      width: 143px;
       height: 40px;
-      position: relative;
       z-index: 5;
       transform: translateY(-50%);
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
+      @media screen and (min-width: 855px) {
+        display: none;
       }
     }
 
-    &--store-button {
+    &--filterbutton {
+      position: absolute;
+      bottom: 15px;
+      right: 12px;
       display: flex;
-      align-self: end;
-      padding-right: 12px;
       gap: 9px;
-
       &-item {
         padding: 9px 23px;
         width: 71px;

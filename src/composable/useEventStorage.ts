@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import type { CampaignBaseInterface, EventInfoInterface } from '@/types/ResponseHandle'
+import type { CampaignBaseInterface, EventSimpleInterface } from '@/types/ResponseHandle'
 
 export function useEventStorage() {
   // 5分鐘後自動刪掉
@@ -25,7 +25,7 @@ export function useEventStorage() {
     }
   }
 
-  const setTargetEventStorage = (eventStorage: EventInfoInterface) => {
+  const setTargetEventStorage = (eventStorage: EventSimpleInterface) => {
     if (eventStorage) {
       Cookies.set('STORE_EVENT', JSON.stringify(eventStorage), {
         expires: inTwelveMinutes
@@ -34,7 +34,7 @@ export function useEventStorage() {
       Cookies.remove('STORE_EVENT')
     }
   }
-  const getTargetEventStorage = (): EventInfoInterface | null => {
+  const getTargetEventStorage = (): EventSimpleInterface | null => {
     const enevts = Cookies.get('STORE_EVENT')
     if (enevts) {
       return JSON.parse(enevts)

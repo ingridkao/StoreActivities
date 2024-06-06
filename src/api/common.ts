@@ -9,7 +9,7 @@ export const parseHeaderAuth = (loginT0ken: string) => {
   } as VerifyHeaderType
 }
 
-export const parseBodyEventId = (activityId: string | number) => {
+export const parseBodyEventId = (activityId: number | string | string[]) => {
   return {
     eventId: Number(activityId)
   }

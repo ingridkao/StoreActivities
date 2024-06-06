@@ -1,9 +1,5 @@
-import type {
-  checkInVerifyBodyType,
-  checkInVerifyHeaderType,
-  VerifyHeaderType
-} from '@/types/RequestHandle'
-const { VITE_VERSION } = import.meta.env
+import type { checkInVerifyBodyType, checkInVerifyHeaderType } from '@/types/RequestHandle'
+import { parseHeaderAuth, parseBodyEventId } from './common'
 
 const CheckInServiceApi = (axios: any, event: any) => ({
   checkInVerify(data: checkInVerifyBodyType, header: checkInVerifyHeaderType) {
@@ -17,40 +13,24 @@ const CheckInServiceApi = (axios: any, event: any) => ({
       },
       {
         headers: {
-          FV: VITE_VERSION,
+          FV: import.meta.env.VITE_VERSION || '',
           ...header
         }
       }
     )
   },
-  fetchCollect(activityId: string, loginT0ken: string) {
+  fetchCollect(activityId: any, loginT0ken: string) {
     return axios.post(
       `${event}/GetUserEventHistory`,
-      {
-        data: {
-          eventId: Number(activityId)
-        }
-      },
-      {
-        headers: {
-          Authorization: loginT0ken,
-          Key: loginT0ken.slice(4, 10),
-          FV: VITE_VERSION
-        } as VerifyHeaderType
-      }
+      { data: parseBodyEventId(activityId) },
+      { headers: parseHeaderAuth(loginT0ken) }
     )
   },
   fetchAlbum(loginT0ken: string) {
     return axios.post(
       `${event}/GetUserHistoryByStore`,
       {},
-      {
-        headers: {
-          Authorization: loginT0ken,
-          Key: loginT0ken.slice(4, 10),
-          FV: VITE_VERSION
-        } as VerifyHeaderType
-      }
+      { headers: parseHeaderAuth(loginT0ken) }
     )
   }
 })

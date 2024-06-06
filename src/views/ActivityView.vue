@@ -7,10 +7,11 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, watchEffect, computed } from 'vue'
+import { ref, watchEffect, computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import dayjs from 'dayjs'
-import type { EventInfoInterface } from '@/types/ResponseHandle'
+import type { EventSimpleInterface } from '@/types/ResponseHandle'
+import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import ParagraphItem from '@/components/ParagraphItem.vue'
@@ -32,7 +33,7 @@ import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
 import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
 import enterButtonImg from '@/assets/images/activity/enter-button.svg'
 
-const { confirmCampaign, verifyCtString, commitStoreCheckIn } = useFetchData()
+const { genrateMockQRCode, confirmCampaign, verifyCtString, commitStoreCheckIn } = useFetchData()
 const { getCtT0kenCookies, setLocationStorage } = useBrowserStorage()
 const { scanCode } = useLIFF()
 
@@ -51,8 +52,8 @@ const confirmCoords = () => {
   }
 }
 
-const { errorAlert } = useSweetAlert()
-const eventInfo = ref<EventInfoInterface>()
+const { activityErrorAlert } = useSweetAlert()
+const eventInfo = ref<EventSimpleInterface>()
 const route = useRoute()
 const activityId = route?.params?.id
 const confirmActivityId = async () => {
@@ -62,11 +63,11 @@ const confirmActivityId = async () => {
     confirmCoords()
   } catch (error) {
     if (error === 1) {
-      errorAlert('沒有此活動')
+      activityErrorAlert('沒有此活動')
     } else if (error === 2) {
-      errorAlert('活動已過期', '/wrapup')
+      activityErrorAlert('活動已結束')
     } else {
-      errorAlert(String(error))
+      activityErrorAlert('異常', String(error))
     }
   }
 }
@@ -106,6 +107,7 @@ const commitScan = async () => {
     const commitRes = await commitStoreCheckIn(activityId, ctTokenCookiesObj)
     if (commitRes) {
       // 打卡成功蓋版
+      console.log(commitRes)
       scanResultContent.value = commitRes
     }
   } catch (error) {
@@ -124,49 +126,66 @@ const directionStartScan = () => {
   layoutStore.toggleDirection(false)
   commitScan()
 }
+
+// TODO: After check api flow, remove this
+const qrString = ref<string>('')
+const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
+
+onMounted(async () => {
+  try {
+    const MockCode = await genrateMockQRCode()
+    if (MockCode) {
+      setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
+    }
+    qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}`
+  } catch (error) {
+    console.error(error)
+  }
+})
 </script>
 
 <template>
-  <main class="activity-view">
+  <main class="activity">
     <HeaderMenu />
-    <div class="activity-view__top-bg"></div>
+    <div class="activity__top-bg"></div>
 
-    <div class="activity-view__main">
-      <div class="activity-view__title">
-        <div class="activity-view__title--text-block">
-          <h1 class="activity-view__title--text-block-main">{{ eventInfo?.eventName }}</h1>
-          <h1 class="activity-view__title--text-block-bg">{{ eventInfo?.eventName }}</h1>
+    <div class="activity__main store-content">
+      <div class="activity__title">
+        <div class="activity__title--text-block">
+          <h1 class="activity__title--text-block-main">{{ eventInfo?.eventName }}</h1>
+          <h1 class="activity__title--text-block-bg">{{ eventInfo?.eventName }}</h1>
         </div>
-        <div class="activity-view__title--deco">
-          <div class="activity-view__title--deco-top">
+        <div class="activity__title--deco">
+          <div class="activity__title--deco-top">
             <img :src="titleDecoTopImg" alt="title deco top" />
           </div>
-          <div class="activity-view__title--deco-bottom">
+          <div class="activity__title--deco-bottom">
             <img :src="titleDecoBottomImg" alt="title deco bottom" />
           </div>
         </div>
       </div>
       <img :src="activityMainCatImg" alt="activity main cat" />
-      <div class="activity-view__date">
-        <p class="activity-view__date--year">{{ data.activity.dateTitle }} {{ year }}</p>
-        <div class="activity-view__date--day-block">
-          <p class="activity-view__date--day">{{ startDate }}</p>
-          <div class="activity-view__date--connect-line"></div>
-          <p class="activity-view__date--day">{{ endTime }}</p>
+      <div class="activity__date">
+        <p class="activity__date--year">{{ data.activity.dateTitle }} {{ year }}</p>
+        <div class="activity__date--day-block">
+          <p class="activity__date--day">{{ startDate }}</p>
+          <div class="activity__date--connect-line"></div>
+          <p class="activity__date--day">{{ endTime }}</p>
         </div>
       </div>
     </div>
-    <button class="activity-view__info-icon-button" @click="openDirection">
-      <img :src="infoIconButtonImg" alt="info icon button" />
-    </button>
-    <div class="activity-view__content" v-if="eventInfo && eventInfo.content">
+
+    <div class="activity__content store-content" v-if="eventInfo && eventInfo.content">
+      <button class="activity__info-icon-button" @click="openDirection">
+        <img :src="infoIconButtonImg" alt="info icon button" />
+      </button>
       <ParagraphItem
         v-for="{ title, text } in eventInfo.content"
         :key="title"
         :title="title"
         :content="text || ''"
       />
-      <footer class="activity-view__footer">
+      <footer class="activity__footer">
         <button @click="commitScan">
           <img :src="enterButtonImg" alt="enter button" />
         </button>
@@ -180,6 +199,13 @@ const directionStartScan = () => {
       :error="scanErrorMsg"
       @scanAgain="commitScan"
     />
+
+    <template v-if="qrString">
+      <div style="width: 10rem">
+        <vueQr :text="qrString" :size="100" :correctLevel="3" />
+      </div>
+      <a :href="qrString" target="_blank">{{ qrString }}</a>
+    </template>
   </main>
 </template>
 
@@ -192,7 +218,7 @@ const directionStartScan = () => {
   white-space: pre-line;
 }
 
-.activity-view {
+.activity {
   background-color: #fff;
   padding-top: 30px;
 
@@ -206,14 +232,8 @@ const directionStartScan = () => {
   }
 
   &__main {
-    position: relative;
-    width: 100%;
-    height: 598px;
     padding-top: 68px;
-
     > img {
-      width: 100%;
-      height: 100%;
       position: relative;
       object-fit: contain;
       z-index: 2;
@@ -277,7 +297,7 @@ const directionStartScan = () => {
     flex-direction: column;
     width: 180px;
     position: absolute;
-    bottom: 45px;
+    bottom: 8%;
     right: 20px;
     z-index: 2;
 
@@ -310,7 +330,6 @@ const directionStartScan = () => {
   }
 
   &__content {
-    position: relative;
     padding: 25px 43px 0 26px;
   }
   &__footer {
@@ -321,13 +340,14 @@ const directionStartScan = () => {
       width: 150px;
     }
   }
+
   &__info-icon-button {
     position: absolute;
     width: 40px;
     height: 40px;
     right: 20px;
     z-index: 3;
-    transform: translateY(-50%);
+    top: -30px;
   }
 }
 

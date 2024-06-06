@@ -23,9 +23,9 @@ const onResponse = (response: any) => {
 
 const onError = (error: any) => {
   const { response, data } = error
-  console.log(response);
-  console.log(data);
+  console.log(data)
   if (response) {
+    console.log(response)
     return response.data?.message || response.data?.errorMessage || '服務異常'
   } else {
     return '服務異常'

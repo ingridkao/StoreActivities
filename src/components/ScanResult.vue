@@ -56,15 +56,11 @@ const errorMsg = computed(() => props.error || '')
         <div class="scan-result__content--fail-msg">{{ errorMsg }}</div>
       </div>
 
-      <div class="scan-result__button">
-        <div class="scan-result__button--wrapper">
-          <img
-            @click="linkToTargetActivityIdPage(props.result.eventId, 'Collected')"
-            :src="recordButtonImg"
-            alt="查看紀錄"
-          />
+      <div class="store-btn-list">
+        <div class="store-btn" @click="linkToTargetActivityIdPage(props.result.eventId, 'Collected')">
+          <img :src="recordButtonImg" alt="查看紀錄"/>
         </div>
-        <button class="scan-result__button--wrapper-keep" @click="$emit('scanAgain')">
+        <button class="store-btn" @click="$emit('scanAgain')">
           <img :src="keepCheckButtonImg" alt="繼續打卡" />
         </button>
       </div>
@@ -181,30 +177,6 @@ const errorMsg = computed(() => props.error || '')
       }
       &-msg {
         margin-top: 16px;
-      }
-    }
-  }
-
-  &__button {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-
-    &--wrapper {
-      width: 135px;
-      height: 40px;
-      overflow: hidden;
-
-      &-keep {
-        width: 143px;
-        height: 40px;
-        overflow: hidden;
-      }
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
       }
     }
   }

@@ -8,13 +8,11 @@
  */
 import { ref, onMounted } from 'vue'
 import type { CampaignInterface } from '@/types/ResponseHandle'
-import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 import type { AdsInterface } from '@/types/ResponseHandle'
 import data from '@/assets/data'
 
 import { useFetchData } from '@/composable/useFetch'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useLayoutStore } from '@/stores/layout'
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
@@ -24,15 +22,13 @@ import LobbyAds from '@/components/lobby/LobbyAds.vue'
 
 const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 
-const { setLocationStorage } = useBrowserStorage()
 const { errorAlert } = useSweetAlert()
-const { genrateMockQRCode, fetchAllCampaign, fetchAdData, verifyCtString, parseParamCT } =
+const { fetchAllCampaign, fetchAdData, verifyCtString, parseParamCT } =
   useFetchData()
 
 const layoutStore = useLayoutStore()
 const displayCampaignList = ref<CampaignInterface[]>([])
 const adsList = ref<AdsInterface[]>([])
-const qrString = ref<string>('')
 
 const newPath = new URL(window.location.href, ORIGIN_URL)
 onMounted(async () => {
@@ -52,13 +48,6 @@ onMounted(async () => {
     if (ctStr) {
       // 驗證ct
       await verifyCtString(ctStr)
-    } else {
-      // TODO: After check api flow, remove this
-      const MockCode = await genrateMockQRCode()
-      if (MockCode) {
-        setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
-      }
-      qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}`
     }
   } catch (error) {
     errorAlert(error)
@@ -70,14 +59,14 @@ onMounted(async () => {
   <main class="lobby">
     <LobbyHeader />
 
-    <section class="lobby__section">
+    <section class="lobby__section store-content large">
       <ParagraphTitle :title="data.lobby.eventTitle" />
       <div class="lobby__section--list">
         <CampaignItem v-for="campaignItem in displayCampaignList" :key="campaignItem.id" :campaignItem="campaignItem" />
       </div>
     </section>
 
-    <section class="lobby__section">
+    <section class="lobby__section store-content large">
       <ParagraphTitle :title="data.lobby.pastEventTitle" />
       <RouterLink to="/album" class="lobby__section--link">
         <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
@@ -93,13 +82,6 @@ onMounted(async () => {
       <img src="@/assets/images/lobby/icon-line.png" alt="line" />
       <img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" />
     </div>
-
-    <template v-if="qrString">
-      <div style="width: 10rem">
-        <vueQr :text="qrString" :size="100" :correctLevel="3" />
-      </div>
-      <a :href="qrString" target="_blank">{{ qrString }}</a>
-    </template>
   </main>
 </template>
 
@@ -113,14 +95,6 @@ $medium: 855px;
     display: flex;
     flex-direction: column;
     padding: 26px 26px 0 26px;
-    max-width: $medium;
-    margin: auto;
-
-    &--title{
-      @media screen and (min-width: $medium) {
-        justify-content: center;
-      }
-    }
 
     &--list{
       display: flex;
@@ -129,10 +103,10 @@ $medium: 855px;
       flex-wrap: wrap;
       gap: 1%;
       >div{
-          flex-basis: 100%;
-          width: $card;
-          margin: auto;
-        }
+        flex-basis: 100%;
+        width: $card;
+        margin: auto;
+      }
       @media screen and (min-width: $medium) {
         flex-direction: row;
         justify-content: space-between;
@@ -153,12 +127,12 @@ $medium: 855px;
       margin: 0 auto;
       gap: 14px;
       @media screen and (min-width: $medium) {
-        max-width: $card*1.25;
+        max-width: $medium;
       }
       img {
         width: 100%;
         height: auto;
-        border-radius: 20px;
+        border-radius: 30px;
         aspect-ratio: 169/50;
         object-fit: cover;
         overflow: hidden;

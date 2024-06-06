@@ -12,41 +12,45 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
 </script>
 
 <template>
-  <div class="direction-view">
-    <div class="direction-view__deco-cat">
-      <img :src="DecoCatImg" alt="deco cat" />
-    </div>
-    <div class="direction-view__step1">
-      <div class="direction-view__step1--icon">
-        <img :src="step1IconImg" alt="step 1 icon" />
+  <div class="direction">
+    <div>
+      <div class="direction__deco-cat">
+        <img :src="DecoCatImg" alt="deco cat" />
       </div>
-      <div class="direction-view__step1--text">
-        <p>{{ data.direction.step1Text }}</p>
-        <p class="direction-view__step1--text-tip">{{ data.direction.step1Tip }}</p>
-      </div>
-    </div>
-    <div class="direction-view__step1--image">
-      <img :src="step1PictureImg" alt="step 1 image" />
-    </div>
-    <div class="direction-view__step2">
-      <div class="direction-view__step2--image">
-        <img :src="step2PictureImg" alt="step 2 image" />
-      </div>
-      <div class="direction-view__step2--text">
-        <div class="direction-view__step2--text-icon">
-          <img :src="step2IconImg" alt="step 2 icon" />
+      <div class="direction__step1">
+        <div class="direction__step1--icon">
+          <img :src="step1IconImg" alt="step 1 icon" />
         </div>
-        <p>{{ data.direction.step2Text }}</p>
+        <div class="direction__step1--text">
+          <p>{{ data.direction.step1Text }}</p>
+          <p class="direction__step1--text-tip">{{ data.direction.step1Tip }}</p>
+        </div>
       </div>
-    </div>
-    <div class="direction-view__button" @click="$emit('checkin')">
-      <img :src="checkInButtonImg" alt="check in button" />
+      <div class="direction__step1--image">
+        <img :src="step1PictureImg" alt="step 1 image" />
+      </div>
+      <div class="direction__step2">
+        <div class="direction__step2--image">
+          <img :src="step2PictureImg" alt="step 2 image" />
+        </div>
+        <div class="direction__step2--text">
+          <div class="direction__step2--text-icon">
+            <img :src="step2IconImg" alt="step 2 icon" />
+          </div>
+          <p>{{ data.direction.step2Text }}</p>
+        </div>
+      </div>
+      <div class="direction__button store-btn" @click="$emit('checkin')">
+        <img :src="checkInButtonImg" alt="check in button" />
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.direction-view {
+$card: 396px;
+
+.direction {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -58,6 +62,11 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
   background: url('@/assets/images/direction/bg.png') repeat;
   padding-top: 60px;
 
+  >div{
+    width: $card;
+    margin: 0 auto;
+    padding-bottom: 1.5rem;
+  }
   &__deco-cat {
     margin: auto;
     width: 208px;
@@ -166,8 +175,8 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
   }
 
   &__button {
+    width: 50%;
     padding: 27px 0 42px;
-    text-align: center;
   }
 }
 </style>

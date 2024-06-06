@@ -175,8 +175,8 @@ export function useMapbox() {
     if (Object.keys(targetBoxData.location).length === 0) return
     if (!targetBoxData.toggle) {
       targetBoxData.toggle = true
-      cacheStore_id = targetBoxData.info.store_id
-    } else if (targetBoxData.toggle && cacheStore_id === targetBoxData.info.store_id) {
+      cacheStore_id = targetBoxData.info.storeId
+    } else if (targetBoxData.toggle && cacheStore_id === targetBoxData.info.storeId) {
       const trigger = ['infoBox'].some((className) => classList.includes(className))
       if (!trigger) closeStoreInfo()
     }
