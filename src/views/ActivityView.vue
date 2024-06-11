@@ -7,11 +7,10 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, watchEffect, computed, onMounted } from 'vue'
+import { ref, watchEffect, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import dayjs from 'dayjs'
 import type { EventSimpleInterface } from '@/types/ResponseHandle'
-import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import ParagraphItem from '@/components/ParagraphItem.vue'
@@ -33,7 +32,7 @@ import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
 import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
 import enterButtonImg from '@/assets/images/activity/enter-button.svg'
 
-const { genrateMockQRCode, confirmCampaign, verifyCtString, commitStoreCheckIn } = useFetchData()
+const { confirmCampaign, verifyCtString, commitStoreCheckIn } = useFetchData()
 const { getCtT0kenCookies, setLocationStorage } = useBrowserStorage()
 const { scanCode } = useLIFF()
 
@@ -72,7 +71,7 @@ const confirmActivityId = async () => {
   }
 }
 
-watchEffect(() => {
+watchEffect(async () => {
   confirmActivityId()
 })
 
@@ -93,7 +92,7 @@ const commitScan = async () => {
   scanResultContent.value = {}
   scanErrorMsg.value = ''
   let ctTokenCookiesObj = getCtT0kenCookies()
-
+  // pinia close
   try {
     layoutStore.loadToggle(true)
     if (ctTokenCookiesObj === null) {
@@ -107,12 +106,13 @@ const commitScan = async () => {
     const commitRes = await commitStoreCheckIn(activityId, ctTokenCookiesObj)
     if (commitRes) {
       // 打卡成功蓋版
-      console.log(commitRes)
       scanResultContent.value = commitRes
+      // pinia open
     }
   } catch (error) {
     // 打卡失敗蓋版
     scanErrorMsg.value = String(error)
+    // pinia open
   }
   layoutStore.loadToggle(false)
 }
@@ -126,22 +126,6 @@ const directionStartScan = () => {
   layoutStore.toggleDirection(false)
   commitScan()
 }
-
-// TODO: After check api flow, remove this
-const qrString = ref<string>('')
-const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
-
-onMounted(async () => {
-  try {
-    const MockCode = await genrateMockQRCode()
-    if (MockCode) {
-      setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
-    }
-    qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}`
-  } catch (error) {
-    console.error(error)
-  }
-})
 </script>
 
 <template>
@@ -175,7 +159,7 @@ onMounted(async () => {
       </div>
     </div>
 
-    <div class="activity__content store-content" v-if="eventInfo && eventInfo.content">
+    <div class="activity__content store-text" v-if="eventInfo && eventInfo.content">
       <button class="activity__info-icon-button" @click="openDirection">
         <img :src="infoIconButtonImg" alt="info icon button" />
       </button>
@@ -193,19 +177,13 @@ onMounted(async () => {
     </div>
 
     <DirectionInfo v-show="layoutStore.showDirection" @checkin="directionStartScan" />
+
     <ScanResult
       v-if="showsScanResult"
       :result="scanResultContent"
       :error="scanErrorMsg"
       @scanAgain="commitScan"
     />
-
-    <template v-if="qrString">
-      <div style="width: 10rem">
-        <vueQr :text="qrString" :size="100" :correctLevel="3" />
-      </div>
-      <a :href="qrString" target="_blank">{{ qrString }}</a>
-    </template>
   </main>
 </template>
 
@@ -233,10 +211,12 @@ onMounted(async () => {
 
   &__main {
     padding-top: 68px;
+    // min-height: 860px;
     > img {
       position: relative;
       object-fit: contain;
       z-index: 2;
+      aspect-ratio: 780/1056;
     }
   }
 
@@ -334,8 +314,7 @@ onMounted(async () => {
   }
   &__footer {
     text-align: center;
-    padding-top: 10px;
-    padding-bottom: 32px;
+    padding: 32px 0;
     > button {
       width: 150px;
     }

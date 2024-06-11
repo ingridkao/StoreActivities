@@ -36,10 +36,6 @@ const props = defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.swiper-slide {
-  width: 90%;
-  max-width: 396px;
-}
 .lobby__ad {
   padding-top: 66px;
   padding-bottom: 66px;

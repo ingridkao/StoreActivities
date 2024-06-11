@@ -20,6 +20,7 @@ export default {
     explanationTitle: '使用方式',
     serialNumber: '序號',
     deadline: '兌換期限',
+    create: '產生時間',
     accumulate: '累積',
     store: '家門市'
   },

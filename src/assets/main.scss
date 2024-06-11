@@ -1,6 +1,11 @@
 @import 'font';
 
 $btn: 143px;
+$card-basic: 396px;
+$card-middle: 586px;
+$card-large: 800px;
+$content-middle: 650px;
+$content-large: 855px;
 
 *,
 html,
@@ -14,6 +19,7 @@ body {
 body {
   position: relative;
   overflow-x: hidden;
+  height: 100%;
 }
 
 main {
@@ -37,10 +43,78 @@ img {
 .store-content {
   position: relative;
   width: 100%;
-  max-width: 586px;
+  max-width: $card-middle;
   margin: auto;
-  &.large{
-    max-width: 855px;
+  // @media screen and (min-width: $content-large) {
+  //   max-width: $card-large;
+  // }
+  &.large {
+    max-width: $content-large;
+  }
+}
+
+.store-text {
+  position: relative;
+  width: 100%;
+  max-width: $card-middle;
+  margin: auto;
+  @media screen and (min-width: $content-middle) {
+    max-width: $content-middle;
+  }
+}
+
+.store-img {
+  position: relative;
+  width: 100%;
+  max-width: $content-large;
+  margin: auto;
+  // @media screen and (min-width: $content-large) {
+  //   max-width: $card-large;
+  // }
+}
+
+.cardWidth {
+  max-width: $card-basic;
+  margin: 0 auto;
+  @media screen and (min-width: $content-large) {
+    max-width: $card-large;
+  }
+}
+
+.commom {
+  width: 100%;
+  > div,
+  &_card {
+    max-width: $card-basic;
+    margin: 0 auto;
+  }
+  &__footer {
+    width: 100%;
+    max-width: $card-basic;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
+  }
+}
+
+/************ font ************/
+h5 {
+  font-weight: 700;
+  font-size: 15px;
+}
+
+h6 {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+/************ swiper ************/
+.swiper-slide {
+  width: 90%;
+  max-width: $card-basic;
+  @media screen and (min-width: $content-large) {
+    max-width: $card-large;
   }
 }
 
@@ -107,12 +181,6 @@ img {
         width: 128px;
         height: 115px;
         overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
       }
 
       &-info {
@@ -142,13 +210,13 @@ img {
 }
 
 /************ store btn ************/
-.store-btn-list{
+.store-btn-list {
   display: flex;
   justify-content: center;
   gap: 24px;
 }
 
-.store-btn{
+.store-btn {
   position: relative;
   max-width: 143px;
   height: 40px;
@@ -163,4 +231,3 @@ body {
     overflow-y: auto !important;
   }
 }
-

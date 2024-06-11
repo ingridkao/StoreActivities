@@ -12,7 +12,7 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
 </script>
 
 <template>
-  <div class="direction">
+  <div class="commom direction">
     <div>
       <div class="direction__deco-cat">
         <img :src="DecoCatImg" alt="deco cat" />
@@ -48,23 +48,17 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
 </template>
 
 <style lang="scss" scoped>
-$card: 396px;
-
 .direction {
   position: fixed;
-  width: 100%;
-  height: 100%;
+  height: 100dvh;
+  overflow-y: scroll;
   top: 0;
   left: 0;
   z-index: 4;
-
   background-color: #55bf6f;
   background: url('@/assets/images/direction/bg.png') repeat;
   padding-top: 60px;
-
-  >div{
-    width: $card;
-    margin: 0 auto;
+  > div {
     padding-bottom: 1.5rem;
   }
   &__deco-cat {
@@ -73,31 +67,19 @@ $card: 396px;
     height: 194px;
     overflow: hidden;
     transform: translateX(24px);
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
   }
 
   &__step1 {
     display: flex;
     align-items: flex-end;
+    justify-content: center;
     color: #fff;
     gap: 12px;
-    justify-content: center;
 
     &--icon {
       width: 53px;
       height: 68px;
       overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
 
     &--text {
@@ -105,7 +87,6 @@ $card: 396px;
       line-height: 18px;
       padding-bottom: 10px;
       transform: translateY(10px);
-
       &-tip {
         margin-top: 8px;
         font-size: 15px;
@@ -120,12 +101,6 @@ $card: 396px;
       overflow: hidden;
       margin-bottom: 38px;
       transform: translateX(24px);
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
   }
 
@@ -139,12 +114,6 @@ $card: 396px;
       width: 102px;
       height: 205px;
       overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
 
     &--text {
@@ -157,12 +126,6 @@ $card: 396px;
         width: 53px;
         height: 68px;
         overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
       }
 
       p {
@@ -175,8 +138,8 @@ $card: 396px;
   }
 
   &__button {
-    width: 50%;
-    padding: 27px 0 42px;
+    margin-top: 27px;
+    margin-bottom: 42px;
   }
 }
 </style>

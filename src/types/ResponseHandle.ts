@@ -153,16 +153,18 @@ export type AlbumListType = {
 // 獎項
 export type AwardType = {
   id: number
-  awardName: string
+  awardName: string //獎項名稱
+  instructions?: string //獎項說明
+  operatingProcedures?: string //使用方法
+  useInterval?: string //使用期限
 }
 
 // 序號
 export type PrizeType = {
   id: number
-  awardName: string
-  checkinTime?: string //最後打卡時間
-  storeTimes?: number //打卡次數
-  iconFilePath?: string //圖片路徑
+  awardName: string //獎項名稱
+  serialNumber?: string //序號
+  getSNTime?: string //取得序號時間
 }
 
 export interface ReceivePrizeListType extends RedeemPrizeType {
@@ -170,5 +172,11 @@ export interface ReceivePrizeListType extends RedeemPrizeType {
   isAchieve: boolean // 是否達標
   isClaimPrize: boolean // 是否領獎
   awardList?: AwardType[]
-  claimPrizeList?: PrizeType[]
+  claimPrizeList?: PrizeType[] // 序號
+}
+
+export interface PrizeUiDisplayInfoType extends AwardType, PrizeType {
+  grade: number // 級距
+  count: number // 此級距獎項序號index
+  total: number // 此級距獎項總量
 }

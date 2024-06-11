@@ -61,7 +61,10 @@ onUnmounted(() => {
         <div class="map-store-view__panel--cat">
           <img :src="mapCatImg" />
         </div>
-        <button class="map-store-view__panel--button store-btn" @click="linkToTargetActivityIdPage('', 'Activity')">
+        <button
+          class="map-store-view__panel--button store-btn"
+          @click="linkToTargetActivityIdPage('', 'Activity')"
+        >
           <img :src="checkInButtonImg" alt="check in button" />
         </button>
         <div class="map-store-view__panel--filterbutton">

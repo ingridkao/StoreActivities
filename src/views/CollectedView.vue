@@ -24,7 +24,7 @@ import backToIndexButtonImg from '@/assets/images/collected/back-to-index-button
 
 const { fetchCollectData, commitReceivePrize, fetchReceivePrize } = useFetchData()
 const { errorAlert, openStoreInfo } = useSweetAlert()
-const { getTargetEventStorage } = useEventStorage()
+const { getTargetEventStorage, setAccumulatCheckinCount } = useEventStorage()
 
 const stampBaseCount = 20
 const activityId = ref<string>('')
@@ -37,19 +37,22 @@ const router = useRouter()
 const { linkToTargetActivityIdPage } = useLink()
 
 const clickReceivePrize = async () => {
-  if(collectedActivity.value && collectedActivity.value.redeemPrize.length > 0 && collectedActivity.value.redeemPrize[0] >= collectedStore.value.length){
+  // 檢查是否符合第一階段兌獎門檻，其他門檻透過API確認
+  if (
+    collectedActivity.value &&
+    collectedActivity.value.redeemPrize.length > 0 &&
+    collectedStore.value.length >= collectedActivity.value.redeemPrize[0]
+  ) {
     try {
-      await fetchReceivePrize(activityId.value)
       const commitRes = await commitReceivePrize(activityId.value)
       if (commitRes) {
         // 兌獎觸發成功引導到兌獎頁面
-        console.log(commitRes)
         router.push({ name: 'Winning' })
       }
     } catch (error) {
       errorAlert(String(error), `/activity/${activityId.value}`)
     }
-  }else{
+  } else {
     errorAlert('未達到兌獎門檻', `/activity/${activityId.value}`)
   }
 }
@@ -68,7 +71,7 @@ watchEffect(async () => {
       if (res) {
         activityId.value = activityParamsId
         collectedStore.value = res.historyList || []
-        debugger
+        setAccumulatCheckinCount(collectedStore.value.length)
       } else {
         activityId.value = ''
         linkToTargetActivityIdPage('', 'Activity')
@@ -80,23 +83,30 @@ watchEffect(async () => {
   }
 })
 
-const startDate = computed(() => collectedActivity.value ? dayjs(collectedActivity.value.end).format('YYYY.MM.DD') || '' : '')
-const endDate = computed(() => collectedActivity.value ? dayjs(collectedActivity.value.end).format('M.D') || '' : '')
+const startDate = computed(() =>
+  collectedActivity.value ? dayjs(collectedActivity.value.end).format('YYYY.MM.DD') || '' : ''
+)
+const endDate = computed(() =>
+  collectedActivity.value ? dayjs(collectedActivity.value.end).format('M.D') || '' : ''
+)
 const stampBorder = ['#ffcf24', '#b26cf7', '#ff8d3b', '#f06f9d']
-const isGradeStamp = (index:number) => {
-  if(collectedActivity.value && collectedActivity.value.redeemPrize.length > 0 && collectedStore.value.length >= 0){
-    const borderStampIndex = collectedActivity.value.redeemPrize.findIndex(item => item === index)
-    if(borderStampIndex === -1)return false
+const isGradeStamp = (index: number) => {
+  if (
+    collectedActivity.value &&
+    collectedActivity.value.redeemPrize.length > 0 &&
+    collectedStore.value.length >= 0
+  ) {
+    const borderStampIndex = collectedActivity.value.redeemPrize.findIndex((item) => item === index)
+    if (borderStampIndex === -1) return false
     return stampBorder[borderStampIndex]
-  }else{
+  } else {
     return false
   }
 }
-
 </script>
 
 <template>
-  <main class="collected">
+  <main class="commom collected">
     <HeaderMenu />
     <div>
       <div class="collected__header">
@@ -111,20 +121,21 @@ const isGradeStamp = (index:number) => {
         </div>
       </div>
       <div class="collected__body">
-        <div 
-          class="collected__body--stamp" 
-          v-for="baseItem in stampBaseCount" 
-          :key="baseItem"
-        >
+        <div class="collected__body--stamp" v-for="baseItem in stampBaseCount" :key="baseItem">
           <div
-            v-if="collectedStore[baseItem - 1] && Object.keys(collectedStore[baseItem - 1]).length > 0"
+            v-if="
+              collectedStore[baseItem - 1] && Object.keys(collectedStore[baseItem - 1]).length > 0
+            "
             class="collected__body--stamp-wrapper"
-            @click="() => openStoreInfo({
-              countShow: false,
-              storeName: collectedStore[baseItem - 1]['storeName'],
-              imageUrl: '',
-              lastCheckInTime: collectedStore[baseItem - 1]['createTime'] || ''
-            })"
+            @click="
+              () =>
+                openStoreInfo({
+                  countShow: false,
+                  storeName: collectedStore[baseItem - 1]['storeName'],
+                  imageUrl: '',
+                  lastCheckInTime: collectedStore[baseItem - 1]['createTime'] || ''
+                })
+            "
           >
             <p
               class="collected__body--stamp-text"
@@ -139,17 +150,17 @@ const isGradeStamp = (index:number) => {
             </p>
             <img :src="checkedStampImg" alt="checked stamp" />
           </div>
-          <img 
-            v-else-if="isGradeStamp(baseItem)" 
-            :src="BorderStampImg" 
+          <img
+            v-else-if="isGradeStamp(baseItem)"
+            :src="BorderStampImg"
             class="collected__body--stamp-grade"
-            :style="{ borderColor: `${isGradeStamp(baseItem)}`}"
+            :style="{ borderColor: `${isGradeStamp(baseItem)}` }"
             :alt="`stamp`"
           />
-          <img v-else :src="emptyStampImg" alt="empty stamp"/>
+          <img v-else :src="emptyStampImg" alt="empty stamp" />
         </div>
       </div>
-      <div v-if="activityId" class="collected__footer">
+      <div v-if="activityId" class="commom__footer collected__footer">
         <button @click="clickReceivePrize()">
           <img :src="redeemButtonImg" alt="前往兌獎" />
         </button>
@@ -162,7 +173,6 @@ const isGradeStamp = (index:number) => {
 </template>
 
 <style lang="scss" scope>
-$card: 396px;
 %title {
   font-size: 55px;
   font-weight: 900;
@@ -173,12 +183,6 @@ $card: 396px;
   overflow: auto;
   background: url('@/assets/images/collected/bg.png');
   padding-bottom: 60px;
-
-  >div{
-    width: $card;
-    margin: 0 auto;
-  }
-
   &__header {
     height: 145px;
     background-color: #009f66;
@@ -191,7 +195,7 @@ $card: 396px;
     &--text-block {
       margin-top: 12px;
       position: relative;
-      >h1{
+      > h1 {
         color: #fff;
         white-space: normal;
       }
@@ -244,7 +248,7 @@ $card: 396px;
         position: relative;
       }
 
-      &-grade{
+      &-grade {
         border-width: 4px;
         border-style: solid;
         border-radius: 15px;
@@ -294,12 +298,6 @@ $card: 396px;
     position: fixed;
     z-index: 4;
     bottom: 60px;
-    width: 100%;
-    max-width: $card;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 14px;
   }
 }
 </style>

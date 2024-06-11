@@ -45,7 +45,7 @@ const goToActivityInfo = () => {
 </script>
 
 <template>
-  <div class="sidemenu">
+  <aside class="sidemenu">
     <div
       class="sidemenu__btn"
       @click="layoutStore.toggleNav()"
@@ -89,7 +89,7 @@ const goToActivityInfo = () => {
         </div>
       </div>
     </transition>
-  </div>
+  </aside>
 </template>
 
 <style lang="scss" scoped>
@@ -168,6 +168,7 @@ const goToActivityInfo = () => {
   &__avendar {
     display: inline-flex;
     align-items: center;
+    margin-top: 3rem;
     gap: 3px;
     > img {
       width: 3rem;

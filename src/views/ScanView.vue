@@ -102,7 +102,6 @@ const updateOutPutData = async (imageData: any) => {
       const commitRes = await commitStoreCheckIn('', t0kenObj)
       if (commitRes) {
         // 打卡成功蓋版
-        console.log(commitRes)
         scanResultContent.value = commitRes
       }
     } catch (error) {

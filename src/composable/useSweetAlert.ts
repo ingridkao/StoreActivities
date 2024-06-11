@@ -28,16 +28,16 @@ export function useSweetAlert() {
     })
   }
 
-  const activityErrorAlert = (title: string, text: string='') => {
+  const activityErrorAlert = (title: string, text: string = '') => {
     Swal.fire({
       icon: 'question',
       title: title,
       text: text,
       showCancelButton: true,
       confirmButtonText: '過去活動打卡紀錄',
-      confirmButtonColor: "#ffce00",
+      confirmButtonColor: '#ffce00',
       cancelButtonText: '活動大廳',
-      cancelButtonColor: "#ffce00",
+      cancelButtonColor: '#ffce00'
     }).then(
       (result: {
         isConfirmed?: boolean
@@ -49,6 +49,11 @@ export function useSweetAlert() {
         if (result.isDismissed) router.push({ path: '/', replace: true })
       }
     )
+  }
+
+  const parseData = (date: string = '') => {
+    const newdate = date ? dayjs(date) : dayjs()
+    return newdate.format('YYYY/MM/DD HH:mm')
   }
 
   const openStoreInfo = ({
@@ -72,7 +77,6 @@ export function useSweetAlert() {
       </div> 
     `
       : ''
-
     Swal.fire({
       html: `
 				<div class="store-info-dialog__dialog-container--content">
@@ -89,7 +93,7 @@ export function useSweetAlert() {
             <div>
               <div>
                 <p>${data.storeInfoDialog.lastCheckInTime}</p>
-                <p>${lastCheckInTime ? dayjs(lastCheckInTime).format('YYYY/MM/DD HH:mm') : new Date().toLocaleDateString()}</p>
+                <p>${parseData(lastCheckInTime)}</p>
               </div> 
               ${countHTML}
             </div> 

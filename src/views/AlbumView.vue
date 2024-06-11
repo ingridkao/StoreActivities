@@ -31,7 +31,7 @@ onMounted(async () => {
   layoutStore.loadToggle(true)
   try {
     const res = await fetchAlbumData()
-    albumStore.value = res && res.historyList? res.historyList : []
+    albumStore.value = res && res.historyList ? res.historyList : []
   } catch (error) {
     errorAlert(String(error))
   }
@@ -40,22 +40,18 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="album">
+  <main class="commom album">
     <HeaderMenu />
     <div>
       <div class="album__header">
-        <p class="album__header--title">目前累積搜集門市</p>
+        <h5 class="album__header--title">目前累積搜集門市</h5>
         <div class="album__header--info">
           <p>{{ accumulation }}<span>家</span></p>
         </div>
       </div>
       <div class="album__body">
-        <div
-          class="album__body--stamp"
-          v-for="(baseItem, index) in stampBaseCount"
-          :key="baseItem"
-        >
-          <div
+        <div class="album__body--stamp" v-for="(baseItem, index) in stampBaseCount" :key="baseItem">
+          <button
             v-if="albumStore[index]"
             class="album__body--stamp-wrapper"
             @click="
@@ -81,7 +77,7 @@ onMounted(async () => {
               {{ albumStore[index]['storeName'] }}
             </p>
             <img :src="checkedStampImg" alt="checked stamp" />
-          </div>
+          </button>
           <img v-else :src="emptyStampImg" alt="empty stamp" />
         </div>
       </div>
@@ -90,17 +86,13 @@ onMounted(async () => {
 </template>
 
 <style lang="scss" scope>
-$card: 396px;
-
 .album {
   background: url('@/assets/images/album/bg.png');
   overflow: auto;
-
-  >div{
-    width: $card;
-    margin: 0 auto;
+  > div {
     padding-bottom: 1.5rem;
   }
+
   &__header {
     width: 336px;
     height: 188px;
@@ -112,8 +104,6 @@ $card: 396px;
 
     &--title {
       color: #fff;
-      font-weight: 700;
-      font-size: 15px;
       padding-top: 30px;
       padding-left: 17px;
       padding-bottom: 4px;

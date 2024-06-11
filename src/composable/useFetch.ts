@@ -18,7 +18,9 @@ import type {
   EventListType,
   ReceivePrizeListType,
   RedeemPrizeType,
-  AwardType
+  AwardType,
+  PrizeType,
+  PrizeUiDisplayInfoType
 } from '@/types/ResponseHandle'
 import type { GenrateMockQRCodeState, ParseCtStringState } from '@/types/StateHandle'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
@@ -45,12 +47,8 @@ export function useFetchData() {
     setLoginT0kenCookies,
     getLoginT0kenCookies
   } = useBrowserStorage()
-  const { 
-    getEventsStorage,
-    setEventsStorage,
-    setTargetEventStorage,
-    getTargetEventStorage
-  } = useEventStorage()
+  const { getEventsStorage, setEventsStorage, setTargetEventStorage, getTargetEventStorage } =
+    useEventStorage()
 
   /**
    * 從URL字串中取出ct參數
@@ -62,10 +60,10 @@ export function useFetchData() {
   }
 
   // MockQRCodeData
-  const genrateMockQRCode = (): Promise<GenrateMockQRCodeState> => {
+  const genrateMockQRCode = (id: any): Promise<GenrateMockQRCodeState> => {
     return new Promise((resolve, reject) => {
       if (VITE_API_URL) {
-        scanEntry.genrateMockQRCode().then((res: GenrateMockQRCodeResType) => {
+        scanEntry.genrateMockQRCode(id).then((res: GenrateMockQRCodeResType) => {
           if (res.qrCode) {
             resolve({
               ...res,
@@ -175,7 +173,6 @@ export function useFetchData() {
         checkIn
           .checkInVerify(data, headers)
           .then((res: any) => {
-            console.log(res)
             const { code, msg, checkInStoreInfo } = res
             if (code === ResponseCodes.NO_EVENT) {
               reject('此活動不存在，請重新操作')
@@ -223,7 +220,7 @@ export function useFetchData() {
   }
 
   // 得到活動ID, 如果沒有帶入參數則取得browser storage
-  const parseActivityId = (activityId: number |string | string[] = '') => {
+  const parseActivityId = (activityId: number | string | string[] = '') => {
     if (!activityId) return activityId
     const TargetEvent = getTargetEventStorage()
     return String(TargetEvent?.id) || ''
@@ -246,14 +243,13 @@ export function useFetchData() {
         prize
           .commitReceivePrize(activityId, String(loginT0kenObj.loginT0ken))
           .then((res: any) => {
-            if (res.code === ResponseCodes.SUCCESS) {
-              console.error(res.result)
-            }else{
+            if (res) {
+              resolve(true)
+            } else {
               reject(`服務異常，${res.result}`)
             }
           })
           .catch((error: any) => {
-            console.error(error)
             reject(`服務異常，${error.msg}`)
           })
       }
@@ -263,7 +259,7 @@ export function useFetchData() {
   // 取得兌獎列表: 整理API Data >>> UI
   const fetchReceivePrize = async (
     id: number | string | string[] = ''
-  ): Promise<boolean | ScanResultType> => {
+  ): Promise<PrizeUiDisplayInfoType[]> => {
     const loginT0kenObj = getLoginT0kenCookies()
     const activityId = parseActivityId(id)
     return new Promise((resolve, reject) => {
@@ -275,33 +271,38 @@ export function useFetchData() {
         reject('訪客無法進行操作，請重新操作')
       } else {
         prize
-        .fetchReceivePrizeResult(activityId, String(loginT0kenObj.loginT0ken))
-        .then((res: any) => {
-          const newPrizeResultList = []
-          if(res && res.claimPrizeResultList){
-            res.claimPrizeResultList.forEach((prizeItem:ReceivePrizeListType)=>{
-              if(prizeItem.awardList){
-                const awardList = prizeItem.awardList
-                const prizeList = prizeItem.claimPrizeList ? prizeItem.claimPrizeList: []
-                awardList.forEach((award:AwardType, index:number)=>{
-                  const obj = {
-                    ...award,
-                    grade: prizeItem.grade,
-                    content: prizeList[index],
-                    usableCount: prizeList.length,
-                    usedCount: prizeList.length,
-  
-                  }
-                  newPrizeResultList.push(obj)
-                })
-              }              
-            })
-          }
-          resolve(newPrizeResultList)
-        })
-        .catch((error: any) => {
-          reject(`服務異常，${error.msg}`)
-        })
+          .fetchReceivePrizeResult(activityId, String(loginT0kenObj.loginT0ken))
+          .then((res: any) => {
+            const newPrizeResultList: PrizeUiDisplayInfoType[] = []
+            if (res && res.claimPrizeResultList) {
+              res.claimPrizeResultList.forEach((prizeItem: ReceivePrizeListType) => {
+                if (prizeItem.awardList) {
+                  const awardList: AwardType[] = prizeItem.awardList ? prizeItem.awardList : []
+                  const prizeList: PrizeType[] = prizeItem.claimPrizeList
+                    ? prizeItem.claimPrizeList
+                    : []
+                  awardList.forEach((award: AwardType, index: number) => {
+                    const matchPrize = prizeList[index] ? prizeList[index] : null
+                    if (matchPrize) {
+                      const obj = {
+                        ...award,
+                        grade: prizeItem.grade,
+                        count: index + 1,
+                        total: awardList.length,
+                        serialNumber: matchPrize.serialNumber,
+                        getSNTime: dayjs(matchPrize.getSNTime).format('YYYY/MM/DD HH:mm')
+                      } as PrizeUiDisplayInfoType
+                      newPrizeResultList.push(obj)
+                    }
+                  })
+                }
+              })
+            }
+            resolve(newPrizeResultList)
+          })
+          .catch((error: any) => {
+            reject(`服務異常，${error.msg}`)
+          })
       }
     })
   }
@@ -342,7 +343,7 @@ export function useFetchData() {
     return new Promise((resolve, reject) => {
       if (VITE_UI_MODE) {
         resolve([...mockDatas.eventMockData, ...mockDatas.specifyEventMockData])
-      }else{
+      } else {
         Promise.all([scanEntry.fetchCampaign(), scanEntry.fetchSpecifyCampaign(storeId)])
           .then(([res1, res2]) => {
             if (res1.error) {
@@ -468,14 +469,23 @@ export function useFetchData() {
         resolve({
           historyList: [
             {
-              storeId: 870504,
-              storeName: '道生',
-              createTime: '2024/01/12 09:12'
+              id: 17,
+              storeId: 1,
+              storeName: '一勝',
+              createTime: '2024-06-11T11:17:35.96'
             }
           ],
-          storeIconList: []
+          storeIconList: [
+            {
+              id: 185,
+              eventId: 5,
+              storeId: 1,
+              iconId: 'A08',
+              iconFilePath: '/EaStoreIcon/Event_5/20240506_142136_82302_A08.png'
+            }
+          ]
         })
-      }else if (loginT0ken && loginT0ken.loginT0ken) {
+      } else if (loginT0ken && loginT0ken.loginT0ken) {
         checkIn.fetchCollect(activityId, loginT0ken.loginT0ken).then((res: any) => {
           if (res.error) {
             reject(`fetchCollectData:${res.error}`)

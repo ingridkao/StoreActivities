@@ -7,14 +7,14 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div class="lobby__section--title">
+  <div class="section__title">
     <img :src="listMarkerImg" alt="list marker" />
     <h6>{{ props.title }}</h6>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.lobby__section--title {
+.section__title {
   gap: 5px;
   width: 100%;
   margin: auto;
@@ -22,15 +22,10 @@ const props = defineProps<{
   padding-bottom: 20px;
   display: flex;
   align-items: center;
-  @media screen and (min-width: 855px) {
-    justify-content: center;
-  }
   img {
     width: 20px;
   }
   h6 {
-    font-weight: 700;
-    font-size: 18px;
     color: #2d2a2a;
   }
 }

@@ -56,7 +56,7 @@ const router = createRouter({
         title: '兌獎',
         requiresAuth: true
       }
-    }, 
+    },
     {
       path: '/scan',
       name: 'Scan',
@@ -91,7 +91,7 @@ const router = createRouter({
       component: () => import('../views/ComingSoonView.vue')
     }
   ],
-  scrollBehavior () {
+  scrollBehavior() {
     return { top: 0 }
   }
 })
@@ -120,14 +120,14 @@ router.beforeEach(async (to, from, next) => {
   const { checkLineIsLoggedin, getLineAccess, getLineProfileAndAccess } = useLIFF()
   const isLoggedin = await checkLineIsLoggedin()
   const { authAlert } = useSweetAlert()
-  const verifyLogin = async() => {
+  const verifyLogin = async () => {
     try {
       let serviceT0ken = null
       if (['Album', 'Collected', 'MapStore'].includes(String(to.name))) {
         serviceT0ken = await getLineAccess(to.path)
       } else if (to.name === 'Activity' && to.params.id) {
         serviceT0ken = await getLineProfileAndAccess(String(to.params.id))
-      }      
+      }
       return serviceT0ken ? '' : '失敗'
     } catch (error) {
       return String(error)
@@ -137,17 +137,21 @@ router.beforeEach(async (to, from, next) => {
   if (isLoggedin) {
     verifyLogin()
     return next()
-  }else{
-    return authAlert('', async () => {
-      const verifyFail = await verifyLogin()
-      if (verifyFail === '') {
-        return next()
-      }else{
+  } else {
+    return authAlert(
+      '',
+      async () => {
+        const verifyFail = await verifyLogin()
+        if (verifyFail === '') {
+          return next()
+        } else {
+          return next({ name: 'Lobby' })
+        }
+      },
+      () => {
         return next({ name: 'Lobby' })
       }
-    }, () => {
-      return next({ name: 'Lobby' })
-    })
+    )
   }
 })
 

@@ -6,7 +6,7 @@ import data from '@/assets/data'
 
 <template>
   <header class="lobby__head">
-    <div class="lobby__head--wrapper store-content large">
+    <div class="lobby__head--wrapper store-img">
       <div class="lobby__head--logo">
         <img :src="topLogoImg" alt="top logo" />
       </div>
@@ -21,8 +21,6 @@ import data from '@/assets/data'
 </template>
 
 <style lang="scss" scoped>
-$card: 396px;
-
 .lobby__head {
   background: url('@/assets/images/lobby/top-bg.png');
   &--wrapper {

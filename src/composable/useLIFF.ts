@@ -91,7 +91,7 @@ export function useLIFF() {
     try {
       await liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
       // liff.init()在執行時會自動執行liff.login()
-      if (liff.isInClient())  return true
+      if (liff.isInClient()) return true
       return liff.isLoggedIn()
     } catch (error) {
       console.error(error)

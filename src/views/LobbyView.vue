@@ -6,14 +6,17 @@
  * step2-2.請求所有  非門市活動列表
  * step2-3.請求所有廣告列表
  */
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import type { CampaignInterface } from '@/types/ResponseHandle'
+import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 import type { AdsInterface } from '@/types/ResponseHandle'
 import data from '@/assets/data'
 
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
+import { useBrowserStorage } from '@/composable/useBrowserStorage'
+
 import { useLayoutStore } from '@/stores/layout'
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
 import CampaignItem from '@/components/lobby/CampaignItem.vue'
@@ -23,14 +26,16 @@ import LobbyAds from '@/components/lobby/LobbyAds.vue'
 const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 
 const { errorAlert } = useSweetAlert()
-const { fetchAllCampaign, fetchAdData, verifyCtString, parseParamCT } =
+const { genrateMockQRCode, fetchAllCampaign, fetchAdData, verifyCtString, parseParamCT } =
   useFetchData()
+const { setLocationStorage } = useBrowserStorage()
 
 const layoutStore = useLayoutStore()
 const displayCampaignList = ref<CampaignInterface[]>([])
 const adsList = ref<AdsInterface[]>([])
 
 const newPath = new URL(window.location.href, ORIGIN_URL)
+const qrString = ref<string>('')
 onMounted(async () => {
   const ctStr = newPath && newPath.search ? parseParamCT(newPath.search) : ''
   layoutStore.loadToggle(true)
@@ -53,6 +58,16 @@ onMounted(async () => {
     errorAlert(error)
   }
 })
+
+// TODO remove
+const activityId = ref('')
+watch(activityId, async () => {
+  const MockCode = await genrateMockQRCode(activityId.value)
+  if (MockCode) {
+    setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
+    qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}`
+  }
+})
 </script>
 
 <template>
@@ -61,14 +76,18 @@ onMounted(async () => {
 
     <section class="lobby__section store-content large">
       <ParagraphTitle :title="data.lobby.eventTitle" />
-      <div class="lobby__section--list">
-        <CampaignItem v-for="campaignItem in displayCampaignList" :key="campaignItem.id" :campaignItem="campaignItem" />
+      <div class="commom lobby__section--list">
+        <CampaignItem
+          v-for="campaignItem in displayCampaignList"
+          :key="campaignItem.id"
+          :campaignItem="campaignItem"
+        />
       </div>
     </section>
 
     <section class="lobby__section store-content large">
       <ParagraphTitle :title="data.lobby.pastEventTitle" />
-      <RouterLink to="/album" class="lobby__section--link">
+      <RouterLink to="/album" class="cardWidth lobby__section--link">
         <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
       </RouterLink>
     </section>
@@ -81,6 +100,16 @@ onMounted(async () => {
       <img src="@/assets/images/lobby/icon-youtube.png" alt="youtube" />
       <img src="@/assets/images/lobby/icon-line.png" alt="line" />
       <img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" />
+    </div>
+
+    <div>
+      <input type="text" v-model="activityId" />
+      <template v-if="qrString">
+        <div style="width: 10rem">
+          <vueQr :text="qrString" :size="100" :correctLevel="3" />
+        </div>
+        <a :href="qrString" target="_blank">{{ qrString }}</a>
+      </template>
     </div>
   </main>
 </template>
@@ -95,42 +124,39 @@ $medium: 855px;
     display: flex;
     flex-direction: column;
     padding: 26px 26px 0 26px;
-
-    &--list{
+    > .section__title {
+      justify-content: flex-start;
+      @media screen and (min-width: $medium) {
+        justify-content: center;
+      }
+    }
+    &--list {
       display: flex;
       flex-direction: column;
       align-items: center;
       flex-wrap: wrap;
       gap: 1%;
-      >div{
+      padding-top: 0;
+      > div {
         flex-basis: 100%;
-        width: $card;
-        margin: auto;
       }
       @media screen and (min-width: $medium) {
         flex-direction: row;
         justify-content: space-between;
-        >div{
+        > div {
           flex-basis: 49%;
           width: auto;
-          min-width: $card;
           margin: 0;
         }
       }
     }
-  
+
     &--link {
       cursor: pointer;
       display: flex;
       flex-direction: column;
-      max-width: $card;
-      margin: 0 auto;
       gap: 14px;
-      @media screen and (min-width: $medium) {
-        max-width: $medium;
-      }
       img {
-        width: 100%;
         height: auto;
         border-radius: 30px;
         aspect-ratio: 169/50;

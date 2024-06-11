@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted, watch } from 'vue'
 import { RouterView } from 'vue-router'
 import { useLayoutStore } from '@/stores/layout'
 
@@ -11,7 +11,7 @@ const handleResize = () => {
   // 傳回兩個數字中較小的一個。
   const windowWidth = Math.min(window.screen.width, 572)
   const scale = windowWidth / siteWidth
-  console.log('handleResize:'+windowWidth);
+  console.log('handleResize:' + windowWidth)
   if (windowWidth > 390) {
     document.documentElement.style.height = '100%'
   } else {
@@ -29,6 +29,12 @@ onUnmounted(() => {
   window.removeEventListener('resize', handleResize)
 })
 
+watch(
+  () => layoutStore.showDirection,
+  (bodyScrollForbid) => {
+    document.body.style.overflowY = bodyScrollForbid ? 'hidden' : 'scroll'
+  }
+)
 </script>
 
 <template>

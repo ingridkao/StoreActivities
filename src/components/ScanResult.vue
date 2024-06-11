@@ -22,43 +22,50 @@ const props = defineProps<{
 }>()
 const successResult = computed(() => Object.keys(props.result).length > 0)
 const errorMsg = computed(() => props.error || '')
+const parseData = (date: string = '') => {
+  const newdate = date ? dayjs(date) : dayjs()
+  return newdate.format('YYYY/MM/DD HH:mm')
+}
 </script>
 
 <template>
   <div
-    class="scan-result"
+    class="commom scanResult"
     :class="{
       fail: !successResult
     }"
   >
-    <div class="scan-result__content">
-      <div class="scan-result__content--result-text">
+    <div class="scanResult__content">
+      <div class="scanResult__content--result-text">
         <img v-if="successResult" :src="checkSuccessImg" alt="check success" />
         <img v-else :src="checkFailImg" alt="check fail" />
       </div>
 
-      <div v-if="successResult" class="scan-result__content--success">
-        <div class="scan-result__content--success-image">
+      <div v-if="successResult" class="scanResult__content--success">
+        <div class="scanResult__content--success-image">
           <img :src="checkSuccessImageImg" alt="check success" />
         </div>
-        <div class="scan-result__content--success-info">
-          <p class="scan-result__content--success-info-id">{{ props.result.storeId }}</p>
-          <p class="scan-result__content--success-info-name">{{ props.result.storeName }}門市</p>
-          <p class="scan-result__content--success-info-date">
-            {{ props.result.date || dayjs().format('YYYY_MM_DD_HH:mm') }}
+        <div class="scanResult__content--success-info">
+          <p class="scanResult__content--success-info-id">{{ props.result.storeId }}</p>
+          <p class="scanResult__content--success-info-name">{{ props.result.storeName }}門市</p>
+          <p class="scanResult__content--success-info-date">
+            {{ parseData(props.result.date) }}
           </p>
         </div>
       </div>
-      <div v-else class="scan-result__content--fail">
-        <div class="scan-result__content--fail-image">
+      <div v-else class="scanResult__content--fail">
+        <div class="scanResult__content--fail-image">
           <img :src="checkFailImageImg" alt="check fail" />
         </div>
-        <div class="scan-result__content--fail-msg">{{ errorMsg }}</div>
+        <div class="scanResult__content--fail-msg">{{ errorMsg }}</div>
       </div>
 
       <div class="store-btn-list">
-        <div class="store-btn" @click="linkToTargetActivityIdPage(props.result.eventId, 'Collected')">
-          <img :src="recordButtonImg" alt="查看紀錄"/>
+        <div
+          class="store-btn"
+          @click="linkToTargetActivityIdPage(props.result.eventId, 'Collected')"
+        >
+          <img :src="recordButtonImg" alt="查看紀錄" />
         </div>
         <button class="store-btn" @click="$emit('scanAgain')">
           <img :src="keepCheckButtonImg" alt="繼續打卡" />
@@ -69,12 +76,12 @@ const errorMsg = computed(() => props.error || '')
 </template>
 
 <style lang="scss" scoped>
-.scan-result {
+.scanResult {
   position: fixed;
   z-index: 4;
-  width: 100%;
   height: 100%;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
   top: 0;
   left: 0;
   background: url('@/assets/images/scan/success-bg.png') repeat;
@@ -84,26 +91,19 @@ const errorMsg = computed(() => props.error || '')
   }
 
   &__content {
-    width: 100%;
-    padding: 0 24px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 700px;
     height: 100%;
+    min-height: 700px;
+    padding: 0 24px;
 
     &--result-text {
       width: 225px;
       height: 90px;
       align-self: end;
       overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
 
     &--success {
@@ -117,12 +117,6 @@ const errorMsg = computed(() => props.error || '')
         width: 210px;
         height: 278px;
         overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
       }
 
       &-info {
@@ -169,11 +163,6 @@ const errorMsg = computed(() => props.error || '')
         width: 300px;
         height: 278px;
         overflow: hidden;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
       }
       &-msg {
         margin-top: 16px;

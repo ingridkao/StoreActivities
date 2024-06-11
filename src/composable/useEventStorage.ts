@@ -34,6 +34,7 @@ export function useEventStorage() {
       Cookies.remove('STORE_EVENT')
     }
   }
+
   const getTargetEventStorage = (): EventSimpleInterface | null => {
     const enevts = Cookies.get('STORE_EVENT')
     if (enevts) {
@@ -43,10 +44,27 @@ export function useEventStorage() {
     }
   }
 
+  const setAccumulatCheckinCount = (count: number) => {
+    if (count) {
+      Cookies.set('STORE_COUNT', JSON.stringify(count), {
+        expires: inTwelveMinutes
+      })
+    } else {
+      Cookies.remove('STORE_COUNT')
+    }
+  }
+
+  const getAccumulatCheckinCount = (): number => {
+    const count = Cookies.get('STORE_COUNT')
+    return count ? Number(count) : 0
+  }
+
   return {
     setEventsStorage,
     getEventsStorage,
     setTargetEventStorage,
-    getTargetEventStorage
+    getTargetEventStorage,
+    setAccumulatCheckinCount,
+    getAccumulatCheckinCount
   }
 }

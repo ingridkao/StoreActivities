@@ -24,9 +24,9 @@ const linkTo = async (campaignItem: CampaignInterface) => {
 }
 const originURL = window.location.origin
 const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
-const parseStartTime = (startTime: string='') => startTime? dayjs(startTime).format('YYYY/MM/DD') : ''
-const parseEndTime = (endTime: string='') => endTime? dayjs(endTime).format('YYYY/MM/DD') : ''
-
+const parseStartTime = (startTime: string = '') =>
+  startTime ? dayjs(startTime).format('YYYY/MM/DD') : ''
+const parseEndTime = (endTime: string = '') => (endTime ? dayjs(endTime).format('YYYY/MM/DD') : '')
 </script>
 
 <template>
@@ -46,9 +46,10 @@ const parseEndTime = (endTime: string='') => endTime? dayjs(endTime).format('YYY
       />
     </div>
     <div class="lobby__activities__info">
-      <p class="lobby__activities__info--title">{{ props.campaignItem.eventName }}</p>
+      <h6 class="lobby__activities__info--title">{{ props.campaignItem.eventName }}</h6>
       <p class="lobby__activities__info--date">
-        {{ parseStartTime(props.campaignItem.startTime) }} - {{ parseEndTime(props.campaignItem.endTime) }}
+        {{ parseStartTime(props.campaignItem.startTime) }} -
+        {{ parseEndTime(props.campaignItem.endTime) }}
       </p>
     </div>
   </div>
@@ -80,10 +81,6 @@ const parseEndTime = (endTime: string='') => endTime? dayjs(endTime).format('YYY
     display: flex;
     flex-direction: column;
     gap: 8px;
-
-    &--title {
-      font-size: 18px;
-    }
 
     &--date {
       font-size: 13px;
