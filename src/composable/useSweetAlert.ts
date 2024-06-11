@@ -20,10 +20,40 @@ export function useSweetAlert() {
       title: '出了一點問題',
       text: String(text)
     }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
-      console.log(result)
-      if (result.isConfirmed) router.push({ path: routerPath, replace: true })
-      if (result.isDismissed) router.push({ path: routerPath, replace: true })
+      if (result.isConfirmed) {
+        router.push({ path: routerPath, replace: true })
+      } else if (result.isDismissed) {
+        router.push({ path: routerPath, replace: true })
+      }
     })
+  }
+
+  const activityErrorAlert = (title: string, text: string = '') => {
+    Swal.fire({
+      icon: 'question',
+      title: title,
+      text: text,
+      showCancelButton: true,
+      confirmButtonText: '過去活動打卡紀錄',
+      confirmButtonColor: '#ffce00',
+      cancelButtonText: '活動大廳',
+      cancelButtonColor: '#ffce00'
+    }).then(
+      (result: {
+        isConfirmed?: boolean
+        isDenied?: boolean
+        isDismissed?: boolean
+        value?: boolean
+      }) => {
+        if (result.isConfirmed) router.push({ path: '/album', replace: true })
+        if (result.isDismissed) router.push({ path: '/', replace: true })
+      }
+    )
+  }
+
+  const parseData = (date: string = '') => {
+    const newdate = date ? dayjs(date) : dayjs()
+    return newdate.format('YYYY/MM/DD HH:mm')
   }
 
   const openStoreInfo = ({
@@ -47,7 +77,6 @@ export function useSweetAlert() {
       </div> 
     `
       : ''
-
     Swal.fire({
       html: `
 				<div class="store-info-dialog__dialog-container--content">
@@ -64,7 +93,7 @@ export function useSweetAlert() {
             <div>
               <div>
                 <p>${data.storeInfoDialog.lastCheckInTime}</p>
-                <p>${lastCheckInTime ? dayjs(lastCheckInTime).format('YYYY/MM/DD HH:mm') : new Date().toLocaleDateString()}</p>
+                <p>${parseData(lastCheckInTime)}</p>
               </div> 
               ${countHTML}
             </div> 
@@ -140,10 +169,24 @@ export function useSweetAlert() {
     )
   }
 
+  const authAlert = (error: string = '', goToLogin: () => void, isDismiss: () => void) => {
+    return Swal.fire({
+      icon: 'info',
+      title: '進行LINE登入驗證',
+      text: error
+    }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
+      // 進行Line登入
+      if (result.isConfirmed) goToLogin()
+      // 拒絕登入返回至首頁
+      if (result.isDismissed) isDismiss()
+    })
+  }
   return {
     errorAlert,
+    activityErrorAlert,
     storeInfoAlert,
     geoLocationErrorAlert,
-    openStoreInfo
+    openStoreInfo,
+    authAlert
   }
 }

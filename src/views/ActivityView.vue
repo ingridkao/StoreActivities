@@ -3,17 +3,14 @@
  * 活動說明
  * step0.確認使用者同意裝置位置資料(經緯度)
  * step1.確認是否為進行中活動
- * step2.取得LINE user profile
- *       - 已登入:網頁導轉到此頁
- *       - 未登入:LINE Login redirect到此頁
- * step3.去檢測ct
+ * step2.去檢測ct
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
 import { ref, watchEffect, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import dayjs from 'dayjs'
-import type { EventInfoInterface } from '@/types/ResponseHandle'
+import type { EventSimpleInterface } from '@/types/ResponseHandle'
 
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import ParagraphItem from '@/components/ParagraphItem.vue'
@@ -54,8 +51,8 @@ const confirmCoords = () => {
   }
 }
 
-const { errorAlert } = useSweetAlert()
-const eventInfo = ref<EventInfoInterface>()
+const { activityErrorAlert } = useSweetAlert()
+const eventInfo = ref<EventSimpleInterface>()
 const route = useRoute()
 const activityId = route?.params?.id
 const confirmActivityId = async () => {
@@ -65,16 +62,16 @@ const confirmActivityId = async () => {
     confirmCoords()
   } catch (error) {
     if (error === 1) {
-      errorAlert('沒有此活動')
+      activityErrorAlert('沒有此活動')
     } else if (error === 2) {
-      errorAlert('活動已過期', '/wrapup')
+      activityErrorAlert('活動已結束')
     } else {
-      errorAlert(String(error))
+      activityErrorAlert('異常', String(error))
     }
   }
 }
 
-watchEffect(() => {
+watchEffect(async () => {
   confirmActivityId()
 })
 
@@ -95,7 +92,7 @@ const commitScan = async () => {
   scanResultContent.value = {}
   scanErrorMsg.value = ''
   let ctTokenCookiesObj = getCtT0kenCookies()
-
+  // pinia close
   try {
     layoutStore.loadToggle(true)
     if (ctTokenCookiesObj === null) {
@@ -110,10 +107,12 @@ const commitScan = async () => {
     if (commitRes) {
       // 打卡成功蓋版
       scanResultContent.value = commitRes
+      // pinia open
     }
   } catch (error) {
     // 打卡失敗蓋版
     scanErrorMsg.value = String(error)
+    // pinia open
   }
   layoutStore.loadToggle(false)
 }
@@ -130,46 +129,47 @@ const directionStartScan = () => {
 </script>
 
 <template>
-  <main class="activity-view">
+  <main class="activity">
     <HeaderMenu />
-    <div class="activity-view__top-bg"></div>
+    <div class="activity__top-bg"></div>
 
-    <div class="activity-view__main">
-      <div class="activity-view__title">
-        <div class="activity-view__title--text-block">
-          <h1 class="activity-view__title--text-block-main">{{ eventInfo?.eventName }}</h1>
-          <h1 class="activity-view__title--text-block-bg">{{ eventInfo?.eventName }}</h1>
+    <div class="activity__main store-content">
+      <div class="activity__title">
+        <div class="activity__title--text-block">
+          <h1 class="activity__title--text-block-main">{{ eventInfo?.eventName }}</h1>
+          <h1 class="activity__title--text-block-bg">{{ eventInfo?.eventName }}</h1>
         </div>
-        <div class="activity-view__title--deco">
-          <div class="activity-view__title--deco-top">
+        <div class="activity__title--deco">
+          <div class="activity__title--deco-top">
             <img :src="titleDecoTopImg" alt="title deco top" />
           </div>
-          <div class="activity-view__title--deco-bottom">
+          <div class="activity__title--deco-bottom">
             <img :src="titleDecoBottomImg" alt="title deco bottom" />
           </div>
         </div>
       </div>
       <img :src="activityMainCatImg" alt="activity main cat" />
-      <div class="activity-view__date">
-        <p class="activity-view__date--year">{{ data.activity.dateTitle }} {{ year }}</p>
-        <div class="activity-view__date--day-block">
-          <p class="activity-view__date--day">{{ startDate }}</p>
-          <div class="activity-view__date--connect-line"></div>
-          <p class="activity-view__date--day">{{ endTime }}</p>
+      <div class="activity__date">
+        <p class="activity__date--year">{{ data.activity.dateTitle }} {{ year }}</p>
+        <div class="activity__date--day-block">
+          <p class="activity__date--day">{{ startDate }}</p>
+          <div class="activity__date--connect-line"></div>
+          <p class="activity__date--day">{{ endTime }}</p>
         </div>
       </div>
     </div>
-    <button class="activity-view__info-icon-button" @click="openDirection">
-      <img :src="infoIconButtonImg" alt="info icon button" />
-    </button>
-    <div class="activity-view__content" v-if="eventInfo && eventInfo.content">
+
+    <div class="activity__content store-text" v-if="eventInfo && eventInfo.content">
+      <button class="activity__info-icon-button" @click="openDirection">
+        <img :src="infoIconButtonImg" alt="info icon button" />
+      </button>
       <ParagraphItem
         v-for="{ title, text } in eventInfo.content"
         :key="title"
         :title="title"
         :content="text || ''"
       />
-      <footer class="activity-view__footer">
+      <footer class="activity__footer">
         <button @click="commitScan">
           <img :src="enterButtonImg" alt="enter button" />
         </button>
@@ -177,6 +177,7 @@ const directionStartScan = () => {
     </div>
 
     <DirectionInfo v-show="layoutStore.showDirection" @checkin="directionStartScan" />
+
     <ScanResult
       v-if="showsScanResult"
       :result="scanResultContent"
@@ -195,8 +196,8 @@ const directionStartScan = () => {
   white-space: pre-line;
 }
 
-.activity-view {
-  background-image: #fff;
+.activity {
+  background-color: #fff;
   padding-top: 30px;
 
   &__top-bg {
@@ -209,17 +210,13 @@ const directionStartScan = () => {
   }
 
   &__main {
-    position: relative;
-    width: 100%;
-    height: 598px;
     padding-top: 68px;
-
+    // min-height: 860px;
     > img {
-      width: 100%;
-      height: 100%;
       position: relative;
       object-fit: contain;
       z-index: 2;
+      aspect-ratio: 780/1056;
     }
   }
 
@@ -280,7 +277,7 @@ const directionStartScan = () => {
     flex-direction: column;
     width: 180px;
     position: absolute;
-    bottom: 45px;
+    bottom: 8%;
     right: 20px;
     z-index: 2;
 
@@ -313,24 +310,23 @@ const directionStartScan = () => {
   }
 
   &__content {
-    position: relative;
     padding: 25px 43px 0 26px;
   }
   &__footer {
     text-align: center;
-    padding-top: 10px;
-    padding-bottom: 32px;
+    padding: 32px 0;
     > button {
       width: 150px;
     }
   }
+
   &__info-icon-button {
     position: absolute;
     width: 40px;
     height: 40px;
     right: 20px;
     z-index: 3;
-    transform: translateY(-50%);
+    top: -30px;
   }
 }
 

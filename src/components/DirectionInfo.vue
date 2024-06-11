@@ -12,84 +12,74 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
 </script>
 
 <template>
-  <div class="direction-view">
-    <div class="direction-view__deco-cat">
-      <img :src="DecoCatImg" alt="deco cat" />
-    </div>
-    <div class="direction-view__step1">
-      <div class="direction-view__step1--icon">
-        <img :src="step1IconImg" alt="step 1 icon" />
+  <div class="commom direction">
+    <div>
+      <div class="direction__deco-cat">
+        <img :src="DecoCatImg" alt="deco cat" />
       </div>
-      <div class="direction-view__step1--text">
-        <p>{{ data.direction.step1Text }}</p>
-        <p class="direction-view__step1--text-tip">{{ data.direction.step1Tip }}</p>
-      </div>
-    </div>
-    <div class="direction-view__step1--image">
-      <img :src="step1PictureImg" alt="step 1 image" />
-    </div>
-    <div class="direction-view__step2">
-      <div class="direction-view__step2--image">
-        <img :src="step2PictureImg" alt="step 2 image" />
-      </div>
-      <div class="direction-view__step2--text">
-        <div class="direction-view__step2--text-icon">
-          <img :src="step2IconImg" alt="step 2 icon" />
+      <div class="direction__step1">
+        <div class="direction__step1--icon">
+          <img :src="step1IconImg" alt="step 1 icon" />
         </div>
-        <p>{{ data.direction.step2Text }}</p>
+        <div class="direction__step1--text">
+          <p>{{ data.direction.step1Text }}</p>
+          <p class="direction__step1--text-tip">{{ data.direction.step1Tip }}</p>
+        </div>
       </div>
-    </div>
-    <div class="direction-view__button" @click="$emit('checkin')">
-      <img :src="checkInButtonImg" alt="check in button" />
+      <div class="direction__step1--image">
+        <img :src="step1PictureImg" alt="step 1 image" />
+      </div>
+      <div class="direction__step2">
+        <div class="direction__step2--image">
+          <img :src="step2PictureImg" alt="step 2 image" />
+        </div>
+        <div class="direction__step2--text">
+          <div class="direction__step2--text-icon">
+            <img :src="step2IconImg" alt="step 2 icon" />
+          </div>
+          <p>{{ data.direction.step2Text }}</p>
+        </div>
+      </div>
+      <div class="direction__button store-btn" @click="$emit('checkin')">
+        <img :src="checkInButtonImg" alt="check in button" />
+      </div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.direction-view {
+.direction {
   position: fixed;
-  width: 100%;
   height: 100dvh;
+  overflow-y: scroll;
   top: 0;
   left: 0;
   z-index: 4;
-  overflow: scroll;
-
   background-color: #55bf6f;
   background: url('@/assets/images/direction/bg.png') repeat;
   padding-top: 60px;
-
+  > div {
+    padding-bottom: 1.5rem;
+  }
   &__deco-cat {
     margin: auto;
     width: 208px;
     height: 194px;
     overflow: hidden;
     transform: translateX(24px);
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
   }
 
   &__step1 {
     display: flex;
     align-items: flex-end;
+    justify-content: center;
     color: #fff;
     gap: 12px;
-    justify-content: center;
 
     &--icon {
       width: 53px;
       height: 68px;
       overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
 
     &--text {
@@ -97,7 +87,6 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
       line-height: 18px;
       padding-bottom: 10px;
       transform: translateY(10px);
-
       &-tip {
         margin-top: 8px;
         font-size: 15px;
@@ -112,12 +101,6 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
       overflow: hidden;
       margin-bottom: 38px;
       transform: translateX(24px);
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
   }
 
@@ -131,12 +114,6 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
       width: 102px;
       height: 205px;
       overflow: hidden;
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
     }
 
     &--text {
@@ -149,12 +126,6 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
         width: 53px;
         height: 68px;
         overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
       }
 
       p {
@@ -167,8 +138,8 @@ import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
   }
 
   &__button {
-    padding: 27px 0 42px;
-    text-align: center;
+    margin-top: 27px;
+    margin-bottom: 42px;
   }
 }
 </style>

@@ -16,16 +16,11 @@ export default {
     lastCheckInTime: '最後打卡時間',
     checkInCount: '打卡次數'
   },
-  collected: {
-    title: '歡樂一夏',
-    startDate: '2024.07.15',
-    endDate: '08.31',
-    specialStampIndexList: [5, 10, 15, 30]
-  },
   winning: {
     explanationTitle: '使用方式',
     serialNumber: '序號',
     deadline: '兌換期限',
+    create: '產生時間',
     accumulate: '累積',
     store: '家門市'
   },

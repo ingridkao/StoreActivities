@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watchEffect } from 'vue'
-import { useRoute, RouterLink } from 'vue-router'
+import { useRoute, useRouter, RouterLink } from 'vue-router'
 import { useLIFF } from '@/composable/useLIFF'
 import { useUserStore } from '@/stores/user'
 import { useLayoutStore } from '@/stores/layout'
@@ -27,16 +27,26 @@ watchEffect(() => {
     ]
   }
 })
-const closeAside = () => {
-  layoutStore.toggleDirection(false)
-  layoutStore.closeNav()
-}
 
+const router = useRouter()
+const goToActivityInfo = () => {
+  if (route.name === 'Activity') {
+    layoutStore.toggleDirection(false)
+    layoutStore.closeNav()
+  } else if (activityId) {
+    router.push({
+      name: 'Activity',
+      params: {
+        id: activityId
+      }
+    })
+  }
+}
 </script>
 
 <template>
-  <div class="sidemenu">
-    <div 
+  <aside class="sidemenu">
+    <div
       class="sidemenu__btn"
       @click="layoutStore.toggleNav()"
       :class="{ active: layoutStore.navOpen }"
@@ -49,19 +59,9 @@ const closeAside = () => {
     <transition name="fade">
       <div v-show="layoutStore.navOpen" class="sidemenu__wrapper">
         <RouterLink to="/" class="sidemenu__item">活動大廳</RouterLink>
-        <button
-          v-if="layoutStore.showDirection && route.name === 'Activity'"
-          @click="closeAside"
-          class="sidemenu__item"
-        >
+        <button v-if="layoutStore.showDirection" @click="goToActivityInfo" class="sidemenu__item">
           活動說明
         </button>
-        <RouterLink
-          v-else-if="layoutStore.showDirection && activityId"
-          :to="`/activity/${activityId}`"
-          class="sidemenu__item"
-          >活動說明</RouterLink
-        >
         <RouterLink
           v-for="item in menuList"
           :to="item.link ?? '/'"
@@ -70,6 +70,8 @@ const closeAside = () => {
         >
           {{ item.name }}
         </RouterLink>
+        <RouterLink to="/album" class="sidemenu__item">過去活動紀錄</RouterLink>
+
         <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
         <div
           v-if="Object.keys(userStore.userProfile).length > 0"
@@ -87,7 +89,7 @@ const closeAside = () => {
         </div>
       </div>
     </transition>
-  </div>
+  </aside>
 </template>
 
 <style lang="scss" scoped>
@@ -102,16 +104,17 @@ const closeAside = () => {
 .sidemenu {
   position: fixed;
   top: 0;
-  z-index: 999;
+  z-index: 9;
 
   &__btn {
+    position: absolute;
     width: 24px;
     height: 22px;
     top: 28px;
     left: 21px;
     z-index: 21;
-    position: absolute;
 
+    cursor: pointer;
     &--top {
       @extend %line;
       transform: translateY(0);
@@ -133,7 +136,7 @@ const closeAside = () => {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 10;
+    z-index: 8;
     width: 168px;
     height: auto;
     padding: 88px 20px 28px 30px;
@@ -142,13 +145,21 @@ const closeAside = () => {
 
   &__item {
     display: block;
+    width: 100%;
     padding: 10px 0;
+
+    text-align: left;
     color: black;
-    text-decoration: none;
     font-size: 18px;
     line-height: 100%;
-    border-bottom: 1px solid #c3c3c3;
 
+    border-bottom: 1px solid #c3c3c3;
+    text-decoration: none;
+
+    &.router-link-active {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
     &:last-child {
       border-bottom: none;
     }
@@ -157,6 +168,7 @@ const closeAside = () => {
   &__avendar {
     display: inline-flex;
     align-items: center;
+    margin-top: 3rem;
     gap: 3px;
     > img {
       width: 3rem;

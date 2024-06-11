@@ -1,5 +1,5 @@
 import { useRouter } from 'vue-router'
-import type { ProfileType } from '@/types/configurable'
+import type { ProfileType } from '@/types/LineHandle'
 import { useFetchData } from '@/composable/useFetch'
 import { useUserStore } from '@/stores/user'
 
@@ -31,12 +31,10 @@ liff.use(new getAccessToken())
 liff.use(new closeWindow())
 liff.use(new scanCodeV2())
 
-const { VITE_LIFF_ID } = import.meta.env
-const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || 'http://localhost:5173/'
-
 export function useLIFF() {
   // ios || android || web
   const getUserOS = () => liff.getOS()
+  const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || 'http://localhost:5173/'
 
   // 判斷目前網頁是否跑在 LIFF Browser 底下
   // - 是否要初始化 LIFF SDK
@@ -65,10 +63,9 @@ export function useLIFF() {
     activityId: string = ''
   ): Promise<ProfileType | undefined> => {
     try {
-      await liff.init({ liffId: VITE_LIFF_ID })
+      await liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
       if (liff.isInClient()) {
         // liff.init()在執行時會自動執行liff.login()
-
       } else if (!liff.isLoggedIn()) {
         const redirectUri = `${ORIGIN_URL}/activity/${activityId}`
         liff.login({
@@ -90,14 +87,26 @@ export function useLIFF() {
     }
   }
 
+  const checkLineIsLoggedin = async () => {
+    try {
+      await liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
+      // liff.init()在執行時會自動執行liff.login()
+      if (liff.isInClient()) return true
+      return liff.isLoggedIn()
+    } catch (error) {
+      console.error(error)
+      return false
+    }
+  }
+
   // https://developers.line.biz/en/reference/liff/#get-access-token
   const getLineAccess = async (routerPath: string = ''): Promise<string | undefined> => {
     try {
-      await liff.init({ liffId: VITE_LIFF_ID })
+      await liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
       if (liff.isInClient()) {
         // liff.init()在執行時會自動執行liff.login()
       } else if (!liff.isLoggedIn()) {
-        const redirectUri = `${window.location.origin}${routerPath}`
+        const redirectUri = `${ORIGIN_URL}${routerPath}`
         liff.login({
           redirectUri: redirectUri
         })
@@ -110,33 +119,32 @@ export function useLIFF() {
         userStore.updateProfile(profile)
       }
       return serviceT0ken
-    } catch (err) {
-      console.error(err)
+    } catch (error) {
+      console.error(error)
     }
   }
 
   // InLIFFClient: 開啟LINE SCAN，開啟相機掃描QRcode取得qrcode string
   // Out LIFF app: 導轉到掃描頁面
-  const scanCode = async (): Promise<string|void> => {
+  const scanCode = async (): Promise<string | void> => {
     try {
       const isInClient = liff.isInClient()
       if (!isInClient) {
         router.push({ path: '/scan' })
-
-      }else{
-        await liff.init({ liffId: VITE_LIFF_ID })
+      } else {
+        await liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
 
         const scanresult = await liff.scanCodeV2()
         if (scanresult && scanresult.value) {
           // 掃瞄出網址取出ct
           const newPath = new URL(scanresult.value, ORIGIN_URL)
-          return (newPath && newPath.search)? parseParamCT(newPath.search): ''
-        }else{
+          return newPath && newPath.search ? parseParamCT(newPath.search) : ''
+        } else {
           return ''
         }
       }
     } catch (err) {
-      throw new Error('Failed: '+ err);
+      throw new Error('Failed: ' + err)
     }
   }
 
@@ -146,6 +154,7 @@ export function useLIFF() {
     useLineLogout,
     getLineProfileAndAccess,
     getLineAccess,
+    checkLineIsLoggedin,
     scanCode
   }
 }

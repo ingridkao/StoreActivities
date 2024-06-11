@@ -12,7 +12,7 @@
  * 'key'        ct number ||| service accesstoken從第5碼取六碼
  * 'longitude'  Number(longitude)
  * 'latitude'   Number(latitude)
- * 'sourceType' 
+ * 'sourceType'
  */
 export type checkInVerifyBodyType = {
   storeId?: string

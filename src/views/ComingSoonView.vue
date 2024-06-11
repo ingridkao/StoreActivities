@@ -2,8 +2,7 @@
 /**
  * ComingSoon
  */
-import { RouterLink  } from 'vue-router'
-
+import { RouterLink } from 'vue-router'
 </script>
 
 <template>
