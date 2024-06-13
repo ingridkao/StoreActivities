@@ -1,0 +1,235 @@
+@import 'font';
+@import 'normalize';
+@import 'mixins';
+@import 'image';
+
+/************ content main layout ************/
+body.swal2-shown{
+  .topBg{
+    overflow-y: hidden;
+  }
+}
+
+main {
+  position: relative;
+  display: block;
+  background-color: $white;
+}
+
+footer{
+  position: relative;
+  width: 100%;
+  text-align: center;
+  padding: 32px 0;
+}
+
+/************ loading ************/
+.loading {
+  @extend %flexColInfo;
+  @extend %fixedSection;
+  height: 100%;
+  z-index: 10;
+
+  color: $black;
+  background-color: $white;
+  font-size: 36px;
+  &.small{
+    font-size: 24px;
+    line-height: 1.5;
+  }
+}
+
+/************ store info dialog ************/
+
+.store-info-dialog {
+  &__dialog-popup {
+    background-color: $purple;
+    border-radius: 15px;
+    box-shadow: 0px 4px 4px 0px rgba($black, 0.4);
+  }
+
+  &__close-icon {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    top: -13px;
+    left: 5px;
+    overflow: hidden;
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  &__dialog-container {
+    &.swal2-html-container {
+      margin: 0;
+      border-radius: 15px;
+    }
+
+    &--content {
+      overflow: auto;
+      background: url('@/assets/images/bg/purple.png') repeat;
+
+      &-image {
+        width: 280px;
+        height: 280px;
+        overflow: hidden;
+        margin: 24px 16px;
+        background-color: $white;
+        img {
+          border: 2px solid $yellow2;
+          object-fit: cover;
+        }
+      }
+    }
+
+    &--footer {
+      @extend %flexRowInfo;
+      gap: 8px;
+
+      &-image {
+        width: 128px;
+        height: 115px;
+        overflow: hidden;
+      }
+
+      &-info {
+        flex: 1;
+        text-align: left;
+        color: $white;
+
+        h6 {
+          font-weight: 900;
+          font-size: 25px;
+          margin-bottom: 16px;
+        }
+
+        > div {
+          display: inline-flex;
+          gap: 1rem;
+        }
+
+        p {
+          font-size: 12px;
+          margin-bottom: 6px;
+        }
+      }
+    }
+  }
+}
+
+/************ store btn ************/
+
+.custom-btn {
+  width: 143px;
+  height: 40px;
+  background-color: $yellow1;
+  font-family: 'GenSenRounded', Helvetica, sans-serif;
+  font-size: 20px;
+  border-radius: 8px;
+}
+
+.store-btn {
+  position: relative;
+  width: 143px;
+  height: 40px;
+  overflow: hidden;
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+  color: transparent;
+  background-repeat: no-repeat;
+  &.record{
+    width: 136px;
+    background-image: url('../assets/images/button/record.svg');
+  }
+  &.keepCheck{
+    width: 143px;
+    background-image: url('../assets/images/button/keep-check.svg');
+  }
+  &.enter{
+    width: 150px;
+    background-image: url('../assets/images/button/enter.svg');
+  }
+  &.checkin{
+    width: 150px;
+    background-image: url('../assets/images/button/check-in.svg');
+  }
+  &.activity{
+    width: 143px;
+    background-image: url('../assets/images/button/back-activity.svg');
+  }
+}
+
+.round-btn{
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+
+  color: transparent;
+  @extend %imgContainer;
+  &.info{
+    background-image: url('../assets/images/button/info.svg');
+  }
+  &.mapCenter{
+    background-image: url('../assets/images/button/map.svg');
+  }
+}
+
+/************ stamp ************/
+.stamp {
+  &-wrapper {
+    position: relative;
+  }
+
+  &-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+    color: $white;
+    font-size: 28px;
+    text-align: left;
+    line-height: 120%;
+    font-weight: bold;
+
+    &.three-characters {
+      font-size: 22px;
+      padding: 0 6px;
+    }
+
+    &.four-characters {
+      text-align: center;
+      font-size: 26px;
+      padding: 0 10px;
+    }
+
+    &.five-characters {
+      font-size: 22px;
+      padding: 0 6px;
+    }
+
+    &.six-characters {
+      text-align: center;
+      font-size: 22px;
+      padding: 0 6px;
+    }
+  }
+
+  &-grade {
+    border-width: 4px;
+    border-style: solid;
+    border-color: transparent;
+    border-radius: 20px;
+    object-fit: cover;
+  }
+}

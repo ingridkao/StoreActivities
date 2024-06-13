@@ -105,6 +105,7 @@ router.beforeEach(async (to, from, next) => {
   // Reset all layout
   const layoutStore = useLayoutStore()
   layoutStore.toggleDirection(false)
+  layoutStore.toggleScanResult(false)
   layoutStore.loadToggle(false)
   layoutStore.closeNav()
 
@@ -133,7 +134,6 @@ router.beforeEach(async (to, from, next) => {
       return String(error)
     }
   }
-
   if (isLoggedin) {
     verifyLogin()
     return next()

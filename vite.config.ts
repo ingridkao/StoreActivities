@@ -25,6 +25,15 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: env.VITE_OUTDIR || 'dist',
     },
-    base: env.VITE_BASEDIR || '/'
+    base: env.VITE_BASEDIR || '/',
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `
+            @import "./src/assets/scss/main.scss";
+          `,
+        }
+      },
+    },
   }
 })

@@ -1,0 +1,93 @@
+$card-basic: 396px;
+$card-middle: 586px;
+$card-large: 800px;
+$content-small: 336px;
+$content-middle: 650px;
+$content-large: 855px;
+
+$black: #000;
+$black1: #2d2a2a;
+$white: #efefea;
+$white2: #d3d3d3;
+$grayBlue: #d7dde2;
+$gray: #8995a1;
+$gray1: #5f5d5d;
+$brown: #594c40;
+$yellow1: #ffce00;
+$yellow2: #ffbd14;
+$yellow3: #bc8700;
+$green1: #5ac274;
+$green2: #009031;
+$green3: #12b84a;
+$green4: #009f66;
+$purple: #8b84d3;
+
+
+/*===== flex =====*/
+%flexColInfo{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+%flexRowInfo{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+/*===== mainSection =====*/
+%pageMain{
+  width: 100%;
+  min-height: calc(100 * var(--vh));
+  z-index: 2;
+  padding-bottom: 60px;
+}
+
+%mainSection{
+  position: relative;
+  width: 100%;
+  margin: auto;
+}
+
+%fixedSection {
+  width: 100%;
+  position: fixed;
+  z-index: 4;
+}
+
+%titleSection {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+%cardWidth{
+  max-width: $card-middle;
+  margin: 0 auto;
+  @media screen and (min-width: $content-large) {
+    max-width: $card-large;
+  }
+}
+
+// 
+
+
+%imgContainer {
+  background-size: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+%stampSection{
+  width: 100%;
+  max-width: $card-basic;
+  margin: auto;
+  display: grid;
+  gap: 12px;
+  padding: 0 20px;
+  margin-bottom: 16px;
+  grid-template-columns: repeat(4, 1fr);
+}

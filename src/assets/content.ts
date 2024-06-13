@@ -14,7 +14,10 @@ export default {
   },
   storeInfoDialog: {
     lastCheckInTime: '最後打卡時間',
-    checkInCount: '打卡次數'
+    checkInCount: '打卡次數',
+    album: '過去活動打卡紀錄',
+    lobby: '活動大廳',
+
   },
   winning: {
     explanationTitle: '使用方式',
@@ -26,6 +29,10 @@ export default {
   },
   mapStore: {
     storeLabel: '門市',
+    addressLabel: '地址'
+  },
+  error: {
+    default: '出了一點問題',
     addressLabel: '地址'
   }
 }

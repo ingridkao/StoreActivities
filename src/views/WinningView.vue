@@ -3,64 +3,30 @@
  * 中獎序號s
  */
 import { ref, watchEffect, computed } from 'vue'
+import content from '@/assets/content'
+import type { PrizeUiDisplayInfoType } from '@/types/ResponseHandle'
+
 import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useEventStorage } from '@/composable/useEventStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import type { PrizeUiDisplayInfoType } from '@/types/ResponseHandle'
+import { useDay } from '@/composable/useDay'
+
 import { useLayoutStore } from '@/stores/layout'
 
 import ParagraphItem from '@/components/ParagraphItem.vue'
-import data from '@/assets/data'
-import winningCatImg from '@/assets/images/winning/winning-cat.png'
-import backButtonImg from '@/assets/images/winning/back-button.svg'
-import nextArrowImg from '@/assets/images/winning/next-arrow.svg'
-import prevArrowImg from '@/assets/images/winning/prev-arrow.svg'
+import winningCatImg from '@/assets/images/cat/winning-cat.png'
+import backButtonImg from '@/assets/images/button/back-collected.svg'
+import nextArrowImg from '@/assets/images/button/next-arrow.svg'
+import prevArrowImg from '@/assets/images/button/prev-arrow.svg'
 
 const { linkToTargetActivityIdPage } = useLink()
 const { fetchReceivePrize } = useFetchData()
 const { getTargetEventStorage, getAccumulatCheckinCount } = useEventStorage()
 const { errorAlert } = useSweetAlert()
+const { parseData } = useDay()
 
-//TODO: Remove prizeIndex and prizeInfo after api finish
 const prizeIndex = ref(0)
-
-// const prizeInfo = ref([
-//   {
-//     awardName: '咖啡券',
-//     grade: 15,
-//     instructions: '拿鐵大杯(冰/熱)',
-//     count: 2,
-//     total: 3,
-//     useInterval: '2024/05/01-2024/08/31',
-//     serialNumber: 5473985660,
-//     operatingProcedures:
-//       '請直接至 7-ELEVEN 門市內的 ibon 機台列印，於機台首頁選擇左上方「代碼輸入」，輸入取件編號或掃描 QR Code，就可以輕鬆取得文件囉！'
-//   },
-//   {
-//     awardName: '4X6貼紙',
-//     grade: 0,
-//     instructions: '4X6貼紙一張',
-//     count: 1,
-//     total: 5,
-//     useInterval: '2024/05/01-2024/08/31',
-//     serialNumber: 6695473985,
-//     operatingProcedures:
-//       '凡於活動期間租借行動電源，於租借時輸入優惠代碼【ibon】，即可享第一小時半價優惠，不限次數。'
-//   },
-//   {
-//     awardName: '虛寶',
-//     grade: 0,
-//     instructions: '尚方寶劍31天效期',
-//     count: 1,
-//     total: 5,
-//     useInterval: '2024/08/01-2024/08/31',
-//     serialNumber: 6695473985,
-//     operatingProcedures:
-//       '請進入遊戲大廳後，點選右上角的齒輪進入【系統設置>>基礎】，拉到畫面最下面點選【虛寶兌換】，輸入完整的序號後點選確認兌換。當提示【序號兌換成功】後，獎勵會派送到【系統郵件】，請稍待3~5分鐘檢查收件匣的狀況即可。'
-//   }
-// ])
-
 const prizeTargetInfo = computed(() => prizeInfo.value[prizeIndex.value] || null)
 
 const checkinCount = ref(0)
@@ -91,7 +57,7 @@ watchEffect(async () => {
 <template>
   <main class="winning">
     <h5 v-if="prizeTargetInfo && checkinCount > 0" class="winning__tip">
-      {{ `${data.winning.accumulate} ${checkinCount} ${data.winning.store}` }}
+      {{ `${content.winning.accumulate} ${checkinCount} ${content.winning.store}` }}
     </h5>
 
     <section class="winning__wrapper" v-if="prizeTargetInfo">
@@ -106,16 +72,16 @@ watchEffect(async () => {
 
       <div class="winning__wrapper--bottom">
         <p v-if="prizeTargetInfo.serialNumber">
-          <span class="label">{{ data.winning.serialNumber }} </span>
+          <span class="label">{{ content.winning.serialNumber }} </span>
           <span class="desc serial">{{ prizeTargetInfo.serialNumber }}</span>
         </p>
         <p v-if="prizeTargetInfo.useInterval">
-          <span class="label">{{ data.winning.deadline }} </span>
+          <span class="label">{{ content.winning.deadline }} </span>
           <span class="desc">{{ prizeTargetInfo.useInterval }}</span>
         </p>
         <p v-if="prizeTargetInfo.getSNTime">
-          <span class="label">{{ data.winning.create }} </span>
-          <span class="desc">{{ prizeTargetInfo.getSNTime }}</span>
+          <span class="label">{{ content.winning.create }} </span>
+          <span class="desc">{{ parseData(prizeTargetInfo.getSNTime) }}</span>
         </p>
       </div>
     </section>
@@ -142,7 +108,7 @@ watchEffect(async () => {
 
     <section class="winning__content store-content">
       <ParagraphItem
-        :title="data.winning.explanationTitle"
+        :title="content.winning.explanationTitle"
         :content="
           prizeTargetInfo && prizeTargetInfo.operatingProcedures
             ? prizeTargetInfo.operatingProcedures
@@ -161,7 +127,7 @@ watchEffect(async () => {
   position: relative;
 
   overflow: auto;
-  background: url('@/assets/images/winning/bg.png');
+  background: url('@/assets/images/bg/green.png');
 
   display: flex;
   align-items: center;
@@ -304,6 +270,10 @@ watchEffect(async () => {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    position: relative;
+    width: 100%;
+    max-width: $card-middle;
+    margin: auto;
   }
 }
 </style>

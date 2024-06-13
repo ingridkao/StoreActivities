@@ -6,6 +6,7 @@ dayjs.extend(isBetween)
 import type { checkInVerifyBodyType, checkInVerifyHeaderType } from '@/types/RequestHandle'
 import { ResponseCodes } from '@/types/ResponseHandle'
 import type {
+  ApiResType,
   GenrateMockQRCodeResType,
   VerifyCodeResType,
   CampaignBaseInterface,
@@ -45,7 +46,8 @@ export function useFetchData() {
     getCtT0kenCookies,
     setLineT0kenCookies,
     setLoginT0kenCookies,
-    getLoginT0kenCookies
+    getLoginT0kenCookies,
+    removeCtT0kenCookies
   } = useBrowserStorage()
   const { getEventsStorage, setEventsStorage, setTargetEventStorage, getTargetEventStorage } =
     useEventStorage()
@@ -60,10 +62,10 @@ export function useFetchData() {
   }
 
   // MockQRCodeData
-  const genrateMockQRCode = (id: any): Promise<GenrateMockQRCodeState> => {
+  const genrateMockQRCode = (id: any, store:string): Promise<GenrateMockQRCodeState> => {
     return new Promise((resolve, reject) => {
       if (VITE_API_URL) {
-        scanEntry.genrateMockQRCode(id).then((res: GenrateMockQRCodeResType) => {
+        scanEntry.genrateMockQRCode(id, store).then((res: GenrateMockQRCodeResType) => {
           if (res.qrCode) {
             resolve({
               ...res,
@@ -93,17 +95,26 @@ export function useFetchData() {
         reject('服務中斷，請稍後再試')
       } else {
         checkIn
-        scanEntry.verifyQRString(ctStr).then((res: VerifyCodeResType) => {
-          if (res.token) {
-            setQRcodeString(ctStr)
-            setCtT0kenCookies(res.token)
-            if (!ctStr || !res.token) return resolve(null)
-            const obj = parseCtT0ken(ctStr, res.token)
-            console.log(obj)
-            resolve(obj)
-          } else {
-            reject(`verifyCtString:${res.error || '發生了例外錯誤'}`)
+        scanEntry.verifyQRString(ctStr).then((res: ApiResType ) => {
+          if (res?.code === ResponseCodes.QRCODE_TIMEOUT) {
+            reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
+
+          }else{
+            console.log(res);
+            const { token } = res
+            
+            if (token) {
+              setQRcodeString(ctStr)
+              setCtT0kenCookies(token)
+              if (!ctStr || !token) return resolve(null)
+              const obj = parseCtT0ken(ctStr, token)
+              resolve(obj)
+            } else {
+              reject(`verifyCtString:發生了例外錯誤`)
+            }
+
           }
+
         })
       }
     })
@@ -173,6 +184,7 @@ export function useFetchData() {
         checkIn
           .checkInVerify(data, headers)
           .then((res: any) => {
+            console.log(res);
             const { code, msg, checkInStoreInfo } = res
             if (code === ResponseCodes.NO_EVENT) {
               reject('此活動不存在，請重新操作')
@@ -210,6 +222,7 @@ export function useFetchData() {
             } else {
               reject(`服務異常，${msg}`)
             }
+            removeCtT0kenCookies()
           })
           .catch((error: any) => {
             console.log(error)
@@ -233,26 +246,26 @@ export function useFetchData() {
     const loginT0kenObj = getLoginT0kenCookies()
     const activityId = parseActivityId(id)
     return new Promise((resolve, reject) => {
-      if (activityId === '') {
-        reject('此活動不存在，請重新操作')
-      } else if (!VITE_API_URL) {
-        reject('服務中斷，請稍後再試')
-      } else if (loginT0kenObj === null) {
-        reject('訪客無法進行操作，請重新操作')
-      } else {
-        prize
-          .commitReceivePrize(activityId, String(loginT0kenObj.loginT0ken))
-          .then((res: any) => {
-            if (res) {
-              resolve(true)
-            } else {
-              reject(`服務異常，${res.result}`)
-            }
-          })
-          .catch((error: any) => {
-            reject(`服務異常，${error.msg}`)
-          })
-      }
+      // if (activityId === '') {
+      //   reject('此活動不存在，請重新操作')
+      // } else if (!VITE_API_URL) {
+      //   reject('服務中斷，請稍後再試')
+      // } else if (loginT0kenObj === null) {
+      //   reject('訪客無法進行操作，請重新操作')
+      // } else {
+      //   prize
+      //     .commitReceivePrize(activityId, String(loginT0kenObj.loginT0ken))
+      //     .then((res: any) => {
+      //       if (res) {
+      //         resolve(true)
+      //       } else {
+      //         reject(`服務異常，${res.result}`)
+      //       }
+      //     })
+      //     .catch((error: any) => {
+      //       reject(`服務異常，${error.msg}`)
+      //     })
+      // }
     })
   }
 
@@ -263,6 +276,8 @@ export function useFetchData() {
     const loginT0kenObj = getLoginT0kenCookies()
     const activityId = parseActivityId(id)
     return new Promise((resolve, reject) => {
+      debugger
+      // resolve(mockDatas.WinningData)
       if (activityId === '') {
         reject('此活動不存在，請重新操作')
       } else if (!VITE_API_URL) {
@@ -290,7 +305,7 @@ export function useFetchData() {
                         count: index + 1,
                         total: awardList.length,
                         serialNumber: matchPrize.serialNumber,
-                        getSNTime: dayjs(matchPrize.getSNTime).format('YYYY/MM/DD HH:mm')
+                        getSNTime: matchPrize.getSNTime
                       } as PrizeUiDisplayInfoType
                       newPrizeResultList.push(obj)
                     }
@@ -306,39 +321,7 @@ export function useFetchData() {
       }
     })
   }
-  /**
-   * 取得活動列表
-   */
-  // const fetchCampaign = (): Promise<CampaignInterface[]> => {
-  //   return new Promise((resolve, reject) => {
-  //     if (VITE_API_URL) {
-  //       scanEntry.fetchCampaign().then((res: EventListResType) => {
-  //         if (res.error) {
-  //           reject(`fetchCampaign:${res.error}`)
-  //         } else {
-  //           resolve(res.queryList || [])
-  //         }
-  //       })
-  //     } else {
-  //       resolve(mockDatas.eventMockData)
-  //     }
-  //   })
-  // }
-  // const fetchSpecifyCampaign = (storeId: string = ''): Promise<CampaignInterface[]> => {
-  //   return new Promise((resolve, reject) => {
-  //     if (VITE_API_URL) {
-  //       scanEntry.fetchSpecifyCampaign(storeId).then((res: EventListResType) => {
-  //         if (res.error) {
-  //           reject(`fetchSpecifyCampaign:${res.error}`)
-  //         } else {
-  //           resolve(res.queryList || [])
-  //         }
-  //       })
-  //     } else {
-  //       resolve(mockDatas.specifyEventMockData)
-  //     }
-  //   })
-  // }
+
   const fetchAllCampaign = (storeId: string = ''): Promise<CampaignInterface[]> => {
     return new Promise((resolve, reject) => {
       if (VITE_UI_MODE) {
@@ -457,7 +440,7 @@ export function useFetchData() {
           }
         })
       } else {
-        reject('沒有登入')
+        reject('開發模式')
       }
     })
   }
@@ -466,25 +449,7 @@ export function useFetchData() {
     const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
       if (VITE_UI_MODE) {
-        resolve({
-          historyList: [
-            {
-              id: 17,
-              storeId: 1,
-              storeName: '一勝',
-              createTime: '2024-06-11T11:17:35.96'
-            }
-          ],
-          storeIconList: [
-            {
-              id: 185,
-              eventId: 5,
-              storeId: 1,
-              iconId: 'A08',
-              iconFilePath: '/EaStoreIcon/Event_5/20240506_142136_82302_A08.png'
-            }
-          ]
-        })
+        resolve(mockDatas.CollectData)
       } else if (loginT0ken && loginT0ken.loginT0ken) {
         checkIn.fetchCollect(activityId, loginT0ken.loginT0ken).then((res: any) => {
           if (res.error) {
@@ -496,7 +461,7 @@ export function useFetchData() {
           }
         })
       } else {
-        reject('沒有登入')
+        reject('開發模式')
       }
     })
   }
@@ -533,8 +498,7 @@ export function useFetchData() {
     fetchReceivePrize,
 
     checkLineLoginVerify,
-    // fetchCampaign,
-    // fetchSpecifyCampaign,
+
     fetchAllCampaign,
     confirmCampaign,
     fetchAdData,

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ParagraphTitle from './ParagraphTitle.vue'
-
 const props = defineProps<{
   title: string
   content: string
@@ -10,9 +9,9 @@ const props = defineProps<{
 <template>
   <div class="paragraph">
     <ParagraphTitle :title="props.title" />
-    <p class="paragraph__content">
+    <b class="paragraph__content">
       {{ props.content }}
-    </p>
+    </b>
   </div>
 </template>
 
@@ -22,12 +21,8 @@ const props = defineProps<{
   flex-direction: column;
   gap: 14px;
   margin-bottom: 20px;
-
   &__content {
-    font-size: 14px;
-    color: #000000;
-    line-height: 18px;
-    font-weight: 500;
+    color: $black;
     padding-left: 25px;
     white-space: pre-line;
   }

@@ -1,8 +1,9 @@
 const ScanEntryApi = (axios: any, event: any) => ({
-  genrateMockQRCode(id: any) {
+  genrateMockQRCode(id: any, store: string) {
     return axios.post(`${event}/MockQRCodeData`, {
       data: {
-        id: Number(id)
+        eventId: Number(id),
+        storeNo: store
       }
     })
   },

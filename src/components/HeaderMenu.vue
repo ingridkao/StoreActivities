@@ -46,7 +46,7 @@ const goToActivityInfo = () => {
 
 <template>
   <aside class="sidemenu">
-    <div
+    <button
       class="sidemenu__btn"
       @click="layoutStore.toggleNav()"
       :class="{ active: layoutStore.navOpen }"
@@ -54,7 +54,7 @@ const goToActivityInfo = () => {
       <span class="sidemenu__btn--top"></span>
       <span class="sidemenu__btn--mid"></span>
       <span class="sidemenu__btn--bottom"></span>
-    </div>
+    </button>
 
     <transition name="fade">
       <div v-show="layoutStore.navOpen" class="sidemenu__wrapper">
@@ -96,15 +96,16 @@ const goToActivityInfo = () => {
 %line {
   display: block;
   width: 24px;
-  height: 1px;
-  background: #000;
+  height: 2px;
+  background: $black;
   transition: all 0.3s ease;
+  margin-bottom: 6px;
 }
 
 .sidemenu {
-  position: fixed;
-  top: 0;
+  @extend %fixedSection;
   z-index: 9;
+  top: 0;
 
   &__btn {
     position: absolute;
@@ -113,34 +114,43 @@ const goToActivityInfo = () => {
     top: 28px;
     left: 21px;
     z-index: 21;
-
-    cursor: pointer;
+    opacity: 0.5;
+    &:hover{
+      opacity: 1;
+    }
     &--top {
       @extend %line;
-      transform: translateY(0);
     }
-
     &--mid {
       @extend %line;
       width: 16px;
-      transform: translateY(6px);
     }
-
     &--bottom {
       @extend %line;
-      transform: translateY(12px);
+    }
+    &.active{
+      .sidemenu__btn--top{
+        transform: translateY(8px) rotate(45deg)
+      }
+      .sidemenu__btn--mid{
+        width: 0;
+      }
+      .sidemenu__btn--bottom{
+        transform: translateY(-8px) rotate(-45deg)
+      }
     }
   }
 
   &__wrapper {
-    position: fixed;
+    @extend %fixedSection;
     top: 0;
     left: 0;
     z-index: 8;
+  
     width: 168px;
     height: auto;
     padding: 88px 20px 28px 30px;
-    background-color: white;
+    background-color: $white;
   }
 
   &__item {
@@ -149,7 +159,7 @@ const goToActivityInfo = () => {
     padding: 10px 0;
 
     text-align: left;
-    color: black;
+    color: $black;
     font-size: 18px;
     line-height: 100%;
 
