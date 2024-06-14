@@ -19,12 +19,19 @@ const menuList = ref<
 
 const route = useRoute()
 const activityId = route?.params?.id
+
 watchEffect(() => {
-  if (activityId && Object.keys(userStore.userProfile).length > 0) {
-    menuList.value = [
-      { link: '/mapStore', key: 'MapStore', name: '門市地圖' },
-      { link: `/collected/${activityId}`, key: 'Collected', name: '活動打卡紀錄' }
-    ]
+  if (Object.keys(userStore.userProfile).length > 0) {
+    if (activityId){
+      menuList.value = [
+        { link: `/collected/${activityId}`, key: 'Collected', name: '活動打卡紀錄' },
+        { link: `/mapStore/${activityId}`, key: 'MapStore', name: '活動門市地圖' },
+      ]
+    }else{
+      menuList.value = [
+        { link: '/mapStore', key: 'MapStore', name: '門市地圖' },
+      ]
+    }
   }
 })
 
@@ -58,19 +65,19 @@ const goToActivityInfo = () => {
 
     <transition name="fade">
       <div v-show="layoutStore.navOpen" class="sidemenu__wrapper">
-        <RouterLink to="/" class="sidemenu__item">活動大廳</RouterLink>
-        <button v-if="layoutStore.showDirection" @click="goToActivityInfo" class="sidemenu__item">
-          活動說明
-        </button>
+        <button v-if="layoutStore.showDirection" class="sidemenu__item" @click="goToActivityInfo">活動說明</button>
         <RouterLink
           v-for="item in menuList"
           :to="item.link ?? '/'"
           :key="item.key"
           class="sidemenu__item"
-        >
+          >
           {{ item.name }}
         </RouterLink>
-        <RouterLink to="/album" class="sidemenu__item">過去活動紀錄</RouterLink>
+
+        <br/>
+        <RouterLink to="/" class="sidemenu__item">所有活動大廳</RouterLink>
+        <RouterLink to="/album" class="sidemenu__item">門市打卡紀錄</RouterLink>
 
         <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
         <div

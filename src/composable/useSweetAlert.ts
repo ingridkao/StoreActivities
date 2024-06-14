@@ -46,9 +46,14 @@ export function useSweetAlert() {
         isDenied?: boolean
         isDismissed?: boolean
         value?: boolean
+        dismiss?: any
       }) => {
+        console.log(result);
+        // click過去活動打卡紀錄isConfirmed: true | value: true
         if (result.isConfirmed) router.push({ path: '/album', replace: true })
-        if (result.isDismissed) router.push({ path: '/', replace: true })
+        // click活動大廳isDismissed: true | dismiss: 'cancel'
+        if (result.isDismissed && result.dismiss === 'cancel') router.push({ path: '/', replace: true })
+        // click背景 isDismissed: true | dismiss:'backdrop'
       }
     )
   }

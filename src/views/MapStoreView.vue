@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
-import HeaderMenu from '@/components/HeaderMenu.vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
+
 import { useLink } from '@/composable/useLink'
 import { useMapbox } from '@/composable/useMapbox'
+
+import HeaderMenu from '@/components/HeaderMenu.vue'
 import content from '@/assets/content'
 import mapCatImg from '@/assets/images/cat/map-cat.png'
 
-const { linkToTargetActivityIdPage } = useLink()
+const { linkToPrepareScan } = useLink()
 const {
   storeFilterOptions,
   storeFilterSelectd,
@@ -16,13 +19,23 @@ const {
   mapNavigation
 } = useMapbox()
 
+const route = useRoute()
+const activityId = route?.params?.id
+const btnName = activityId? '進入活動': '進行打卡'
+const btnClassName = activityId? 'enter': 'checkin'
+
 // 點選門市後出現資訊drawerBox >> 點選drawerBox以外則toggleStoreInfo()
 const handleOutsideClick = (event: Event) => {
   const inputTarget = event.target as HTMLInputElement
   toggleStoreInfo(String(inputTarget.classList.value))
 }
 
-onMounted(() => {
+const goToActivityDetailPage = () => {
+  linkToPrepareScan(activityId)
+}
+
+onMounted(async() => {
+  console.log('onMounted');
   document.addEventListener('click', handleOutsideClick)
 })
 onUnmounted(() => {
@@ -37,10 +50,7 @@ onUnmounted(() => {
     <div id="mapboxBasic"></div>
 
     <div class="mapPanel">
-      <div 
-        v-if="targetBoxData.toggle" 
-        class="panelBox mapPanel-info"
-      >
+      <div v-if="targetBoxData.toggle" class="panelBox mapPanel-info">
         <div class="mapPanel-info-logo">
           <img src="/images/example-logo.svg" alt="7-11 logo" />
         </div>
@@ -59,21 +69,20 @@ onUnmounted(() => {
         ></button>
       </div>
 
-      <div 
-        v-else 
-        class="panelBox mapPanel-action"
-      >
+      <div v-else class="panelBox mapPanel-action">
         <div class="panelBox mapPanel-action-checkin">
           <div class="catImg">
             <img :src="mapCatImg" width="157" height="200"/>
           </div>
           <button
-            class="store-btn checkin"
-            @click="linkToTargetActivityIdPage('', 'Activity')"
-            title="進行打卡"
-          ></button>
+            class="store-btn"
+            :class="btnClassName"
+            @click="goToActivityDetailPage"
+            :title="btnName"
+          >{{ btnName }}</button>
         </div>
 
+        <!-- TODO URL slug有activityId時顯示活動門市 -->
         <div class="mapPanel-filter">
           <button
             v-for="item in storeFilterOptions"
@@ -122,11 +131,11 @@ onUnmounted(() => {
     }
 
     &-content {
-      height: 84px;
+      height: 100%;
       display: grid;
       grid-template-columns: 50px 1fr;
-      grid-template-rows: 1fr 1fr;
-      row-gap: 12px;
+      grid-template-rows: 1.5em 3em;
+      row-gap: 0.5em;
       p {
         color: $white;
       }
@@ -156,7 +165,7 @@ onUnmounted(() => {
           object-fit: cover;
         }
       }
-      .store-btn.checkin{
+      .store-btn{
         margin-top: -25px;
         margin-left: 135px;
         z-index: 5;

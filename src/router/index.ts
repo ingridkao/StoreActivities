@@ -36,6 +36,7 @@ const router = createRouter({
       name: 'Activity',
       component: () => import('../views/ActivityView.vue'),
       meta: {
+        title: 'ibon打卡活動',
         requiresAuth: true
       }
     },
@@ -49,25 +50,25 @@ const router = createRouter({
       }
     },
     {
-      path: '/winning',
+      path: '/winning/:id?',
       name: 'Winning',
       component: () => import('../views/WinningView.vue'),
       meta: {
-        title: '兌獎',
+        title: '活動兌獎',
         requiresAuth: true
       }
     },
     {
-      path: '/scan',
+      path: '/scan/:id?',
       name: 'Scan',
       component: () => import('../views/ScanView.vue'),
       meta: {
-        title: '掃描'
+        title: '掃描打卡'
         //requiresCamera: true
       }
     },
     {
-      path: '/mapStore',
+      path: '/mapStore/:id?',
       name: 'MapStore',
       component: () => import('../views/MapStoreView.vue'),
       meta: {
@@ -81,7 +82,7 @@ const router = createRouter({
       component: () => import('../views/AlbumView.vue'),
       beforeEnter: [removeActivityID],
       meta: {
-        title: '過去活動紀錄',
+        title: '門市打卡紀錄',
         requiresAuth: true
       }
     },
