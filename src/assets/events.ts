@@ -1,6 +1,6 @@
 import type { EventInfoInterface } from '@/types/ResponseHandle'
 const campaigns: Record<string, EventInfoInterface> = {
-  'default': {
+  default: {
     nameBreak: 2,
     content: [
       {

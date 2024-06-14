@@ -49,8 +49,7 @@ export function useFetchData() {
     getLoginT0kenCookies,
     removeCtT0kenCookies
   } = useBrowserStorage()
-  const { getEventsStorage, setEventsStorage, setTargetEventStorage, getTargetEventStorage } =
-    useEventStorage()
+  const { getEventsStorage, setEventsStorage } = useEventStorage()
 
   /**
    * 從URL字串中取出ct參數
@@ -62,19 +61,24 @@ export function useFetchData() {
   }
 
   // MockQRCodeData
-  const genrateMockQRCode = (id: any, store:string): Promise<GenrateMockQRCodeState> => {
+  const genrateMockQRCode = (id: any, store: string): Promise<GenrateMockQRCodeState> => {
     return new Promise((resolve, reject) => {
       if (VITE_API_URL) {
-        scanEntry.genrateMockQRCode(id, store).then((res: GenrateMockQRCodeResType) => {
-          if (res.qrCode) {
-            resolve({
-              ...res,
-              store: res.qrCode.substring(2, 8)
-            })
-          } else {
-            reject(`genrateMockQRCode:${res.error || '發生了例外錯誤'}`)
-          }
-        })
+        scanEntry
+          .genrateMockQRCode(id, store)
+          .then((res: GenrateMockQRCodeResType) => {
+            if (res.qrCode) {
+              resolve({
+                ...res,
+                store: res.qrCode.substring(2, 8)
+              })
+            } else {
+              reject(`genrateMockQRCode:${res.error || '發生了例外錯誤'}`)
+            }
+          })
+          .catch((error: string) => {
+            reject(error)
+          })
       } else {
         resolve(mockDatas.genrateMockQRCode)
       }
@@ -95,27 +99,28 @@ export function useFetchData() {
         reject('服務中斷，請稍後再試')
       } else {
         checkIn
-        scanEntry.verifyQRString(ctStr).then((res: ApiResType ) => {
-          if (res?.code === ResponseCodes.QRCODE_TIMEOUT) {
-            reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
-
-          }else{
-            console.log(res);
-            const { token } = res
-            
-            if (token) {
-              setQRcodeString(ctStr)
-              setCtT0kenCookies(token)
-              if (!ctStr || !token) return resolve(null)
-              const obj = parseCtT0ken(ctStr, token)
-              resolve(obj)
+        scanEntry
+          .verifyQRString(ctStr)
+          .then((res: ApiResType) => {
+            if (res?.code === ResponseCodes.QRCODE_TIMEOUT) {
+              reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
             } else {
-              reject(`verifyCtString:發生了例外錯誤`)
+              console.log(res)
+              const { token } = res
+              if (token) {
+                setQRcodeString(ctStr)
+                setCtT0kenCookies(token)
+                if (!ctStr || !token) return resolve(null)
+                const obj = parseCtT0ken(ctStr, token)
+                resolve(obj)
+              } else {
+                reject(`verifyCtString:發生了例外錯誤`)
+              }
             }
-
-          }
-
-        })
+          })
+          .catch((error: string) => {
+            reject(error)
+          })
       }
     })
   }
@@ -130,15 +135,20 @@ export function useFetchData() {
         if (!VITE_API_URL) {
           resolve('template')
         } else {
-          scanEntry.checkLineLoginVerify(accessToken).then((res: VerifyCodeResType) => {
-            if (res.result) {
-              const serviceT0ken = res.token || ''
-              setLoginT0kenCookies(serviceT0ken)
-              resolve(serviceT0ken)
-            } else {
-              reject(`checkLineLoginVerify:${res.error || '發生了例外錯誤'}`)
-            }
-          })
+          scanEntry
+            .checkLineLoginVerify(accessToken)
+            .then((res: VerifyCodeResType) => {
+              if (res.result) {
+                const serviceT0ken = res.token || ''
+                setLoginT0kenCookies(serviceT0ken)
+                resolve(serviceT0ken)
+              } else {
+                reject(`checkLineLoginVerify:${res.error || '發生了例外錯誤'}`)
+              }
+            })
+            .catch((error: string) => {
+              reject(error)
+            })
         }
       } else {
         resolve('')
@@ -148,14 +158,13 @@ export function useFetchData() {
 
   // 打卡驗證
   const commitStoreCheckIn = async (
-    id: string | string[] = '',
+    eventId: string = '',
     t0kenObj: ParseCtStringState | null = null
   ): Promise<boolean | ScanResultType> => {
     const loginT0kenObj = getLoginT0kenCookies()
     const locationObj = getLocationStorage()
-    const activityId = parseActivityId(id)
     return new Promise((resolve, reject) => {
-      if (activityId === '') {
+      if (eventId === '') {
         reject('此活動不存在，請重新操作')
       } else if (!VITE_API_URL) {
         reject('服務中斷，請稍後再試')
@@ -168,7 +177,7 @@ export function useFetchData() {
         const { loginT0ken } = loginT0kenObj
         const [latitude, longitude] = locationObj
         const data = {
-          eventId: Number(activityId),
+          eventId: Number(eventId),
           longitude: Number(longitude),
           latitude: Number(latitude),
           storeId: storeId,
@@ -184,7 +193,7 @@ export function useFetchData() {
         checkIn
           .checkInVerify(data, headers)
           .then((res: any) => {
-            console.log(res);
+            console.log(res)
             const { code, msg, checkInStoreInfo } = res
             if (code === ResponseCodes.NO_EVENT) {
               reject('此活動不存在，請重新操作')
@@ -194,7 +203,7 @@ export function useFetchData() {
               reject('訪客無法進行打卡，請重新操作')
             } else if (checkInStoreInfo) {
               resolve({
-                eventId: String(activityId),
+                eventId: String(eventId),
                 storeId: checkInStoreInfo.storeId,
                 storeName: checkInStoreInfo.storeName,
                 date: checkInStoreInfo.checkInTime
@@ -224,61 +233,18 @@ export function useFetchData() {
             }
             removeCtT0kenCookies()
           })
-          .catch((error: any) => {
-            console.log(error)
-            reject(`服務異常，${error.msg}`)
+          .catch((error: string) => {
+            reject(error)
           })
       }
     })
   }
 
-  // 得到活動ID, 如果沒有帶入參數則取得browser storage
-  const parseActivityId = (activityId: number | string | string[] = '') => {
-    if (!activityId) return activityId
-    const TargetEvent = getTargetEventStorage()
-    return String(TargetEvent?.id) || ''
-  }
-
   // 觸發兌獎
-  const commitReceivePrize = async (
-    id: string | string[] = ''
-  ): Promise<boolean | ScanResultType> => {
+  const commitReceivePrize = async (eventId: string = ''): Promise<boolean | ScanResultType> => {
     const loginT0kenObj = getLoginT0kenCookies()
-    const activityId = parseActivityId(id)
     return new Promise((resolve, reject) => {
-      // if (activityId === '') {
-      //   reject('此活動不存在，請重新操作')
-      // } else if (!VITE_API_URL) {
-      //   reject('服務中斷，請稍後再試')
-      // } else if (loginT0kenObj === null) {
-      //   reject('訪客無法進行操作，請重新操作')
-      // } else {
-      //   prize
-      //     .commitReceivePrize(activityId, String(loginT0kenObj.loginT0ken))
-      //     .then((res: any) => {
-      //       if (res) {
-      //         resolve(true)
-      //       } else {
-      //         reject(`服務異常，${res.result}`)
-      //       }
-      //     })
-      //     .catch((error: any) => {
-      //       reject(`服務異常，${error.msg}`)
-      //     })
-      // }
-    })
-  }
-
-  // 取得兌獎列表: 整理API Data >>> UI
-  const fetchReceivePrize = async (
-    id: number | string | string[] = ''
-  ): Promise<PrizeUiDisplayInfoType[]> => {
-    const loginT0kenObj = getLoginT0kenCookies()
-    const activityId = parseActivityId(id)
-    return new Promise((resolve, reject) => {
-      debugger
-      // resolve(mockDatas.WinningData)
-      if (activityId === '') {
+      if (eventId === '') {
         reject('此活動不存在，請重新操作')
       } else if (!VITE_API_URL) {
         reject('服務中斷，請稍後再試')
@@ -286,7 +252,35 @@ export function useFetchData() {
         reject('訪客無法進行操作，請重新操作')
       } else {
         prize
-          .fetchReceivePrizeResult(activityId, String(loginT0kenObj.loginT0ken))
+          .commitReceivePrize(eventId, String(loginT0kenObj.loginT0ken))
+          .then((res: any) => {
+            if (res) {
+              resolve(true)
+            } else {
+              reject(`服務異常，${res.result}`)
+            }
+          })
+          .catch((error: any) => {
+            reject(`服務異常，${error.msg}`)
+          })
+      }
+    })
+  }
+
+  // 取得兌獎列表: 整理API Data >>> UI
+  const fetchReceivePrize = async (eventId: string = ''): Promise<PrizeUiDisplayInfoType[]> => {
+    const loginT0kenObj = getLoginT0kenCookies()
+    return new Promise((resolve, reject) => {
+      // resolve(mockDatas.WinningData)
+      if (eventId === '') {
+        reject('此活動不存在，請重新操作')
+      } else if (!VITE_API_URL) {
+        reject('服務中斷，請稍後再試')
+      } else if (loginT0kenObj === null) {
+        reject('訪客無法進行操作，請重新操作')
+      } else {
+        prize
+          .fetchReceivePrizeResult(eventId, String(loginT0kenObj.loginT0ken))
           .then((res: any) => {
             const newPrizeResultList: PrizeUiDisplayInfoType[] = []
             if (res && res.claimPrizeResultList) {
@@ -315,8 +309,8 @@ export function useFetchData() {
             }
             resolve(newPrizeResultList)
           })
-          .catch((error: any) => {
-            reject(`服務異常，${error.msg}`)
+          .catch((error: string) => {
+            reject(error)
           })
       }
     })
@@ -352,14 +346,14 @@ export function useFetchData() {
               resolve(eventList || [])
             }
           })
-          .catch((err) => {
-            console.error(err)
+          .catch((error: any) => {
+            reject(error)
           })
       }
     })
   }
 
-  const confirmCampaign = (parameter: string | string[] = ''): Promise<EventSimpleInterface> => {
+  const confirmEvent = (parameter: string | string[] = ''): Promise<EventSimpleInterface> => {
     return new Promise((resolve, reject) => {
       const activityId = String(parameter)
 
@@ -368,9 +362,13 @@ export function useFetchData() {
       if (enevtList.length === 0) {
         const parseQrStringObj = getCtT0kenCookies()
         const storeId = parseQrStringObj ? parseQrStringObj.storeId || '' : ''
-        fetchAllCampaign(storeId).then((res: CampaignInterface[]) => {
-          enevtList = res
-        })
+        fetchAllCampaign(storeId)
+          .then((res: CampaignInterface[]) => {
+            enevtList = res
+          })
+          .catch((error: string) => {
+            console.error(error)
+          })
       }
 
       const target = enevtList.find((item) => String(item.id) === activityId)
@@ -403,7 +401,6 @@ export function useFetchData() {
             content: eventInfo.content || [],
             redeemPrize: target.redeemPrizeList.map((item: RedeemPrizeType) => item.reachTarget)
           }
-          setTargetEventStorage(obj)
           resolve(obj)
         }
       }
@@ -415,13 +412,18 @@ export function useFetchData() {
       if (VITE_UI_MODE) {
         resolve(mockDatas.adsData)
       } else {
-        scanEntry.fetchAdData().then((res: AdListResType) => {
-          if (res.error) {
-            reject(`fetchAdData:${res.error}`)
-          } else {
-            resolve(res.queryList || [])
-          }
-        })
+        scanEntry
+          .fetchAdData()
+          .then((res: AdListResType) => {
+            if (res.error) {
+              reject(`fetchAdData:${res.error}`)
+            } else {
+              resolve(res.queryList || [])
+            }
+          })
+          .catch((error: string) => {
+            reject(error)
+          })
       }
     })
   }
@@ -432,13 +434,19 @@ export function useFetchData() {
       if (VITE_UI_MODE) {
         resolve(mockDatas.albumData)
       } else if (loginT0ken && loginT0ken.loginT0ken) {
-        checkIn.fetchAlbum(loginT0ken.loginT0ken).then((res: any) => {
-          if (res.error) {
-            reject(`fetchAlbumData:${res.error}`)
-          } else {
-            resolve(res)
-          }
-        })
+        checkIn
+          .fetchAlbum(loginT0ken.loginT0ken)
+          .then((res: any) => {
+            if (res.error) {
+              reject(`fetchAlbumData:${res.error}`)
+            } else {
+              resolve(res)
+            }
+          })
+          .catch((error: string) => {
+            console.log('未登入' + error)
+            reject(error)
+          })
       } else {
         reject('開發模式')
       }
@@ -451,15 +459,20 @@ export function useFetchData() {
       if (VITE_UI_MODE) {
         resolve(mockDatas.CollectData)
       } else if (loginT0ken && loginT0ken.loginT0ken) {
-        checkIn.fetchCollect(activityId, loginT0ken.loginT0ken).then((res: any) => {
-          if (res.error) {
-            reject(`fetchCollectData:${res.error}`)
-          } else {
-            resolve({
-              ...res
-            })
-          }
-        })
+        checkIn
+          .fetchCollect(activityId, loginT0ken.loginT0ken)
+          .then((res: any) => {
+            if (res.error) {
+              reject(`fetchCollectData:${res.error}`)
+            } else {
+              resolve({
+                ...res
+              })
+            }
+          })
+          .catch((error: string) => {
+            reject(`fetchCollectData:${error}`)
+          })
       } else {
         reject('開發模式')
       }
@@ -500,7 +513,7 @@ export function useFetchData() {
     checkLineLoginVerify,
 
     fetchAllCampaign,
-    confirmCampaign,
+    confirmEvent,
     fetchAdData,
     fetchAlbumData,
     fetchCollectData,

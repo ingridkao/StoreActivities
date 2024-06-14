@@ -1,41 +1,38 @@
 <script setup lang="ts">
 /**
  * 門市打卡紀錄
- * 確認LINE login(router.beforeEach判斷)
  */
 import { ref, onMounted, computed } from 'vue'
-
-import HeaderMenu from '@/components/HeaderMenu.vue'
 import type { AlbumType } from '@/types/ResponseHandle'
-import { useFetchData } from '@/composable/useFetch'
-import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useLayoutStore } from '@/stores/layout'
 
 import emptyStampImg from '@/assets/images/stamp/empty1.png'
 import checkedStampImg from '@/assets/images/stamp/checked.svg'
+import HeaderMenu from '@/components/HeaderMenu.vue'
 
+import { useFetchData } from '@/composable/useFetch'
+import { useSweetAlert } from '@/composable/useSweetAlert'
+import { useLayoutStore } from '@/stores/layout'
 const { fetchAlbumData } = useFetchData()
 const { errorAlert, openStoreInfo } = useSweetAlert()
+const layoutStore = useLayoutStore()
 
-const stampBaseCount = ref(20)
 const albumStore = ref<AlbumType[]>([])
-
 const accumulation = computed(() => {
   if (albumStore.value.length === 0) return '0000'
   const numberStr = String(albumStore.value.length)
   return numberStr.padStart(5 - numberStr.length, '0')
 })
+const stampBaseCount = computed(() => {
+  const albumCount = albumStore.value.length
+  if (albumCount <= 24) return 24
+  return (Math.round((albumCount - 24) / 4) + 6) * 8
+})
 
-const layoutStore = useLayoutStore()
 onMounted(async () => {
   layoutStore.loadToggle(true)
   try {
     const res = await fetchAlbumData()
     albumStore.value = res && res.historyList ? res.historyList : []
-    const albumCount = albumStore.value.length
-    if(albumCount > stampBaseCount.value){
-      stampBaseCount.value =(Math.round((albumCount - 20)/4) + 6)*4
-    }
   } catch (error) {
     errorAlert(String(error))
   }

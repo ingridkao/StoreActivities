@@ -57,7 +57,7 @@ onMounted(async () => {
 // TODO remove
 const activityId = ref('')
 const storeId = ref('')
-const genrate = async() => {
+const genrate = async () => {
   const MockCode = await genrateMockQRCode(activityId.value, storeId.value)
   if (MockCode) {
     setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
@@ -89,14 +89,38 @@ const genrate = async() => {
     </section>
 
     <LobbyAds :adsList="adsList" />
-    
+
     <footer class="lobby_footer">
       <div>
-        <a href="https://www.facebook.com/711.ibon/" target="_blank" rel="noreferrer noopenner"><img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" width="45" height="45"/></a>
-        <a href="https://www.instagram.com/ibontw/" target="_blank" rel="noreferrer noopenner"><img src="@/assets/images/lobby/icon-instagram.png" alt="instagram" width="45" height="45"/></a>
-        <a href="https://www.youtube.com/@ibon1348" target="_blank" rel="noreferrer noopenner"><img src="@/assets/images/lobby/icon-youtube.png" alt="youtube" width="45" height="45"/></a>
-        <a href="https://page.line.me/gpk2354t?openQrModal=true" target="_blank" rel="noreferrer noopenner"><img src="@/assets/images/lobby/icon-line.png" alt="line" width="45" height="45"/></a>
-        <a href="https://group.openpoint.com.tw/cdn/index.html" target="_blank" rel="noreferrer noopenner"><img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" width="45" height="45"/></a>
+        <a href="https://www.facebook.com/711.ibon/" target="_blank" rel="noreferrer noopenner"
+          ><img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" width="45" height="45"
+        /></a>
+        <a href="https://www.instagram.com/ibontw/" target="_blank" rel="noreferrer noopenner"
+          ><img
+            src="@/assets/images/lobby/icon-instagram.png"
+            alt="instagram"
+            width="45"
+            height="45"
+        /></a>
+        <a href="https://www.youtube.com/@ibon1348" target="_blank" rel="noreferrer noopenner"
+          ><img src="@/assets/images/lobby/icon-youtube.png" alt="youtube" width="45" height="45"
+        /></a>
+        <a
+          href="https://page.line.me/gpk2354t?openQrModal=true"
+          target="_blank"
+          rel="noreferrer noopenner"
+          ><img src="@/assets/images/lobby/icon-line.png" alt="line" width="45" height="45"
+        /></a>
+        <a
+          href="https://group.openpoint.com.tw/cdn/index.html"
+          target="_blank"
+          rel="noreferrer noopenner"
+          ><img
+            src="@/assets/images/lobby/icon-open-point.png"
+            alt="open-point"
+            width="45"
+            height="45"
+        /></a>
       </div>
     </footer>
 
@@ -117,7 +141,7 @@ const genrate = async() => {
 </template>
 
 <style lang="scss">
-.lobby{
+.lobby {
   @extend %pageMain;
 
   &_section {
@@ -126,14 +150,14 @@ const genrate = async() => {
     flex-wrap: wrap;
     max-width: $content-large;
     padding: 26px 26px 0 26px;
-  
+
     .section__title {
       justify-content: flex-start;
       @media screen and (min-width: $content-large) {
         justify-content: center;
       }
     }
-  
+
     &-list {
       @extend %flexColInfo;
       @extend %mainSection;
@@ -152,7 +176,7 @@ const genrate = async() => {
         }
       }
     }
-  
+
     &-link {
       @extend %flexColInfo;
       @extend %mainSection;
@@ -170,10 +194,10 @@ const genrate = async() => {
     }
   }
 
-  &_footer{
+  &_footer {
     background: url('@/assets/images/bg/lime.png') repeat;
     padding: 28px 0 52px 0;
-    >div{
+    > div {
       @extend %mainSection;
       max-width: $card-middle;
       @extend %flexRowInfo;
@@ -185,5 +209,4 @@ const genrate = async() => {
     }
   }
 }
-
 </style>

@@ -2,41 +2,45 @@
 /**
  * 單一打卡紀錄
  */
-import { ref, watchEffect } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useDay } from '@/composable/useDay'
-
-import HeaderMenu from '@/components/HeaderMenu.vue'
-
 import type { EventSimpleInterface, EventInterface, IconInterface } from '@/types/ResponseHandle'
-import { useLink } from '@/composable/useLink'
-import { useFetchData } from '@/composable/useFetch'
-import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useEventStorage } from '@/composable/useEventStorage'
-
-import { useLayoutStore } from '@/stores/layout'
 
 import emptyStampImg from '@/assets/images/stamp/empty.png'
 import checkedStampImg from '@/assets/images/stamp/checked.svg'
 import BorderStampImg from '@/assets/images/stamp/border.png'
 import redeemButtonImg from '@/assets/images/button/redeem.svg'
 import backToActivityImg from '@/assets/images/button/back-activity.svg'
+import HeaderMenu from '@/components/HeaderMenu.vue'
 
+import { useFetchData } from '@/composable/useFetch'
+import { useSweetAlert } from '@/composable/useSweetAlert'
+import { useEventStorage } from '@/composable/useEventStorage'
+import { useDay } from '@/composable/useDay'
+import { useLink } from '@/composable/useLink'
+import { useLayoutStore } from '@/stores/layout'
+const { confirmEvent, fetchCollectData, commitReceivePrize } = useFetchData()
+const { activityErrorAlert, errorAlert, openStoreInfo } = useSweetAlert()
+const { setAccumulatCheckinCount } = useEventStorage()
 const { parseYMD, parseMD } = useDay()
-const { fetchCollectData, commitReceivePrize } = useFetchData()
-const { errorAlert, openStoreInfo } = useSweetAlert()
-const { getTargetEventStorage, setAccumulatCheckinCount } = useEventStorage()
-
-const stampBaseCount = 20
-const activityId = ref<string>('')
-const collectedActivity = ref<EventSimpleInterface | null>(null)
-const collectedStore = ref<EventInterface[]>([])
-const iconStore = ref<IconInterface[]>([])
-
+const { linkToTargetActivityIdPage } = useLink()
+const layoutStore = useLayoutStore()
 const route = useRoute()
 const router = useRouter()
 
-const { linkToTargetActivityIdPage } = useLink()
+const collectedActivity = ref<EventSimpleInterface | null>(null)
+const collectedStore = ref<EventInterface[]>([])
+const iconStore = ref<IconInterface[]>([])
+const stampBaseCount = computed(() => {
+  const albumCount = collectedStore.value.length
+  if (albumCount <= 24) return 24
+  return (Math.round((albumCount - 24) / 4) + 6) * 8
+})
+
+const eventId = String(route.params.id)
+const goToEventPage = () => {
+  linkToTargetActivityIdPage(eventId, 'Activity')
+}
 
 const clickReceivePrize = async () => {
   // 檢查是否符合第一階段兌獎門檻，其他門檻透過API確認
@@ -46,45 +50,42 @@ const clickReceivePrize = async () => {
     collectedStore.value.length >= collectedActivity.value.redeemPrize[0]
   ) {
     try {
-      const commitRes = await commitReceivePrize(activityId.value)
+      const commitRes = await commitReceivePrize(eventId)
       if (commitRes) {
         // 兌獎觸發成功引導到兌獎頁面
-        router.push({ name: 'Winning' })
+        router.push({ path: `/winning/${eventId}` })
+      } else {
+        errorAlert('未達到兌獎門檻', `/activity/${eventId}`)
       }
     } catch (error) {
-      errorAlert(String(error), `/activity/${activityId.value}`)
+      errorAlert(String(error), `/activity/${eventId}`)
     }
   } else {
-    errorAlert('未達到兌獎門檻', `/activity/${activityId.value}`)
+    errorAlert('未達到兌獎門檻', `/activity/${eventId}`)
   }
 }
 
-const layoutStore = useLayoutStore()
-watchEffect(async () => {
-  const activityParamsId = String(route.params.id)
-  if (!activityParamsId) {
-    router.push({ name: 'Album' })
-  } else {
-    layoutStore.loadToggle(true)
-    const TargetEvent = getTargetEventStorage()
-    collectedActivity.value = TargetEvent || null
-    try {
-      const res = await fetchCollectData(activityParamsId)
-      if (res) {
-        activityId.value = activityParamsId
-        collectedStore.value = res.historyList || []
-        iconStore.value = res.storeIconList || []
-
-        setAccumulatCheckinCount(collectedStore.value.length)
-      } else {
-        activityId.value = ''
-        linkToTargetActivityIdPage('', 'Activity')
-      }
-    } catch (error) {
-      errorAlert(String(error), `/activity/${activityParamsId}`)
+onMounted(async () => {
+  layoutStore.loadToggle(true)
+  try {
+    const confirmRes = await confirmEvent(eventId)
+    collectedActivity.value = confirmRes
+    const res = await fetchCollectData(eventId)
+    if (res) {
+      collectedStore.value = res.historyList || []
+      iconStore.value = res.storeIconList || []
+      setAccumulatCheckinCount(collectedStore.value.length)
     }
-    layoutStore.loadToggle(false)
+  } catch (error) {
+    if (error === 1) {
+      activityErrorAlert('沒有此活動')
+    } else if (error === 2) {
+      activityErrorAlert('活動已結束')
+    } else {
+      errorAlert(String(error), `/activity/${eventId}`)
+    }
   }
+  layoutStore.loadToggle(false)
 })
 
 const stampBorder = ['#ffcf24', '#b26cf7', '#ff8d3b', '#f06f9d']
@@ -102,10 +103,10 @@ const isGradeStamp = (index: number) => {
   }
 }
 
-const parseIconURL = (baseItem:EventInterface) => {
-  if(!baseItem) return ''
-  const target = iconStore.value.find(item => item.storeId === baseItem.storeId)
-  return target? target.iconFilePath: ''
+const parseIconURL = (baseItem: EventInterface) => {
+  if (!baseItem) return ''
+  const target = iconStore.value.find((item) => item.storeId === baseItem.storeId)
+  return target ? target.iconFilePath : ''
 }
 </script>
 
@@ -115,8 +116,12 @@ const parseIconURL = (baseItem:EventInterface) => {
     <div>
       <div class="collected__header">
         <div class="collected__header--text-block">
-          <h1 class="collected__header--text-block-main">{{ collectedActivity?.eventName || '-' }}</h1>
-          <h1 class="collected__header--text-block-bg">{{ collectedActivity?.eventName || '-' }}</h1>
+          <h1 class="collected__header--text-block-main">
+            {{ collectedActivity?.eventName || '-' }}
+          </h1>
+          <h1 class="collected__header--text-block-bg">
+            {{ collectedActivity?.eventName || '-' }}
+          </h1>
         </div>
         <div class="collected__header--date">
           <h2>{{ parseYMD(collectedActivity?.start) || 'YYYY.MM.DD' }}</h2>
@@ -152,8 +157,8 @@ const parseIconURL = (baseItem:EventInterface) => {
             >
               {{ collectedStore[baseItem - 1]['storeName'] }}
             </p>
-            <img 
-              :src="checkedStampImg" 
+            <img
+              :src="checkedStampImg"
               class="stamp-grade"
               :style="{ borderColor: `${isGradeStamp(baseItem)}` }"
               :alt="collectedStore[baseItem - 1]['storeName']"
@@ -166,18 +171,14 @@ const parseIconURL = (baseItem:EventInterface) => {
             :style="{ borderColor: `${isGradeStamp(baseItem)}` }"
             :alt="`stamp`"
           />
-          <img 
-            v-else 
-            :src="emptyStampImg" 
-            alt="empty stamp"
-          />
+          <img v-else :src="emptyStampImg" alt="empty stamp" />
         </div>
       </div>
-      <footer v-if="activityId" class="collected__footer">
+      <footer class="collected__footer">
         <button @click="clickReceivePrize()">
           <img :src="redeemButtonImg" alt="前往兌獎" />
         </button>
-        <button @click="linkToTargetActivityIdPage(activityId, 'Activity')">
+        <button @click="goToEventPage()">
           <img :src="backToActivityImg" alt="回活動首頁" />
         </button>
       </footer>
@@ -192,6 +193,7 @@ const parseIconURL = (baseItem:EventInterface) => {
 
 .collected {
   @extend %pageMain;
+  min-height: 100dvh;
 
   &__header {
     @extend %flexColInfo;
@@ -248,12 +250,14 @@ const parseIconURL = (baseItem:EventInterface) => {
 
   &__footer {
     @extend %fixedSection;
-    @extend %flexRowInfo;
+    height: 40px;
     bottom: 60px;
+    top: auto;
+    @extend %flexRowInfo;
     gap: 14px;
   }
 
-  .stamp-grade{
+  .stamp-grade {
     border-color: $white;
   }
 }

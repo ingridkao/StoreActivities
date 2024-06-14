@@ -1,13 +1,11 @@
 import { useRouter } from 'vue-router'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useEventStorage } from '@/composable/useEventStorage'
 import { useFetchData } from '@/composable/useFetch'
 
 export function useLink() {
   const router = useRouter()
   const { activityErrorAlert, errorAlert } = useSweetAlert()
-  const { getTargetEventStorage } = useEventStorage()
-  const { confirmCampaign } = useFetchData()
+  const { confirmEvent } = useFetchData()
 
   const getQueryParam = (url: string, param: string) => {
     // eslint-disable-next-line no-useless-escape
@@ -17,15 +15,13 @@ export function useLink() {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '))
   }
 
-  const linkToPrepareScan = async(
-    activityId: string | string[] = ''
-  ) => {
+  const linkToPrepareScan = async (activityId: string | string[] = '') => {
     if (activityId === '') {
       router.push('/')
     } else {
       try {
-        const confirmRes = await confirmCampaign(activityId)
-        if(confirmRes){
+        const confirmRes = await confirmEvent(activityId)
+        if (confirmRes) {
           router.push({
             name: 'Activity',
             params: {

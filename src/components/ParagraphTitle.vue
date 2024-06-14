@@ -16,9 +16,9 @@ const props = defineProps<{
 <style lang="scss" scoped>
 .section__title {
   @extend %flexRowInfo;
+  justify-content: flex-start;
   gap: 5px;
   width: 100%;
-  margin: auto;
   padding-top: 0;
   padding-bottom: 20px;
   img {

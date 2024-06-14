@@ -48,11 +48,12 @@ export function useSweetAlert() {
         value?: boolean
         dismiss?: any
       }) => {
-        console.log(result);
+        console.log(result)
         // click過去活動打卡紀錄isConfirmed: true | value: true
         if (result.isConfirmed) router.push({ path: '/album', replace: true })
         // click活動大廳isDismissed: true | dismiss: 'cancel'
-        if (result.isDismissed && result.dismiss === 'cancel') router.push({ path: '/', replace: true })
+        if (result.isDismissed && result.dismiss === 'cancel')
+          router.push({ path: '/', replace: true })
         // click背景 isDismissed: true | dismiss:'backdrop'
       }
     )
@@ -79,7 +80,7 @@ export function useSweetAlert() {
       </div> 
     `
       : ''
-    const imgURL = imageUrl? `${VITE_ASSETS_URL}${imageUrl}`: baseImgURL
+    const imgURL = imageUrl ? `${VITE_ASSETS_URL}${imageUrl}` : baseImgURL
 
     Swal.fire({
       html: `

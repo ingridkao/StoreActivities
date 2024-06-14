@@ -4,8 +4,8 @@
 @import 'image';
 
 /************ content main layout ************/
-body.swal2-shown{
-  .topBg{
+body.swal2-shown {
+  .topBg {
     overflow-y: hidden;
   }
 }
@@ -16,7 +16,7 @@ main {
   background-color: $white;
 }
 
-footer{
+footer {
   position: relative;
   width: 100%;
   text-align: center;
@@ -33,7 +33,7 @@ footer{
   color: $black;
   background-color: $white;
   font-size: 36px;
-  &.small{
+  &.small {
     font-size: 24px;
     line-height: 1.5;
   }
@@ -141,39 +141,39 @@ footer{
   cursor: pointer;
   color: transparent;
   background-repeat: no-repeat;
-  &.record{
+  &.record {
     width: 136px;
     background-image: url('../assets/images/button/record.svg');
   }
-  &.keepCheck{
+  &.keepCheck {
     width: 143px;
     background-image: url('../assets/images/button/keep-check.svg');
   }
-  &.enter{
+  &.enter {
     width: 150px;
     background-image: url('../assets/images/button/enter.svg');
   }
-  &.checkin{
+  &.checkin {
     width: 150px;
     background-image: url('../assets/images/button/check-in.svg');
   }
-  &.activity{
+  &.activity {
     width: 143px;
     background-image: url('../assets/images/button/back-activity.svg');
   }
 }
 
-.round-btn{
+.round-btn {
   width: 40px;
   height: 40px;
   cursor: pointer;
 
   color: transparent;
   @extend %imgContainer;
-  &.info{
+  &.info {
     background-image: url('../assets/images/button/info.svg');
   }
-  &.mapCenter{
+  &.mapCenter {
     background-image: url('../assets/images/button/map.svg');
   }
 }

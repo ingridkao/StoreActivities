@@ -7,19 +7,13 @@ import content from '@/assets/content'
 <template>
   <header class="lobbyHead">
     <div class="lobbyHead_wrapper">
-      <img 
-        class="lobbyHead_wrapper-logo" 
-        :src="topLogoImg" 
-        alt="top logo" 
-        width="73" 
-        height="31"
-      />
+      <img class="lobbyHead_wrapper-logo" :src="topLogoImg" alt="top logo" width="73" height="31" />
       <div class="lobbyHead_wrapper-cat">
-        <img 
-          class="lobbyHead_wrapper-cat-img" 
-          :src="topCatImg" 
-          alt="操作ibon的喵~" 
-          width="135" 
+        <img
+          class="lobbyHead_wrapper-cat-img"
+          :src="topCatImg"
+          alt="操作ibon的喵~"
+          width="135"
           height="125"
         />
         <h1 class="lobbyHead_wrapper-cat-dialog">
@@ -45,7 +39,7 @@ import content from '@/assets/content'
       @extend %flexRowInfo;
       justify-content: end;
       gap: 8px;
-  
+
       padding-bottom: 8px;
       &-img {
         width: 135px;

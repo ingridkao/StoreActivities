@@ -1,4 +1,6 @@
-*, ::after, ::before {
+*,
+::after,
+::before {
   box-sizing: border-box;
 }
 
@@ -11,7 +13,7 @@ body {
 
 html {
   text-rendering: optimizeLegibility;
-  font-family: Helvetica,sans-serif;
+  font-family: Helvetica, sans-serif;
   font-weight: 400;
 }
 
@@ -30,11 +32,15 @@ button {
 
 a {
   background-color: transparent;
+  text-decoration: none;
   cursor: pointer;
-  &:active, &:focus, &:hover, &:focus-visible {
+  &:active,
+  &:focus,
+  &:hover,
+  &:focus-visible {
     outline: none;
   }
-  &:disabled{
+  &:disabled {
     pointer-events: none;
     opacity: 0.85;
   }
@@ -54,4 +60,20 @@ img {
 svg {
   -webkit-tap-highlight-color: transparent; /* 在 iOS 上禁用選中效果 */
   tap-highlight-color: transparent; /* 在其他瀏覽器上禁用選中效果 */
+}
+
+/* vue相關
+   ========================================================================== */
+.router-link-active {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }

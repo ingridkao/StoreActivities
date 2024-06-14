@@ -7,19 +7,19 @@ export function useDay() {
   }
 
   const parseYear = (date: string = '') => {
-    return date? dayjs(date).year(): ''
+    return date ? dayjs(date).year() : ''
   }
 
   const parseYMD = (date: string = '') => {
-    return date? dayjs(date).format('YYYY.MM.DD'): ''
+    return date ? dayjs(date).format('YYYY.MM.DD') : ''
   }
 
   const parseMD = (date: string = '') => {
-    return date? dayjs(date).format('MM.DD'): ''
+    return date ? dayjs(date).format('MM.DD') : ''
   }
 
   const parseYYYYMMDD = (date: string = '') => {
-    return date? dayjs(date).format('YYYY/MM/DD'): ''
+    return date ? dayjs(date).format('YYYY/MM/DD') : ''
   }
   return {
     parseData,

@@ -1,7 +1,4 @@
 <script setup lang="ts">
-/**
- * 打卡結果
- */
 import { computed } from 'vue'
 import type { ScanResultType } from '@/types/ResponseHandle'
 import { useLink } from '@/composable/useLink'
@@ -20,7 +17,6 @@ const props = defineProps<{
 }>()
 const successResult = computed(() => Object.keys(props.result).length > 0)
 const errorMsg = computed(() => props.error || '')
-
 </script>
 
 <template>
@@ -51,7 +47,7 @@ const errorMsg = computed(() => props.error || '')
 
       <div v-else class="scanResult_container--result scanResult_container--fail">
         <div class="catImg">
-          <img :src="checkFailImageImg" alt="check fail" />
+          <img :src="checkFailImageImg" alt="無奈喵~~" width="336" height="403" />
         </div>
         <div class="scanResult_container--fail-msg">{{ errorMsg }}</div>
       </div>
@@ -64,11 +60,7 @@ const errorMsg = computed(() => props.error || '')
         >
           查看紀錄
         </button>
-        <button 
-          class="store-btn keepCheck" 
-          @click="$emit('scanAgain')"
-          title="繼續打卡"
-        >
+        <button class="store-btn keepCheck" @click="$emit('scanAgain')" title="繼續打卡">
           繼續打卡
         </button>
       </footer>
@@ -77,15 +69,15 @@ const errorMsg = computed(() => props.error || '')
 </template>
 
 <style lang="scss" scoped>
-.catImg > img{
+.catImg > img {
   width: 80%;
   margin: auto;
 }
 .scanResult {
   @extend %fixedSection;
-  top: 0;
-  left: 0;
   height: 100dvh;
+  overflow-y: scroll;
+
   &_container {
     @extend %flexColInfo;
     @extend %mainSection;
@@ -97,8 +89,7 @@ const errorMsg = computed(() => props.error || '')
       align-self: end;
     }
 
-    &--result{
-      // @extend %flexColInfo;
+    &--result {
       @extend %mainSection;
       max-width: $card-middle;
     }
@@ -141,12 +132,12 @@ const errorMsg = computed(() => props.error || '')
       &-msg {
         margin-top: 24px;
         word-break: break-word;
-        max-width: $content-small;
+        text-align: center;
       }
     }
   }
 
-  &__button{
+  &__button {
     @extend %flexRowInfo;
     gap: 24px;
   }

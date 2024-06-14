@@ -3,6 +3,8 @@
  * 中獎序號s
  */
 import { ref, watchEffect, computed } from 'vue'
+import { useRoute } from 'vue-router'
+
 import content from '@/assets/content'
 import type { PrizeUiDisplayInfoType } from '@/types/ResponseHandle'
 
@@ -22,36 +24,37 @@ import prevArrowImg from '@/assets/images/button/prev-arrow.svg'
 
 const { linkToTargetActivityIdPage } = useLink()
 const { fetchReceivePrize } = useFetchData()
-const { getTargetEventStorage, getAccumulatCheckinCount } = useEventStorage()
+const { getAccumulatCheckinCount } = useEventStorage()
 const { errorAlert } = useSweetAlert()
 const { parseData } = useDay()
+const route = useRoute()
+const eventId = String(route.params.id)
 
 const prizeIndex = ref(0)
 const prizeTargetInfo = computed(() => prizeInfo.value[prizeIndex.value] || null)
-
 const checkinCount = ref(0)
 const prizeInfo = ref<PrizeUiDisplayInfoType[]>([])
+
 const layoutStore = useLayoutStore()
 watchEffect(async () => {
   checkinCount.value = getAccumulatCheckinCount()
-  const TargetEvent = getTargetEventStorage()
-  if (TargetEvent && TargetEvent.id) {
-    layoutStore.loadToggle(true)
-    try {
-      const res = await fetchReceivePrize(TargetEvent.id)
-      if (res && res.length > 0) {
-        prizeInfo.value = res
-      } else {
-        errorAlert('未達到兌換門檻，回到活動頁面', `/activity/${TargetEvent.id}`)
-      }
-    } catch (error) {
-      errorAlert(String(error), `/activity/${TargetEvent.id}`)
+  layoutStore.loadToggle(true)
+  try {
+    const res = await fetchReceivePrize(eventId)
+    if (res && res.length > 0) {
+      prizeInfo.value = res
+    } else {
+      errorAlert('未達到兌換門檻，回到活動頁面', `/activity/${eventId}`)
     }
-    layoutStore.loadToggle(false)
-  } else {
-    errorAlert('操作異常，回到活動大廳')
+  } catch (error) {
+    errorAlert(String(error), `/activity/${eventId}`)
   }
+  layoutStore.loadToggle(false)
 })
+
+const goToCollectedPage = () => {
+  linkToTargetActivityIdPage(eventId, 'Collected')
+}
 </script>
 
 <template>
@@ -115,7 +118,7 @@ watchEffect(async () => {
             : ''
         "
       />
-      <button class="store-btn" @click="linkToTargetActivityIdPage('', 'Collected')">
+      <button class="store-btn" @click="goToCollectedPage">
         <img :src="backButtonImg" alt="返回打卡紀錄" />
       </button>
     </section>

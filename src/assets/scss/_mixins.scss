@@ -1,12 +1,15 @@
 $card-basic: 396px;
 $card-middle: 586px;
 $card-large: 800px;
+$card-basic2X: 792px;
+
 $content-small: 336px;
 $content-middle: 650px;
 $content-large: 855px;
 
 $black: #000;
 $black1: #2d2a2a;
+$whitePure: #f5f5f5;
 $white: #efefea;
 $white2: #d3d3d3;
 $grayBlue: #d7dde2;
@@ -22,16 +25,15 @@ $green3: #12b84a;
 $green4: #009f66;
 $purple: #8b84d3;
 
-
 /*===== flex =====*/
-%flexColInfo{
+%flexColInfo {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
-%flexRowInfo{
+%flexRowInfo {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -39,14 +41,14 @@ $purple: #8b84d3;
 }
 
 /*===== mainSection =====*/
-%pageMain{
+%pageMain {
   width: 100%;
   min-height: calc(100 * var(--vh));
   z-index: 2;
   padding-bottom: 60px;
 }
 
-%mainSection{
+%mainSection {
   position: relative;
   width: 100%;
   margin: auto;
@@ -56,6 +58,8 @@ $purple: #8b84d3;
   width: 100%;
   position: fixed;
   z-index: 4;
+  top: 0;
+  left: 0;
 }
 
 %titleSection {
@@ -64,7 +68,7 @@ $purple: #8b84d3;
   align-items: center;
 }
 
-%cardWidth{
+%cardWidth {
   max-width: $card-middle;
   margin: 0 auto;
   @media screen and (min-width: $content-large) {
@@ -72,16 +76,13 @@ $purple: #8b84d3;
   }
 }
 
-// 
-
-
 %imgContainer {
   background-size: center;
   background-repeat: no-repeat;
   background-size: contain;
 }
 
-%stampSection{
+%stampSection {
   width: 100%;
   max-width: $card-basic;
   margin: auto;
@@ -90,4 +91,12 @@ $purple: #8b84d3;
   padding: 0 20px;
   margin-bottom: 16px;
   grid-template-columns: repeat(4, 1fr);
+  @media screen and (max-width: $card-basic) {
+    max-width: $content-small;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @media screen and (min-width: $card-basic2X) {
+    max-width: $card-basic2X;
+    grid-template-columns: repeat(8, 1fr);
+  }
 }

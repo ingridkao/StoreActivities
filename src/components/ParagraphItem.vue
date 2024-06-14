@@ -9,9 +9,9 @@ const props = defineProps<{
 <template>
   <div class="paragraph">
     <ParagraphTitle :title="props.title" />
-    <b class="paragraph__content">
+    <p class="paragraph__content">
       {{ props.content }}
-    </b>
+    </p>
   </div>
 </template>
 

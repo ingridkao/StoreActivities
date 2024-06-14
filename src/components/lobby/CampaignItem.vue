@@ -82,11 +82,11 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
 
     padding: 15px;
     background-color: $white;
-    h6{
+    h6 {
       color: $black;
       font-weight: 500;
     }
-    p{
+    p {
       color: $black;
       font-weight: 500;
       font-size: 13px;

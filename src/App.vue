@@ -31,8 +31,8 @@ onUnmounted(() => {
 
 watch(
   () => [layoutStore.showDirection, layoutStore.showScanResult],
-  ([showDirection, showScanResult] ) => {
-    console.log(showDirection||showScanResult? 1: 0);
+  ([showDirection, showScanResult]) => {
+    console.log(showDirection || showScanResult ? 1 : 0)
     const bodyScrollForbid = showDirection || showScanResult
     document.body.style.overflowY = bodyScrollForbid ? 'hidden' : 'scroll'
   }

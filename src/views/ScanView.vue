@@ -3,6 +3,7 @@
  * 開啟相機掃描QR Code
  */
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import jsQR from 'jsqr'
 import dialogCatImg from '@/assets/images/cat/dialog-cat.png'
 
@@ -13,6 +14,7 @@ import HeaderMenu from '@/components/HeaderMenu.vue'
 import { useLayoutStore } from '@/stores/layout'
 const { parseParamCT, verifyCtString, commitStoreCheckIn } = useFetchData()
 const layoutStore = useLayoutStore()
+const route = useRoute()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
 const canvasVisible = ref(false)
@@ -81,6 +83,7 @@ const showsScanResult = computed(
   () => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== ''
 )
 
+const eventId = route?.params?.id
 const updateOutPutData = async (imageData: any) => {
   if (qrCodeOutputData.value !== '') return
   const code = jsQR(imageData.data, imageData.width, imageData.height, {
@@ -103,9 +106,9 @@ const updateOutPutData = async (imageData: any) => {
       const ctStr = parseParamCT(code.data)
       // 驗證ct
       const t0kenObj = await verifyCtString(ctStr)
-      
+
       // 打卡驗證
-      const commitRes = await commitStoreCheckIn('', t0kenObj)
+      const commitRes = await commitStoreCheckIn(eventId, t0kenObj)
       if (commitRes) {
         // 打卡成功蓋版
         scanResultContent.value = commitRes
@@ -220,7 +223,6 @@ onUnmounted(() => {
 
 <template>
   <main class="cameraScan">
-
     <HeaderMenu />
 
     <h1 v-if="!canvasVisible" class="loading small">
@@ -229,34 +231,28 @@ onUnmounted(() => {
     </h1>
     <h1 v-if="videoLoading" class="loading">Loading...</h1>
 
-    <div class="cameraScan__box"
-        :style="{
-          width: `${canvasW + 32}px`,
-        }"
+    <div
+      class="cameraScan__box"
+      :style="{
+        width: `${canvasW + 32}px`
+      }"
     >
-      <div 
+      <div
         class="cameraScan__box-canvas"
         :style="{
           height: `${canvasH + 48}px`
         }"
       >
-        <canvas 
-          ref="canvas" 
-          id="canvas" 
-          v-show="canvasVisible && !videoLoading"
-        ></canvas>
+        <canvas ref="canvas" id="canvas" v-show="canvasVisible && !videoLoading"></canvas>
       </div>
-  
+
       <div class="cameraScan__box-result">
-        <div class="cameraScan__box-result-image" >
-          <img :src="dialogCatImg" alt="掃描喵~" width="128" height="115"/>
+        <div class="cameraScan__box-result-image">
+          <img :src="dialogCatImg" alt="掃描喵~" width="128" height="115" />
         </div>
         <div class="cameraScan__box-result-text">
-          {{ qrCodeOutputData
-            ? qrCodeOutputData
-            : scanStatuMsg
-              ?scanStatuMsg
-              :'沒有掃描到任何東西'
+          {{
+            qrCodeOutputData ? qrCodeOutputData : scanStatuMsg ? scanStatuMsg : '沒有掃描到任何東西'
           }}
         </div>
       </div>
@@ -267,7 +263,6 @@ onUnmounted(() => {
       <button class="custom-btn" v-if="scanStatuMsg" @click="scanAgain">開啟攝影機</button>
       <button class="custom-btn" v-else @click="stopMediaTracks">關閉攝影機</button>
     </footer>
-
   </main>
 
   <ScanResult
@@ -288,29 +283,29 @@ video {
   @extend %flexColInfo;
   padding-top: 30px;
 
-  &__box{
+  &__box {
     width: 100%;
     background-color: $purple;
     border-radius: 15px;
     overflow: hidden;
     box-shadow: 0px 4px 4px 0px rgba($black, 0.4);
 
-    &-canvas{
+    &-canvas {
       @extend %bgContainer;
       background-image: url('@/assets/images/bg/purple.png');
       padding: 24px 16px;
     }
-    &-result{
+    &-result {
       @extend %flexRowInfo;
       justify-content: space-around;
       gap: 8px;
-      &-text{
+      &-text {
         color: $white;
         width: 270px;
       }
     }
   }
-  #canvas{
+  #canvas {
     overflow: hidden;
     border: 2px solid $yellow2;
   }

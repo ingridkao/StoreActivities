@@ -6,20 +6,6 @@ import { useSweetAlert } from '@/composable/useSweetAlert'
 
 const DevMode = import.meta.env.MODE === 'development'
 
-// const removeQueryParams = (to: { query: {}; path: any; }) => {
-//   if (Object.keys(to.query).length)
-//     return { path: to.path, query: {} }
-// }
-
-const removeActivityID = (to: { query: { ac?: any }; path: any }) => {
-  if (localStorage.getItem('ac')) localStorage.removeItem('ac')
-  if (to?.query?.ac) {
-    const queryObj = to.query
-    delete queryObj['ac']
-    return { path: to.path, query: queryObj }
-  }
-}
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -32,7 +18,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/activity/:id?',
+      path: '/activity/:id',
       name: 'Activity',
       component: () => import('../views/ActivityView.vue'),
       meta: {
@@ -41,7 +27,16 @@ const router = createRouter({
       }
     },
     {
-      path: '/collected/:id?',
+      path: '/scan/:id',
+      name: 'Scan',
+      component: () => import('../views/ScanView.vue'),
+      meta: {
+        title: '掃描打卡'
+        //requiresCamera: true
+      }
+    },
+    {
+      path: '/collected/:id',
       name: 'Collected',
       component: () => import('../views/CollectedView.vue'),
       meta: {
@@ -50,21 +45,12 @@ const router = createRouter({
       }
     },
     {
-      path: '/winning/:id?',
+      path: '/winning/:id',
       name: 'Winning',
       component: () => import('../views/WinningView.vue'),
       meta: {
         title: '活動兌獎',
         requiresAuth: true
-      }
-    },
-    {
-      path: '/scan/:id?',
-      name: 'Scan',
-      component: () => import('../views/ScanView.vue'),
-      meta: {
-        title: '掃描打卡'
-        //requiresCamera: true
       }
     },
     {
@@ -80,7 +66,6 @@ const router = createRouter({
       path: '/album',
       name: 'Album',
       component: () => import('../views/AlbumView.vue'),
-      beforeEnter: [removeActivityID],
       meta: {
         title: '門市打卡紀錄',
         requiresAuth: true

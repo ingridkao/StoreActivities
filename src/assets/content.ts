@@ -16,8 +16,7 @@ export default {
     lastCheckInTime: '最後打卡時間',
     checkInCount: '打卡次數',
     album: '過去活動打卡紀錄',
-    lobby: '活動大廳',
-
+    lobby: '活動大廳'
   },
   winning: {
     explanationTitle: '使用方式',

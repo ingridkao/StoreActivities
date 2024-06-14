@@ -144,29 +144,33 @@ const data = {
       }
     ]
   },
-  WinningData: [{
-    "id": 10,
-    "awardName": "虛寶",
-    "instructions": "龍之寶玉",
-    "operatingProcedures": "請進入遊戲大廳後，點選右上角的齒輪進入【系統設置>>基礎】，拉到畫面最下面點選【虛寶兌換】，輸入完整的序號後點選確認兌換。當提示【序號兌換成功】後，獎勵會派送到【系統郵件】，請稍待3~5分鐘檢查收件匣的狀況即可。",
-    "useInterval": "2024/08/01-2024/08/31",
-    "grade": 1,
-    "count": 3,
-    "total": 2,
-    "serialNumber": "asdsadsadsad",
-    "getSNTime": "2024-06-11T11:21:53.787"
-  },
-  {
-    "id": 11,
-    "awardName": "虛寶",
-    "instructions": "龍之寶玉2",
-    "operatingProcedures": "請進入遊戲大廳後，點選右上角的齒輪進入【系統設置>>基礎】，拉到畫面最下面點選【虛寶兌換】，輸入完整的序號後點選確認兌換。當提示【序號兌換成功】後，獎勵會派送到【系統郵件】，請稍待3~5分鐘檢查收件匣的狀況即可。",
-    "useInterval": "2024/08/01-2024/08/31",
-    "grade": 2,
-    "count": 3,
-    "total": 2,
-    "serialNumber": "029FD46C3BED4B41B927EF2FC14F66C7",
-    "getSNTime": "2024-06-11T11:21:53.787"
-  }]
+  WinningData: [
+    {
+      id: 10,
+      awardName: '虛寶',
+      instructions: '龍之寶玉',
+      operatingProcedures:
+        '請進入遊戲大廳後，點選右上角的齒輪進入【系統設置>>基礎】，拉到畫面最下面點選【虛寶兌換】，輸入完整的序號後點選確認兌換。當提示【序號兌換成功】後，獎勵會派送到【系統郵件】，請稍待3~5分鐘檢查收件匣的狀況即可。',
+      useInterval: '2024/08/01-2024/08/31',
+      grade: 1,
+      count: 3,
+      total: 2,
+      serialNumber: 'asdsadsadsad',
+      getSNTime: '2024-06-11T11:21:53.787'
+    },
+    {
+      id: 11,
+      awardName: '虛寶',
+      instructions: '龍之寶玉2',
+      operatingProcedures:
+        '請進入遊戲大廳後，點選右上角的齒輪進入【系統設置>>基礎】，拉到畫面最下面點選【虛寶兌換】，輸入完整的序號後點選確認兌換。當提示【序號兌換成功】後，獎勵會派送到【系統郵件】，請稍待3~5分鐘檢查收件匣的狀況即可。',
+      useInterval: '2024/08/01-2024/08/31',
+      grade: 2,
+      count: 3,
+      total: 2,
+      serialNumber: '029FD46C3BED4B41B927EF2FC14F66C7',
+      getSNTime: '2024-06-11T11:21:53.787'
+    }
+  ]
 }
 export default data

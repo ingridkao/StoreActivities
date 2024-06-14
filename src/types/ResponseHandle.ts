@@ -86,7 +86,7 @@ export type EventInfoInterface = {
   content: EventContentType[]
 }
 
-// 簡化後的活動列表for ActivityView.vue, confirmCampaign()
+// 簡化後的活動列表for ActivityView.vue, confirmEvent()
 export type EventSimpleInterface = {
   id?: number | string
   start?: string //開始時間

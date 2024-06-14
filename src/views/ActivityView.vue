@@ -31,12 +31,17 @@ import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
 import titleDecoBottomImg from '@/assets/images/activity/title-deco-bottom.svg'
 import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
 
-const { confirmCampaign, verifyCtString, commitStoreCheckIn } = useFetchData()
+const { confirmEvent, verifyCtString, commitStoreCheckIn } = useFetchData()
 const { getCtT0kenCookies, setLocationStorage } = useBrowserStorage()
 const { scanCode } = useLIFF()
-
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
+const { parseYear, parseMD } = useDay()
+const { activityErrorAlert } = useSweetAlert()
+const route = useRoute()
+const eventId = route?.params?.id
+const eventInfo = ref<EventSimpleInterface>()
+
 let getPosition = false
 const confirmCoords = () => {
   const { latitude, longitude } = coords.value
@@ -50,14 +55,9 @@ const confirmCoords = () => {
   }
 }
 
-const { parseYear, parseMD } = useDay()
-const { activityErrorAlert } = useSweetAlert()
-const eventInfo = ref<EventSimpleInterface>()
-const route = useRoute()
-const activityId = route?.params?.id
-const confirmActivityId = async () => {
+watchEffect(async () => {
   try {
-    const confirmRes = await confirmCampaign(activityId)
+    const confirmRes = await confirmEvent(eventId)
     eventInfo.value = confirmRes
     confirmCoords()
   } catch (error) {
@@ -69,10 +69,6 @@ const confirmActivityId = async () => {
       activityErrorAlert('異常', String(error))
     }
   }
-}
-
-watchEffect(async () => {
-  confirmActivityId()
 })
 
 const scanResultContent = ref({})
@@ -80,23 +76,28 @@ const scanErrorMsg = ref<String>('')
 const commitScan = async () => {
   scanResultContent.value = {}
   scanErrorMsg.value = ''
-  let ctTokenCookiesObj = getCtT0kenCookies()
+  const eventId = eventInfo.value ? String(eventInfo.value.id) : ''
+  if (eventId === '') return
+
+  // 具有有效的活動ID
+  layoutStore.loadToggle(true)
   try {
-    layoutStore.loadToggle(true)
+    let ctTokenCookiesObj = getCtT0kenCookies()
+    // 沒有驗證過ct,打開手機鏡頭準備掃描
     if (ctTokenCookiesObj === null) {
-      // 打開手機鏡頭
-      const ctStr = await scanCode()
+      const ctStr = await scanCode(eventId)
       ctTokenCookiesObj = await verifyCtString(ctStr || '')
     }
-    
-    // 打卡驗證
-    const commitRes = await commitStoreCheckIn(activityId, ctTokenCookiesObj)
+
+    // 已驗證ct，進行打卡驗證
+    const commitRes = await commitStoreCheckIn(eventId, ctTokenCookiesObj)
     if (commitRes) {
+      // 成功蓋版，顯示打卡成功門是資訊
       scanResultContent.value = commitRes
       layoutStore.toggleScanResult(true)
     }
   } catch (error) {
-    // 打卡失敗蓋版
+    // 錯誤蓋版，顯示錯誤訊息包含打卡失敗
     scanErrorMsg.value = String(error)
     layoutStore.toggleScanResult(true)
   }
@@ -114,7 +115,6 @@ const directionStartScan = () => {
   layoutStore.toggleScanResult(false)
   commitScan()
 }
-
 </script>
 
 <template>
@@ -130,13 +130,13 @@ const directionStartScan = () => {
           <h1 class="activity__main_title-text-bg">{{ eventInfo?.eventName }}</h1>
         </div>
         <div class="activity__main_title--deco">
-          <img :src="titleDecoTopImg" alt="title deco top" width="68" height="64"/>
-          <img :src="titleDecoBottomImg" alt="title deco bottom" width="68" height="64"/>
+          <img :src="titleDecoTopImg" alt="title deco top" width="68" height="64" />
+          <img :src="titleDecoBottomImg" alt="title deco bottom" width="68" height="64" />
         </div>
       </div>
 
       <div class="activity__main_banner">
-        <img :src="activityMainCatImg" :alt="eventInfo?.eventName" width="586" height="793"/>
+        <img :src="activityMainCatImg" :alt="eventInfo?.eventName" width="586" height="793" />
       </div>
 
       <div class="activity__main_date">
@@ -150,8 +150,8 @@ const directionStartScan = () => {
     </div>
 
     <div class="activity__content" v-if="eventInfo && eventInfo.content">
-      <button 
-        class="activity__content_directionBtn round-btn info " 
+      <button
+        class="activity__content_directionBtn round-btn info"
         @click="openDirection"
         title="打開說明"
       >
@@ -164,20 +164,11 @@ const directionStartScan = () => {
         :content="text || ''"
       />
       <footer>
-        <button 
-          class="store-btn enter"
-          @click="commitScan" 
-          title="進入活動"
-        >
-          進入活動
-        </button>
+        <button class="store-btn enter" @click="commitScan" title="進入活動">進入活動</button>
       </footer>
     </div>
 
-    <DirectionInfo 
-      v-show="layoutStore.showDirection" 
-      @checkin="directionStartScan" 
-    />
+    <DirectionInfo v-show="layoutStore.showDirection" @checkin="directionStartScan" />
 
     <ScanResult
       v-if="layoutStore.showScanResult"
@@ -198,17 +189,18 @@ const directionStartScan = () => {
 
 .activity {
   @extend %pageMain;
-  background-color: $white;
+  background-color: $whitePure;
   padding-top: 30px;
   padding-bottom: 30px;
-  
+
   &__top {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 500px;
+    max-height: 500px;
     overflow-y: hidden;
+    aspect-ratio: 65 / 50;
   }
 
   &__main {
@@ -246,7 +238,7 @@ const directionStartScan = () => {
 
       &--deco {
         @extend %flexColInfo;
-        >img{
+        > img {
           width: 68px;
           height: 64px;
           overflow: hidden;
@@ -254,8 +246,8 @@ const directionStartScan = () => {
       }
     }
 
-    &_banner{
-      padding-top: 80px;
+    &_banner {
+      padding-top: 30px;
       > img {
         z-index: 2;
         aspect-ratio: 65/88;
@@ -265,7 +257,7 @@ const directionStartScan = () => {
     &_date {
       @extend %flexColInfo;
       gap: 4px;
-  
+
       position: absolute;
       width: 180px;
       bottom: 8%;
@@ -301,5 +293,4 @@ const directionStartScan = () => {
     }
   }
 }
-
 </style>

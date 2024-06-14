@@ -8,7 +8,7 @@
   background-repeat: repeat;
 }
 
-.scanResult{
+.scanResult {
   @extend %bgContainer;
   background-image: url('@/assets/images/bg/lime.png');
   &.fail {
@@ -16,16 +16,16 @@
   }
 }
 
-.lobbyHead{
+.lobbyHead {
   @extend %bgContainer;
   background-image: url('@/assets/images/bg/lime.png');
-  &_wrapper-cat-dialog{
+  &_wrapper-cat-dialog {
     background-image: url('@/assets/images/lobby/top-dialog.svg');
     background-size: 100% 100%;
   }
 }
 
-.topBg{
+.topBg {
   @extend %bgContainer;
   background-color: $green1;
   background-image: url('../assets/images/bg/green.png');

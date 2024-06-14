@@ -10,7 +10,7 @@ import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
 <template>
   <div class="direction topBg">
     <div>
-      <img class="direction__deco" :src="DecoCatImg" alt="操作ibon的喵~" width="208" height="194"/>
+      <img class="direction__deco" :src="DecoCatImg" alt="操作ibon的喵~" width="208" height="194" />
 
       <div class="direction__step1-desc">
         <img class="direction_stepIcon" :src="step1IconImg" alt="step 1" width="53" height="68" />
@@ -19,10 +19,22 @@ import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
           <p class="direction__step1-desc-tip">{{ content.direction.step1Tip }}</p>
         </div>
       </div>
-      <img class="direction__step1-img" :src="step1PictureImg" alt="掃描ibon右上角QRcode" width="230" height="177"/>
+      <img
+        class="direction__step1-img"
+        :src="step1PictureImg"
+        alt="掃描ibon右上角QRcode"
+        width="230"
+        height="177"
+      />
 
       <div class="direction__step2">
-        <img class="direction__step2-img" :src="step2PictureImg" alt="畫面顯示打卡成功" width="102" height="205"/>
+        <img
+          class="direction__step2-img"
+          :src="step2PictureImg"
+          alt="畫面顯示打卡成功"
+          width="102"
+          height="205"
+        />
         <div class="direction__step2-text">
           <img class="direction_stepIcon" :src="step2IconImg" alt="step 2" width="53" height="68" />
           <p>{{ content.direction.step2Text }}</p>
@@ -30,33 +42,26 @@ import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
       </div>
 
       <footer class="direction__button">
-        <button 
-          class="store-btn checkin" 
-          @click="$emit('checkin')" 
-          title="進行打卡"
-        ></button>
+        <button class="store-btn checkin" @click="$emit('checkin')" title="進行打卡"></button>
       </footer>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-p{
+p {
   font-weight: 500;
   font-size: 18px;
   line-height: 1;
   color: $white;
 }
 .direction {
-  position: absolute;
-  width: 100%;
-  height: 100vh;
-  top: 0;
-  left: 0;
+  @extend %fixedSection;
   z-index: 4;
+  height: 100vh;
   overflow-y: scroll;
 
-  >div{
+  > div {
     padding-top: 80px;
     max-width: $card-basic;
     margin: auto;
@@ -74,7 +79,7 @@ p{
   }
 
   &__step1 {
-    &-desc{
+    &-desc {
       @extend %flexRowInfo;
       align-items: flex-end;
       gap: 12px;

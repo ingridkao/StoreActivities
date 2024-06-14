@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { useLink } from '@/composable/useLink'
@@ -21,8 +21,8 @@ const {
 
 const route = useRoute()
 const activityId = route?.params?.id
-const btnName = activityId? '進入活動': '進行打卡'
-const btnClassName = activityId? 'enter': 'checkin'
+const btnName = activityId ? '進入活動' : '進行打卡'
+const btnClassName = activityId ? 'enter' : 'checkin'
 
 // 點選門市後出現資訊drawerBox >> 點選drawerBox以外則toggleStoreInfo()
 const handleOutsideClick = (event: Event) => {
@@ -34,8 +34,8 @@ const goToActivityDetailPage = () => {
   linkToPrepareScan(activityId)
 }
 
-onMounted(async() => {
-  console.log('onMounted');
+onMounted(async () => {
+  console.log('onMounted')
   document.addEventListener('click', handleOutsideClick)
 })
 onUnmounted(() => {
@@ -62,8 +62,8 @@ onUnmounted(() => {
           <p>{{ targetBoxData.info['address'] }}</p>
         </div>
 
-        <button 
-          class="round-btn mapCenter mapPanel-info-centerBtn" 
+        <button
+          class="round-btn mapCenter mapPanel-info-centerBtn"
           @click="mapNavigation"
           title="開啟google"
         ></button>
@@ -72,14 +72,16 @@ onUnmounted(() => {
       <div v-else class="panelBox mapPanel-action">
         <div class="panelBox mapPanel-action-checkin">
           <div class="catImg">
-            <img :src="mapCatImg" width="157" height="200"/>
+            <img :src="mapCatImg" width="157" height="200" />
           </div>
           <button
             class="store-btn"
             :class="btnClassName"
             @click="goToActivityDetailPage"
             :title="btnName"
-          >{{ btnName }}</button>
+          >
+            {{ btnName }}
+          </button>
         </div>
 
         <!-- TODO URL slug有activityId時顯示活動門市 -->
@@ -106,7 +108,7 @@ onUnmounted(() => {
   height: calc(100vh - 125px);
 }
 
-.panelBox{
+.panelBox {
   @extend %mainSection;
   @extend %flexRowInfo;
   justify-content: space-between;
@@ -119,7 +121,7 @@ onUnmounted(() => {
   @extend %flexColInfo;
   @extend %fixedSection;
   bottom: 0;
-  left: 0;
+  top: auto;
 
   &-info {
     padding: 20px 25px;
@@ -152,7 +154,7 @@ onUnmounted(() => {
   &-action {
     gap: 13px;
 
-    &-checkin{
+    &-checkin {
       justify-content: initial;
 
       .catImg {
@@ -161,17 +163,14 @@ onUnmounted(() => {
         height: 200px;
         left: 0;
         bottom: 0;
-        img{
+        img {
           object-fit: cover;
         }
       }
-      .store-btn{
+      .store-btn {
         margin-top: -25px;
         margin-left: 135px;
         z-index: 5;
-        @media screen and (min-width: $content-large) {
-          display: none;
-        }
       }
     }
   }
@@ -200,5 +199,4 @@ onUnmounted(() => {
     }
   }
 }
-
 </style>
