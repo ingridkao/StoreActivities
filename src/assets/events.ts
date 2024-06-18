@@ -1,6 +1,7 @@
 import type { EventInfoInterface } from '@/types/ResponseHandle'
 const campaigns: Record<string, EventInfoInterface> = {
   default: {
+    headerImg: 'activity-main-cat.png',
     nameBreak: 2,
     content: [
       {
@@ -18,6 +19,7 @@ const campaigns: Record<string, EventInfoInterface> = {
     ]
   },
   '1': {
+    headerImg: 'activity-main-cat.png',
     nameBreak: 2,
     content: [
       {

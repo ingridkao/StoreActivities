@@ -396,8 +396,9 @@ export function useFetchData() {
             id: target.id,
             start: target.startTime,
             end: target.endTime,
-            eventName: target.eventName,
+            eventName: target.eventName || '',
             eventNameBreak,
+            headerImg: eventInfo.headerImg || '',
             content: eventInfo.content || [],
             redeemPrize: target.redeemPrizeList.map((item: RedeemPrizeType) => item.reachTarget)
           }

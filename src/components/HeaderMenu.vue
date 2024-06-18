@@ -64,7 +64,7 @@ const goToActivityInfo = () => {
     <transition name="fade">
       <div v-show="layoutStore.navOpen" class="sidemenu__wrapper">
         <button v-if="layoutStore.showDirection" class="sidemenu__item" @click="goToActivityInfo">
-          活動說明
+          回到活動說明
         </button>
         <RouterLink
           v-for="item in menuList"
@@ -76,8 +76,8 @@ const goToActivityInfo = () => {
         </RouterLink>
 
         <br />
-        <RouterLink to="/" class="sidemenu__item">活動大廳</RouterLink>
-        <RouterLink to="/album" class="sidemenu__item last">門市打卡紀錄</RouterLink>
+        <RouterLink to="/" class="sidemenu__item">回到活動大廳</RouterLink>
+        <!-- <RouterLink to="/album" class="sidemenu__item last">門市打卡紀錄</RouterLink> -->
 
         <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
         <div
@@ -194,9 +194,6 @@ const goToActivityInfo = () => {
       height: 4rem;
       border-radius: 50%;
       margin-bottom: 0.5rem;
-    }
-    > div {
-      text-align: center;
     }
   }
 }

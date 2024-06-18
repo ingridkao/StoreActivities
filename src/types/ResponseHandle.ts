@@ -82,6 +82,7 @@ export interface EventContentType {
 }
 
 export type EventInfoInterface = {
+  headerImg: string
   nameBreak?: number // 供UI幾個字換行判斷
   content: EventContentType[]
 }
@@ -93,6 +94,7 @@ export type EventSimpleInterface = {
   end?: string //結束時間
   eventName?: string
   eventNameBreak?: string
+  headerImg?: string
   content: EventContentType[]
   redeemPrize: number[]
 }

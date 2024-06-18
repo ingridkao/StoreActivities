@@ -29,7 +29,6 @@ import { useLayoutStore } from '@/stores/layout'
 
 import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
 import titleDecoBottomImg from '@/assets/images/activity/title-deco-bottom.svg'
-import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
 
 const { confirmEvent, verifyCtString, commitStoreCheckIn } = useFetchData()
 const { getCtT0kenCookies, setLocationStorage } = useBrowserStorage()
@@ -115,6 +114,11 @@ const directionStartScan = () => {
   layoutStore.toggleScanResult(false)
   commitScan()
 }
+
+const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
+  ? new URL(`@/assets/images/activity/${eventInfo.value.headerImg}`, import.meta.url).href
+  : new URL(`@/assets/images/activity/activity-main-cat.png`, import.meta.url).href
+
 </script>
 
 <template>
@@ -136,7 +140,7 @@ const directionStartScan = () => {
       </div>
 
       <div class="activity__main_banner">
-        <img :src="activityMainCatImg" :alt="eventInfo?.eventName" width="586" height="793" />
+        <img :src="parseHeaderImg" :alt="eventInfo?.eventName" width="586" height="793" />
       </div>
 
       <div class="activity__main_date">
