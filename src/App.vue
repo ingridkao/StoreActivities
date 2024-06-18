@@ -30,8 +30,10 @@ onUnmounted(() => {
 })
 
 watch(
-  () => layoutStore.showDirection,
-  (bodyScrollForbid) => {
+  () => [layoutStore.showDirection, layoutStore.showScanResult],
+  ([showDirection, showScanResult]) => {
+    console.log(showDirection || showScanResult ? 1 : 0)
+    const bodyScrollForbid = showDirection || showScanResult
     document.body.style.overflowY = bodyScrollForbid ? 'hidden' : 'scroll'
   }
 )
@@ -39,23 +41,7 @@ watch(
 
 <template>
   <main>
-    <div v-show="layoutStore.load || layoutStore.pageLoad" class="loading">Loading...</div>
+    <h1 v-show="layoutStore.load || layoutStore.pageLoad" class="loading">Loading...</h1>
     <RouterView />
   </main>
 </template>
-
-<style lang="scss" scoped>
-.loading {
-  position: fixed;
-  z-index: 10;
-  width: 100%;
-  height: 100%;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  background-color: #efefea;
-  font-size: 36px;
-}
-</style>

@@ -1,173 +1,152 @@
 <script setup lang="ts">
-/**
- * 打卡結果
- */
 import { computed } from 'vue'
-import dayjs from 'dayjs'
+import { useRoute } from 'vue-router'
+
 import type { ScanResultType } from '@/types/ResponseHandle'
 import { useLink } from '@/composable/useLink'
+import { useDay } from '@/composable/useDay'
 
-import checkFailImg from '@/assets/images/scan/check-fail.svg'
-import checkSuccessImg from '@/assets/images/scan/check-success.svg'
-import checkFailImageImg from '@/assets/images/scan/check-fail-image.png'
-import keepCheckButtonImg from '@/assets/images/scan/keep-check-button.svg'
-import recordButtonImg from '@/assets/images/scan/record-button.svg'
-import checkSuccessImageImg from '@/assets/images/scan/check-success-image.png'
+import content from '@/assets/content'
+import checkFailText from '@/assets/images/scan/check-fail-text.svg'
+import checkSuccessText from '@/assets/images/scan/check-success-text.svg'
+import checkFailImageImg from '@/assets/images/cat/check-fail-cat.png'
+import checkSuccessImageImg from '@/assets/images/cat/check-success-cat.png'
 
 const { linkToTargetActivityIdPage } = useLink()
-
+const { parseData } = useDay()
 const props = defineProps<{
   result: ScanResultType
   error: Number | String
 }>()
 const successResult = computed(() => Object.keys(props.result).length > 0)
 const errorMsg = computed(() => props.error || '')
-const parseData = (date: string = '') => {
-  const newdate = date ? dayjs(date) : dayjs()
-  return newdate.format('YYYY/MM/DD HH:mm')
-}
+const route = useRoute()
+const eventId = route?.params?.id
+
 </script>
 
 <template>
   <div
-    class="commom scanResult"
+    class="scanResult"
     :class="{
       fail: !successResult
     }"
   >
-    <div class="scanResult__content">
-      <div class="scanResult__content--result-text">
-        <img v-if="successResult" :src="checkSuccessImg" alt="check success" />
-        <img v-else :src="checkFailImg" alt="check fail" />
+    <div class="scanResult_container">
+      <div class="scanResult_container--img">
+        <img v-if="successResult" :src="checkSuccessText" alt="打卡成功" width="225" height="90" />
+        <img v-else :src="checkFailText" alt="打卡失敗" width="225" height="90" />
       </div>
 
-      <div v-if="successResult" class="scanResult__content--success">
-        <div class="scanResult__content--success-image">
+      <div v-if="successResult" class="scanResult_container--result scanResult_container--success">
+        <div class="catImg">
           <img :src="checkSuccessImageImg" alt="check success" />
         </div>
-        <div class="scanResult__content--success-info">
-          <p class="scanResult__content--success-info-id">{{ props.result.storeId }}</p>
-          <p class="scanResult__content--success-info-name">{{ props.result.storeName }}門市</p>
-          <p class="scanResult__content--success-info-date">
+        <div class="scanResult_container--success-info">
+          <p class="scanResult_container--success-info-id">{{ props.result.storeId }}</p>
+          <p class="scanResult_container--success-info-name">{{ props.result.storeName }}{{ content.mapStore.storeLabel }}</p>
+          <p class="scanResult_container--success-info-date">
             {{ parseData(props.result.date) }}
           </p>
         </div>
       </div>
-      <div v-else class="scanResult__content--fail">
-        <div class="scanResult__content--fail-image">
-          <img :src="checkFailImageImg" alt="check fail" />
+
+      <div v-else class="scanResult_container--result scanResult_container--fail">
+        <div class="catImg">
+          <img :src="checkFailImageImg" alt="無奈喵~~" width="336" height="403" />
         </div>
-        <div class="scanResult__content--fail-msg">{{ errorMsg }}</div>
+        <div class="scanResult_container--fail-msg">{{ errorMsg }}</div>
       </div>
 
-      <div class="store-btn-list">
-        <div
-          class="store-btn"
-          @click="linkToTargetActivityIdPage(props.result.eventId, 'Collected')"
+      <footer class="scanResult__button">
+        <button
+          class="store-btn record"
+          @click="linkToTargetActivityIdPage(eventId, 'Collected')"
+          :title="content.btn.goCollected"
         >
-          <img :src="recordButtonImg" alt="查看紀錄" />
-        </div>
-        <button class="store-btn" @click="$emit('scanAgain')">
-          <img :src="keepCheckButtonImg" alt="繼續打卡" />
+          {{ content.btn.goCollected }}
         </button>
-      </div>
+        <button class="store-btn keepCheck" @click="$emit('scanAgain')" :title="content.btn.scanAgain">
+          {{ content.btn.scanAgain }}
+        </button>
+      </footer>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+.catImg > img {
+  width: 80%;
+  margin: auto;
+}
 .scanResult {
-  position: fixed;
-  z-index: 4;
-  height: 100%;
+  @extend %fixedSection;
+  height: 100dvh;
   overflow-y: scroll;
-  overflow-x: hidden;
-  top: 0;
-  left: 0;
-  background: url('@/assets/images/scan/success-bg.png') repeat;
 
-  &.fail {
-    background: url('@/assets/images/scan/fail-bg.png') repeat;
-  }
-
-  &__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  &_container {
+    @extend %flexColInfo;
     justify-content: center;
-    height: 100%;
-    min-height: 700px;
-    padding: 0 24px;
-
-    &--result-text {
-      width: 225px;
-      height: 90px;
+    position: relative;
+    width: 80%;
+    max-width: $card-basic;
+    margin: 2.5rem auto;
+    &--img {
+      width: 14.125rem;
       align-self: end;
-      overflow: hidden;
+    }
+
+    &--result {
+      @extend %mainSection;
+      max-width: $card-middle;
     }
 
     &--success {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
       margin-bottom: 64px;
-
-      &-image {
-        width: 210px;
-        height: 278px;
-        overflow: hidden;
-      }
-
       &-info {
-        width: 334px;
-        height: 191px;
-        display: flex;
-        color: #594c40;
-        flex-direction: column;
-        align-items: center;
+        @extend %flexColInfo;
         justify-content: center;
-        transform: translateY(-10px);
-        background-size: contain;
-        background-repeat: no-repeat;
+        flex-wrap: wrap;
+        @extend %mainSection;
+        width: 20.875rem;
+        height: 11.875rem;
+        color: $brown;
+
+        @extend %imgContainer;
         background-image: url('@/assets/images/scan/check-success-bg.png');
 
         &-id {
-          margin-top: 10px;
-          font-size: 18px;
+          margin-top: 0.625rem;
+          font-size: 1.125rem;
           font-weight: 700;
         }
 
         &-name {
-          font-size: 32px;
+          font-size: 2rem;
           font-weight: 900;
-          margin-top: 12px;
-          margin-bottom: 19px;
+          margin-top: 0.75rem;
+          margin-bottom: 1.125rem;
         }
 
         &-date {
-          font-size: 15px;
+          font-size: 1rem;
           font-weight: 500;
         }
       }
     }
 
     &--fail {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 78px;
-      padding-top: 20px;
-      &-image {
-        width: 300px;
-        height: 278px;
-        overflow: hidden;
-      }
       &-msg {
-        margin-top: 16px;
+        margin-top: 1.5rem;
+        word-break: break-word;
+        text-align: center;
       }
     }
+  }
+
+  &__button {
+    @extend %flexRowInfo;
+    gap: 1.5rem;
   }
 }
 </style>

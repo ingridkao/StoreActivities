@@ -74,20 +74,28 @@ export type EventListResType = {
 }
 
 // For活動詳情
+
+// 文字來源src/assets/events.ts
 export interface EventContentType {
   title: string
   text?: string
 }
 
-// 簡化後的活動列表for ActivityView.vue, confirmCampaign()
+export type EventInfoInterface = {
+  headerImg: string
+  nameBreak?: number // 供UI幾個字換行判斷
+  content: EventContentType[]
+}
+
+// 簡化後的活動列表for ActivityView.vue, confirmEvent()
 export type EventSimpleInterface = {
   id?: number | string
   start?: string //開始時間
   end?: string //結束時間
   eventName?: string
   eventNameBreak?: string
-  nameBreak?: number // 供UI幾個字換行判斷
-  content: EventContentType[] // 下方內容，文字來源src/assets/events.ts
+  headerImg?: string
+  content: EventContentType[]
   redeemPrize: number[]
 }
 

@@ -3,20 +3,19 @@ import type { AdsInterface } from '@/types/ResponseHandle'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import 'swiper/css'
 const { VITE_ASSETS_URL } = import.meta.env
-
 const props = defineProps<{
   adsList: AdsInterface[]
 }>()
 </script>
 
 <template>
-  <section class="lobby__ad">
+  <section class="ads">
     <Swiper :slides-per-view="'auto'" :space-between="9" :centeredSlides="true">
       <SwiperSlide v-for="item in props.adsList" :key="item.id">
         <a
           v-if="item.link"
           :href="item.link"
-          class="lobby__ad--link"
+          class="ads--link"
           :class="{ invalid: !item.isEnable }"
         >
           <img
@@ -36,15 +35,13 @@ const props = defineProps<{
 </template>
 
 <style lang="scss" scoped>
-.lobby__ad {
-  padding-top: 66px;
-  padding-bottom: 66px;
+.ads {
+  padding: 2rem 0;
   &--link {
-    cursor: pointer;
     display: block;
-    border-radius: 15px;
     overflow: hidden;
-    aspect-ratio: 1280/720;
+    border-radius: 0.5rem;
+    aspect-ratio: 169/50;
     img {
       object-fit: cover;
     }
@@ -52,5 +49,9 @@ const props = defineProps<{
       opacity: 0.3;
     }
   }
+}
+.swiper-slide {
+  width: 90%;
+  max-width: $card-middle;
 }
 </style>

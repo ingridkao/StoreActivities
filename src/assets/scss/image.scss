@@ -1,0 +1,39 @@
+%imgContainer {
+  background-size: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+%bgContainer {
+  background-repeat: repeat;
+}
+
+.scanResult {
+  @extend %bgContainer;
+  background-image: url('@/assets/images/bg/lime.png');
+  &.fail {
+    background-image: url('@/assets/images/bg/fail.png');
+  }
+}
+
+.lobbyHead {
+  @extend %bgContainer;
+  background-image: url('@/assets/images/bg/lime.png');
+  &_wrapper-cat-dialog {
+    background-image: url('@/assets/images/lobby/top-dialog.svg');
+    background-size: 100% 100%;
+  }
+}
+
+.topBg {
+  @extend %bgContainer;
+  background-color: $green1;
+  background-image: url('@/assets/images/bg/green.png');
+}
+
+.mapPanel {
+  @extend %bgContainer;
+  width: 100%;
+  height: 7.5rem;
+  background-image: url('@/assets/images/bg/gray.png');
+}

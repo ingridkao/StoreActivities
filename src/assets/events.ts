@@ -1,7 +1,7 @@
-import type { EventSimpleInterface } from '@/types/ResponseHandle'
-// 0: default
-const campaigns: Record<string, EventSimpleInterface> = {
-  'default': {
+import type { EventInfoInterface } from '@/types/ResponseHandle'
+const campaigns: Record<string, EventInfoInterface> = {
+  default: {
+    headerImg: 'activity-main-cat.png',
     nameBreak: 2,
     content: [
       {
@@ -19,6 +19,7 @@ const campaigns: Record<string, EventSimpleInterface> = {
     ]
   },
   '1': {
+    headerImg: 'activity-main-cat.png',
     nameBreak: 2,
     content: [
       {

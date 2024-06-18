@@ -1,28 +1,33 @@
-import Swal from 'sweetalert2'
-import dayjs from 'dayjs'
+import Swal, { type SweetAlertIcon } from 'sweetalert2'
 import { useRouter } from 'vue-router'
+import { useDay } from '@/composable/useDay'
 
 import type { EventInterface } from '@/types/ResponseHandle'
-import data from '@/assets/data'
-import closeIconImg from '@/assets/images/close-icon.svg'
-import dialogCatImg from '@/assets/images/dialog-cat.png'
+import content from '@/assets/content'
+import closeIconImg from '@/assets/images/icon/close.svg'
+import dialogCatImg from '@/assets/images/cat/dialog-cat.png'
 
 export function useSweetAlert() {
   const router = useRouter()
-  const { VITE_OUTDIR } = import.meta.env
+  const { parseData } = useDay()
+
+  const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
   const originURL = window.location.origin
   const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
   const baseImgURL = `${fileOrigin}/images/example-store.png`
 
-  const errorAlert = (text: any = '', routerPath: string = '/') => {
+  const errorAlert = (
+    text: any = '', 
+    routerPath: string = '/', 
+    iconName: SweetAlertIcon = 'error',
+    title: string = content.swal.default
+  ) => {
     return Swal.fire({
-      icon: 'error',
-      title: '出了一點問題',
+      icon: iconName,
+      title: title,
       text: String(text)
     }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
-      if (result.isConfirmed) {
-        router.push({ path: routerPath, replace: true })
-      } else if (result.isDismissed) {
+      if (result.isConfirmed || result.isDismissed) {
         router.push({ path: routerPath, replace: true })
       }
     })
@@ -34,9 +39,9 @@ export function useSweetAlert() {
       title: title,
       text: text,
       showCancelButton: true,
-      confirmButtonText: '過去活動打卡紀錄',
+      confirmButtonText: content.storeInfoDialog.album,
       confirmButtonColor: '#ffce00',
-      cancelButtonText: '活動大廳',
+      cancelButtonText: content.storeInfoDialog.lobby,
       cancelButtonColor: '#ffce00'
     }).then(
       (result: {
@@ -44,16 +49,17 @@ export function useSweetAlert() {
         isDenied?: boolean
         isDismissed?: boolean
         value?: boolean
+        dismiss?: any
       }) => {
+        console.log(result)
+        // click過去活動打卡紀錄isConfirmed: true | value: true
         if (result.isConfirmed) router.push({ path: '/album', replace: true })
-        if (result.isDismissed) router.push({ path: '/', replace: true })
+        // click活動大廳isDismissed: true | dismiss: 'cancel'
+        if (result.isDismissed && result.dismiss === 'cancel')
+          router.push({ path: '/', replace: true })
+        // click背景 isDismissed: true | dismiss:'backdrop'
       }
     )
-  }
-
-  const parseData = (date: string = '') => {
-    const newdate = date ? dayjs(date) : dayjs()
-    return newdate.format('YYYY/MM/DD HH:mm')
   }
 
   const openStoreInfo = ({
@@ -72,27 +78,29 @@ export function useSweetAlert() {
     const countHTML = countShow
       ? `
       <div >
-        <p>${data.storeInfoDialog.checkInCount}</p>
+        <p>${content.storeInfoDialog.checkInCount}</p>
         <p>${count ?? count}</p>
       </div> 
     `
       : ''
+    const imgURL = imageUrl ? `${VITE_ASSETS_URL}${imageUrl}` : baseImgURL
+
     Swal.fire({
       html: `
 				<div class="store-info-dialog__dialog-container--content">
 					<div class="store-info-dialog__dialog-container--content-image">
-						<img src="${imageUrl ? imageUrl : baseImgURL}" alt="${storeName ?? 'store'}門市"/>
+						<img src="${imgURL}" alt="${storeName ?? 'store'}門市"/>
 					</div>
 				</div>
 				<div class="store-info-dialog__dialog-container--footer">
 					<div class="store-info-dialog__dialog-container--footer-image">
-						<img src="${dialogCatImg}" alt="cat"/>
+						<img src="${dialogCatImg}" alt="掃描喵~" />
 					</div>
 					<div class="store-info-dialog__dialog-container--footer-info">
 						<h6>${storeName ?? '7-11門市'}</h6>
             <div>
               <div>
-                <p>${data.storeInfoDialog.lastCheckInTime}</p>
+                <p>${content.storeInfoDialog.lastCheckInTime}</p>
                 <p>${parseData(lastCheckInTime)}</p>
               </div> 
               ${countHTML}
@@ -131,7 +139,7 @@ export function useSweetAlert() {
 					${imgBox}
 					<div class="textBox">
 						<h6>${storeItem.storeName || '7-11'}門市</h6>
-						<p>最後打卡時間</p><p>${storeItem.createTime || 'YYYY-MM-DD HH:mm:ss'}</p>
+						<p>${content.storeInfoDialog.lastCheckInTime}</p><p>${storeItem.createTime || 'YYYY-MM-DD HH:mm:ss'}</p>
 					</div>
 				`,
       imageUrl: storeIcon ? storeIcon : null,

@@ -3,12 +3,19 @@
  * 開啟相機掃描QR Code
  */
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 import jsQR from 'jsqr'
+import dialogCatImg from '@/assets/images/cat/dialog-cat.png'
+import content from '@/assets/content'
+
 import { useFetchData } from '@/composable/useFetch'
 import ScanResult from '@/components/ScanResult.vue'
+import HeaderMenu from '@/components/HeaderMenu.vue'
+
 import { useLayoutStore } from '@/stores/layout'
 const { parseParamCT, verifyCtString, commitStoreCheckIn } = useFetchData()
 const layoutStore = useLayoutStore()
+const route = useRoute()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
 const canvasVisible = ref(false)
@@ -72,10 +79,12 @@ let animationId: AnimationRequestId | null = null
 
 const scanResultContent = ref({})
 const scanErrorMsg = ref('')
+const scanStatuMsg = ref('')
 const showsScanResult = computed(
   () => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== ''
 )
 
+const eventId = route?.params?.id
 const updateOutPutData = async (imageData: any) => {
   if (qrCodeOutputData.value !== '') return
   const code = jsQR(imageData.data, imageData.width, imageData.height, {
@@ -98,8 +107,10 @@ const updateOutPutData = async (imageData: any) => {
       const ctStr = parseParamCT(code.data)
       // 驗證ct
       const t0kenObj = await verifyCtString(ctStr)
+
       // 打卡驗證
-      const commitRes = await commitStoreCheckIn('', t0kenObj)
+      const commitRes = await commitStoreCheckIn(String(eventId), t0kenObj)
+
       if (commitRes) {
         // 打卡成功蓋版
         scanResultContent.value = commitRes
@@ -108,7 +119,7 @@ const updateOutPutData = async (imageData: any) => {
       // 打卡失敗蓋版
       scanErrorMsg.value = String(error)
     }
-    layoutStore.loadToggle(true)
+    layoutStore.loadToggle(false)
   }
 }
 
@@ -140,10 +151,13 @@ const tick = () => {
   animationId = requestAnimationFrame(tick)
 }
 
+const canvasW = ref(0)
+const canvasH = ref(0)
 let streamInstance: any = null
 onMounted(() => {
   const ua = navigator.userAgent
   isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
+  layoutStore.loadToggle(true)
 
   video = document.createElement('video') as HTMLVideoElement
   canvasElement = document.getElementById('canvas') as HTMLCanvasElement
@@ -154,16 +168,20 @@ onMounted(() => {
     if (!video || !canvasElement) return
 
     const ratio = Math.round((video.videoWidth / video.videoHeight) * 100) / 100
-
     if (window.innerWidth > 680) {
       // 640:400
-      canvasElement.width = video.videoWidth
-      canvasElement.height = video.videoHeight
+      canvasElement.width = 640
+      canvasElement.height = 400
     } else {
       // mobile: 480:640
-      canvasElement.width = window.innerWidth - 40
+      canvasElement.width = window.innerWidth - 100
       canvasElement.height = Math.round((canvasElement.width / ratio) * 100) / 100
     }
+    layoutStore.loadToggle(false)
+
+    canvasW.value = canvasElement.width
+    canvasH.value = canvasElement.height
+
     // 執行動畫
     animationId = requestAnimationFrame(tick)
     video.removeEventListener('playing', getVideoSize, false)
@@ -187,13 +205,18 @@ onMounted(() => {
       .catch((error) => {
         // 用戶拒絕或未能啟用相機
         canvasVisible.value = false
+        videoLoading.value = false
+        layoutStore.loadToggle(false)
         console.error(error)
       })
   }
 })
 
 const stopMediaTracks = () => {
-  streamInstance.stop()
+  scanStatuMsg.value = '攝影機關閉中'
+  if(streamInstance){
+    streamInstance.stop()
+  }
 }
 
 onUnmounted(() => {
@@ -207,24 +230,51 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="cameraBox">
-    <div v-if="!canvasVisible" class="loadingMessage">
-      🎥 無法存取視訊串流（請確保您已啟用網路攝影機）
-    </div>
-    <div v-if="videoLoading" class="loadingMessage">Loading...</div>
-    <canvas ref="canvas" id="canvas" v-show="canvasVisible && !videoLoading"></canvas>
-    <!-- TODO: 刪除 -->
-    <div id="output" class="outputBox">
-      <div v-if="qrCodeOutputData">
-        <b>Data:</b>
-        <span>{{ qrCodeOutputData }}</span>
+  <main class="cameraScan">
+    <HeaderMenu />
+
+    <h1 v-if="!canvasVisible" class="loading small">
+      <span>🎥 無法存取視訊串流</span>
+      <span>請確保您已啟用網路攝影機</span>
+      <RouterLink to="/" class="store-btn activity" :title="content.btn.backHome"></RouterLink>
+    </h1>
+    <h1 v-if="videoLoading" class="loading">Loading...</h1>
+
+    <div
+      class="cameraScan__box"
+      :style="{
+        width: `${canvasW + 32}px`,
+      }"
+    >
+      <div
+        class="cameraScan__box-canvas"
+        :style="{
+          width: `${canvasW + 32}px`,
+          height: `${canvasH + 48}px`
+        }"
+      >
+        <canvas ref="canvas" id="canvas" v-show="canvasVisible && !videoLoading"></canvas>
       </div>
-      <div v-else>No QR code detected.</div>
+
+      <div class="cameraScan__box-result">
+        <div class="cameraScan__box-result-image">
+          <img :src="dialogCatImg" alt="掃描喵~" width="128" height="115" />
+        </div>
+        <div class="cameraScan__box-result-text">
+          {{
+            qrCodeOutputData ? qrCodeOutputData : scanStatuMsg ? scanStatuMsg : '沒有掃描到任何東西'
+          }}
+        </div>
+      </div>
     </div>
 
-    <button @click="cleanOutPutData" class="cameraBox__button">重新抓取</button>
-    <button @click="stopMediaTracks" class="cameraBox__button">關閉攝影機</button>
+    <footer class="cameraScan__button">
+      <button class="custom-btn" @click="cleanOutPutData">重新抓取</button>
+      <button class="custom-btn" v-if="scanStatuMsg" @click="scanAgain">開啟攝影機</button>
+      <button class="custom-btn" v-else @click="stopMediaTracks">關閉攝影機</button>
+    </footer>
   </main>
+
   <ScanResult
     v-if="showsScanResult"
     :result="scanResultContent"
@@ -238,39 +288,43 @@ video {
   object-fit: cover;
 }
 
-.cameraBox {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1rem;
+.cameraScan {
+  @extend %pageMain;
+  @extend %flexColInfo;
+  padding-top: 4rem;
 
-  .loadingMessage {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: black;
-    font-size: 36px;
-    padding: 40px;
-    background-color: #eee;
-  }
-
-  .outputBox {
-    max-width: 25rem;
-    margin-top: 1rem;
-    background: #eee;
-    padding: 1rem;
-
-    div {
-      word-wrap: break-word;
+  &__box {
+    @extend %roundBox;
+    @extend %shadowBox;
+    width: 90%;
+    margin: auto;
+    background-color: $purple;
+    &-canvas {
+      @extend %bgContainer;
+      width: 100%;
+      height: 23rem;
+      background-image: url('@/assets/images/bg/purple.png');
+      padding: 1.5rem 1rem;
+    }
+    &-result {
+      @extend %flexRowInfo;
+      justify-content: space-around;
+      gap: 0.5rem;
+      &-text {
+        color: $white;
+        width: 16.875rem;
+      }
     }
   }
-
+  #canvas {
+    overflow: hidden;
+    border: 2px solid $yellow2;
+    width: 100%;
+    height: 100%;
+  }
   &__button {
-    display: flex;
-    justify-content: center;
-    gap: 24px;
-    padding: 27px 0 42px;
-    text-align: center;
+    @extend %flexRowInfo;
+    gap: 1.5rem;
   }
 }
 </style>

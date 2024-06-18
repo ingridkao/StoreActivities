@@ -25,28 +25,9 @@ export function useEventStorage() {
     }
   }
 
-  const setTargetEventStorage = (eventStorage: EventSimpleInterface) => {
-    if (eventStorage) {
-      Cookies.set('STORE_EVENT', JSON.stringify(eventStorage), {
-        expires: inTwelveMinutes
-      })
-    } else {
-      Cookies.remove('STORE_EVENT')
-    }
-  }
-
-  const getTargetEventStorage = (): EventSimpleInterface | null => {
-    const enevts = Cookies.get('STORE_EVENT')
-    if (enevts) {
-      return JSON.parse(enevts)
-    } else {
-      return null
-    }
-  }
-
   const setAccumulatCheckinCount = (count: number) => {
     if (count) {
-      Cookies.set('STORE_COUNT', JSON.stringify(count), {
+      Cookies.set('STORE_COUNT', String(count), {
         expires: inTwelveMinutes
       })
     } else {
@@ -62,8 +43,6 @@ export function useEventStorage() {
   return {
     setEventsStorage,
     getEventsStorage,
-    setTargetEventStorage,
-    getTargetEventStorage,
     setAccumulatCheckinCount,
     getAccumulatCheckinCount
   }

@@ -1,145 +1,128 @@
 <script setup lang="ts">
-/**
- * 打卡教學
- */
-import data from '@/assets/data'
-import DecoCatImg from '@/assets/images/direction/deco-cat.png'
+import content from '@/assets/content'
+import DecoCatImg from '@/assets/images/cat/ibon-cat-big.png'
 import step1IconImg from '@/assets/images/direction/step-1-icon.svg'
 import step1PictureImg from '@/assets/images/direction/step-1-picture.png'
 import step2IconImg from '@/assets/images/direction/step-2-icon.svg'
 import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
-import checkInButtonImg from '@/assets/images/direction/check-in-button.svg'
 </script>
 
 <template>
-  <div class="commom direction">
+  <div class="direction topBg">
     <div>
-      <div class="direction__deco-cat">
-        <img :src="DecoCatImg" alt="deco cat" />
-      </div>
-      <div class="direction__step1">
-        <div class="direction__step1--icon">
-          <img :src="step1IconImg" alt="step 1 icon" />
-        </div>
-        <div class="direction__step1--text">
-          <p>{{ data.direction.step1Text }}</p>
-          <p class="direction__step1--text-tip">{{ data.direction.step1Tip }}</p>
+      <img class="direction__deco" :src="DecoCatImg" alt="操作ibon的喵~" width="208" height="194" />
+
+      <div class="direction__step1-desc">
+        <img class="direction_stepIcon" :src="step1IconImg" alt="step 1" width="53" height="68" />
+        <div>
+          <p class="direction__step1-desc-text">{{ content.direction.step1Text }}</p>
+          <p class="direction__step1-desc-tip">{{ content.direction.step1Tip }}</p>
         </div>
       </div>
-      <div class="direction__step1--image">
-        <img :src="step1PictureImg" alt="step 1 image" />
-      </div>
+      <img
+        class="direction__step1-img"
+        :src="step1PictureImg"
+        alt="掃描ibon右上角QRcode"
+        width="230"
+        height="177"
+      />
+
       <div class="direction__step2">
-        <div class="direction__step2--image">
-          <img :src="step2PictureImg" alt="step 2 image" />
-        </div>
-        <div class="direction__step2--text">
-          <div class="direction__step2--text-icon">
-            <img :src="step2IconImg" alt="step 2 icon" />
-          </div>
-          <p>{{ data.direction.step2Text }}</p>
+        <img
+          class="direction__step2-img"
+          :src="step2PictureImg"
+          alt="畫面顯示打卡成功"
+          width="102"
+          height="205"
+        />
+        <div class="direction__step2-text">
+          <img class="direction_stepIcon" :src="step2IconImg" alt="step 2" width="53" height="68" />
+          <p>{{ content.direction.step2Text }}</p>
         </div>
       </div>
-      <div class="direction__button store-btn" @click="$emit('checkin')">
-        <img :src="checkInButtonImg" alt="check in button" />
-      </div>
+
+      <footer class="direction__button">
+        <button class="store-btn checkin" @click="$emit('checkin')" :title="content.btn.scanAgain"></button>
+      </footer>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+p {
+  font-weight: 500;
+  font-size: 1.125rem;
+  line-height: 1;
+  color: $white;
+}
 .direction {
-  position: fixed;
-  height: 100dvh;
-  overflow-y: scroll;
-  top: 0;
-  left: 0;
+  @extend %fixedSection;
   z-index: 4;
-  background-color: #55bf6f;
-  background: url('@/assets/images/direction/bg.png') repeat;
-  padding-top: 60px;
+  height: 100vh;
+  overflow-y: scroll;
+
   > div {
-    padding-bottom: 1.5rem;
-  }
-  &__deco-cat {
+    padding-top: 5rem;
+    max-width: $card-basic;
     margin: auto;
-    width: 208px;
-    height: 194px;
-    overflow: hidden;
-    transform: translateX(24px);
+  }
+
+  &__deco {
+    width: 13rem;
+    height: 12.125rem;
+    margin: 0 2.875rem 0 auto;
+  }
+
+  &_stepIcon {
+    width: 3.375rem;
+    height: 4.25rem;
   }
 
   &__step1 {
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    color: #fff;
-    gap: 12px;
+    &-desc {
+      @extend %flexRowInfo;
+      align-items: flex-end;
+      gap: 0.75rem;
 
-    &--icon {
-      width: 53px;
-      height: 68px;
-      overflow: hidden;
-    }
-
-    &--text {
-      font-size: 18px;
-      line-height: 18px;
-      padding-bottom: 10px;
-      transform: translateY(10px);
+      color: $white;
+      &-text {
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+      }
       &-tip {
-        margin-top: 8px;
-        font-size: 15px;
-        line-height: 15px;
+        font-size: 1rem;
+        font-weight: normal;
       }
     }
-
-    &--image {
-      margin: auto;
-      width: 230px;
-      height: 177px;
-      overflow: hidden;
-      margin-bottom: 38px;
-      transform: translateX(24px);
+    &-img {
+      margin: 0 2.5rem 2.375rem auto;
+      width: 14.375rem;
+      height: 11.125rem;
     }
   }
 
   &__step2 {
-    display: flex;
-    margin-left: 34px;
-    align-items: center;
-    gap: 8px;
-
-    &--image {
-      width: 102px;
-      height: 205px;
-      overflow: hidden;
+    @extend %flexRowInfo;
+    gap: 0.5rem;
+    margin: 0 auto auto 34px;
+    &-img {
+      width: 6.375rem;
+      height: 12.875rem;
     }
 
-    &--text {
-      display: flex;
-      justify-content: center;
+    &-text {
+      @extend %flexRowInfo;
       align-items: flex-end;
-      gap: 8px;
-
-      &-icon {
-        width: 53px;
-        height: 68px;
-        overflow: hidden;
-      }
-
+      gap: 0.5rem;
       p {
-        width: 130px;
-        color: #fff;
-        font-size: 18px;
-        margin-bottom: 9px;
+        width: 8.125rem;
+        margin-bottom: 0.5rem;
       }
     }
   }
 
   &__button {
-    margin-top: 27px;
-    margin-bottom: 42px;
+    margin: 1.75rem auto 2.625rem auto;
   }
 }
 </style>

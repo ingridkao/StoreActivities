@@ -2,39 +2,44 @@
 /**
  * 單一打卡紀錄
  */
-import { ref, watchEffect, computed } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import dayjs from 'dayjs'
+import type { EventSimpleInterface, EventInterface, IconInterface } from '@/types/ResponseHandle'
 
+import content from '@/assets/content'
+import emptyStampImg from '@/assets/images/stamp/empty.png'
+import checkedStampImg from '@/assets/images/stamp/checked.svg'
+import BorderStampImg from '@/assets/images/stamp/border.png'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
-import type { EventSimpleInterface, EventInterface } from '@/types/ResponseHandle'
-import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useEventStorage } from '@/composable/useEventStorage'
-
+import { useDay } from '@/composable/useDay'
+import { useLink } from '@/composable/useLink'
 import { useLayoutStore } from '@/stores/layout'
-
-import emptyStampImg from '@/assets/images/collected/empty-stamp.png'
-import checkedStampImg from '@/assets/images/collected/checked-stamp.svg'
-import BorderStampImg from '@/assets/images/collected/border-stamp.png'
-import redeemButtonImg from '@/assets/images/collected/redeem-button.svg'
-import backToIndexButtonImg from '@/assets/images/collected/back-to-index-button.svg'
-
-const { fetchCollectData, commitReceivePrize, fetchReceivePrize } = useFetchData()
-const { errorAlert, openStoreInfo } = useSweetAlert()
-const { getTargetEventStorage, setAccumulatCheckinCount } = useEventStorage()
-
-const stampBaseCount = 20
-const activityId = ref<string>('')
-const collectedActivity = ref<EventSimpleInterface | null>(null)
-const collectedStore = ref<EventInterface[]>([])
-
+const { confirmEvent, fetchCollectData, commitReceivePrize } = useFetchData()
+const { activityErrorAlert, errorAlert, openStoreInfo } = useSweetAlert()
+const { setAccumulatCheckinCount } = useEventStorage()
+const { parseYMD, parseMD } = useDay()
+const { linkToTargetActivityIdPage } = useLink()
+const layoutStore = useLayoutStore()
 const route = useRoute()
 const router = useRouter()
 
-const { linkToTargetActivityIdPage } = useLink()
+const collectedActivity = ref<EventSimpleInterface | null>(null)
+const collectedStore = ref<EventInterface[]>([])
+const iconStore = ref<IconInterface[]>([])
+const stampBaseCount = computed(() => {
+  const albumCount = collectedStore.value.length
+  if (albumCount <= 24) return 24
+  return (Math.round((albumCount - 24) / 4) + 6) * 8
+})
+
+const eventId = String(route.params.id)
+const goToEventPage = () => {
+  linkToTargetActivityIdPage(eventId, 'Activity')
+}
 
 const clickReceivePrize = async () => {
   // 檢查是否符合第一階段兌獎門檻，其他門檻透過API確認
@@ -44,51 +49,45 @@ const clickReceivePrize = async () => {
     collectedStore.value.length >= collectedActivity.value.redeemPrize[0]
   ) {
     try {
-      const commitRes = await commitReceivePrize(activityId.value)
+      const commitRes = await commitReceivePrize(eventId)
       if (commitRes) {
         // 兌獎觸發成功引導到兌獎頁面
-        router.push({ name: 'Winning' })
+        router.push({ path: `/winning/${eventId}` })
+      } else {
+        errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
       }
     } catch (error) {
-      errorAlert(String(error), `/activity/${activityId.value}`)
+      errorAlert(String(error), `/activity/${eventId}`)
     }
   } else {
-    errorAlert('未達到兌獎門檻', `/activity/${activityId.value}`)
+    errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
   }
 }
 
-const layoutStore = useLayoutStore()
-watchEffect(async () => {
-  const activityParamsId = String(route.params.id)
-  if (!activityParamsId) {
-    router.push({ name: 'Album' })
-  } else {
-    layoutStore.loadToggle(true)
-    const TargetEvent = getTargetEventStorage()
-    collectedActivity.value = TargetEvent || null
-    try {
-      const res = await fetchCollectData(activityParamsId)
-      if (res) {
-        activityId.value = activityParamsId
-        collectedStore.value = res.historyList || []
-        setAccumulatCheckinCount(collectedStore.value.length)
-      } else {
-        activityId.value = ''
-        linkToTargetActivityIdPage('', 'Activity')
-      }
-    } catch (error) {
-      errorAlert(String(error), `/activity/${activityParamsId}`)
+onMounted(async () => {
+  layoutStore.loadToggle(true)
+  try {
+    const confirmRes = await confirmEvent(eventId)
+    collectedActivity.value = confirmRes
+    const res = await fetchCollectData(eventId)
+    if (res) {
+      collectedStore.value = res.historyList || []
+      iconStore.value = res.storeIconList || []
+      setAccumulatCheckinCount(collectedStore.value.length)
+    }
+    layoutStore.loadToggle(false)
+  } catch (error) {
+    if (error === 1) {
+      activityErrorAlert(content.activity.notFound)
+    } else if (error === 2) {
+      activityErrorAlert(content.activity.timeOver)
+    } else {
+      errorAlert(String(error), `/activity/${eventId}`)
     }
     layoutStore.loadToggle(false)
   }
 })
 
-const startDate = computed(() =>
-  collectedActivity.value ? dayjs(collectedActivity.value.end).format('YYYY.MM.DD') || '' : ''
-)
-const endDate = computed(() =>
-  collectedActivity.value ? dayjs(collectedActivity.value.end).format('M.D') || '' : ''
-)
 const stampBorder = ['#ffcf24', '#b26cf7', '#ff8d3b', '#f06f9d']
 const isGradeStamp = (index: number) => {
   if (
@@ -103,42 +102,52 @@ const isGradeStamp = (index: number) => {
     return false
   }
 }
+
+const parseIconURL = (baseItem: EventInterface) => {
+  if (!baseItem) return ''
+  const target = iconStore.value.find((item) => item.storeId === baseItem.storeId)
+  return target ? target.iconFilePath : ''
+}
 </script>
 
 <template>
-  <main class="commom collected">
+  <main class="collected topBg">
     <HeaderMenu />
     <div>
       <div class="collected__header">
         <div class="collected__header--text-block">
-          <h1 class="collected__header--text-block-main">{{ collectedActivity?.eventName }}</h1>
-          <h1 class="collected__header--text-block-bg">{{ collectedActivity?.eventName }}</h1>
+          <h1 class="collected__header--text-block-main">
+            {{ collectedActivity?.eventName || '-' }}
+          </h1>
+          <h1 class="collected__header--text-block-bg">
+            {{ collectedActivity?.eventName || '-' }}
+          </h1>
         </div>
         <div class="collected__header--date">
-          <p>{{ startDate }}</p>
+          <h2>{{ parseYMD(collectedActivity?.start) || 'YYYY.MM.DD' }}</h2>
           <div class="collected__header--date-line"></div>
-          <p>{{ endDate }}</p>
+          <h2>{{ parseMD(collectedActivity?.end) || 'MM.DD' }}</h2>
         </div>
       </div>
       <div class="collected__body">
-        <div class="collected__body--stamp" v-for="baseItem in stampBaseCount" :key="baseItem">
+        <div class="stamp" v-for="baseItem in stampBaseCount" :key="baseItem">
           <div
             v-if="
               collectedStore[baseItem - 1] && Object.keys(collectedStore[baseItem - 1]).length > 0
             "
-            class="collected__body--stamp-wrapper"
+            class="stamp-wrapper"
             @click="
               () =>
                 openStoreInfo({
                   countShow: false,
                   storeName: collectedStore[baseItem - 1]['storeName'],
-                  imageUrl: '',
+                  imageUrl: parseIconURL(collectedStore[baseItem - 1]),
                   lastCheckInTime: collectedStore[baseItem - 1]['createTime'] || ''
                 })
             "
           >
             <p
-              class="collected__body--stamp-text"
+              class="stamp-text"
               :class="{
                 'three-characters': collectedStore[baseItem - 1]['storeName']?.length === 3,
                 'four-characters': collectedStore[baseItem - 1]['storeName']?.length === 4,
@@ -148,156 +157,120 @@ const isGradeStamp = (index: number) => {
             >
               {{ collectedStore[baseItem - 1]['storeName'] }}
             </p>
-            <img :src="checkedStampImg" alt="checked stamp" />
+            <img
+              :src="checkedStampImg"
+              class="stamp-grade"
+              :style="{ borderColor: `${isGradeStamp(baseItem)}` }"
+              :alt="collectedStore[baseItem - 1]['storeName']"
+            />
           </div>
           <img
             v-else-if="isGradeStamp(baseItem)"
             :src="BorderStampImg"
-            class="collected__body--stamp-grade"
+            class="stamp-grade"
             :style="{ borderColor: `${isGradeStamp(baseItem)}` }"
-            :alt="`stamp`"
+            :alt="`門市${baseItem}`"
           />
-          <img v-else :src="emptyStampImg" alt="empty stamp" />
+          <img v-else :src="emptyStampImg" alt="還沒打卡" />
         </div>
       </div>
-      <div v-if="activityId" class="commom__footer collected__footer">
-        <button @click="clickReceivePrize()">
-          <img :src="redeemButtonImg" alt="前往兌獎" />
+      <footer class="collected__footer">
+        <button 
+          class="store-btn redeem" 
+          @click="clickReceivePrize()"
+          :title="content.btn.goRedeem"
+        >
+          {{ content.btn.goRedeem }}
         </button>
-        <button @click="linkToTargetActivityIdPage(activityId, 'Activity')">
-          <img :src="backToIndexButtonImg" alt="回活動首頁" />
+        <button 
+          class="store-btn activity" 
+          @click="goToEventPage()"
+          :title="content.btn.backHome"
+        >
+          {{ content.btn.backHome }}
         </button>
-      </div>
+      </footer>
     </div>
   </main>
 </template>
 
 <style lang="scss" scope>
-%title {
+%titleMiddleStyle {
   font-size: 55px;
-  font-weight: 900;
-  white-space: pre-line;
 }
 
 .collected {
-  overflow: auto;
-  background: url('@/assets/images/collected/bg.png');
-  padding-bottom: 60px;
+  @extend %pageMain;
+  min-height: 100dvh;
+
   &__header {
-    height: 145px;
-    background-color: #009f66;
-    width: 100%;
-    display: flex;
+    @extend %flexColInfo;
     justify-content: center;
-    align-items: center;
-    flex-direction: column;
+    @extend %mainSection;
+    flex-wrap: wrap;
+    height: 145px;
+    background-color: $green4;
 
     &--text-block {
-      margin-top: 12px;
       position: relative;
+      margin-top: 0.75rem;
       > h1 {
-        color: #fff;
+        color: $white;
         white-space: normal;
       }
       &-main {
-        @extend %title;
+        @extend %titleMiddleStyle;
         position: relative;
         z-index: 2;
         text-shadow:
-          -1px -1px 0 #009031,
-          1px -1px 0 #009031,
-          -1px 1px 0 #009031,
-          1px 1px 0 #009031;
+          -1px -1px 0 $green2,
+          1px -1px 0 $green2,
+          -1px 1px 0 $green2,
+          1px 1px 0 $green2;
       }
 
       &-bg {
-        @extend %title;
+        @extend %titleMiddleStyle;
         position: absolute;
         top: 0;
-        -webkit-text-stroke: 8px #12b84a;
+        -webkit-text-stroke: 0.5rem $green3;
       }
     }
 
     &--date {
-      font-size: 22px;
-      color: #fff;
-      font-weight: 900;
-      margin-top: 12px;
+      color: $white;
+      margin-top: 0.75rem;
       display: flex;
       align-items: end;
-      gap: 8px;
+      gap: 0.5rem;
 
       &-line {
-        width: 32px;
+        width: 2rem;
         height: 1px;
-        background-color: #fff;
+        background-color: $white;
       }
     }
   }
 
   &__body {
-    display: grid;
-    gap: 12px;
-    padding: 0 20px;
+    @extend %stampSection;
     margin-top: 9px;
-    margin-bottom: 16px;
-    grid-template-columns: repeat(4, 1fr);
-
-    &--stamp {
-      &-wrapper {
-        position: relative;
-      }
-
-      &-grade {
-        border-width: 4px;
-        border-style: solid;
-        border-radius: 15px;
-        object-fit: cover;
-      }
-      &-text {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #fff;
-        font-size: 28px;
-        text-align: left;
-        line-height: 120%;
-        font-weight: 700;
-
-        &.three-characters {
-          font-size: 22px;
-          padding: 0 6px;
-        }
-
-        &.four-characters {
-          text-align: center;
-          font-size: 26px;
-          padding: 0 10px;
-        }
-
-        &.five-characters {
-          font-size: 22px;
-          padding: 0 6px;
-        }
-
-        &.six-characters {
-          text-align: center;
-          font-size: 22px;
-          padding: 0 6px;
-        }
-      }
-    }
   }
 
   &__footer {
-    position: fixed;
-    z-index: 4;
+    @extend %fixedSection;
+    height: 2.5rem;
     bottom: 60px;
+    top: auto;
+    @extend %flexRowInfo;
+    gap: 0.875rem;
+    .store-btn{
+      margin: 0;
+    }
+  }
+
+  .stamp-grade {
+    border-color: $white;
   }
 }
 </style>

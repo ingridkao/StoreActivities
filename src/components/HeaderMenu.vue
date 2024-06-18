@@ -19,12 +19,17 @@ const menuList = ref<
 
 const route = useRoute()
 const activityId = route?.params?.id
+
 watchEffect(() => {
-  if (activityId && Object.keys(userStore.userProfile).length > 0) {
-    menuList.value = [
-      { link: '/mapStore', key: 'MapStore', name: '門市地圖' },
-      { link: `/collected/${activityId}`, key: 'Collected', name: '活動打卡紀錄' }
-    ]
+  if (Object.keys(userStore.userProfile).length > 0) {
+    if (activityId) {
+      menuList.value = [
+        { link: `/collected/${activityId}`, key: 'Collected', name: '活動打卡紀錄' },
+        { link: `/mapStore/${activityId}`, key: 'MapStore', name: '活動門市地圖' }
+      ]
+    } else {
+      menuList.value = [{ link: '/mapStore', key: 'MapStore', name: '門市地圖' }]
+    }
   }
 })
 
@@ -46,21 +51,20 @@ const goToActivityInfo = () => {
 
 <template>
   <aside class="sidemenu">
-    <div
+    <button
       class="sidemenu__btn"
       @click="layoutStore.toggleNav()"
-      :class="{ active: layoutStore.navOpen }"
+      :class="[{ close: layoutStore.navOpen }, route.name]"
     >
       <span class="sidemenu__btn--top"></span>
       <span class="sidemenu__btn--mid"></span>
       <span class="sidemenu__btn--bottom"></span>
-    </div>
+    </button>
 
     <transition name="fade">
       <div v-show="layoutStore.navOpen" class="sidemenu__wrapper">
-        <RouterLink to="/" class="sidemenu__item">活動大廳</RouterLink>
-        <button v-if="layoutStore.showDirection" @click="goToActivityInfo" class="sidemenu__item">
-          活動說明
+        <button v-if="layoutStore.showDirection" class="sidemenu__item" @click="goToActivityInfo">
+          回到活動說明
         </button>
         <RouterLink
           v-for="item in menuList"
@@ -70,7 +74,10 @@ const goToActivityInfo = () => {
         >
           {{ item.name }}
         </RouterLink>
-        <RouterLink to="/album" class="sidemenu__item">過去活動紀錄</RouterLink>
+
+        <br />
+        <RouterLink to="/" class="sidemenu__item">回到活動大廳</RouterLink>
+        <!-- <RouterLink to="/album" class="sidemenu__item last">門市打卡紀錄</RouterLink> -->
 
         <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
         <div
@@ -95,99 +102,105 @@ const goToActivityInfo = () => {
 <style lang="scss" scoped>
 %line {
   display: block;
-  width: 24px;
-  height: 1px;
-  background: #000;
+  width: 1.5rem;
+  height: 2px;
+  background: $black1;
   transition: all 0.3s ease;
+  margin-bottom: 0.25rem;
 }
 
 .sidemenu {
-  position: fixed;
-  top: 0;
+  @extend %fixedSection;
   z-index: 9;
 
   &__btn {
     position: absolute;
-    width: 24px;
-    height: 22px;
-    top: 28px;
-    left: 21px;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 1.75rem;
+    left: 1.375rem;
     z-index: 21;
-
-    cursor: pointer;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
+    }
     &--top {
       @extend %line;
-      transform: translateY(0);
     }
-
     &--mid {
       @extend %line;
-      width: 16px;
-      transform: translateY(6px);
+      width: 1rem;
     }
-
     &--bottom {
       @extend %line;
-      transform: translateY(12px);
+    }
+    &.Activity {
+      .sidemenu__btn--top,
+      .sidemenu__btn--mid,
+      .sidemenu__btn--bottom {
+        background: $whitePure;
+      }
+    }
+    &.close {
+      .sidemenu__btn--top {
+        background: $black1;
+        transform: translateY(0.375rem) rotate(45deg);
+      }
+      .sidemenu__btn--mid {
+        background: $black1;
+        width: 0;
+      }
+      .sidemenu__btn--bottom {
+        background: $black1;
+        transform: translateY(-0.375rem) rotate(-45deg);
+      }
     }
   }
 
   &__wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
+    @extend %fixedSection;
     z-index: 8;
-    width: 168px;
+    width:  10.5rem;
+
     height: auto;
-    padding: 88px 20px 28px 30px;
-    background-color: white;
+    padding:  5.5rem 1.25rem 1.75rem 1.875rem;
+    background-color: $whitePure;
   }
 
   &__item {
     display: block;
     width: 100%;
-    padding: 10px 0;
+    padding: 0.625rem 0;
 
     text-align: left;
-    color: black;
-    font-size: 18px;
+    font-weight: bold;
+    color: $black;
+    font-size: 1.125rem;
     line-height: 100%;
 
-    border-bottom: 1px solid #c3c3c3;
-    text-decoration: none;
+    border-bottom: 1px solid $white2;
 
-    &.router-link-active {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-    &:last-child {
+    &.last {
       border-bottom: none;
     }
   }
 
   &__avendar {
-    display: inline-flex;
-    align-items: center;
+    @extend %flexColInfo;
+    justify-content: center;
     margin-top: 3rem;
-    gap: 3px;
+    gap: 0.25rem;
     > img {
-      width: 3rem;
-      height: 3rem;
+      width: 4rem;
+      height: 4rem;
       border-radius: 50%;
-    }
-    > div {
-      font-size: 12px;
+      margin-bottom: 0.5rem;
     }
   }
-}
 
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.25s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+  &__button{
+    font-size: 1rem;
+    color: inherit;
+  }
 }
 </style>

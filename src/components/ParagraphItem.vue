@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import ParagraphTitle from './ParagraphTitle.vue'
-
 const props = defineProps<{
   title: string
   content: string
@@ -18,17 +17,15 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .paragraph {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 20px;
-
+  @extend %flexColInfo;
+  align-items: flex-start;
+  gap: 0.875rem;
+  
+  width: 100%;
+  margin-bottom: 1.25rem;
   &__content {
-    font-size: 14px;
-    color: #000000;
-    line-height: 18px;
-    font-weight: 500;
-    padding-left: 25px;
+    color: $black;
+    padding-left: 1.5rem;
     white-space: pre-line;
   }
 }

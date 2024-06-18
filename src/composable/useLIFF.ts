@@ -126,11 +126,11 @@ export function useLIFF() {
 
   // InLIFFClient: 開啟LINE SCAN，開啟相機掃描QRcode取得qrcode string
   // Out LIFF app: 導轉到掃描頁面
-  const scanCode = async (): Promise<string | void> => {
+  const scanCode = async (eventId: string): Promise<string | void> => {
     try {
       const isInClient = liff.isInClient()
       if (!isInClient) {
-        router.push({ path: '/scan' })
+        router.push({ path: `/scan/${eventId}` })
       } else {
         await liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
 

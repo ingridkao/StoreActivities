@@ -25,6 +25,11 @@ export const useLayoutStore = defineStore('loading', () => {
     showDirection.value = action
   }
 
+  const showScanResult = ref(false)
+  const toggleScanResult = (action: boolean) => {
+    showScanResult.value = action
+  }
+
   return {
     load,
     loadToggle,
@@ -34,6 +39,8 @@ export const useLayoutStore = defineStore('loading', () => {
     toggleNav,
     closeNav,
     showDirection,
-    toggleDirection
+    toggleDirection,
+    showScanResult,
+    toggleScanResult
   }
 })

@@ -1,61 +1,57 @@
 <script setup lang="ts">
 import topLogoImg from '@/assets/images/lobby/top-logo.png'
-import topCatImg from '@/assets/images/lobby/top-cat.png'
-import data from '@/assets/data'
+import topCatImg from '@/assets/images/cat/ibon-cat.png'
+import content from '@/assets/content'
 </script>
 
 <template>
-  <header class="lobby__head">
-    <div class="lobby__head--wrapper store-img">
-      <div class="lobby__head--logo">
-        <img :src="topLogoImg" alt="top logo" />
-      </div>
-      <div class="lobby__head--cat">
-        <div class="lobby__head--cat-img">
-          <img :src="topCatImg" alt="top cat" />
-        </div>
-        <div class="lobby__head--cat-dialog">{{ data.lobby.title }}</div>
+  <header class="lobbyHead">
+    <div class="lobbyHead_wrapper">
+      <img class="lobbyHead_wrapper-logo" :src="topLogoImg" alt="top logo" width="73" height="31" />
+      <div class="lobbyHead_wrapper-cat">
+        <img
+          class="lobbyHead_wrapper-cat-img"
+          :src="topCatImg"
+          alt="操作ibon的喵~"
+          width="135"
+          height="125"
+        />
+        <h1 class="lobbyHead_wrapper-cat-dialog">
+          {{ content.lobby.title }}
+        </h1>
       </div>
     </div>
   </header>
 </template>
 
 <style lang="scss" scoped>
-.lobby__head {
-  background: url('@/assets/images/lobby/top-bg.png');
-  &--wrapper {
-    padding: 22px 26px 0 26px;
-  }
-  &--logo {
-    width: 73px;
-    height: 31px;
-    margin-bottom: 8px;
-  }
-  &--cat {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: end;
-    gap: 8px;
-    padding-bottom: 8px;
-    &-img {
-      width: 135px;
-      height: 125px;
+.lobbyHead {
+  &_wrapper {
+    @extend %mainSection;
+    max-width: $content-large;
+    padding: 1.375rem 1.625rem 0.5rem 1.625rem;
+    &-logo {
+      width: 4.5rem;
+      height: 2rem;
+      margin-bottom: 0.5rem;
     }
-    &-dialog {
-      width: 163px;
-      height: 70px;
-      background: url('@/assets/images/lobby/top-dialog.svg');
-      background-size: 100% 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: #5f5d5d;
-      font-size: 24px;
-      line-height: 100%;
-      font-weight: 700;
-      padding-left: 24px;
-      transform: translateY(-12px);
+    &-cat {
+      @extend %flexRowInfo;
+      justify-content: end;
+      gap: 0.5rem;
+
+      &-img {
+        width: 8.5rem;
+      }
+      &-dialog {
+        @extend %flexColInfo;
+        justify-content: center;
+        width: 10.25rem;
+        height: 4.375rem;
+        color: $gray1;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
+      }
     }
   }
 }

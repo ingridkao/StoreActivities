@@ -2,13 +2,15 @@
 /**
  * 進行中活動 || 預告中活動 || 已結束活動
  */
-import dayjs from 'dayjs'
 import { useRouter } from 'vue-router'
 import type { CampaignInterface } from '@/types/ResponseHandle'
+import { useDay } from '@/composable/useDay'
+
 const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
 const props = defineProps<{
   campaignItem: CampaignInterface
 }>()
+const { parseYYYYMMDD } = useDay()
 const router = useRouter()
 const linkTo = async (campaignItem: CampaignInterface) => {
   const { id, isEnable, pageRouter } = campaignItem
@@ -24,18 +26,15 @@ const linkTo = async (campaignItem: CampaignInterface) => {
 }
 const originURL = window.location.origin
 const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
-const parseStartTime = (startTime: string = '') =>
-  startTime ? dayjs(startTime).format('YYYY/MM/DD') : ''
-const parseEndTime = (endTime: string = '') => (endTime ? dayjs(endTime).format('YYYY/MM/DD') : '')
 </script>
 
 <template>
   <div
-    class="lobby__activities"
+    class="activities"
     :class="{ invalid: !props.campaignItem.isEnable }"
     @click="linkTo(props.campaignItem)"
   >
-    <div class="lobby__activities__img">
+    <div class="activities__img">
       <img
         :src="
           VITE_ASSETS_URL && props.campaignItem.imageFilePath
@@ -45,45 +44,52 @@ const parseEndTime = (endTime: string = '') => (endTime ? dayjs(endTime).format(
         :alt="props.campaignItem.eventName ?? ''"
       />
     </div>
-    <div class="lobby__activities__info">
-      <h6 class="lobby__activities__info--title">{{ props.campaignItem.eventName }}</h6>
-      <p class="lobby__activities__info--date">
-        {{ parseStartTime(props.campaignItem.startTime) }} -
-        {{ parseEndTime(props.campaignItem.endTime) }}
+    <div class="activities__info">
+      <h6>{{ props.campaignItem.eventName }}</h6>
+      <p>
+        {{ parseYYYYMMDD(props.campaignItem.startTime) }} -
+        {{ parseYYYYMMDD(props.campaignItem.endTime) }}
       </p>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.lobby__activities {
+.activities {
   cursor: pointer;
-  border-radius: 12px;
-  margin-bottom: 12px;
+  border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0px 4px 4px 0px #00000040;
-  background-color: #ddd;
+  box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.3);
+  background-color: transparent;
   &.invalid {
     opacity: 0.3;
   }
   &__img {
-    height: 120px;
+    background-color: $white2;
+    aspect-ratio: 169/50;
     img {
+      border-radius: 1.5rem 1.5rem 0px 0px;
+      overflow: hidden;
       object-fit: cover;
     }
   }
 
   &__info {
-    padding: 15px;
-    background-color: #fff;
-    color: #000;
-    font-weight: 500;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    @extend %flexColInfo;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.5rem;
 
-    &--date {
-      font-size: 13px;
+    padding: 1rem;
+    background-color: $white;
+    h6 {
+      color: $black;
+      font-weight: 500;
+    }
+    p {
+      color: $black;
+      font-weight: 500;
+      font-size: 0.75rem;
     }
   }
 }

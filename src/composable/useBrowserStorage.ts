@@ -55,6 +55,12 @@ export function useBrowserStorage() {
     return parseCtT0ken(ctStr, t0ken) || null
   }
 
+  // 移除儲存的ct及驗證ct後的token
+  const removeCtT0kenCookies = () => {
+    Cookies.remove('STORE_CT')
+    Cookies.remove('STORE_CT_T')
+  }
+
   // 儲存line login的accessToken
   const setLineT0kenCookies = (accessToken: string = '') => {
     if (!accessToken) return
@@ -90,6 +96,7 @@ export function useBrowserStorage() {
     setQRcodeString,
     parseCtT0ken,
     getCtT0kenCookies,
+    removeCtT0kenCookies,
     setCtT0kenCookies,
     setLineT0kenCookies,
     setLoginT0kenCookies,

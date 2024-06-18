@@ -1,17 +1,10 @@
 <script setup lang="ts">
-/**
- * 活動大廳
- * step1.  確認URL是否有ct參數 >> 驗證是否合法 >> 合法則存起來
- * step2-1.請求所有指定門市活動列表
- * step2-2.請求所有  非門市活動列表
- * step2-3.請求所有廣告列表
- */
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted } from 'vue'
 import type { CampaignInterface } from '@/types/ResponseHandle'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
 
 import type { AdsInterface } from '@/types/ResponseHandle'
-import data from '@/assets/data'
+import content from '@/assets/content'
 
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
@@ -44,39 +37,57 @@ onMounted(async () => {
     const [result1, result2] = await Promise.all([fetchAllCampaign(storeId), fetchAdData()])
     displayCampaignList.value = result1 || []
     adsList.value = result2 || []
-  } catch (error) {
-    errorAlert(error)
-  }
-  layoutStore.loadToggle(false)
 
-  try {
     if (ctStr) {
-      // 驗證ct
       await verifyCtString(ctStr)
     }
   } catch (error) {
-    errorAlert(error)
+    errorAlert(String(error))
   }
+  layoutStore.loadToggle(false)
 })
+
+const shareList = ref([{
+  link: "https://www.facebook.com/711.ibon/",
+  img: new URL(`@/assets/images/lobby/icon-facebook.png`, import.meta.url).href,
+  name: "facebook",
+},{
+  link: "https://www.instagram.com/ibontw/",
+  img: new URL(`@/assets/images/lobby/icon-instagram.png`, import.meta.url).href,
+  name: "instagram",
+},{
+  link: "https://www.youtube.com/@ibon1348/",
+  img: new URL(`@/assets/images/lobby/icon-youtube.png`, import.meta.url).href,
+  name: "youtube",
+},{
+  link: "https://page.line.me/gpk2354t?openQrModal=true",
+  img: new URL(`@/assets/images/lobby/icon-line.png`, import.meta.url).href,
+  name: "line",
+},{
+  link: "https://group.openpoint.com.tw/cdn/index.html",
+  img: new URL(`@/assets/images/lobby/icon-open-point.png`, import.meta.url).href,
+  name: "open-point",
+}])
 
 // TODO remove
 const activityId = ref('')
-watch(activityId, async () => {
-  const MockCode = await genrateMockQRCode(activityId.value)
+const storeId = ref('')
+const genrate = async () => {
+  const MockCode = await genrateMockQRCode(activityId.value, storeId.value)
   if (MockCode) {
     setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
     qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}`
   }
-})
+}
 </script>
 
 <template>
   <main class="lobby">
     <LobbyHeader />
 
-    <section class="lobby__section store-content large">
-      <ParagraphTitle :title="data.lobby.eventTitle" />
-      <div class="commom lobby__section--list">
+    <section class="lobby_section">
+      <ParagraphTitle :title="content.lobby.eventTitle" />
+      <div class="lobby_section-list">
         <CampaignItem
           v-for="campaignItem in displayCampaignList"
           :key="campaignItem.id"
@@ -85,28 +96,37 @@ watch(activityId, async () => {
       </div>
     </section>
 
-    <section class="lobby__section store-content large">
-      <ParagraphTitle :title="data.lobby.pastEventTitle" />
-      <RouterLink to="/album" class="cardWidth lobby__section--link">
+    <section class="lobby_section">
+      <ParagraphTitle :title="content.lobby.pastEventTitle" />
+      <RouterLink to="/album" class="lobby_section-link">
         <img src="@/assets/images/lobby/album.png" alt="集郵冊-打卡紀錄" />
       </RouterLink>
     </section>
 
     <LobbyAds :adsList="adsList" />
 
-    <div class="lobby__icon-bar">
-      <img src="@/assets/images/lobby/icon-facebook.png" alt="facebook" />
-      <img src="@/assets/images/lobby/icon-instagram.png" alt="instagram" />
-      <img src="@/assets/images/lobby/icon-youtube.png" alt="youtube" />
-      <img src="@/assets/images/lobby/icon-line.png" alt="line" />
-      <img src="@/assets/images/lobby/icon-open-point.png" alt="open-point" />
-    </div>
+    <footer class="lobby_footer">
+      <div>
+        <a 
+          v-for="item in shareList" :key="item.name"
+          :href="item.link" 
+          target="_blank" 
+          rel="noreferrer noopenner"
+        >
+          <img :src="item.img" :alt="item.name" width="45" height="45"/>
+        </a>
+      </div>
+    </footer>
 
     <div>
+      <label for="activityId">活動ID</label>
       <input type="text" v-model="activityId" />
+      <label for="activityId">店號六碼</label>
+      <input type="text" v-model="storeId" />
+      <button @click="genrate">送出</button>
       <template v-if="qrString">
-        <div style="width: 10rem">
-          <vueQr :text="qrString" :size="100" :correctLevel="3" />
+        <div style="width: 80px">
+          <vueQr :text="qrString" :size="80" :correctLevel="0" :margin="0"/>
         </div>
         <a :href="qrString" target="_blank">{{ qrString }}</a>
       </template>
@@ -115,70 +135,71 @@ watch(activityId, async () => {
 </template>
 
 <style lang="scss">
-$card: 396px;
-$medium: 855px;
 .lobby {
-  background-color: #efefea;
+  @extend %pageMain;
 
-  &__section {
-    display: flex;
-    flex-direction: column;
-    padding: 26px 26px 0 26px;
-    > .section__title {
+  &_section {
+    @extend %flexColInfo;
+    @extend %mainSection;
+    max-width: $content-large;
+    padding: 1.625rem;
+
+    .section__title {
       justify-content: flex-start;
-      @media screen and (min-width: $medium) {
+      margin-bottom: 1.25rem;
+      @media screen and (min-width: $content-large) {
         justify-content: center;
       }
     }
-    &--list {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+
+    &-list {
+      @extend %flexColInfo;
       flex-wrap: wrap;
-      gap: 1%;
-      padding-top: 0;
+      justify-content: center;
+      gap: 0.75rem;
+      @extend %mainSection;
+      max-width: $card-middle;
       > div {
-        flex-basis: 100%;
+        width: 100%;
       }
-      @media screen and (min-width: $medium) {
+      @media screen and (min-width: $content-large) {
+        max-width: $content-large;
         flex-direction: row;
         justify-content: space-between;
+        column-gap: 1%;
         > div {
-          flex-basis: 49%;
-          width: auto;
-          margin: 0;
+          width: 49%;
         }
       }
     }
 
-    &--link {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+    &-link {
+      @extend %flexColInfo;
+      @extend %cardWidth;
+      box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.3);
+      border-radius: 1.75rem;
+      background-color: $white2;
+      aspect-ratio: 169/50;
       img {
         height: auto;
-        border-radius: 30px;
-        aspect-ratio: 169/50;
-        object-fit: cover;
         overflow: hidden;
-        box-shadow: 0px 4px 4px 0px #00000040;
+        object-fit: cover;
       }
     }
   }
 
-  &__icon-bar {
-    background: url('@/assets/images/lobby/bottom-bg.png');
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    gap: 16px;
-    align-items: center;
-    justify-content: center;
-    padding: 28px 0 52px 0;
-    img {
-      width: 45px;
-      height: 45px;
+  &_footer {
+    background: url('@/assets/images/bg/lime.png') repeat;
+    padding: 1.75rem 0 3.25rem 0;
+    > div {
+      @extend %mainSection;
+      max-width: $card-middle;
+      @extend %flexRowInfo;
+      gap: 1rem;
+      a {
+        width: 2.75rem;
+        height: 2.75rem;
+      }
     }
   }
 }

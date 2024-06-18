@@ -16,6 +16,8 @@ const onResponse = (response: any) => {
   const { data } = response
   if (data.code === ResponseCodes.SUCCESS) {
     return data.result
+  } else if (data.code === ResponseCodes.EXPIRED_ACCESS_TOKEN) {
+    return Promise.reject('沒有權限')
   } else {
     return data
   }
@@ -23,12 +25,14 @@ const onResponse = (response: any) => {
 
 const onError = (error: any) => {
   const { response, data } = error
-  console.log(data)
   if (response) {
     console.log(response)
-    return response.data?.message || response.data?.errorMessage || '服務異常'
+    return Promise.reject(response.data?.message || response.data?.errorMessage || '服務異常')
+  } else if (data) {
+    console.log(data)
+    return Promise.reject(data?.message || data?.errorMessage || '服務異常')
   } else {
-    return '服務異常'
+    return Promise.reject('服務異常')
   }
 }
 

@@ -1,127 +1,99 @@
 <script setup lang="ts">
-/**
- * 中獎序號s
- */
 import { ref, watchEffect, computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+import content from '@/assets/content'
+import type { PrizeUiDisplayInfoType } from '@/types/ResponseHandle'
+
 import { useLink } from '@/composable/useLink'
 import { useFetchData } from '@/composable/useFetch'
 import { useEventStorage } from '@/composable/useEventStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import type { PrizeUiDisplayInfoType } from '@/types/ResponseHandle'
+import { useDay } from '@/composable/useDay'
+import { useClipboard } from '@vueuse/core'
+
 import { useLayoutStore } from '@/stores/layout'
 
 import ParagraphItem from '@/components/ParagraphItem.vue'
-import data from '@/assets/data'
-import winningCatImg from '@/assets/images/winning/winning-cat.png'
-import backButtonImg from '@/assets/images/winning/back-button.svg'
-import nextArrowImg from '@/assets/images/winning/next-arrow.svg'
-import prevArrowImg from '@/assets/images/winning/prev-arrow.svg'
+import winningCatImg from '@/assets/images/cat/winning-cat.png'
+import backButtonImg from '@/assets/images/button/back-collected.svg'
+import nextArrowImg from '@/assets/images/button/next-arrow.svg'
+import prevArrowImg from '@/assets/images/button/prev-arrow.svg'
 
 const { linkToTargetActivityIdPage } = useLink()
 const { fetchReceivePrize } = useFetchData()
-const { getTargetEventStorage, getAccumulatCheckinCount } = useEventStorage()
+const { getAccumulatCheckinCount } = useEventStorage()
 const { errorAlert } = useSweetAlert()
+const { parseData } = useDay()
+const { isSupported, copy } = useClipboard()
+const copyClipboard = () => {
+  if(isSupported.value && prizeTargetInfo.value && prizeTargetInfo.value.serialNumber){
+    copy(prizeTargetInfo.value.serialNumber)
+  }
+}
 
-//TODO: Remove prizeIndex and prizeInfo after api finish
+const route = useRoute()
+const eventId = String(route.params.id)
+
 const prizeIndex = ref(0)
-
-// const prizeInfo = ref([
-//   {
-//     awardName: '咖啡券',
-//     grade: 15,
-//     instructions: '拿鐵大杯(冰/熱)',
-//     count: 2,
-//     total: 3,
-//     useInterval: '2024/05/01-2024/08/31',
-//     serialNumber: 5473985660,
-//     operatingProcedures:
-//       '請直接至 7-ELEVEN 門市內的 ibon 機台列印，於機台首頁選擇左上方「代碼輸入」，輸入取件編號或掃描 QR Code，就可以輕鬆取得文件囉！'
-//   },
-//   {
-//     awardName: '4X6貼紙',
-//     grade: 0,
-//     instructions: '4X6貼紙一張',
-//     count: 1,
-//     total: 5,
-//     useInterval: '2024/05/01-2024/08/31',
-//     serialNumber: 6695473985,
-//     operatingProcedures:
-//       '凡於活動期間租借行動電源，於租借時輸入優惠代碼【ibon】，即可享第一小時半價優惠，不限次數。'
-//   },
-//   {
-//     awardName: '虛寶',
-//     grade: 0,
-//     instructions: '尚方寶劍31天效期',
-//     count: 1,
-//     total: 5,
-//     useInterval: '2024/08/01-2024/08/31',
-//     serialNumber: 6695473985,
-//     operatingProcedures:
-//       '請進入遊戲大廳後，點選右上角的齒輪進入【系統設置>>基礎】，拉到畫面最下面點選【虛寶兌換】，輸入完整的序號後點選確認兌換。當提示【序號兌換成功】後，獎勵會派送到【系統郵件】，請稍待3~5分鐘檢查收件匣的狀況即可。'
-//   }
-// ])
-
 const prizeTargetInfo = computed(() => prizeInfo.value[prizeIndex.value] || null)
-
 const checkinCount = ref(0)
 const prizeInfo = ref<PrizeUiDisplayInfoType[]>([])
+
 const layoutStore = useLayoutStore()
 watchEffect(async () => {
   checkinCount.value = getAccumulatCheckinCount()
-  const TargetEvent = getTargetEventStorage()
-  if (TargetEvent && TargetEvent.id) {
-    layoutStore.loadToggle(true)
-    try {
-      const res = await fetchReceivePrize(TargetEvent.id)
-      if (res && res.length > 0) {
-        prizeInfo.value = res
-      } else {
-        errorAlert('未達到兌換門檻，回到活動頁面', `/activity/${TargetEvent.id}`)
-      }
-    } catch (error) {
-      errorAlert(String(error), `/activity/${TargetEvent.id}`)
+  layoutStore.loadToggle(true)
+  try {
+    const res = await fetchReceivePrize(eventId)
+    if (res && res.length > 0) {
+      prizeInfo.value = res
+    } else {
+      errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
     }
-    layoutStore.loadToggle(false)
-  } else {
-    errorAlert('操作異常，回到活動大廳')
+  } catch (error) {
+    errorAlert(String(error), `/activity/${eventId}`)
   }
+  layoutStore.loadToggle(false)
 })
+
 </script>
 
 <template>
   <main class="winning">
     <h5 v-if="prizeTargetInfo && checkinCount > 0" class="winning__tip">
-      {{ `${data.winning.accumulate} ${checkinCount} ${data.winning.store}` }}
+      {{ `${content.winning.accumulate} ${checkinCount} ${content.winning.store}` }}
     </h5>
 
-    <section class="winning__wrapper" v-if="prizeTargetInfo">
-      <div class="winning__wrapper--top" :class="`type${prizeTargetInfo.grade}`">
+    <section class="winning__awards" v-if="prizeTargetInfo">
+      <div class="winning__awards--top" :class="`type${prizeTargetInfo.grade}`">
         <p>{{ prizeTargetInfo.awardName || '' }}</p>
         <span> ({{ prizeTargetInfo.count || 0 }}/{{ prizeTargetInfo.total || 0 }}) </span>
       </div>
 
-      <div class="winning__wrapper--middle">
+      <div class="winning__awards--middle">
         {{ prizeTargetInfo.instructions || '' }}
       </div>
 
-      <div class="winning__wrapper--bottom">
-        <p v-if="prizeTargetInfo.serialNumber">
-          <span class="label">{{ data.winning.serialNumber }} </span>
+      <div class="winning__awards--bottom">
+        <p v-if="prizeTargetInfo.serialNumber" @click="copyClipboard">
+          <span class="label">{{ content.winning.serialNumber }} </span>
           <span class="desc serial">{{ prizeTargetInfo.serialNumber }}</span>
         </p>
         <p v-if="prizeTargetInfo.useInterval">
-          <span class="label">{{ data.winning.deadline }} </span>
+          <span class="label">{{ content.winning.deadline }} </span>
           <span class="desc">{{ prizeTargetInfo.useInterval }}</span>
         </p>
         <p v-if="prizeTargetInfo.getSNTime">
-          <span class="label">{{ data.winning.create }} </span>
-          <span class="desc">{{ prizeTargetInfo.getSNTime }}</span>
+          <span class="label">{{ content.winning.create }} </span>
+          <span class="desc">{{ parseData(prizeTargetInfo.getSNTime) }}</span>
         </p>
       </div>
     </section>
 
     <section class="winning__cat">
       <button
+        v-if="prizeTargetInfo"
         class="winning__cat--prev-arrow"
         :class="{ show: prizeIndex !== 0 }"
         @click="() => prizeIndex > 0 && prizeIndex--"
@@ -132,6 +104,7 @@ watchEffect(async () => {
         <img :src="winningCatImg" alt="winning cat" />
       </div>
       <button
+        v-if="prizeTargetInfo"
         class="winning__cat--next-arrow"
         :class="{ show: prizeIndex !== prizeInfo.length - 1 }"
         @click="() => prizeIndex < prizeInfo.length - 1 && prizeIndex++"
@@ -142,15 +115,15 @@ watchEffect(async () => {
 
     <section class="winning__content store-content">
       <ParagraphItem
-        :title="data.winning.explanationTitle"
+        :title="content.winning.explanationTitle"
         :content="
           prizeTargetInfo && prizeTargetInfo.operatingProcedures
             ? prizeTargetInfo.operatingProcedures
             : ''
         "
       />
-      <button class="store-btn" @click="linkToTargetActivityIdPage('', 'Collected')">
-        <img :src="backButtonImg" alt="返回打卡紀錄" />
+      <button class="store-btn" @click="linkToTargetActivityIdPage(eventId, 'Collected')">
+        <img :src="backButtonImg" :alt="content.btn.backCollected" />
       </button>
     </section>
   </main>
@@ -158,137 +131,120 @@ watchEffect(async () => {
 
 <style lang="scss" scoped>
 .winning {
-  position: relative;
-
-  overflow: auto;
-  background: url('@/assets/images/winning/bg.png');
-
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 80px;
+  @extend %mainSection;
+  @extend %flexColInfo;
+  padding-top: 5rem;
+  background: url('@/assets/images/bg/green.png');
 
   &__tip {
     position: absolute;
-    top: 60px;
-    color: #fff;
+    top: 3.75rem;
+    color: $whitePure;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
-  &__wrapper {
-    background: #fff;
-    margin-top: 28px;
-    border-radius: 15px;
+  &__awards {
+    font-family: 'GenSenRounded', Helvetica, sans-serif;
+    font-weight: 900;
 
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    @extend %flexColInfo;
+    @extend %roundBox;
+    background: $whitePure;
+    margin-top: 1.75rem;
 
-    width: 270px;
+    width: 16.875rem;
     @media screen and (min-width: 600px) {
       width: 80%;
-      max-width: 520px;
-      margin: 28px auto 0 auto;
+      max-width: 32.5rem;
+      margin: 1.75rem auto 0 auto;
     }
-
     > div {
-      width: 100%;
-      display: flex;
+      @extend %flexColInfo;
       justify-content: center;
-      flex-direction: column;
-      align-items: center;
+      width: 100%;
     }
     &--top {
-      padding: 8px 0;
-      font-size: 20px;
-      font-weight: 700;
-      color: #473423;
-      gap: 4px;
-
+      padding: 1rem 0 0.5rem 0;
+      &.type1 { background-color: $yellow0; }
+      &.type2 { background-color: $green0; }
+      &.type3 { background-color: $orange0; }
+      >*{
+        color: $brown2;
+        font-weight: 900;
+      }
       p {
-        margin-top: 6px;
+        font-size: 1.1rem;
       }
-
       span {
-        font-size: 15px;
-        font-weight: 500;
-      }
-
-      &.type1 {
-        background-color: #efdc2b;
-      }
-
-      &.type2 {
-        background-color: #afeb30;
-      }
-
-      &.type3 {
-        background-color: #ffa41b;
+        font-size: 1rem;
       }
     }
 
     &--middle {
-      padding: 12px 0;
-      font-size: 24px;
-      font-weight: 700;
-      color: #85846b;
-      background-color: #f7f7f7;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: $gray2;
+      word-break: keep-all;
+      text-align: center;
+      line-height: 1.3;
+
+      min-height: 7rem;
+      background-color: $whitePure;
+      padding: 0.75rem 1rem;
     }
 
     &--bottom {
       align-items: start;
-      padding: 8px 25px;
-      background-color: #eeecd8;
-      gap: 8px;
+      padding: 1rem;
+      background-color: $white3;
+      gap: 0.5rem;
       > p {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: row;
+        @extend %flexRowInfo;
         width: 100%;
         flex: 1;
       }
       span {
-        font-size: 14px;
-        color: #85846b;
-        font-weight: 500;
         display: inline-block;
-      }
-      span.label {
-        font-weight: 700;
-        width: 65px;
-      }
-      span.desc {
-        width: calc(100% - 65px);
-        word-wrap: break-word;
+        &.label {
+          font-weight: 700;
+          font-size: 0.875rem;
+          width: 3.75rem;
+          color: $gray2;
+        }
+        &.desc {
+          font-weight: 500;
+          font-size: 0.875rem;
+          width: calc(100% - 4rem);
+          word-wrap: break-word;
+          color: $gray2;
+        }
         &.serial {
-          font-size: 20px;
+          font-size: 1.25rem;
           font-weight: 900;
-          color: #473423;
+          line-height: 1;
+          color: $brown2;
         }
       }
     }
   }
 
   &__cat {
-    display: flex;
-    align-items: center;
-    width: 100%;
+    @extend %flexRowInfo;
     justify-content: space-around;
+    width: 100%;
 
     &--image {
-      width: 152px;
-      height: 190px;
+      width: 9.5rem;
+      height: 11.875rem;
       overflow: hidden;
-      margin: -10px 0;
+      margin: -0.625rem 0;
     }
 
     &--next-arrow,
     &--prev-arrow {
-      cursor: pointer;
-      width: 32px;
-      height: 37px;
+      width: 2rem;
+      height: 2.375rem;
       overflow: hidden;
       visibility: hidden;
       &.show {
@@ -298,12 +254,13 @@ watchEffect(async () => {
   }
 
   &__content {
-    padding: 42px 27px 42px 27px;
-    background-color: #fff;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    @extend %flexColInfo;
     justify-content: space-between;
+    flex: 1;
+    @extend %mainSection;
+    max-width: $card-middle;
+    padding: 2.625rem 1.75rem;
+    background-color: $whitePure;
   }
 }
 </style>

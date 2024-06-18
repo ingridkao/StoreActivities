@@ -1,19 +1,15 @@
 <script setup lang="ts">
-/**
- * 門市地圖
- */
 import { onMounted, onUnmounted } from 'vue'
+import { useRoute } from 'vue-router'
 
-import HeaderMenu from '@/components/HeaderMenu.vue'
 import { useLink } from '@/composable/useLink'
 import { useMapbox } from '@/composable/useMapbox'
 
-import data from '@/assets/data'
-import mapIconButtonImg from '@/assets/images/mapStore/map-button.svg'
-import checkInButtonImg from '@/assets/images/mapStore/check-in-button.svg'
-import mapCatImg from '@/assets/images/mapStore/map-cat.png'
+import HeaderMenu from '@/components/HeaderMenu.vue'
+import content from '@/assets/content'
+import mapCatImg from '@/assets/images/cat/map-cat.png'
 
-const { linkToTargetActivityIdPage } = useLink()
+const { linkToPrepareScan } = useLink()
 const {
   storeFilterOptions,
   storeFilterSelectd,
@@ -23,13 +19,23 @@ const {
   mapNavigation
 } = useMapbox()
 
+const route = useRoute()
+const activityId = route?.params?.id
+const btnName = activityId ? '進入活動' : '進行打卡'
+const btnClassName = activityId ? 'enter' : 'checkin'
+
 // 點選門市後出現資訊drawerBox >> 點選drawerBox以外則toggleStoreInfo()
 const handleOutsideClick = (event: Event) => {
   const inputTarget = event.target as HTMLInputElement
   toggleStoreInfo(String(inputTarget.classList.value))
 }
 
-onMounted(() => {
+const goToActivityDetailPage = () => {
+  linkToPrepareScan(activityId)
+}
+
+onMounted(async () => {
+  console.log('onMounted')
   document.addEventListener('click', handleOutsideClick)
 })
 onUnmounted(() => {
@@ -38,44 +44,57 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="map-store-view">
+  <main>
     <HeaderMenu />
+
     <div id="mapboxBasic"></div>
 
-    <div class="map-store-view__panel">
-      <div v-if="targetBoxData.toggle" class="map-store-view__panel--info">
-        <div class="map-store-view__panel--info-center-button" @click="mapNavigation">
-          <img :src="mapIconButtonImg" alt="center icon button" />
+    <div class="mapPanel">
+      <div v-if="targetBoxData.toggle" class="panelBox mapPanel-info">
+        <div class="mapPanel-info-logo">
+          <img src="/images/example-logo.svg" alt="7-11 logo" />
         </div>
-        <div class="map-store-view__panel--info-logo">
-          <img src="/images/example-logo.svg" alt="logo point" />
-        </div>
-        <div v-if="targetBoxData.info" class="map-store-view__panel--info-content">
-          <p>{{ data.mapStore.storeLabel }}：</p>
+
+        <div v-if="targetBoxData.info" class="mapPanel-info-content">
+          <p>{{ content.mapStore.storeLabel }}：</p>
           <p>{{ targetBoxData.info['store_id'] }} {{ targetBoxData.info['store_name'] }}</p>
-          <p>{{ data.mapStore.addressLabel }}：</p>
+          <p>{{ content.mapStore.addressLabel }}：</p>
           <p>{{ targetBoxData.info['address'] }}</p>
         </div>
-      </div>
-      <div v-else class="map-store-view__panel--filter store-content">
-        <div class="map-store-view__panel--cat">
-          <img :src="mapCatImg" />
-        </div>
+
         <button
-          class="map-store-view__panel--button store-btn"
-          @click="linkToTargetActivityIdPage('', 'Activity')"
-        >
-          <img :src="checkInButtonImg" alt="check in button" />
-        </button>
-        <div class="map-store-view__panel--filterbutton">
+          class="round-btn mapCenter mapPanel-info-centerBtn"
+          @click="mapNavigation"
+          title="開啟google"
+        ></button>
+      </div>
+
+      <div v-else class="panelBox mapPanel-action">
+        <div class="panelBox mapPanel-action-checkin">
+          <div class="catImg">
+            <img :src="mapCatImg" width="157" height="200" />
+          </div>
+          <button
+            class="store-btn"
+            :class="btnClassName"
+            @click="goToActivityDetailPage"
+            :title="btnName"
+          >
+            {{ btnName }}
+          </button>
+        </div>
+
+        <!-- TODO URL slug有activityId時顯示活動門市 -->
+        <div class="mapPanel-filter">
           <button
             v-for="item in storeFilterOptions"
             :key="item.value"
-            class="map-store-view__panel--filterbutton-item"
-            @click="updateChecked(item.value)"
+            class="custom-btn"
             :class="{ active: storeFilterSelectd === item.value }"
+            @click="updateChecked(item.value)"
+            :title="item.nameTw"
           >
-            <p>{{ item.nameTw }}</p>
+            {{ item.nameTw }}
           </button>
         </div>
       </div>
@@ -86,121 +105,97 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 #mapboxBasic {
   width: 100%;
-  height: calc(100vh - 125px);
+  height: calc(100vh - 7.5rem);
 }
 
-.map-store-view {
-  z-index: 2;
+.panelBox {
+  @extend %flexRowInfo;
+  justify-content: space-between;
+  gap: 1rem;
   position: relative;
+  width: 100%;
+  max-width: $card-middle;
+  height: 7.5rem;
+}
 
-  &__panel {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    z-index: 4;
-    width: 100%;
-    height: 125px;
-    background: url('@/assets/images/mapStore/bg.png') repeat;
+.mapPanel {
+  @extend %flexColInfo;
+  @extend %fixedSection;
+  bottom: 0;
+  top: auto;
 
-    &--info {
-      padding: 20px 25px;
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      position: relative;
+  &-info {
+    padding: 1.25rem 1.5rem;
+    justify-content: flex-start;
 
-      &-center-button {
-        width: 40px;
-        height: 40px;
-        position: absolute;
-        top: 4px;
-        right: 16px;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-      }
-
-      &-logo {
-        width: 84px;
-        height: 84px;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-        }
-      }
-
-      &-content {
-        display: grid;
-        grid-template-columns: 50px 1fr;
-        grid-template-rows: 1fr 1fr;
-        row-gap: 12px;
-        p {
-          color: #fff;
-          font-size: 16px;
-          line-height: 120%;
-        }
-      }
+    &-logo {
+      width: 5.25rem;
+      height: 5.25rem;
     }
 
-    &--filter {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 13px;
+    &-content {
       height: 100%;
-    }
-
-    &--cat {
-      position: absolute;
-      width: 157px;
-      height: 200px;
-      bottom: -5px;
-      left: 0;
-    }
-
-    &--button {
-      height: 40px;
-      z-index: 5;
-      transform: translateY(-50%);
-      @media screen and (min-width: 855px) {
-        display: none;
+      display: grid;
+      grid-template-columns: 3.125rem 1fr;
+      grid-template-rows: 1.5em 3em;
+      row-gap: 0.5em;
+      p {
+        color: $white;
       }
     }
 
-    &--filterbutton {
+    &-centerBtn {
       position: absolute;
-      bottom: 15px;
-      right: 12px;
-      display: flex;
-      gap: 9px;
-      &-item {
-        padding: 9px 23px;
-        width: 71px;
-        height: 55px;
-        text-align: center;
-        background-size: cover;
-        background-image: url('@/assets/images/mapStore/inactive-button.svg');
+      top: -1rem;
+      right: 1rem;
+      z-index: 5;
+    }
+  }
 
-        &.active {
-          background-image: url('@/assets/images/mapStore/active-button.svg');
+  &-action {
+    gap: 0.75rem;
 
-          p {
-            color: #000;
-          }
+    &-checkin {
+      justify-content: initial;
+      .catImg {
+        position: absolute;
+        width: 10rem;
+        height: 12.5rem;
+        left: 0;
+        bottom: 0;
+        border: 1px solid transparent; // 加了手機上就不會往上移
+        img {
+          object-fit: cover;
         }
+      }
+      .store-btn {
+        margin: -8.5rem 0 0 8.5rem;
+        z-index: 5;
+      }
+    }
+  }
 
-        p {
-          white-space: pre-line;
-          font-size: 12px;
-          line-height: 120%;
-          font-weight: 700;
-          color: #8995a1;
-        }
+  &-filter {
+    position: absolute;
+    bottom: 1.875rem;
+    right: 0.75rem;
+    display: flex;
+    gap: 9px;
+    .custom-btn {
+      @extend %flexColInfo;
+      justify-content: center;
+      width: 4.375rem;
+      height: 3.125rem;
+      padding: 0 1rem;
+
+      box-shadow: 0px 0.25rem 0.25rem rgb($black, 0.3);
+      background-color: $grayBlue;
+
+      font-size: 0.875rem;
+      color: $gray;
+      &.active {
+        background-color: $yellow1;
+        color: $black;
       }
     }
   }

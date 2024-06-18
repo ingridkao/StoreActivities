@@ -299,6 +299,7 @@ export function useMapbox() {
 
           try {
             const storeResults = await fetchLayerData(clientLocationCity.value)
+            // const storeResults = await fetchLayerData(mapConfig.taipeiCenter)
             if (!storeResults) {
               // TODO: alert
               console.error('不合法的geojson')

@@ -7,10 +7,10 @@
  *       - 有  : 送出打卡資訊
  *       - 沒有: 到活動地圖頁面
  */
-import { ref, watchEffect, computed } from 'vue'
+import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
-import dayjs from 'dayjs'
 import type { EventSimpleInterface } from '@/types/ResponseHandle'
+import content from '@/assets/content'
 
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import ParagraphItem from '@/components/ParagraphItem.vue'
@@ -23,21 +23,24 @@ import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useGeo } from '@/composable/useGeo'
 import { useSweetAlert } from '@/composable/useSweetAlert'
+import { useDay } from '@/composable/useDay'
+
 import { useLayoutStore } from '@/stores/layout'
 
-import data from '@/assets/data'
 import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
 import titleDecoBottomImg from '@/assets/images/activity/title-deco-bottom.svg'
-import activityMainCatImg from '@/assets/images/activity/activity-main-cat.png'
-import infoIconButtonImg from '@/assets/images/activity/info-icon-button.svg'
-import enterButtonImg from '@/assets/images/activity/enter-button.svg'
 
-const { confirmCampaign, verifyCtString, commitStoreCheckIn } = useFetchData()
+const { confirmEvent, verifyCtString, commitStoreCheckIn } = useFetchData()
 const { getCtT0kenCookies, setLocationStorage } = useBrowserStorage()
 const { scanCode } = useLIFF()
-
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
+const { parseYear, parseMD } = useDay()
+const { activityErrorAlert, errorAlert } = useSweetAlert()
+const route = useRoute()
+const eventId = route?.params?.id
+const eventInfo = ref<EventSimpleInterface>()
+
 let getPosition = false
 const confirmCoords = () => {
   const { latitude, longitude } = coords.value
@@ -51,68 +54,51 @@ const confirmCoords = () => {
   }
 }
 
-const { activityErrorAlert } = useSweetAlert()
-const eventInfo = ref<EventSimpleInterface>()
-const route = useRoute()
-const activityId = route?.params?.id
-const confirmActivityId = async () => {
+watchEffect(async () => {
   try {
-    const confirmRes = await confirmCampaign(activityId)
+    const confirmRes = await confirmEvent(eventId)
     eventInfo.value = confirmRes
     confirmCoords()
   } catch (error) {
     if (error === 1) {
-      activityErrorAlert('沒有此活動')
+      activityErrorAlert(content.activity.notFound)
     } else if (error === 2) {
-      activityErrorAlert('活動已結束')
+      activityErrorAlert(content.activity.timeOver)
     } else {
-      activityErrorAlert('異常', String(error))
+      errorAlert(String(error), `/activity/${eventId}`)
     }
   }
-}
-
-watchEffect(async () => {
-  confirmActivityId()
 })
 
 const scanResultContent = ref({})
 const scanErrorMsg = ref<String>('')
-const showsScanResult = computed(
-  () => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== ''
-)
-const year = computed(() => (eventInfo.value ? dayjs(eventInfo.value.start).year() || '' : ''))
-const startDate = computed(() =>
-  eventInfo.value ? dayjs(eventInfo.value.start).format('M.D') || '' : ''
-)
-const endTime = computed(() =>
-  eventInfo.value ? dayjs(eventInfo.value.end).format('M.D') || '' : ''
-)
-
 const commitScan = async () => {
   scanResultContent.value = {}
   scanErrorMsg.value = ''
-  let ctTokenCookiesObj = getCtT0kenCookies()
-  // pinia close
+  const eventId = eventInfo.value ? String(eventInfo.value.id) : ''
+  if (eventId === '') return
+
+  // 具有有效的活動ID
+  layoutStore.loadToggle(true)
   try {
-    layoutStore.loadToggle(true)
+    let ctTokenCookiesObj = getCtT0kenCookies()
+    // 沒有驗證過ct,打開手機鏡頭準備掃描
     if (ctTokenCookiesObj === null) {
-      // 打開手機鏡頭
-      const ctStr = await scanCode()
-      // 驗證ct
+      const ctStr = await scanCode(eventId)
       ctTokenCookiesObj = await verifyCtString(ctStr || '')
     }
 
-    // 打卡驗證
-    const commitRes = await commitStoreCheckIn(activityId, ctTokenCookiesObj)
+    // 已驗證ct，進行打卡驗證
+    const commitRes = await commitStoreCheckIn(eventId, ctTokenCookiesObj)
     if (commitRes) {
-      // 打卡成功蓋版
+      // 成功蓋版，顯示打卡成功門是資訊
       scanResultContent.value = commitRes
-      // pinia open
+      layoutStore.toggleScanResult(true)
     }
   } catch (error) {
-    // 打卡失敗蓋版
+    // 錯誤蓋版，顯示錯誤訊息包含打卡失敗
     scanErrorMsg.value = String(error)
-    // pinia open
+    layoutStore.toggleScanResult(true)
   }
   layoutStore.loadToggle(false)
 }
@@ -120,48 +106,60 @@ const commitScan = async () => {
 const layoutStore = useLayoutStore()
 const openDirection = () => {
   layoutStore.toggleDirection(true)
+  layoutStore.toggleScanResult(false)
   layoutStore.closeNav()
 }
 const directionStartScan = () => {
   layoutStore.toggleDirection(false)
+  layoutStore.toggleScanResult(false)
   commitScan()
 }
+
+const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
+  ? new URL(`@/assets/images/activity/${eventInfo.value.headerImg}`, import.meta.url).href
+  : new URL(`@/assets/images/activity/activity-main-cat.png`, import.meta.url).href
+
 </script>
 
 <template>
   <main class="activity">
     <HeaderMenu />
-    <div class="activity__top-bg"></div>
 
-    <div class="activity__main store-content">
-      <div class="activity__title">
-        <div class="activity__title--text-block">
-          <h1 class="activity__title--text-block-main">{{ eventInfo?.eventName }}</h1>
-          <h1 class="activity__title--text-block-bg">{{ eventInfo?.eventName }}</h1>
+    <div class="activity__top topBg"></div>
+
+    <div class="activity__main">
+      <div class="activity__main_title">
+        <div class="activity__main_title-text">
+          <h1 class="activity__main_title-text-main">{{ eventInfo?.eventName }}</h1>
+          <h1 class="activity__main_title-text-bg">{{ eventInfo?.eventName }}</h1>
         </div>
-        <div class="activity__title--deco">
-          <div class="activity__title--deco-top">
-            <img :src="titleDecoTopImg" alt="title deco top" />
-          </div>
-          <div class="activity__title--deco-bottom">
-            <img :src="titleDecoBottomImg" alt="title deco bottom" />
-          </div>
+        <div class="activity__main_title--deco">
+          <img :src="titleDecoTopImg" alt="title deco top" width="68" height="64" />
+          <img :src="titleDecoBottomImg" alt="title deco bottom" width="68" height="64" />
         </div>
       </div>
-      <img :src="activityMainCatImg" alt="activity main cat" />
-      <div class="activity__date">
-        <p class="activity__date--year">{{ data.activity.dateTitle }} {{ year }}</p>
-        <div class="activity__date--day-block">
-          <p class="activity__date--day">{{ startDate }}</p>
-          <div class="activity__date--connect-line"></div>
-          <p class="activity__date--day">{{ endTime }}</p>
+
+      <div class="activity__main_banner">
+        <img :src="parseHeaderImg" :alt="eventInfo?.eventName" width="586" height="793" />
+      </div>
+
+      <div class="activity__main_date">
+        <h3>{{ content.activity.dateTitle }} {{ parseYear(eventInfo?.start) }}</h3>
+        <div class="activity__main_date--day">
+          <h4>{{ parseMD(eventInfo?.start) }}</h4>
+          <div class="activity__main_date--day-line"></div>
+          <h4>{{ parseMD(eventInfo?.end) }}</h4>
         </div>
       </div>
     </div>
 
-    <div class="activity__content store-text" v-if="eventInfo && eventInfo.content">
-      <button class="activity__info-icon-button" @click="openDirection">
-        <img :src="infoIconButtonImg" alt="info icon button" />
+    <div class="activity__content" v-if="eventInfo && eventInfo.content">
+      <button
+        class="activity__content_directionBtn round-btn info"
+        @click="openDirection"
+        :title="content.btn.openDirection"
+      >
+        {{content.btn.openDirection}}
       </button>
       <ParagraphItem
         v-for="{ title, text } in eventInfo.content"
@@ -169,9 +167,13 @@ const directionStartScan = () => {
         :title="title"
         :content="text || ''"
       />
-      <footer class="activity__footer">
-        <button @click="commitScan">
-          <img :src="enterButtonImg" alt="enter button" />
+      <footer>
+        <button 
+          class="store-btn enter" 
+          @click="commitScan" 
+          :title="content.btn.goScan"
+        >
+          {{ content.btn.goScan }}
         </button>
       </footer>
     </div>
@@ -179,7 +181,7 @@ const directionStartScan = () => {
     <DirectionInfo v-show="layoutStore.showDirection" @checkin="directionStartScan" />
 
     <ScanResult
-      v-if="showsScanResult"
+      v-if="layoutStore.showScanResult"
       :result="scanResultContent"
       :error="scanErrorMsg"
       @scanAgain="commitScan"
@@ -188,154 +190,115 @@ const directionStartScan = () => {
 </template>
 
 <style lang="scss" scoped>
-%title {
-  font-size: 65px;
+%titleLargeStyle {
+  font-size: 4rem;
   line-height: 75px;
   letter-spacing: calc(65px * 0.17);
-  font-weight: 900;
-  white-space: pre-line;
+  color: $white;
 }
 
 .activity {
-  background-color: #fff;
-  padding-top: 30px;
+  @extend %pageMain;
+  background-color: $whitePure;
+  padding-top: 1.875rem;
+  padding-bottom: 1.875rem;
 
-  &__top-bg {
-    position: absolute;
-    top: 0;
+  &__top {
+    @extend %absoluteTopSection;
     left: 0;
-    width: 100%;
-    height: 500px;
-    background: url('@/assets/images/activity/bg.png') repeat;
+    max-height: 500px;
+    overflow-y: hidden;
+    aspect-ratio: 65 / 50;
   }
 
   &__main {
-    padding-top: 68px;
-    // min-height: 860px;
-    > img {
-      position: relative;
-      object-fit: contain;
-      z-index: 2;
-      aspect-ratio: 780/1056;
-    }
-  }
+    @extend %mainSection;
+    max-width: $card-middle;
 
-  &__title {
-    display: flex;
-    position: absolute;
-    right: 14px;
-    top: 0px;
-
-    &--text-block {
-      position: relative;
-
-      &-main {
-        @extend %title;
-        position: relative;
-        z-index: 2;
-        color: #fff;
-        text-shadow:
-          -1px -1px 0 #bc8700,
-          1px -1px 0 #bc8700,
-          -1px 1px 0 #bc8700,
-          1px 1px 0 #bc8700;
-      }
-
-      &-bg {
-        @extend %title;
-        position: absolute;
-        top: 0;
-        color: #fff;
-        -webkit-text-stroke: 8px #ffbd14;
-      }
-    }
-
-    &--deco {
+    &_title {
+      @extend %absoluteTopSection;
+      width: 18.75rem;
+      right: 0.875rem;
       display: flex;
-      flex-direction: column;
+
+      &-text {
+        position: relative;
+        text-align: right;
+        &-main {
+          @extend %titleLargeStyle;
+          position: relative;
+          z-index: 2;
+          text-shadow:
+            -1px -1px 0 $yellow3,
+            1px -1px 0 $yellow3,
+            -1px 1px 0 $yellow3,
+            1px 1px 0 $yellow3;
+        }
+
+        &-bg {
+          @extend %titleLargeStyle;
+          @extend %absoluteTopSection;
+          -webkit-text-stroke: 0.5rem $yellow2;
+        }
+      }
+
+      &--deco {
+        @extend %flexColInfo;
+        justify-content: center;
+        > img {
+          width: 4.25rem;
+          height: 64px;
+          overflow: hidden;
+        }
+      }
+    }
+
+    &_banner {
+      padding-top: 1.875rem;
+      > img {
+        z-index: 2;
+        aspect-ratio: 65/88;
+      }
+    }
+
+    &_date {
+      @extend %flexColInfo;
       justify-content: center;
+      gap: 0.25rem;
 
-      &-top,
-      &-bottom {
-        width: 68px;
-        height: 64px;
-        overflow: hidden;
-
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
+      position: absolute;
+      width: 11.25rem;
+      bottom: 8%;
+      right: 1.25rem;
+      z-index: 2;
+      color: $white2;
+      &--day {
+        @extend %flexRowInfo;
+        border: 0.5px solid $white2;
+        padding: 0.5rem 0.75rem;
+        gap: 0.5rem;
+        &-line {
+          width: 2rem;
+          height: 1px;
+          background-color: $white;
         }
       }
     }
   }
 
-  &__date {
-    text-align: center;
-    display: flex;
-    gap: 4px;
-    flex-direction: column;
-    width: 180px;
-    position: absolute;
-    bottom: 8%;
-    right: 20px;
-    z-index: 2;
-
-    &--year {
-      color: #d3d3d3;
-      font-size: 12px;
-      font-weight: 700;
-    }
-
-    &--day-block {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      border: 0.5px solid #d3d3d3;
-      padding: 8px 12px;
-      gap: 8px;
-    }
-
-    &--connect-line {
-      width: 36px;
-      background-color: #d3d3d3;
-      height: 1px;
-    }
-
-    &--day {
-      color: #d3d3d3;
-      font-size: 26px;
-      font-weight: 700;
-    }
-  }
-
   &__content {
-    padding: 25px 43px 0 26px;
-  }
-  &__footer {
-    text-align: center;
-    padding: 32px 0;
-    > button {
-      width: 150px;
+    @extend %mainSection;
+    max-width: $card-middle;
+    padding: 1.5rem 2.625rem 0 1.625rem;
+    @media screen and (min-width: $content-middle) {
+      max-width: $content-middle;
     }
-  }
-
-  &__info-icon-button {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    right: 20px;
-    z-index: 3;
-    top: -30px;
-  }
-}
-
-.event {
-  flex-direction: column;
-  @media (min-width: 1024px) {
-    min-height: calc(100 * var(--vh));
-    display: flex;
-    align-items: center;
+    &_directionBtn {
+      position: absolute;
+      top: -1.875rem;
+      right: 1.25rem;
+      z-index: 3;
+    }
   }
 }
 </style>
