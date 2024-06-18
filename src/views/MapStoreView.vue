@@ -105,21 +105,21 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 #mapboxBasic {
   width: 100%;
-  height: calc(100vh - 125px);
+  height: calc(100vh - 7.5rem);
 }
 
 .panelBox {
-  @extend %mainSection;
   @extend %flexRowInfo;
   justify-content: space-between;
-  max-width: $card-middle;
-  height: 100%;
   gap: 1rem;
+  position: relative;
+  width: 100%;
+  max-width: $card-middle;
+  height: 7.5rem;
 }
 
 .mapPanel {
   @extend %flexColInfo;
-  justify-content: center;
   @extend %fixedSection;
   bottom: 0;
   top: auto;
@@ -163,13 +163,13 @@ onUnmounted(() => {
         height: 12.5rem;
         left: 0;
         bottom: 0;
+        border: 1px solid transparent; // 加了手機上就不會往上移
         img {
           object-fit: cover;
         }
       }
       .store-btn {
-        margin-top: -1.5rem;
-        margin-left: 8.375rem;
+        margin: -8.5rem 0 0 8.5rem;
         z-index: 5;
       }
     }
