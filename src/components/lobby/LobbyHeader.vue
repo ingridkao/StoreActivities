@@ -29,28 +29,28 @@ import content from '@/assets/content'
   &_wrapper {
     @extend %mainSection;
     max-width: $content-large;
-    padding: 22px 26px 0 26px;
+    padding: 1.375rem 1.625rem 0.5rem 1.625rem;
     &-logo {
-      width: 73px;
-      height: 31px;
-      margin-bottom: 8px;
+      width: 4.5rem;
+      height: 2rem;
+      margin-bottom: 0.5rem;
     }
     &-cat {
       @extend %flexRowInfo;
       justify-content: end;
-      gap: 8px;
+      gap: 0.5rem;
 
-      padding-bottom: 8px;
       &-img {
-        width: 135px;
+        width: 8.5rem;
       }
       &-dialog {
         @extend %flexColInfo;
-        width: 163px;
-        height: 70px;
+        justify-content: center;
+        width: 10.25rem;
+        height: 4.375rem;
         color: $gray1;
-        padding-left: 24px;
-        margin-bottom: 12px;
+        padding-left: 1.5rem;
+        margin-bottom: 0.75rem;
       }
     }
   }

@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import listMarkerImg from '@/assets/images/icon/list-marker.svg'
-
 const props = defineProps<{
   title: string
 }>()
@@ -17,12 +16,10 @@ const props = defineProps<{
 .section__title {
   @extend %flexRowInfo;
   justify-content: flex-start;
-  gap: 5px;
+  gap: 0.25rem;
   width: 100%;
-  padding-top: 0;
-  padding-bottom: 20px;
   img {
-    width: 20px;
+    width: 1.25rem;
   }
   h6 {
     color: $black1;

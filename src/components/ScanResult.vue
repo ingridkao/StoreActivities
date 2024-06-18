@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
 import type { ScanResultType } from '@/types/ResponseHandle'
 import { useLink } from '@/composable/useLink'
 import { useDay } from '@/composable/useDay'
 
+import content from '@/assets/content'
 import checkFailText from '@/assets/images/scan/check-fail-text.svg'
 import checkSuccessText from '@/assets/images/scan/check-success-text.svg'
 import checkFailImageImg from '@/assets/images/cat/check-fail-cat.png'
@@ -17,6 +20,9 @@ const props = defineProps<{
 }>()
 const successResult = computed(() => Object.keys(props.result).length > 0)
 const errorMsg = computed(() => props.error || '')
+const route = useRoute()
+const eventId = route?.params?.id
+
 </script>
 
 <template>
@@ -38,7 +44,7 @@ const errorMsg = computed(() => props.error || '')
         </div>
         <div class="scanResult_container--success-info">
           <p class="scanResult_container--success-info-id">{{ props.result.storeId }}</p>
-          <p class="scanResult_container--success-info-name">{{ props.result.storeName }}門市</p>
+          <p class="scanResult_container--success-info-name">{{ props.result.storeName }}{{ content.mapStore.storeLabel }}</p>
           <p class="scanResult_container--success-info-date">
             {{ parseData(props.result.date) }}
           </p>
@@ -55,13 +61,13 @@ const errorMsg = computed(() => props.error || '')
       <footer class="scanResult__button">
         <button
           class="store-btn record"
-          @click="linkToTargetActivityIdPage(props.result.eventId, 'Collected')"
-          title="查看紀錄"
+          @click="linkToTargetActivityIdPage(eventId, 'Collected')"
+          :title="content.btn.goCollected"
         >
-          查看紀錄
+          {{ content.btn.goCollected }}
         </button>
-        <button class="store-btn keepCheck" @click="$emit('scanAgain')" title="繼續打卡">
-          繼續打卡
+        <button class="store-btn keepCheck" @click="$emit('scanAgain')" :title="content.btn.scanAgain">
+          {{ content.btn.scanAgain }}
         </button>
       </footer>
     </div>
@@ -80,12 +86,13 @@ const errorMsg = computed(() => props.error || '')
 
   &_container {
     @extend %flexColInfo;
-    @extend %mainSection;
+    justify-content: center;
+    position: relative;
     width: 80%;
     max-width: $card-basic;
-    margin: 40px auto;
+    margin: 2.5rem auto;
     &--img {
-      width: 225px;
+      width: 14.125rem;
       align-self: end;
     }
 
@@ -98,31 +105,31 @@ const errorMsg = computed(() => props.error || '')
       margin-bottom: 64px;
       &-info {
         @extend %flexColInfo;
-        @extend %mainSection;
+        justify-content: center;
         flex-wrap: wrap;
-        width: 334px;
-        height: 191px;
-
+        @extend %mainSection;
+        width: 20.875rem;
+        height: 11.875rem;
         color: $brown;
-        background-size: contain;
-        background-repeat: no-repeat;
+
+        @extend %imgContainer;
         background-image: url('@/assets/images/scan/check-success-bg.png');
 
         &-id {
-          margin-top: 10px;
-          font-size: 18px;
+          margin-top: 0.625rem;
+          font-size: 1.125rem;
           font-weight: 700;
         }
 
         &-name {
-          font-size: 32px;
+          font-size: 2rem;
           font-weight: 900;
-          margin-top: 12px;
-          margin-bottom: 19px;
+          margin-top: 0.75rem;
+          margin-bottom: 1.125rem;
         }
 
         &-date {
-          font-size: 15px;
+          font-size: 1rem;
           font-weight: 500;
         }
       }
@@ -130,7 +137,7 @@ const errorMsg = computed(() => props.error || '')
 
     &--fail {
       &-msg {
-        margin-top: 24px;
+        margin-top: 1.5rem;
         word-break: break-word;
         text-align: center;
       }
@@ -139,7 +146,7 @@ const errorMsg = computed(() => props.error || '')
 
   &__button {
     @extend %flexRowInfo;
-    gap: 24px;
+    gap: 1.5rem;
   }
 }
 </style>

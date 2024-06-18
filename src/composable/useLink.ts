@@ -1,6 +1,7 @@
 import { useRouter } from 'vue-router'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useFetchData } from '@/composable/useFetch'
+import content from '@/assets/content'
 
 export function useLink() {
   const router = useRouter()
@@ -31,11 +32,11 @@ export function useLink() {
         }
       } catch (error) {
         if (error === 1) {
-          activityErrorAlert('沒有此活動')
+          activityErrorAlert(content.activity.notFound)
         } else if (error === 2) {
-          activityErrorAlert('活動已結束')
+          activityErrorAlert(content.activity.timeOver)
         } else {
-          activityErrorAlert('異常', String(error))
+          errorAlert(String(error), `/activity/${activityId}`)
         }
       }
     }
@@ -46,7 +47,7 @@ export function useLink() {
     routerName: string = ''
   ) => {
     if (activityId === '') {
-      errorAlert('找不到此活動，回到活動大廳')
+      errorAlert('回到活動大廳', '/', 'question', '找不到此活動')
     } else {
       router.push({
         name: routerName,

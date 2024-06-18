@@ -102,11 +102,11 @@ const goToActivityInfo = () => {
 <style lang="scss" scoped>
 %line {
   display: block;
-  width: 24px;
+  width: 1.5rem;
   height: 2px;
   background: $black1;
   transition: all 0.3s ease;
-  margin-bottom: 6px;
+  margin-bottom: 0.25rem;
 }
 
 .sidemenu {
@@ -115,10 +115,10 @@ const goToActivityInfo = () => {
 
   &__btn {
     position: absolute;
-    width: 24px;
-    height: 22px;
-    top: 28px;
-    left: 21px;
+    width: 1.5rem;
+    height: 1.5rem;
+    top: 1.75rem;
+    left: 1.375rem;
     z-index: 21;
     opacity: 0.8;
     &:hover {
@@ -129,7 +129,7 @@ const goToActivityInfo = () => {
     }
     &--mid {
       @extend %line;
-      width: 16px;
+      width: 1rem;
     }
     &--bottom {
       @extend %line;
@@ -144,7 +144,7 @@ const goToActivityInfo = () => {
     &.close {
       .sidemenu__btn--top {
         background: $black1;
-        transform: translateY(8px) rotate(45deg);
+        transform: translateY(0.375rem) rotate(45deg);
       }
       .sidemenu__btn--mid {
         background: $black1;
@@ -152,7 +152,7 @@ const goToActivityInfo = () => {
       }
       .sidemenu__btn--bottom {
         background: $black1;
-        transform: translateY(-8px) rotate(-45deg);
+        transform: translateY(-0.375rem) rotate(-45deg);
       }
     }
   }
@@ -160,22 +160,22 @@ const goToActivityInfo = () => {
   &__wrapper {
     @extend %fixedSection;
     z-index: 8;
-    width: 168px;
+    width:  10.5rem;
 
     height: auto;
-    padding: 88px 20px 28px 30px;
+    padding:  5.5rem 1.25rem 1.75rem 1.875rem;
     background-color: $whitePure;
   }
 
   &__item {
     display: block;
     width: 100%;
-    padding: 10px 0;
+    padding: 0.625rem 0;
 
     text-align: left;
     font-weight: bold;
     color: $black;
-    font-size: 18px;
+    font-size: 1.125rem;
     line-height: 100%;
 
     border-bottom: 1px solid $white2;
@@ -187,14 +187,20 @@ const goToActivityInfo = () => {
 
   &__avendar {
     @extend %flexColInfo;
+    justify-content: center;
     margin-top: 3rem;
-    gap: 3px;
+    gap: 0.25rem;
     > img {
       width: 4rem;
       height: 4rem;
       border-radius: 50%;
       margin-bottom: 0.5rem;
     }
+  }
+
+  &__button{
+    font-size: 1rem;
+    color: inherit;
   }
 }
 </style>

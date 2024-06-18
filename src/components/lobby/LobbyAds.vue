@@ -36,12 +36,11 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .ads {
-  padding-top: 66px;
-  padding-bottom: 66px;
+  padding: 2rem 0;
   &--link {
     display: block;
-    border-radius: 8px;
     overflow: hidden;
+    border-radius: 0.5rem;
     aspect-ratio: 169/50;
     img {
       object-fit: cover;

@@ -17,13 +17,15 @@ const props = defineProps<{
 
 <style lang="scss" scoped>
 .paragraph {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 20px;
+  @extend %flexColInfo;
+  align-items: flex-start;
+  gap: 0.875rem;
+  
+  width: 100%;
+  margin-bottom: 1.25rem;
   &__content {
     color: $black;
-    padding-left: 25px;
+    padding-left: 1.5rem;
     white-space: pre-line;
   }
 }

@@ -1,4 +1,4 @@
-import Swal from 'sweetalert2'
+import Swal, { type SweetAlertIcon } from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useDay } from '@/composable/useDay'
 
@@ -16,15 +16,18 @@ export function useSweetAlert() {
   const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
   const baseImgURL = `${fileOrigin}/images/example-store.png`
 
-  const errorAlert = (text: any = '', routerPath: string = '/') => {
+  const errorAlert = (
+    text: any = '', 
+    routerPath: string = '/', 
+    iconName: SweetAlertIcon = 'error',
+    title: string = content.swal.default
+  ) => {
     return Swal.fire({
-      icon: 'error',
-      title: content.error.default,
+      icon: iconName,
+      title: title,
       text: String(text)
     }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
-      if (result.isConfirmed) {
-        router.push({ path: routerPath, replace: true })
-      } else if (result.isDismissed) {
+      if (result.isConfirmed || result.isDismissed) {
         router.push({ path: routerPath, replace: true })
       }
     })

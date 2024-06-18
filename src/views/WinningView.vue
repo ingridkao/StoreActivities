@@ -1,7 +1,4 @@
 <script setup lang="ts">
-/**
- * 中獎序號s
- */
 import { ref, watchEffect, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -13,6 +10,7 @@ import { useFetchData } from '@/composable/useFetch'
 import { useEventStorage } from '@/composable/useEventStorage'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useDay } from '@/composable/useDay'
+import { useClipboard } from '@vueuse/core'
 
 import { useLayoutStore } from '@/stores/layout'
 
@@ -27,6 +25,13 @@ const { fetchReceivePrize } = useFetchData()
 const { getAccumulatCheckinCount } = useEventStorage()
 const { errorAlert } = useSweetAlert()
 const { parseData } = useDay()
+const { isSupported, copy } = useClipboard()
+const copyClipboard = () => {
+  if(isSupported.value && prizeTargetInfo.value && prizeTargetInfo.value.serialNumber){
+    copy(prizeTargetInfo.value.serialNumber)
+  }
+}
+
 const route = useRoute()
 const eventId = String(route.params.id)
 
@@ -44,7 +49,7 @@ watchEffect(async () => {
     if (res && res.length > 0) {
       prizeInfo.value = res
     } else {
-      errorAlert('未達到兌換門檻，回到活動頁面', `/activity/${eventId}`)
+      errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
     }
   } catch (error) {
     errorAlert(String(error), `/activity/${eventId}`)
@@ -52,9 +57,6 @@ watchEffect(async () => {
   layoutStore.loadToggle(false)
 })
 
-const goToCollectedPage = () => {
-  linkToTargetActivityIdPage(eventId, 'Collected')
-}
 </script>
 
 <template>
@@ -63,18 +65,18 @@ const goToCollectedPage = () => {
       {{ `${content.winning.accumulate} ${checkinCount} ${content.winning.store}` }}
     </h5>
 
-    <section class="winning__wrapper" v-if="prizeTargetInfo">
-      <div class="winning__wrapper--top" :class="`type${prizeTargetInfo.grade}`">
+    <section class="winning__awards" v-if="prizeTargetInfo">
+      <div class="winning__awards--top" :class="`type${prizeTargetInfo.grade}`">
         <p>{{ prizeTargetInfo.awardName || '' }}</p>
         <span> ({{ prizeTargetInfo.count || 0 }}/{{ prizeTargetInfo.total || 0 }}) </span>
       </div>
 
-      <div class="winning__wrapper--middle">
+      <div class="winning__awards--middle">
         {{ prizeTargetInfo.instructions || '' }}
       </div>
 
-      <div class="winning__wrapper--bottom">
-        <p v-if="prizeTargetInfo.serialNumber">
+      <div class="winning__awards--bottom">
+        <p v-if="prizeTargetInfo.serialNumber" @click="copyClipboard">
           <span class="label">{{ content.winning.serialNumber }} </span>
           <span class="desc serial">{{ prizeTargetInfo.serialNumber }}</span>
         </p>
@@ -91,6 +93,7 @@ const goToCollectedPage = () => {
 
     <section class="winning__cat">
       <button
+        v-if="prizeTargetInfo"
         class="winning__cat--prev-arrow"
         :class="{ show: prizeIndex !== 0 }"
         @click="() => prizeIndex > 0 && prizeIndex--"
@@ -101,6 +104,7 @@ const goToCollectedPage = () => {
         <img :src="winningCatImg" alt="winning cat" />
       </div>
       <button
+        v-if="prizeTargetInfo"
         class="winning__cat--next-arrow"
         :class="{ show: prizeIndex !== prizeInfo.length - 1 }"
         @click="() => prizeIndex < prizeInfo.length - 1 && prizeIndex++"
@@ -118,8 +122,8 @@ const goToCollectedPage = () => {
             : ''
         "
       />
-      <button class="store-btn" @click="goToCollectedPage">
-        <img :src="backButtonImg" alt="返回打卡紀錄" />
+      <button class="store-btn" @click="linkToTargetActivityIdPage(eventId, 'Collected')">
+        <img :src="backButtonImg" :alt="content.btn.backCollected" />
       </button>
     </section>
   </main>
@@ -127,137 +131,120 @@ const goToCollectedPage = () => {
 
 <style lang="scss" scoped>
 .winning {
-  position: relative;
-
-  overflow: auto;
+  @extend %mainSection;
+  @extend %flexColInfo;
+  padding-top: 5rem;
   background: url('@/assets/images/bg/green.png');
-
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 80px;
 
   &__tip {
     position: absolute;
-    top: 60px;
-    color: #fff;
+    top: 3.75rem;
+    color: $whitePure;
     font-weight: 700;
-    font-size: 20px;
+    font-size: 1.25rem;
   }
 
-  &__wrapper {
-    background: #fff;
-    margin-top: 28px;
-    border-radius: 15px;
+  &__awards {
+    font-family: 'GenSenRounded', Helvetica, sans-serif;
+    font-weight: 900;
 
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+    @extend %flexColInfo;
+    @extend %roundBox;
+    background: $whitePure;
+    margin-top: 1.75rem;
 
-    width: 270px;
+    width: 16.875rem;
     @media screen and (min-width: 600px) {
       width: 80%;
-      max-width: 520px;
-      margin: 28px auto 0 auto;
+      max-width: 32.5rem;
+      margin: 1.75rem auto 0 auto;
     }
-
     > div {
-      width: 100%;
-      display: flex;
+      @extend %flexColInfo;
       justify-content: center;
-      flex-direction: column;
-      align-items: center;
+      width: 100%;
     }
     &--top {
-      padding: 8px 0;
-      font-size: 20px;
-      font-weight: 700;
-      color: #473423;
-      gap: 4px;
-
+      padding: 1rem 0 0.5rem 0;
+      &.type1 { background-color: $yellow0; }
+      &.type2 { background-color: $green0; }
+      &.type3 { background-color: $orange0; }
+      >*{
+        color: $brown2;
+        font-weight: 900;
+      }
       p {
-        margin-top: 6px;
+        font-size: 1.1rem;
       }
-
       span {
-        font-size: 15px;
-        font-weight: 500;
-      }
-
-      &.type1 {
-        background-color: #efdc2b;
-      }
-
-      &.type2 {
-        background-color: #afeb30;
-      }
-
-      &.type3 {
-        background-color: #ffa41b;
+        font-size: 1rem;
       }
     }
 
     &--middle {
-      padding: 12px 0;
-      font-size: 24px;
-      font-weight: 700;
-      color: #85846b;
-      background-color: #f7f7f7;
+      font-weight: 900;
+      font-size: 1.5rem;
+      color: $gray2;
+      word-break: keep-all;
+      text-align: center;
+      line-height: 1.3;
+
+      min-height: 7rem;
+      background-color: $whitePure;
+      padding: 0.75rem 1rem;
     }
 
     &--bottom {
       align-items: start;
-      padding: 8px 25px;
-      background-color: #eeecd8;
-      gap: 8px;
+      padding: 1rem;
+      background-color: $white3;
+      gap: 0.5rem;
       > p {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: row;
+        @extend %flexRowInfo;
         width: 100%;
         flex: 1;
       }
       span {
-        font-size: 14px;
-        color: #85846b;
-        font-weight: 500;
         display: inline-block;
-      }
-      span.label {
-        font-weight: 700;
-        width: 65px;
-      }
-      span.desc {
-        width: calc(100% - 65px);
-        word-wrap: break-word;
+        &.label {
+          font-weight: 700;
+          font-size: 0.875rem;
+          width: 3.75rem;
+          color: $gray2;
+        }
+        &.desc {
+          font-weight: 500;
+          font-size: 0.875rem;
+          width: calc(100% - 4rem);
+          word-wrap: break-word;
+          color: $gray2;
+        }
         &.serial {
-          font-size: 20px;
+          font-size: 1.25rem;
           font-weight: 900;
-          color: #473423;
+          line-height: 1;
+          color: $brown2;
         }
       }
     }
   }
 
   &__cat {
-    display: flex;
-    align-items: center;
-    width: 100%;
+    @extend %flexRowInfo;
     justify-content: space-around;
+    width: 100%;
 
     &--image {
-      width: 152px;
-      height: 190px;
+      width: 9.5rem;
+      height: 11.875rem;
       overflow: hidden;
-      margin: -10px 0;
+      margin: -0.625rem 0;
     }
 
     &--next-arrow,
     &--prev-arrow {
-      cursor: pointer;
-      width: 32px;
-      height: 37px;
+      width: 2rem;
+      height: 2.375rem;
       overflow: hidden;
       visibility: hidden;
       &.show {
@@ -267,16 +254,13 @@ const goToCollectedPage = () => {
   }
 
   &__content {
-    padding: 42px 27px 42px 27px;
-    background-color: #fff;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+    @extend %flexColInfo;
     justify-content: space-between;
-    position: relative;
-    width: 100%;
+    flex: 1;
+    @extend %mainSection;
     max-width: $card-middle;
-    margin: auto;
+    padding: 2.625rem 1.75rem;
+    background-color: $whitePure;
   }
 }
 </style>

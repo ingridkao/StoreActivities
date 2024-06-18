@@ -1,8 +1,6 @@
 <script setup lang="ts">
-/**
- * ComingSoon
- */
 import { RouterLink } from 'vue-router'
+import content from '@/assets/content'
 import checkFailImageImg from '@/assets/images/cat/check-fail-cat.png'
 </script>
 
@@ -18,7 +16,7 @@ import checkFailImageImg from '@/assets/images/cat/check-fail-cat.png'
           <div class="dialog">Coming soon</div>
         </div>
       </div>
-      <RouterLink to="/" class="store-btn activity" title="回活動首頁"></RouterLink>
+      <RouterLink to="/" class="store-btn activity" :title="content.btn.backHome"></RouterLink>
     </div>
   </main>
 </template>
@@ -29,8 +27,10 @@ import checkFailImageImg from '@/assets/images/cat/check-fail-cat.png'
   background: url('@/assets/images/bg/fail.png');
   overflow: hidden;
   height: 100vh;
+
   > div {
     @extend %flexColInfo;
+    justify-content: center;
     @extend %mainSection;
     max-width: $content-small;
     height: 100%;
@@ -50,6 +50,7 @@ import checkFailImageImg from '@/assets/images/cat/check-fail-cat.png'
       }
       .dialog {
         @extend %flexColInfo;
+        justify-content: center;
         @extend %imgContainer;
         background-image: url('@/assets/images/lobby/top-dialog.svg');
         aspect-ratio: 163/70;

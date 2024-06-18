@@ -6,11 +6,10 @@ import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { EventSimpleInterface, EventInterface, IconInterface } from '@/types/ResponseHandle'
 
+import content from '@/assets/content'
 import emptyStampImg from '@/assets/images/stamp/empty.png'
 import checkedStampImg from '@/assets/images/stamp/checked.svg'
 import BorderStampImg from '@/assets/images/stamp/border.png'
-import redeemButtonImg from '@/assets/images/button/redeem.svg'
-import backToActivityImg from '@/assets/images/button/back-activity.svg'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
 import { useFetchData } from '@/composable/useFetch'
@@ -33,8 +32,8 @@ const collectedStore = ref<EventInterface[]>([])
 const iconStore = ref<IconInterface[]>([])
 const stampBaseCount = computed(() => {
   const albumCount = collectedStore.value.length
-  if (albumCount <= 24) return 24
-  return (Math.round((albumCount - 24) / 4) + 6) * 8
+  if (albumCount <= 16) return 16
+  return (Math.round((albumCount - 16) / 4) + 6) * 8
 })
 
 const eventId = String(route.params.id)
@@ -55,13 +54,13 @@ const clickReceivePrize = async () => {
         // 兌獎觸發成功引導到兌獎頁面
         router.push({ path: `/winning/${eventId}` })
       } else {
-        errorAlert('未達到兌獎門檻', `/activity/${eventId}`)
+        errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
       }
     } catch (error) {
       errorAlert(String(error), `/activity/${eventId}`)
     }
   } else {
-    errorAlert('未達到兌獎門檻', `/activity/${eventId}`)
+    errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
   }
 }
 
@@ -76,16 +75,17 @@ onMounted(async () => {
       iconStore.value = res.storeIconList || []
       setAccumulatCheckinCount(collectedStore.value.length)
     }
+    layoutStore.loadToggle(false)
   } catch (error) {
     if (error === 1) {
-      activityErrorAlert('沒有此活動')
+      activityErrorAlert(content.activity.notFound)
     } else if (error === 2) {
-      activityErrorAlert('活動已結束')
+      activityErrorAlert(content.activity.timeOver)
     } else {
       errorAlert(String(error), `/activity/${eventId}`)
     }
+    layoutStore.loadToggle(false)
   }
-  layoutStore.loadToggle(false)
 })
 
 const stampBorder = ['#ffcf24', '#b26cf7', '#ff8d3b', '#f06f9d']
@@ -169,17 +169,25 @@ const parseIconURL = (baseItem: EventInterface) => {
             :src="BorderStampImg"
             class="stamp-grade"
             :style="{ borderColor: `${isGradeStamp(baseItem)}` }"
-            :alt="`stamp`"
+            :alt="`門市${baseItem}`"
           />
-          <img v-else :src="emptyStampImg" alt="empty stamp" />
+          <img v-else :src="emptyStampImg" alt="還沒打卡" />
         </div>
       </div>
       <footer class="collected__footer">
-        <button @click="clickReceivePrize()">
-          <img :src="redeemButtonImg" alt="前往兌獎" />
+        <button 
+          class="store-btn redeem" 
+          @click="clickReceivePrize()"
+          :title="content.btn.goRedeem"
+        >
+          {{ content.btn.goRedeem }}
         </button>
-        <button @click="goToEventPage()">
-          <img :src="backToActivityImg" alt="回活動首頁" />
+        <button 
+          class="store-btn activity" 
+          @click="goToEventPage()"
+          :title="content.btn.backHome"
+        >
+          {{ content.btn.backHome }}
         </button>
       </footer>
     </div>
@@ -197,6 +205,7 @@ const parseIconURL = (baseItem: EventInterface) => {
 
   &__header {
     @extend %flexColInfo;
+    justify-content: center;
     @extend %mainSection;
     flex-wrap: wrap;
     height: 145px;
@@ -204,7 +213,7 @@ const parseIconURL = (baseItem: EventInterface) => {
 
     &--text-block {
       position: relative;
-      margin-top: 12px;
+      margin-top: 0.75rem;
       > h1 {
         color: $white;
         white-space: normal;
@@ -224,19 +233,19 @@ const parseIconURL = (baseItem: EventInterface) => {
         @extend %titleMiddleStyle;
         position: absolute;
         top: 0;
-        -webkit-text-stroke: 8px $green3;
+        -webkit-text-stroke: 0.5rem $green3;
       }
     }
 
     &--date {
       color: $white;
-      margin-top: 12px;
+      margin-top: 0.75rem;
       display: flex;
       align-items: end;
-      gap: 8px;
+      gap: 0.5rem;
 
       &-line {
-        width: 32px;
+        width: 2rem;
         height: 1px;
         background-color: $white;
       }
@@ -250,11 +259,14 @@ const parseIconURL = (baseItem: EventInterface) => {
 
   &__footer {
     @extend %fixedSection;
-    height: 40px;
+    height: 2.5rem;
     bottom: 60px;
     top: auto;
     @extend %flexRowInfo;
-    gap: 14px;
+    gap: 0.875rem;
+    .store-btn{
+      margin: 0;
+    }
   }
 
   .stamp-grade {

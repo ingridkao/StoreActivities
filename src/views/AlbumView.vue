@@ -1,7 +1,4 @@
 <script setup lang="ts">
-/**
- * 門市打卡紀錄
- */
 import { ref, onMounted, computed } from 'vue'
 import type { AlbumType } from '@/types/ResponseHandle'
 
@@ -24,8 +21,8 @@ const accumulation = computed(() => {
 })
 const stampBaseCount = computed(() => {
   const albumCount = albumStore.value.length
-  if (albumCount <= 24) return 24
-  return (Math.round((albumCount - 24) / 4) + 6) * 8
+  if (albumCount <= 16) return 16
+  return (Math.round((albumCount - 16) / 4) + 6) * 8
 })
 
 onMounted(async () => {
@@ -93,35 +90,35 @@ onMounted(async () => {
   &__header {
     @extend %mainSection;
     max-width: $content-small;
-    height: 188px;
-    margin-top: 38px;
-    margin-bottom: 16px;
+    height: 11.75rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 
     @extend %imgContainer;
     background-image: url('@/assets/images/cat/fish-cat.png');
 
     &--title {
       color: $white;
-      padding-top: 30px;
-      padding-left: 17px;
-      padding-bottom: 4px;
+      padding-top: 1.875rem;
+      padding-left: 1rem;
+      padding-bottom: 0.25rem;
     }
 
     &--info {
       @extend %flexRowInfo;
       @extend %imgContainer;
       background-image: url('@/assets/images/album/main-dialog.svg');
-      width: 190px;
-      height: 82px;
+      width: 11.875rem;
+      height: 5.125rem;
       p {
         color: $gray1;
         font-weight: 700;
-        font-size: 40px;
-        margin-right: 15px;
+        font-size: 2.5rem;
+        margin-right: 1rem;
       }
       span {
-        font-size: 20px;
-        margin-left: 6px;
+        font-size: 1.25rem;
+        margin-left: 0.5rem;
       }
     }
   }

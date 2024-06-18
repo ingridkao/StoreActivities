@@ -12,24 +12,30 @@ $black1: #2d2a2a;
 $whitePure: #f5f5f5;
 $white: #efefea;
 $white2: #d3d3d3;
+$white3: #eeecd8;
 $grayBlue: #d7dde2;
 $gray: #8995a1;
 $gray1: #5f5d5d;
+$gray2: #85846b;
 $brown: #594c40;
+$brown2: #473423;
+$yellow0: #efdc2b; // type1
 $yellow1: #ffce00;
 $yellow2: #ffbd14;
 $yellow3: #bc8700;
+$green0: #afeb30; // type2
 $green1: #5ac274;
 $green2: #009031;
 $green3: #12b84a;
 $green4: #009f66;
+$orange0: #ffa41b; // type3
+
 $purple: #8b84d3;
 
 /*===== flex =====*/
 %flexColInfo {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
 }
 
@@ -60,6 +66,14 @@ $purple: #8b84d3;
   z-index: 4;
   top: 0;
   left: 0;
+  padding: 0;
+}
+
+
+%absoluteTopSection {
+  position: absolute;
+  top: 0px;
+  width: 100%;
 }
 
 %titleSection {
@@ -68,7 +82,19 @@ $purple: #8b84d3;
   align-items: center;
 }
 
+%roundBox {
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+%shadowBox {
+  width: 100%;
+  box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.4);
+}
+
 %cardWidth {
+  position: relative;
+  width: 100%;
   max-width: $card-middle;
   margin: 0 auto;
   @media screen and (min-width: $content-large) {
@@ -87,9 +113,9 @@ $purple: #8b84d3;
   max-width: $card-basic;
   margin: auto;
   display: grid;
-  gap: 12px;
-  padding: 0 20px;
-  margin-bottom: 16px;
+  gap: 0.75rem;
+  padding: 0 1.25rem;
+  margin-bottom: 1rem;
   grid-template-columns: repeat(4, 1fr);
   @media screen and (max-width: $card-basic) {
     max-width: $content-small;

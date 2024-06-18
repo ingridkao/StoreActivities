@@ -114,28 +114,29 @@ onUnmounted(() => {
   justify-content: space-between;
   max-width: $card-middle;
   height: 100%;
-  gap: 15px;
+  gap: 1rem;
 }
 
 .mapPanel {
   @extend %flexColInfo;
+  justify-content: center;
   @extend %fixedSection;
   bottom: 0;
   top: auto;
 
   &-info {
-    padding: 20px 25px;
+    padding: 1.25rem 1.5rem;
     justify-content: flex-start;
 
     &-logo {
-      width: 84px;
-      height: 84px;
+      width: 5.25rem;
+      height: 5.25rem;
     }
 
     &-content {
       height: 100%;
       display: grid;
-      grid-template-columns: 50px 1fr;
+      grid-template-columns: 3.125rem 1fr;
       grid-template-rows: 1.5em 3em;
       row-gap: 0.5em;
       p {
@@ -145,22 +146,21 @@ onUnmounted(() => {
 
     &-centerBtn {
       position: absolute;
-      top: -16px;
-      right: 16px;
+      top: -1rem;
+      right: 1rem;
       z-index: 5;
     }
   }
 
   &-action {
-    gap: 13px;
+    gap: 0.75rem;
 
     &-checkin {
       justify-content: initial;
-
       .catImg {
         position: absolute;
-        width: 157px;
-        height: 200px;
+        width: 10rem;
+        height: 12.5rem;
         left: 0;
         bottom: 0;
         img {
@@ -168,8 +168,8 @@ onUnmounted(() => {
         }
       }
       .store-btn {
-        margin-top: -25px;
-        margin-left: 135px;
+        margin-top: -1.5rem;
+        margin-left: 8.375rem;
         z-index: 5;
       }
     }
@@ -177,20 +177,21 @@ onUnmounted(() => {
 
   &-filter {
     position: absolute;
-    bottom: 30px;
-    right: 12px;
+    bottom: 1.875rem;
+    right: 0.75rem;
     display: flex;
     gap: 9px;
     .custom-btn {
       @extend %flexColInfo;
-      width: 70px;
-      height: 50px;
-      padding: 0 15px;
+      justify-content: center;
+      width: 4.375rem;
+      height: 3.125rem;
+      padding: 0 1rem;
 
-      box-shadow: 0px 4px 4px rgb($black, 0.3);
+      box-shadow: 0px 0.25rem 0.25rem rgb($black, 0.3);
       background-color: $grayBlue;
 
-      font-size: 14px;
+      font-size: 0.875rem;
       color: $gray;
       &.active {
         background-color: $yellow1;

@@ -36,7 +36,7 @@ const { scanCode } = useLIFF()
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
 const { parseYear, parseMD } = useDay()
-const { activityErrorAlert } = useSweetAlert()
+const { activityErrorAlert, errorAlert } = useSweetAlert()
 const route = useRoute()
 const eventId = route?.params?.id
 const eventInfo = ref<EventSimpleInterface>()
@@ -61,11 +61,11 @@ watchEffect(async () => {
     confirmCoords()
   } catch (error) {
     if (error === 1) {
-      activityErrorAlert('沒有此活動')
+      activityErrorAlert(content.activity.notFound)
     } else if (error === 2) {
-      activityErrorAlert('活動已結束')
+      activityErrorAlert(content.activity.timeOver)
     } else {
-      activityErrorAlert('異常', String(error))
+      errorAlert(String(error), `/activity/${eventId}`)
     }
   }
 })
@@ -157,9 +157,9 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
       <button
         class="activity__content_directionBtn round-btn info"
         @click="openDirection"
-        title="打開說明"
+        :title="content.btn.openDirection"
       >
-        打開說明
+        {{content.btn.openDirection}}
       </button>
       <ParagraphItem
         v-for="{ title, text } in eventInfo.content"
@@ -168,7 +168,13 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
         :content="text || ''"
       />
       <footer>
-        <button class="store-btn enter" @click="commitScan" title="進入活動">進入活動</button>
+        <button 
+          class="store-btn enter" 
+          @click="commitScan" 
+          :title="content.btn.goScan"
+        >
+          {{ content.btn.goScan }}
+        </button>
       </footer>
     </div>
 
@@ -185,7 +191,7 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
 
 <style lang="scss" scoped>
 %titleLargeStyle {
-  font-size: 65px;
+  font-size: 4rem;
   line-height: 75px;
   letter-spacing: calc(65px * 0.17);
   color: $white;
@@ -194,14 +200,12 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
 .activity {
   @extend %pageMain;
   background-color: $whitePure;
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 1.875rem;
+  padding-bottom: 1.875rem;
 
   &__top {
-    position: absolute;
-    top: 0;
+    @extend %absoluteTopSection;
     left: 0;
-    width: 100%;
     max-height: 500px;
     overflow-y: hidden;
     aspect-ratio: 65 / 50;
@@ -212,10 +216,9 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
     max-width: $card-middle;
 
     &_title {
-      position: absolute;
-      width: 300px;
-      right: 14px;
-      top: 0px;
+      @extend %absoluteTopSection;
+      width: 18.75rem;
+      right: 0.875rem;
       display: flex;
 
       &-text {
@@ -234,16 +237,16 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
 
         &-bg {
           @extend %titleLargeStyle;
-          position: absolute;
-          top: 0;
-          -webkit-text-stroke: 8px $yellow2;
+          @extend %absoluteTopSection;
+          -webkit-text-stroke: 0.5rem $yellow2;
         }
       }
 
       &--deco {
         @extend %flexColInfo;
+        justify-content: center;
         > img {
-          width: 68px;
+          width: 4.25rem;
           height: 64px;
           overflow: hidden;
         }
@@ -251,7 +254,7 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
     }
 
     &_banner {
-      padding-top: 30px;
+      padding-top: 1.875rem;
       > img {
         z-index: 2;
         aspect-ratio: 65/88;
@@ -260,21 +263,22 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
 
     &_date {
       @extend %flexColInfo;
-      gap: 4px;
+      justify-content: center;
+      gap: 0.25rem;
 
       position: absolute;
-      width: 180px;
+      width: 11.25rem;
       bottom: 8%;
-      right: 20px;
+      right: 1.25rem;
       z-index: 2;
       color: $white2;
       &--day {
         @extend %flexRowInfo;
         border: 0.5px solid $white2;
-        padding: 8px 12px;
-        gap: 8px;
+        padding: 0.5rem 0.75rem;
+        gap: 0.5rem;
         &-line {
-          width: 32px;
+          width: 2rem;
           height: 1px;
           background-color: $white;
         }
@@ -285,14 +289,14 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
   &__content {
     @extend %mainSection;
     max-width: $card-middle;
-    padding: 25px 43px 0 26px;
+    padding: 1.5rem 2.625rem 0 1.625rem;
     @media screen and (min-width: $content-middle) {
       max-width: $content-middle;
     }
     &_directionBtn {
       position: absolute;
-      top: -30px;
-      right: 20px;
+      top: -1.875rem;
+      right: 1.25rem;
       z-index: 3;
     }
   }

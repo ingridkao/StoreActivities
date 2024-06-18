@@ -42,7 +42,7 @@ import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
       </div>
 
       <footer class="direction__button">
-        <button class="store-btn checkin" @click="$emit('checkin')" title="進行打卡"></button>
+        <button class="store-btn checkin" @click="$emit('checkin')" :title="content.btn.scanAgain"></button>
       </footer>
     </div>
   </div>
@@ -51,7 +51,7 @@ import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
 <style lang="scss" scoped>
 p {
   font-weight: 500;
-  font-size: 18px;
+  font-size: 1.125rem;
   line-height: 1;
   color: $white;
 }
@@ -62,67 +62,67 @@ p {
   overflow-y: scroll;
 
   > div {
-    padding-top: 80px;
+    padding-top: 5rem;
     max-width: $card-basic;
     margin: auto;
   }
 
   &__deco {
-    width: 208px;
-    height: 194px;
-    margin: 0 46px 0 auto;
+    width: 13rem;
+    height: 12.125rem;
+    margin: 0 2.875rem 0 auto;
   }
 
   &_stepIcon {
-    width: 53px;
-    height: 68px;
+    width: 3.375rem;
+    height: 4.25rem;
   }
 
   &__step1 {
     &-desc {
       @extend %flexRowInfo;
       align-items: flex-end;
-      gap: 12px;
+      gap: 0.75rem;
 
       color: $white;
       &-text {
-        margin-bottom: 8px;
+        margin-bottom: 0.5rem;
         font-weight: bold;
       }
       &-tip {
-        font-size: 15px;
+        font-size: 1rem;
         font-weight: normal;
       }
     }
     &-img {
-      margin: 0 40px 38px auto;
-      width: 230px;
-      height: 177px;
+      margin: 0 2.5rem 2.375rem auto;
+      width: 14.375rem;
+      height: 11.125rem;
     }
   }
 
   &__step2 {
     @extend %flexRowInfo;
-    gap: 8px;
+    gap: 0.5rem;
     margin: 0 auto auto 34px;
     &-img {
-      width: 102px;
-      height: 205px;
+      width: 6.375rem;
+      height: 12.875rem;
     }
 
     &-text {
       @extend %flexRowInfo;
       align-items: flex-end;
-      gap: 8px;
+      gap: 0.5rem;
       p {
-        width: 130px;
-        margin-bottom: 9px;
+        width: 8.125rem;
+        margin-bottom: 0.5rem;
       }
     }
   }
 
   &__button {
-    margin: 27px auto 42px auto;
+    margin: 1.75rem auto 2.625rem auto;
   }
 }
 </style>

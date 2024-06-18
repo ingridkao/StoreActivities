@@ -6,6 +6,7 @@ import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import jsQR from 'jsqr'
 import dialogCatImg from '@/assets/images/cat/dialog-cat.png'
+import content from '@/assets/content'
 
 import { useFetchData } from '@/composable/useFetch'
 import ScanResult from '@/components/ScanResult.vue'
@@ -108,7 +109,8 @@ const updateOutPutData = async (imageData: any) => {
       const t0kenObj = await verifyCtString(ctStr)
 
       // 打卡驗證
-      const commitRes = await commitStoreCheckIn(eventId, t0kenObj)
+      const commitRes = await commitStoreCheckIn(String(eventId), t0kenObj)
+
       if (commitRes) {
         // 打卡成功蓋版
         scanResultContent.value = commitRes
@@ -155,6 +157,7 @@ let streamInstance: any = null
 onMounted(() => {
   const ua = navigator.userAgent
   isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
+  layoutStore.loadToggle(true)
 
   video = document.createElement('video') as HTMLVideoElement
   canvasElement = document.getElementById('canvas') as HTMLCanvasElement
@@ -165,7 +168,6 @@ onMounted(() => {
     if (!video || !canvasElement) return
 
     const ratio = Math.round((video.videoWidth / video.videoHeight) * 100) / 100
-
     if (window.innerWidth > 680) {
       // 640:400
       canvasElement.width = 640
@@ -175,6 +177,8 @@ onMounted(() => {
       canvasElement.width = window.innerWidth - 100
       canvasElement.height = Math.round((canvasElement.width / ratio) * 100) / 100
     }
+    layoutStore.loadToggle(false)
+
     canvasW.value = canvasElement.width
     canvasH.value = canvasElement.height
 
@@ -201,6 +205,8 @@ onMounted(() => {
       .catch((error) => {
         // 用戶拒絕或未能啟用相機
         canvasVisible.value = false
+        videoLoading.value = false
+        layoutStore.loadToggle(false)
         console.error(error)
       })
   }
@@ -208,7 +214,9 @@ onMounted(() => {
 
 const stopMediaTracks = () => {
   scanStatuMsg.value = '攝影機關閉中'
-  streamInstance.stop()
+  if(streamInstance){
+    streamInstance.stop()
+  }
 }
 
 onUnmounted(() => {
@@ -228,18 +236,20 @@ onUnmounted(() => {
     <h1 v-if="!canvasVisible" class="loading small">
       <span>🎥 無法存取視訊串流</span>
       <span>請確保您已啟用網路攝影機</span>
+      <RouterLink to="/" class="store-btn activity" :title="content.btn.backHome"></RouterLink>
     </h1>
     <h1 v-if="videoLoading" class="loading">Loading...</h1>
 
     <div
       class="cameraScan__box"
       :style="{
-        width: `${canvasW + 32}px`
+        width: `${canvasW + 32}px`,
       }"
     >
       <div
         class="cameraScan__box-canvas"
         :style="{
+          width: `${canvasW + 32}px`,
           height: `${canvasH + 48}px`
         }"
       >
@@ -281,37 +291,40 @@ video {
 .cameraScan {
   @extend %pageMain;
   @extend %flexColInfo;
-  padding-top: 30px;
+  padding-top: 4rem;
 
   &__box {
-    width: 100%;
+    @extend %roundBox;
+    @extend %shadowBox;
+    width: 90%;
+    margin: auto;
     background-color: $purple;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0px 4px 4px 0px rgba($black, 0.4);
-
     &-canvas {
       @extend %bgContainer;
+      width: 100%;
+      height: 23rem;
       background-image: url('@/assets/images/bg/purple.png');
-      padding: 24px 16px;
+      padding: 1.5rem 1rem;
     }
     &-result {
       @extend %flexRowInfo;
       justify-content: space-around;
-      gap: 8px;
+      gap: 0.5rem;
       &-text {
         color: $white;
-        width: 270px;
+        width: 16.875rem;
       }
     }
   }
   #canvas {
     overflow: hidden;
     border: 2px solid $yellow2;
+    width: 100%;
+    height: 100%;
   }
   &__button {
     @extend %flexRowInfo;
-    gap: 24px;
+    gap: 1.5rem;
   }
 }
 </style>

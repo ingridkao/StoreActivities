@@ -57,10 +57,9 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
 <style lang="scss" scoped>
 .activities {
   cursor: pointer;
-  border-radius: 24px;
-  margin-bottom: 12px;
+  border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0px 4px 4px 0px rgba($black, 0.3);
+  box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.3);
   background-color: transparent;
   &.invalid {
     opacity: 0.3;
@@ -69,7 +68,7 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
     background-color: $white2;
     aspect-ratio: 169/50;
     img {
-      border-radius: 24px 24px 0px 0px;
+      border-radius: 1.5rem 1.5rem 0px 0px;
       overflow: hidden;
       object-fit: cover;
     }
@@ -78,9 +77,10 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
   &__info {
     @extend %flexColInfo;
     align-items: flex-start;
-    gap: 8px;
+    justify-content: center;
+    gap: 0.5rem;
 
-    padding: 15px;
+    padding: 1rem;
     background-color: $white;
     h6 {
       color: $black;
@@ -89,7 +89,7 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
     p {
       color: $black;
       font-weight: 500;
-      font-size: 13px;
+      font-size: 0.75rem;
     }
   }
 }

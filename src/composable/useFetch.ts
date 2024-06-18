@@ -36,7 +36,7 @@ import EventContent from '@/assets/events'
 const { VITE_API_URL, VITE_UI_MODE, VITE_OUTDIR } = import.meta.env
 
 export function useFetchData() {
-  const { scanEntry, checkIn, prize } = apis
+  const { scanEntry, checkIn, prize, storeMap } = apis
   const layoutStore = useLayoutStore()
   const {
     getLocationStorage,
@@ -103,9 +103,9 @@ export function useFetchData() {
           .verifyQRString(ctStr)
           .then((res: ApiResType) => {
             if (res?.code === ResponseCodes.QRCODE_TIMEOUT) {
-              reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
+              // reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
+              reject(`QRcode掃描失效 ct:${ctStr}`)
             } else {
-              console.log(res)
               const { token } = res
               if (token) {
                 setQRcodeString(ctStr)
@@ -177,15 +177,15 @@ export function useFetchData() {
         const { loginT0ken } = loginT0kenObj
         const [latitude, longitude] = locationObj
         const data = {
+          storeId: String(storeId),
           eventId: Number(eventId),
+          key: String(number),
           longitude: Number(longitude),
           latitude: Number(latitude),
-          storeId: storeId,
-          key: number
         } as checkInVerifyBodyType
         const headerKey = loginT0ken ? loginT0ken.slice(4, 10) : ''
         const headers = {
-          store: storeId,
+          store: String(storeId),
           key: `${number}|||${headerKey}`,
           Auth1: token,
           Auth2: loginT0ken
@@ -193,8 +193,8 @@ export function useFetchData() {
         checkIn
           .checkInVerify(data, headers)
           .then((res: any) => {
-            console.log(res)
             const { code, msg, checkInStoreInfo } = res
+            removeCtT0kenCookies()
             if (code === ResponseCodes.NO_EVENT) {
               reject('此活動不存在，請重新操作')
             } else if (code === ResponseCodes.LOCATION_ERROR) {
@@ -227,13 +227,14 @@ export function useFetchData() {
                 ResponseCodes.STORE_ERROR
               ].includes(code)
             ) {
-              reject('請重新進行掃描打卡')
+              // reject(`${msg} 請重新進行掃描打卡`)
+              reject(`${code}${msg}storeId: ${storeId}|eventId:${eventId}|key:${number}`)
             } else {
               reject(`服務異常，${msg}`)
             }
-            removeCtT0kenCookies()
           })
           .catch((error: string) => {
+            removeCtT0kenCookies()
             reject(error)
           })
       }
@@ -449,7 +450,7 @@ export function useFetchData() {
             reject(error)
           })
       } else {
-        reject('開發模式')
+        reject('此服務需要登入')
       }
     })
   }
@@ -475,32 +476,51 @@ export function useFetchData() {
             reject(`fetchCollectData:${error}`)
           })
       } else {
-        reject('開發模式')
+        reject('此服務需要登入')
       }
     })
   }
 
+  // 讀取指定城市資料
   const originURL = window.location.origin
   const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
-
-  // 讀取指定城市資料
   const fetchLayerData = async (selectCity: string = '') => {
     const targerCity = String(selectCity)
     if (!targerCity) return false
-    layoutStore.loadToggle(true)
-    return await axios
-      .get(`${fileOrigin}/stores/map_${targerCity}.geojson`)
-      .then((geoRes) => {
-        if (geoRes && geoRes.data) return geoRes.data
-        return false
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-      .finally(() => {
-        layoutStore.loadToggle(false)
-      })
+    try {
+      layoutStore.loadToggle(true)
+      const geoRes = await axios.get(`${fileOrigin}/stores/map_${targerCity}.geojson`)
+      layoutStore.loadToggle(false)
+      if (geoRes && geoRes.data) return geoRes.data
+      return false
+    } catch (error) {
+      console.log(error)
+    }
   }
+
+  // const fetchLayerData = async (center: number[]) => {
+  //   const loginT0ken = getLoginT0kenCookies()
+  //   if (loginT0ken && loginT0ken.loginT0ken) {
+  //     try {
+  //       layoutStore.loadToggle(true)
+  //       const geoRes = await storeMap.getGeoData(center, loginT0ken.loginT0ken)
+  //       layoutStore.loadToggle(false)
+  //       debugger
+  //       console.log(geoRes);
+  //       if (geoRes && geoRes.data) {
+  //         return geoRes.data
+  //       // }else{
+
+  //       }
+  //       return false
+  //     } catch (error) {
+  //       throw new Error('GetStoreMapGeoJson Failed: ' + error)
+  //     }
+  //   }else{
+  //     // throw new Error('Failed: ' + err)
+  //     throw new Error('此服務需要登入')
+  //   }
+  // }
 
   return {
     parseParamCT,
