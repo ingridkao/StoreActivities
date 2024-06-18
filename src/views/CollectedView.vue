@@ -32,8 +32,8 @@ const collectedStore = ref<EventInterface[]>([])
 const iconStore = ref<IconInterface[]>([])
 const stampBaseCount = computed(() => {
   const albumCount = collectedStore.value.length
-  if (albumCount <= 16) return 16
-  return (Math.round((albumCount - 16) / 4) + 6) * 8
+  if (albumCount <= 24) return 24
+  return (Math.round((albumCount - 24) / 4) + 6) * 8
 })
 
 const eventId = String(route.params.id)
