@@ -39,6 +39,7 @@ export function useFetchData() {
   const { scanEntry, checkIn, prize, storeMap } = apis
   const layoutStore = useLayoutStore()
   const {
+    setLocationStorage,
     getLocationStorage,
     setQRcodeString,
     parseCtT0ken,
@@ -56,8 +57,34 @@ export function useFetchData() {
    * <URL>?ct=OP1134580513153032440f32024
    */
   const parseParamCT = (url: string): string => {
-    const codeSplit = url.split('?ct=')
-    return codeSplit.length === 2 && codeSplit[1] ? String(codeSplit[1]) : ''
+    const parsedUrl = new URL(url)
+    const params = new URLSearchParams(parsedUrl.search)
+    return params.get('ct') || ''
+  }
+
+  /**
+   * 從URL字串中取出lat和lon參數 for dev
+   */
+  const parseParamLocation = (url: string): { lat: number | null; lon: number | null } => {
+    const parsedUrl = new URL(url)
+    const params = new URLSearchParams(parsedUrl.search)
+    const latValue = params.get('lat')
+    const lonValue = params.get('lon')
+    return {
+      lat: Number(latValue) || null,
+      lon: Number(lonValue) || null
+    }
+  }
+
+  /**
+   * 從URL字串中取出lat和lon參數
+   */
+  const parseClientLocation = (url: string): { lat: number | null; lon: number | null } => {
+    // TODO dev取的URL
+    const Location = parseParamLocation(url)
+    return {
+      ...Location
+    }
   }
 
   // MockQRCodeData
@@ -91,7 +118,11 @@ export function useFetchData() {
    * ct=OP666000031818094ac904
    * 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
    */
-  const verifyCtString = (ctStr: string = ''): Promise<ParseCtStringState | null> => {
+  const verifyCtString = (
+    ctStr: string = '',
+    lat: number | null = null,
+    lon: number | null = null
+  ): Promise<ParseCtStringState | null> => {
     return new Promise((resolve, reject) => {
       if (ctStr === '') {
         reject('請選擇活動')
@@ -101,17 +132,17 @@ export function useFetchData() {
         checkIn
         scanEntry
           .verifyQRString(ctStr)
-          .then((res: ApiResType) => {
+          .then((res: any) => {
             if (res?.code === ResponseCodes.QRCODE_TIMEOUT) {
               // reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
               reject(`QRcode掃描失效 ct:${ctStr}`)
-            } else {
-              const { token } = res
-              if (token) {
+            } else if (res && res.token) {
+              if (res.token) {
+                setLocationStorage(lat, lon)
                 setQRcodeString(ctStr)
-                setCtT0kenCookies(token)
-                if (!ctStr || !token) return resolve(null)
-                const obj = parseCtT0ken(ctStr, token)
+                setCtT0kenCookies(res.token)
+                if (!ctStr || !res.token) return resolve(null)
+                const obj = parseCtT0ken(ctStr, res.token)
                 resolve(obj)
               } else {
                 reject(`verifyCtString:發生了例外錯誤`)
@@ -181,7 +212,7 @@ export function useFetchData() {
           eventId: Number(eventId),
           key: String(number),
           longitude: Number(longitude),
-          latitude: Number(latitude),
+          latitude: Number(latitude)
         } as checkInVerifyBodyType
         const headerKey = loginT0ken ? loginT0ken.slice(4, 10) : ''
         const headers = {
@@ -197,17 +228,12 @@ export function useFetchData() {
             removeCtT0kenCookies()
             if (code === ResponseCodes.NO_EVENT) {
               reject('此活動不存在，請重新操作')
-            } else if (code === ResponseCodes.LOCATION_ERROR) {
+            } else if (code === ResponseCodes.STORE_AREA_ERROR) {
               reject('你不在門市所在位置，請重新操作')
             } else if (code === ResponseCodes.LINE_NOAUTH) {
               reject('訪客無法進行打卡，請重新操作')
-            } else if (checkInStoreInfo) {
-              resolve({
-                eventId: String(eventId),
-                storeId: checkInStoreInfo.storeId,
-                storeName: checkInStoreInfo.storeName,
-                date: checkInStoreInfo.checkInTime
-              })
+            } else if ([ResponseCodes.VERIFY_FAIL, ResponseCodes.CHECKIN_FAIL].includes(code)) {
+              reject('驗證錯誤，請重新操作')
             } else if (
               [
                 ResponseCodes.SCAN_ONCE,
@@ -216,19 +242,27 @@ export function useFetchData() {
               ].includes(code)
             ) {
               reject('此門市已經打卡過了')
-            } else if ([ResponseCodes.VERIFY_FAIL, ResponseCodes.CHECKIN_FAIL].includes(code)) {
-              reject('驗證錯誤，請重新操作')
             } else if (
               [
                 ResponseCodes.QRCODE_STRING,
                 ResponseCodes.QRCODE_FORMAT,
                 ResponseCodes.QRCODE_TIMEOUT,
                 ResponseCodes.QRCODE_NUMBER,
-                ResponseCodes.STORE_ERROR
+                ResponseCodes.STORE_ERROR,
+                ResponseCodes.LOCATION_ERROR
               ].includes(code)
             ) {
               // reject(`${msg} 請重新進行掃描打卡`)
-              reject(`${code}${msg}storeId: ${storeId}|eventId:${eventId}|key:${number}`)
+              reject(
+                `${code}${msg}storeId: ${storeId}|eventId:${eventId}|longitude:${longitude}|latitude:${latitude}`
+              )
+            } else if (checkInStoreInfo) {
+              resolve({
+                eventId: String(eventId),
+                storeId: checkInStoreInfo.storeId,
+                storeName: checkInStoreInfo.storeName,
+                date: checkInStoreInfo.checkInTime
+              })
             } else {
               reject(`服務異常，${msg}`)
             }
@@ -433,25 +467,25 @@ export function useFetchData() {
   const fetchAlbumData = (): Promise<AlbumListType> => {
     const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
-      if (VITE_UI_MODE) {
-        resolve(mockDatas.albumData)
-      } else if (loginT0ken && loginT0ken.loginT0ken) {
-        checkIn
-          .fetchAlbum(loginT0ken.loginT0ken)
-          .then((res: any) => {
-            if (res.error) {
-              reject(`fetchAlbumData:${res.error}`)
-            } else {
-              resolve(res)
-            }
-          })
-          .catch((error: string) => {
-            console.log('未登入' + error)
-            reject(error)
-          })
-      } else {
-        reject('此服務需要登入')
-      }
+      // if (VITE_UI_MODE) {
+      resolve(mockDatas.albumData)
+      // } else if (loginT0ken && loginT0ken.loginT0ken) {
+      //   checkIn
+      //     .fetchAlbum(loginT0ken.loginT0ken)
+      //     .then((res: any) => {
+      //       if (res.error) {
+      //         reject(`fetchAlbumData:${res.error}`)
+      //       } else {
+      //         resolve(res)
+      //       }
+      //     })
+      //     .catch((error: string) => {
+      //       console.log('未登入' + error)
+      //       reject(error)
+      //     })
+      // } else {
+      //   reject('此服務需要登入')
+      // }
     })
   }
 
@@ -505,7 +539,6 @@ export function useFetchData() {
   //       layoutStore.loadToggle(true)
   //       const geoRes = await storeMap.getGeoData(center, loginT0ken.loginT0ken)
   //       layoutStore.loadToggle(false)
-  //       debugger
   //       console.log(geoRes);
   //       if (geoRes && geoRes.data) {
   //         return geoRes.data
@@ -524,6 +557,8 @@ export function useFetchData() {
 
   return {
     parseParamCT,
+    parseClientLocation,
+
     genrateMockQRCode,
     verifyCtString,
     commitStoreCheckIn,

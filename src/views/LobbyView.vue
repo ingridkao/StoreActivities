@@ -8,7 +8,6 @@ import content from '@/assets/content'
 
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-import { useBrowserStorage } from '@/composable/useBrowserStorage'
 
 import { useLayoutStore } from '@/stores/layout'
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
@@ -19,27 +18,60 @@ import LobbyAds from '@/components/lobby/LobbyAds.vue'
 const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 
 const { errorAlert } = useSweetAlert()
-const { genrateMockQRCode, fetchAllCampaign, fetchAdData, verifyCtString, parseParamCT } =
-  useFetchData()
-const { setLocationStorage } = useBrowserStorage()
+const {
+  genrateMockQRCode,
+  fetchAllCampaign,
+  fetchAdData,
+  verifyCtString,
+  parseParamCT,
+  parseClientLocation
+} = useFetchData()
 
 const layoutStore = useLayoutStore()
 const displayCampaignList = ref<CampaignInterface[]>([])
 const adsList = ref<AdsInterface[]>([])
+const shareList = ref([
+  {
+    link: 'https://www.facebook.com/711.ibon/',
+    img: new URL(`@/assets/images/lobby/icon-facebook.png`, import.meta.url).href,
+    name: 'facebook'
+  },
+  {
+    link: 'https://www.instagram.com/ibontw/',
+    img: new URL(`@/assets/images/lobby/icon-instagram.png`, import.meta.url).href,
+    name: 'instagram'
+  },
+  {
+    link: 'https://www.youtube.com/@ibon1348/',
+    img: new URL(`@/assets/images/lobby/icon-youtube.png`, import.meta.url).href,
+    name: 'youtube'
+  },
+  {
+    link: 'https://page.line.me/gpk2354t?openQrModal=true',
+    img: new URL(`@/assets/images/lobby/icon-line.png`, import.meta.url).href,
+    name: 'line'
+  },
+  {
+    link: 'https://group.openpoint.com.tw/cdn/index.html',
+    img: new URL(`@/assets/images/lobby/icon-open-point.png`, import.meta.url).href,
+    name: 'open-point'
+  }
+])
 
-const newPath = new URL(window.location.href, ORIGIN_URL)
 const qrString = ref<string>('')
 onMounted(async () => {
-  const ctStr = newPath && newPath.search ? parseParamCT(newPath.search) : ''
+  const ctStr = parseParamCT(window.location.href)
+  const Location = parseClientLocation(window.location.href)
+  const storeId = ctStr ? ctStr.substring(2, 8) : ''
+
   layoutStore.loadToggle(true)
   try {
-    const storeId = ctStr ? ctStr.substring(2, 8) : ''
     const [result1, result2] = await Promise.all([fetchAllCampaign(storeId), fetchAdData()])
     displayCampaignList.value = result1 || []
     adsList.value = result2 || []
 
-    if (ctStr) {
-      await verifyCtString(ctStr)
+    if (ctStr && Location.lat && Location.lon) {
+      await verifyCtString(ctStr, Location.lat, Location.lon)
     }
   } catch (error) {
     errorAlert(String(error))
@@ -47,36 +79,13 @@ onMounted(async () => {
   layoutStore.loadToggle(false)
 })
 
-const shareList = ref([{
-  link: "https://www.facebook.com/711.ibon/",
-  img: new URL(`@/assets/images/lobby/icon-facebook.png`, import.meta.url).href,
-  name: "facebook",
-},{
-  link: "https://www.instagram.com/ibontw/",
-  img: new URL(`@/assets/images/lobby/icon-instagram.png`, import.meta.url).href,
-  name: "instagram",
-},{
-  link: "https://www.youtube.com/@ibon1348/",
-  img: new URL(`@/assets/images/lobby/icon-youtube.png`, import.meta.url).href,
-  name: "youtube",
-},{
-  link: "https://page.line.me/gpk2354t?openQrModal=true",
-  img: new URL(`@/assets/images/lobby/icon-line.png`, import.meta.url).href,
-  name: "line",
-},{
-  link: "https://group.openpoint.com.tw/cdn/index.html",
-  img: new URL(`@/assets/images/lobby/icon-open-point.png`, import.meta.url).href,
-  name: "open-point",
-}])
-
 // TODO remove
 const activityId = ref('')
 const storeId = ref('')
 const genrate = async () => {
   const MockCode = await genrateMockQRCode(activityId.value, storeId.value)
   if (MockCode) {
-    setLocationStorage(Number(MockCode.lat), Number(MockCode.long))
-    qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}`
+    qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}&lat=${MockCode.lat}&lon=${MockCode.long}`
   }
 }
 </script>
@@ -107,13 +116,14 @@ const genrate = async () => {
 
     <footer class="lobby_footer">
       <div>
-        <a 
-          v-for="item in shareList" :key="item.name"
-          :href="item.link" 
-          target="_blank" 
+        <a
+          v-for="item in shareList"
+          :key="item.name"
+          :href="item.link"
+          target="_blank"
           rel="noreferrer noopenner"
         >
-          <img :src="item.img" :alt="item.name" width="45" height="45"/>
+          <img :src="item.img" :alt="item.name" width="45" height="45" />
         </a>
       </div>
     </footer>
@@ -125,8 +135,8 @@ const genrate = async () => {
       <input type="text" v-model="storeId" />
       <button @click="genrate">送出</button>
       <template v-if="qrString">
-        <div style="width: 80px">
-          <vueQr :text="qrString" :size="80" :correctLevel="0" :margin="0"/>
+        <div style="width: 90px">
+          <vueQr :text="qrString" :size="90" :correctLevel="1" :margin="1" />
         </div>
         <a :href="qrString" target="_blank">{{ qrString }}</a>
       </template>

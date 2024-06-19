@@ -11,10 +11,10 @@ export function useBrowserStorage() {
   // TODO: 如果位置會一直移動好像存在store會比較好
   const setLocationStorage = (latitude: null | number = null, longitude: null | number = null) => {
     const toString = `${latitude},${longitude}`
-    localStorage.setItem('STORE_LOCATION', toString)
+    Cookies.set('STORE_LOCATION', toString)
   }
   const getLocationStorage = () => {
-    const locationStorage = localStorage.getItem('STORE_LOCATION')
+    const locationStorage = Cookies.get('STORE_LOCATION')
     return locationStorage ? locationStorage.split(',') : []
   }
 

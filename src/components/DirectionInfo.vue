@@ -42,7 +42,11 @@ import step2PictureImg from '@/assets/images/direction/step-2-picture.png'
       </div>
 
       <footer class="direction__button">
-        <button class="store-btn checkin" @click="$emit('checkin')" :title="content.btn.scanAgain"></button>
+        <button
+          class="store-btn checkin"
+          @click="$emit('checkin')"
+          :title="content.btn.scanAgain"
+        ></button>
       </footer>
     </div>
   </div>

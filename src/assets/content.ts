@@ -7,7 +7,7 @@ export default {
   activity: {
     dateTitle: '活動期間',
     notFound: '沒有此活動',
-    timeOver: '活動已結束',
+    timeOver: '活動已結束'
   },
   direction: {
     step1Text: '掃描門市 ibon 右上角 QRcode',
@@ -23,7 +23,7 @@ export default {
   swal: {
     default: '出了一點問題',
     backActivity: '回到活動頁面',
-    notReached: '未達到兌換門檻',
+    notReached: '未達到兌換門檻'
   },
   btn: {
     backHome: '回活動首頁',
@@ -32,7 +32,7 @@ export default {
     goRedeem: '前往兌獎',
     goScan: '進入活動',
     scanAgain: '繼續打卡',
-    openDirection: '打開說明',
+    openDirection: '打開說明'
   },
   winning: {
     explanationTitle: '使用方式',
@@ -40,11 +40,10 @@ export default {
     deadline: '兌換期限',
     create: '產生時間',
     accumulate: '累積',
-    store: '家門市',
+    store: '家門市'
   },
   mapStore: {
     storeLabel: '門市',
     addressLabel: '地址'
   }
 }
-

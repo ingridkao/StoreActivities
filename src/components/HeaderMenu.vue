@@ -160,10 +160,10 @@ const goToActivityInfo = () => {
   &__wrapper {
     @extend %fixedSection;
     z-index: 8;
-    width:  10.5rem;
+    width: 10.5rem;
 
     height: auto;
-    padding:  5.5rem 1.25rem 1.75rem 1.875rem;
+    padding: 5.5rem 1.25rem 1.75rem 1.875rem;
     background-color: $whitePure;
   }
 
@@ -198,7 +198,7 @@ const goToActivityInfo = () => {
     }
   }
 
-  &__button{
+  &__button {
     font-size: 1rem;
     color: inherit;
   }

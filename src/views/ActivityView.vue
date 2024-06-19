@@ -47,7 +47,7 @@ const confirmCoords = () => {
   if (getPosition) return
   if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
     getPosition = true
-    // !! 正式環境要打開
+    // TODO !! 正式環境要打開
     // setLocationStorage(latitude, longitude)
   } else if (error.value && error.value.code >= 1) {
     geoErrorHandler(error.value.code)
@@ -84,8 +84,9 @@ const commitScan = async () => {
     let ctTokenCookiesObj = getCtT0kenCookies()
     // 沒有驗證過ct,打開手機鏡頭準備掃描
     if (ctTokenCookiesObj === null) {
-      const ctStr = await scanCode(eventId)
-      ctTokenCookiesObj = await verifyCtString(ctStr || '')
+      // TODO 經緯度要帶上面的
+      const { ct, lat, lon } = await scanCode(eventId)
+      ctTokenCookiesObj = await verifyCtString(ct, lat, lon)
     }
 
     // 已驗證ct，進行打卡驗證
@@ -115,10 +116,10 @@ const directionStartScan = () => {
   commitScan()
 }
 
-const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
-  ? new URL(`@/assets/images/activity/${eventInfo.value.headerImg}`, import.meta.url).href
-  : new URL(`@/assets/images/activity/activity-main-cat.png`, import.meta.url).href
-
+const parseHeaderImg =
+  eventInfo.value && eventInfo.value.headerImg
+    ? new URL(`@/assets/images/activity/${eventInfo.value.headerImg}`, import.meta.url).href
+    : new URL(`@/assets/images/activity/activity-main-cat.png`, import.meta.url).href
 </script>
 
 <template>
@@ -159,7 +160,7 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
         @click="openDirection"
         :title="content.btn.openDirection"
       >
-        {{content.btn.openDirection}}
+        {{ content.btn.openDirection }}
       </button>
       <ParagraphItem
         v-for="{ title, text } in eventInfo.content"
@@ -168,11 +169,7 @@ const parseHeaderImg = eventInfo.value && eventInfo.value.headerImg
         :content="text || ''"
       />
       <footer>
-        <button 
-          class="store-btn enter" 
-          @click="commitScan" 
-          :title="content.btn.goScan"
-        >
+        <button class="store-btn enter" @click="commitScan" :title="content.btn.goScan">
           {{ content.btn.goScan }}
         </button>
       </footer>

@@ -7,7 +7,7 @@ export enum ResponseCodes {
   QRCODE_NUMBER = 1010004, // 檢查碼錯誤
 
   STORE_ERROR = 1010005, // 無法取得門市資訊
-  LOCATION_ERROR = 1010006, // 你不在門市所在位置
+  STORE_AREA_ERROR = 1010006, // 你不在門市所在位置
 
   LINE_NOAUTH = 1010007, // Line Login 驗證失敗
   NO_EVENT = 1010008, // 活動不存在
@@ -19,6 +19,7 @@ export enum ResponseCodes {
   CHECKIN_FAIL = 1010013, // 打卡Token及Input驗證不對
 
   AWARD_FAIL = 1010014, // 領取獎項未成功
+  LOCATION_ERROR = 1010015, // 無法取得手機定位
 
   EXPIRED_ACCESS_TOKEN = 50012,
   EXCEPTION = 50000
@@ -148,7 +149,7 @@ export interface AlbumType {
   storeId?: string
   storeName?: string
   checkinTime?: string //最後打卡時間
-  storeTimes?: number //打卡次數
+  storeTimes: number //打卡次數
   iconFilePath?: string //圖片路徑
 }
 
