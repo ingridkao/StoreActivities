@@ -27,7 +27,7 @@ const { errorAlert } = useSweetAlert()
 const { parseData } = useDay()
 const { isSupported, copy } = useClipboard()
 const copyClipboard = () => {
-  if(isSupported.value && prizeTargetInfo.value && prizeTargetInfo.value.serialNumber){
+  if (isSupported.value && prizeTargetInfo.value && prizeTargetInfo.value.serialNumber) {
     copy(prizeTargetInfo.value.serialNumber)
   }
 }
@@ -49,14 +49,18 @@ watchEffect(async () => {
     if (res && res.length > 0) {
       prizeInfo.value = res
     } else {
-      errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
+      errorAlert(
+        content.swal.backActivity,
+        `/activity/${eventId}`,
+        'question',
+        content.swal.notReached
+      )
     }
   } catch (error) {
     errorAlert(String(error), `/activity/${eventId}`)
   }
   layoutStore.loadToggle(false)
 })
-
 </script>
 
 <template>
@@ -166,10 +170,16 @@ watchEffect(async () => {
     }
     &--top {
       padding: 1rem 0 0.5rem 0;
-      &.type1 { background-color: $yellow0; }
-      &.type2 { background-color: $green0; }
-      &.type3 { background-color: $orange0; }
-      >*{
+      &.type1 {
+        background-color: $yellow0;
+      }
+      &.type2 {
+        background-color: $green0;
+      }
+      &.type3 {
+        background-color: $orange0;
+      }
+      > * {
         color: $brown2;
         font-weight: 900;
       }

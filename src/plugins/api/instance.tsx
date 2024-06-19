@@ -26,10 +26,8 @@ const onResponse = (response: any) => {
 const onError = (error: any) => {
   const { response, data } = error
   if (response) {
-    console.log(response)
     return Promise.reject(response.data?.message || response.data?.errorMessage || '服務異常')
   } else if (data) {
-    console.log(data)
     return Promise.reject(data?.message || data?.errorMessage || '服務異常')
   } else {
     return Promise.reject('服務異常')

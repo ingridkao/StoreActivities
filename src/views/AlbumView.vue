@@ -74,6 +74,9 @@ onMounted(async () => {
             {{ albumStore[index]['storeName'] }}
           </p>
           <img :src="checkedStampImg" alt="checked stamp" />
+          <div class="stamp-count">
+            {{ albumStore[index]['storeTimes'] >= 99 ? 99 : albumStore[index]['storeTimes'] }}
+          </div>
         </button>
         <img v-else :src="emptyStampImg" alt="empty stamp" />
       </div>
@@ -125,6 +128,20 @@ onMounted(async () => {
 
   &__body {
     @extend %stampSection;
+  }
+}
+
+.stamp {
+  &-count {
+    @extend %flexRowInfo;
+    position: absolute;
+    top: -0.5rem;
+    right: -0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: $orange1;
+    color: $whitePure;
+    border-radius: 1.5rem;
   }
 }
 </style>

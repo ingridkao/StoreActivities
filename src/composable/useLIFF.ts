@@ -56,7 +56,7 @@ export function useLIFF() {
     }
   }
 
-  const { checkLineLoginVerify, parseParamCT } = useFetchData()
+  const { checkLineLoginVerify, parseParamCT, parseClientLocation } = useFetchData()
 
   // https://developers.line.biz/en/reference/liff/#get-access-token
   const getLineProfileAndAccess = async (
@@ -126,21 +126,29 @@ export function useLIFF() {
 
   // InLIFFClient: 開啟LINE SCAN，開啟相機掃描QRcode取得qrcode string
   // Out LIFF app: 導轉到掃描頁面
-  const scanCode = async (eventId: string): Promise<string | void> => {
+  const scanCode = async (
+    eventId: string
+  ): Promise<{ ct: string; lat: number | null; lon: number | null }> => {
     try {
       const isInClient = liff.isInClient()
       if (!isInClient) {
         router.push({ path: `/scan/${eventId}` })
+        return { ct: '', lat: null, lon: null }
       } else {
         await liff.init({ liffId: import.meta.env.VITE_LIFF_ID })
 
         const scanresult = await liff.scanCodeV2()
         if (scanresult && scanresult.value) {
-          // 掃瞄出網址取出ct
-          const newPath = new URL(scanresult.value, ORIGIN_URL)
-          return newPath && newPath.search ? parseParamCT(newPath.search) : ''
+          // QRcode掃瞄出網址將ct取出
+          const ct = parseParamCT(scanresult.value)
+          // 取得經緯度
+          const Location = parseClientLocation(scanresult.value)
+          return {
+            ct,
+            ...Location
+          }
         } else {
-          return ''
+          return { ct: '', lat: null, lon: null }
         }
       }
     } catch (err) {

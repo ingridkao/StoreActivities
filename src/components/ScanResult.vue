@@ -22,7 +22,6 @@ const successResult = computed(() => Object.keys(props.result).length > 0)
 const errorMsg = computed(() => props.error || '')
 const route = useRoute()
 const eventId = route?.params?.id
-
 </script>
 
 <template>
@@ -44,7 +43,9 @@ const eventId = route?.params?.id
         </div>
         <div class="scanResult_container--success-info">
           <p class="scanResult_container--success-info-id">{{ props.result.storeId }}</p>
-          <p class="scanResult_container--success-info-name">{{ props.result.storeName }}{{ content.mapStore.storeLabel }}</p>
+          <p class="scanResult_container--success-info-name">
+            {{ props.result.storeName }}{{ content.mapStore.storeLabel }}
+          </p>
           <p class="scanResult_container--success-info-date">
             {{ parseData(props.result.date) }}
           </p>
@@ -66,7 +67,11 @@ const eventId = route?.params?.id
         >
           {{ content.btn.goCollected }}
         </button>
-        <button class="store-btn keepCheck" @click="$emit('scanAgain')" :title="content.btn.scanAgain">
+        <button
+          class="store-btn keepCheck"
+          @click="$emit('scanAgain')"
+          :title="content.btn.scanAgain"
+        >
           {{ content.btn.scanAgain }}
         </button>
       </footer>

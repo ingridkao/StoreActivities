@@ -13,7 +13,7 @@ import ScanResult from '@/components/ScanResult.vue'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
 import { useLayoutStore } from '@/stores/layout'
-const { parseParamCT, verifyCtString, commitStoreCheckIn } = useFetchData()
+const { parseParamCT, parseClientLocation, verifyCtString, commitStoreCheckIn } = useFetchData()
 const layoutStore = useLayoutStore()
 const route = useRoute()
 
@@ -105,8 +105,11 @@ const updateOutPutData = async (imageData: any) => {
 
       // QRcode掃瞄出網址將ct取出
       const ctStr = parseParamCT(code.data)
+      // 取得經緯度
+      const { lat, lon } = parseClientLocation(code.data)
+
       // 驗證ct
-      const t0kenObj = await verifyCtString(ctStr)
+      const t0kenObj = await verifyCtString(ctStr, lat, lon)
 
       // 打卡驗證
       const commitRes = await commitStoreCheckIn(String(eventId), t0kenObj)
@@ -204,17 +207,17 @@ onMounted(() => {
       })
       .catch((error) => {
         // 用戶拒絕或未能啟用相機
+        console.error(error)
         canvasVisible.value = false
         videoLoading.value = false
         layoutStore.loadToggle(false)
-        console.error(error)
       })
   }
 })
 
 const stopMediaTracks = () => {
   scanStatuMsg.value = '攝影機關閉中'
-  if(streamInstance){
+  if (streamInstance) {
     streamInstance.stop()
   }
 }
@@ -243,7 +246,7 @@ onUnmounted(() => {
     <div
       class="cameraScan__box"
       :style="{
-        width: `${canvasW + 32}px`,
+        width: `${canvasW + 32}px`
       }"
     >
       <div

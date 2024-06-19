@@ -54,13 +54,23 @@ const clickReceivePrize = async () => {
         // 兌獎觸發成功引導到兌獎頁面
         router.push({ path: `/winning/${eventId}` })
       } else {
-        errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
+        errorAlert(
+          content.swal.backActivity,
+          `/activity/${eventId}`,
+          'question',
+          content.swal.notReached
+        )
       }
     } catch (error) {
       errorAlert(String(error), `/activity/${eventId}`)
     }
   } else {
-    errorAlert(content.swal.backActivity, `/activity/${eventId}`, 'question', content.swal.notReached)
+    errorAlert(
+      content.swal.backActivity,
+      `/activity/${eventId}`,
+      'question',
+      content.swal.notReached
+    )
   }
 }
 
@@ -175,18 +185,10 @@ const parseIconURL = (baseItem: EventInterface) => {
         </div>
       </div>
       <footer class="collected__footer">
-        <button 
-          class="store-btn redeem" 
-          @click="clickReceivePrize()"
-          :title="content.btn.goRedeem"
-        >
+        <button class="store-btn redeem" @click="clickReceivePrize()" :title="content.btn.goRedeem">
           {{ content.btn.goRedeem }}
         </button>
-        <button 
-          class="store-btn activity" 
-          @click="goToEventPage()"
-          :title="content.btn.backHome"
-        >
+        <button class="store-btn activity" @click="goToEventPage()" :title="content.btn.backHome">
           {{ content.btn.backHome }}
         </button>
       </footer>
@@ -264,7 +266,7 @@ const parseIconURL = (baseItem: EventInterface) => {
     top: auto;
     @extend %flexRowInfo;
     gap: 0.875rem;
-    .store-btn{
+    .store-btn {
       margin: 0;
     }
   }

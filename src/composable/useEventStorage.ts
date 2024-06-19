@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-import type { CampaignBaseInterface, EventSimpleInterface } from '@/types/ResponseHandle'
+import type { CampaignBaseInterface } from '@/types/ResponseHandle'
 
 export function useEventStorage() {
   // 5分鐘後自動刪掉
