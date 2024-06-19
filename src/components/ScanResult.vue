@@ -42,12 +42,12 @@ const eventId = route?.params?.id
           <img :src="checkSuccessImageImg" alt="check success" />
         </div>
         <div class="scanResult_container--success-info">
-          <p class="scanResult_container--success-info-id">{{ props.result.storeId }}</p>
+          <p class="scanResult_container--success-info-id">{{ props.result?.storeId }}</p>
           <p class="scanResult_container--success-info-name">
-            {{ props.result.storeName }}{{ content.mapStore.storeLabel }}
+            {{ props.result?.storeName }}{{ content.mapStore.storeLabel }}
           </p>
           <p class="scanResult_container--success-info-date">
-            {{ parseData(props.result.date) }}
+            {{ parseData(props.result?.date) }}
           </p>
         </div>
       </div>
@@ -111,26 +111,26 @@ const eventId = route?.params?.id
       &-info {
         @extend %flexColInfo;
         justify-content: center;
-        flex-wrap: wrap;
         @extend %mainSection;
-        width: 20.875rem;
-        height: 11.875rem;
+        max-width: 23.625rem;
+        margin-top: -0.25rem; // 圖沒有切好需要往上移
         color: $brown;
 
         @extend %imgContainer;
         background-image: url('@/assets/images/scan/check-success-bg.png');
+        aspect-ratio: 27 / 16;
 
         &-id {
-          margin-top: 0.625rem;
           font-size: 1.125rem;
           font-weight: 700;
+          margin-top: 0.75rem;
         }
 
         &-name {
           font-size: 2rem;
           font-weight: 900;
-          margin-top: 0.75rem;
-          margin-bottom: 1.125rem;
+          margin-bottom: 0.75rem;
+          line-height: 1.3;
         }
 
         &-date {

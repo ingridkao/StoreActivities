@@ -306,7 +306,7 @@ export function useFetchData() {
   const fetchReceivePrize = async (eventId: string = ''): Promise<PrizeUiDisplayInfoType[]> => {
     const loginT0kenObj = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
-      // resolve(mockDatas.WinningData)
+      resolve(mockDatas.WinningData)
       if (eventId === '') {
         reject('此活動不存在，請重新操作')
       } else if (!VITE_API_URL) {
@@ -467,25 +467,24 @@ export function useFetchData() {
   const fetchAlbumData = (): Promise<AlbumListType> => {
     const loginT0ken = getLoginT0kenCookies()
     return new Promise((resolve, reject) => {
-      // if (VITE_UI_MODE) {
-      resolve(mockDatas.albumData)
-      // } else if (loginT0ken && loginT0ken.loginT0ken) {
-      //   checkIn
-      //     .fetchAlbum(loginT0ken.loginT0ken)
-      //     .then((res: any) => {
-      //       if (res.error) {
-      //         reject(`fetchAlbumData:${res.error}`)
-      //       } else {
-      //         resolve(res)
-      //       }
-      //     })
-      //     .catch((error: string) => {
-      //       console.log('未登入' + error)
-      //       reject(error)
-      //     })
-      // } else {
-      //   reject('此服務需要登入')
-      // }
+      if (VITE_UI_MODE) {
+        resolve(mockDatas.albumData)
+      } else if (loginT0ken && loginT0ken.loginT0ken) {
+        checkIn
+          .fetchAlbum(loginT0ken.loginT0ken)
+          .then((res: any) => {
+            if (res.error) {
+              reject(`fetchAlbumData:${res.error}`)
+            } else {
+              resolve(res)
+            }
+          })
+          .catch((error: string) => {
+            reject(error)
+          })
+      } else {
+        reject('此服務需要登入')
+      }
     })
   }
 

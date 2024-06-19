@@ -203,9 +203,9 @@ const parseHeaderImg =
   &__top {
     @extend %absoluteTopSection;
     left: 0;
-    max-height: 500px;
+    max-height: 30rem;
     overflow-y: hidden;
-    aspect-ratio: 65 / 50;
+    aspect-ratio: 65 / 58;
   }
 
   &__main {
@@ -251,7 +251,7 @@ const parseHeaderImg =
     }
 
     &_banner {
-      padding-top: 1.875rem;
+      padding-top: 2rem;
       > img {
         z-index: 2;
         aspect-ratio: 65/88;
@@ -271,13 +271,16 @@ const parseHeaderImg =
       color: $white2;
       &--day {
         @extend %flexRowInfo;
-        border: 0.5px solid $white2;
-        padding: 0.5rem 0.75rem;
+        border: 0.5px solid rgba($white3, 0.6);
+        padding: 0.5rem;
         gap: 0.5rem;
+        h4{
+          font-size: 1.3rem;
+        }
         &-line {
-          width: 2rem;
+          width: 1.5rem;
           height: 1px;
-          background-color: $white;
+          background-color:rgba($white3, 0.6);
         }
       }
     }
@@ -292,7 +295,7 @@ const parseHeaderImg =
     }
     &_directionBtn {
       position: absolute;
-      top: -1.875rem;
+      top: -1.25rem;
       right: 1.25rem;
       z-index: 3;
     }

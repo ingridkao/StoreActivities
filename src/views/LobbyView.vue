@@ -150,13 +150,13 @@ const genrate = async () => {
 
   &_section {
     @extend %flexColInfo;
+    gap: 1rem;
     @extend %mainSection;
     max-width: $content-large;
     padding: 1.625rem;
 
     .section__title {
       justify-content: flex-start;
-      margin-bottom: 1.25rem;
       @media screen and (min-width: $content-large) {
         justify-content: center;
       }

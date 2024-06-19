@@ -1,33 +1,26 @@
+//ttf source: https://github.com/ButTaiwan/gensen-font
 @font-face {
   font-family: 'GenSenRounded';
-  font-weight: 900;
-  src: url('/fonts/GenSenRounded-B.ttc');
+  src: url('/fonts/GenSenRoundedTW-B-01.woff2') format('woff2'),
+      url('/fonts/GenSenRoundedTW-B-01.woff') format('woff'),
+      url('/fonts/GenSenRoundedTW-B-01.ttf') format('truetype'),
+      url('/fonts/GenSenRounded-B.ttc');
   font-display: swap;
 }
 
-// @font-face {
-//   font-family: 'GenSenRounded';
-//   font-weight: 500;
-//   src: url('/fonts/GenSenRounded-R.ttc');
-//   font-display: swap;
-// }
-
-// @font-face {
-//   font-family: 'GenSenRounded';
-//   font-weight: 300;
-//   src: url('/fonts/GenSenRounded-L.ttc');
-//   font-display: swap;
-// }
+h1, h2, h3, h4, h5, h6, b{
+  font-family: 'GenSenRounded', Helvetica, sans-serif;
+}
 
 h1 {
-  font-family: 'GenSenRounded', Helvetica, sans-serif;
+  font-weight: 700;
   font-size: 1.5rem;
   line-height: 1;
   white-space: pre-line;
 }
 
 h2 {
-  font-family: 'GenSenRounded', Helvetica, sans-serif;
+  font-weight: 500;
   font-size: 1.75rem;
 }
 
@@ -38,8 +31,7 @@ h3 {
 }
 
 h4 {
-  font-weight: 700;
-  font-size: 1.625rem;
+  font-weight: 600;
   line-height: 1;
 }
 
@@ -49,15 +41,15 @@ h5 {
 }
 
 h6 {
-  font-family: 'GenSenRounded', Helvetica, sans-serif;
+  font-weight: 900;
   font-size: 1.125rem;
-  line-height: 1;
+  line-height: 1.5;
 }
 
 b {
-  font-weight: 500;
-  font-size: 0.875rem;
-  line-height: 1.125rem;
+  font-weight: 600;
+  font-size: 0.75rem;
+  line-height: 1;
 }
 
 p {

@@ -2,10 +2,11 @@ import Swal, { type SweetAlertIcon } from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useDay } from '@/composable/useDay'
 
-import type { EventInterface } from '@/types/ResponseHandle'
+import type { EventInterface, AwardType } from '@/types/ResponseHandle'
 import content from '@/assets/content'
 import closeIconImg from '@/assets/images/icon/close.svg'
 import dialogCatImg from '@/assets/images/cat/dialog-cat.png'
+import successCatImg from '@/assets/images/cat/check-success-cat.png'
 
 export function useSweetAlert() {
   const router = useRouter()
@@ -87,16 +88,16 @@ export function useSweetAlert() {
 
     Swal.fire({
       html: `
-				<div class="store-info-dialog__dialog-container--content">
-					<div class="store-info-dialog__dialog-container--content-image">
+				<div class="custom-dialog-container-content store-info-content">
+					<div class="store-info-content-image">
 						<img src="${imgURL}" alt="${storeName ?? 'store'}門市"/>
 					</div>
 				</div>
-				<div class="store-info-dialog__dialog-container--footer">
-					<div class="store-info-dialog__dialog-container--footer-image">
+				<div class="custom-dialog-container-footer">
+					<div class="store-info-footer-image">
 						<img src="${dialogCatImg}" alt="掃描喵~" />
 					</div>
-					<div class="store-info-dialog__dialog-container--footer-info">
+					<div class="custom-dialog-container-footer-info">
 						<h6>${storeName ?? '7-11門市'}</h6>
             <div>
               <div>
@@ -114,9 +115,49 @@ export function useSweetAlert() {
       showCloseButton: true,
       showConfirmButton: false,
       customClass: {
-        popup: 'store-info-dialog__dialog-popup',
-        closeButton: 'store-info-dialog__close-icon',
-        htmlContainer: 'store-info-dialog__dialog-container'
+        popup: 'custom-dialog-popup',
+        closeButton: 'custom-dialog-closeicon',
+        htmlContainer: 'custom-dialog-container'
+      }
+    })
+  }
+
+  const openPrizeInfo = (award: AwardType, remaining: number = 0) => {
+    Swal.fire({
+      html: `
+        <div class="custom-dialog-container-content awards-info-content">
+          <div class="awards-info-content-list">
+            <h6>
+              再打卡<b> ${remaining} 家</b>門市! <br>
+              即可以兌換${award.awardName}!!
+            </h6>
+            <P>${award.operatingProcedures}</P>
+          </div>
+        </div>
+        <div class="custom-dialog-container-footer">
+          <div class="store-info-footer-image">
+            <img src="${successCatImg}" alt="開心喵~" />
+          </div>
+          <div class="custom-dialog-container-footer-info awards-info-footer-info">
+            <h6>${award.instructions}</h6>
+            <div>
+              <div>
+                <p>${content.winning.deadline}</p>
+                <p>${award.useInterval}</p>
+              </div> 
+            </div> 
+          </div>
+        </div>
+      `,
+      width: '313px',
+      padding: 0,
+      closeButtonHtml: `<img src="${closeIconImg}" alt="close"/>`,
+      showCloseButton: true,
+      showConfirmButton: false,
+      customClass: {
+        popup: 'custom-dialog-popup awards-info-popup',
+        closeButton: 'custom-dialog-closeicon',
+        htmlContainer: 'custom-dialog-container'
       }
     })
   }
@@ -195,6 +236,7 @@ export function useSweetAlert() {
     storeInfoAlert,
     geoLocationErrorAlert,
     openStoreInfo,
+    openPrizeInfo,
     authAlert
   }
 }
