@@ -1,14 +1,21 @@
 //ttf source: https://github.com/ButTaiwan/gensen-font
 @font-face {
   font-family: 'GenSenRounded';
-  src: url('/fonts/GenSenRoundedTW-B-01.woff2') format('woff2'),
-      url('/fonts/GenSenRoundedTW-B-01.woff') format('woff'),
-      url('/fonts/GenSenRoundedTW-B-01.ttf') format('truetype'),
-      url('/fonts/GenSenRounded-B.ttc');
+  src:
+    url('/fonts/GenSenRoundedTW-B-01.woff2') format('woff2'),
+    url('/fonts/GenSenRoundedTW-B-01.woff') format('woff'),
+    url('/fonts/GenSenRoundedTW-B-01.ttf') format('truetype'),
+    url('/fonts/GenSenRounded-B.ttc');
   font-display: swap;
 }
 
-h1, h2, h3, h4, h5, h6, b{
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+b {
   font-family: 'GenSenRounded', Helvetica, sans-serif;
 }
 

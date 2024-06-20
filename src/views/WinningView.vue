@@ -25,6 +25,7 @@ const { fetchReceivePrize } = useFetchData()
 const { getAccumulatCheckinCount } = useEventStorage()
 const { errorAlert } = useSweetAlert()
 const { parseData } = useDay()
+
 const { isSupported, copy } = useClipboard()
 const copyClipboard = () => {
   if (isSupported.value && prizeTargetInfo.value && prizeTargetInfo.value.serialNumber) {
@@ -35,16 +36,16 @@ const copyClipboard = () => {
 const route = useRoute()
 const eventId = String(route.params.id)
 
+const checkinCount = ref(0)
 const prizeIndex = ref(0)
 const prizeTargetInfo = computed(() => prizeInfo.value[prizeIndex.value] || null)
-const checkinCount = ref(0)
 const prizeInfo = ref<PrizeUiDisplayInfoType[]>([])
 
 const layoutStore = useLayoutStore()
 watchEffect(async () => {
   checkinCount.value = getAccumulatCheckinCount()
-  layoutStore.loadToggle(true)
   try {
+    layoutStore.loadToggle(true)
     const res = await fetchReceivePrize(eventId)
     if (res && res.length > 0) {
       prizeInfo.value = res
@@ -56,10 +57,11 @@ watchEffect(async () => {
         content.swal.notReached
       )
     }
+    layoutStore.loadToggle(false)
   } catch (error) {
     errorAlert(String(error), `/activity/${eventId}`)
+    layoutStore.loadToggle(false)
   }
-  layoutStore.loadToggle(false)
 })
 </script>
 

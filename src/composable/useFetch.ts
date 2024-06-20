@@ -29,6 +29,7 @@ import { useEventStorage } from '@/composable/useEventStorage'
 // import { useLIFF } from '@/composable/useLIFF'
 
 import { useLayoutStore } from '@/stores/layout'
+import { useUserStore } from '@/stores/user'
 import apis from '@/api/apiRoutes'
 import mockDatas from '@/api/mockData'
 import EventContent from '@/assets/events'
@@ -38,13 +39,13 @@ const { VITE_API_URL, VITE_UI_MODE, VITE_OUTDIR } = import.meta.env
 export function useFetchData() {
   const { scanEntry, checkIn, prize, storeMap } = apis
   const layoutStore = useLayoutStore()
+  const userStore = useUserStore()
   const {
-    setLocationStorage,
-    getLocationStorage,
     setQRcodeString,
-    parseCtT0ken,
     setCtT0kenCookies,
-    getCtT0kenCookies,
+    parseCtToStoreAndNumber,
+    getQRcodeString,
+    getT0kenCookies,
     setLineT0kenCookies,
     setLoginT0kenCookies,
     getLoginT0kenCookies,
@@ -53,8 +54,8 @@ export function useFetchData() {
   const { getEventsStorage, setEventsStorage } = useEventStorage()
 
   /**
-   * 從URL字串中取出ct參數
-   * <URL>?ct=OP1134580513153032440f32024
+   *  QRcode掃瞄出網址
+   *  從URL字串中取出ct參數
    */
   const parseParamCT = (url: string): string => {
     const parsedUrl = new URL(url)
@@ -77,11 +78,14 @@ export function useFetchData() {
   }
 
   /**
-   * 從URL字串中取出lat和lon參數
+   * QRcode掃瞄出網址
+   * 測試：從URL字串中取出lat和lon經緯度參數
+   * 正式：
    */
   const parseClientLocation = (url: string): { lat: number | null; lon: number | null } => {
     // TODO dev取的URL
     const Location = parseParamLocation(url)
+    //
     return {
       ...Location
     }
@@ -113,112 +117,91 @@ export function useFetchData() {
   }
 
   /**
-   * Lobby and after scan
-   * 取的CT驗證QRCode(CT字串)
-   * ct=OP666000031818094ac904
-   * 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
+   * 驗證ct
+   * 使用情境：
+   *   1. Lobby URL中具有ct
+   *   2. 活動頁面點選進入活動，如沒有經過驗證會開啟掃描取的ct
+   *   2. QRCode掃描後得到ct
+   * 參數：
+   *  ct=OP666000031818094ac904=場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+驗證碼(6碼)
+   *  lat=存入pinia
+   *  lon=存入pinia
    */
   const verifyCtString = (
     ctStr: string = '',
     lat: number | null = null,
     lon: number | null = null
-  ): Promise<ParseCtStringState | null> => {
+  ): Promise<boolean> => {
     return new Promise((resolve, reject) => {
+      userStore.updateLocation(lat, lon)
+
       if (ctStr === '') {
         reject('請選擇活動')
       } else if (!VITE_API_URL) {
         reject('服務中斷，請稍後再試')
       } else {
-        checkIn
         scanEntry
           .verifyQRString(ctStr)
           .then((res: any) => {
             if (res?.code === ResponseCodes.QRCODE_TIMEOUT) {
-              // reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
-              reject(`QRcode掃描失效 ct:${ctStr}`)
+              reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
+              // reject(`QRcode掃描失效 ct:${ctStr}`)
             } else if (res && res.token) {
-              if (res.token) {
-                setLocationStorage(lat, lon)
-                setQRcodeString(ctStr)
-                setCtT0kenCookies(res.token)
-                if (!ctStr || !res.token) return resolve(null)
-                const obj = parseCtT0ken(ctStr, res.token)
-                resolve(obj)
-              } else {
-                reject(`verifyCtString:發生了例外錯誤`)
-              }
+              setQRcodeString(ctStr)
+              setCtT0kenCookies(res.token)
+              resolve(true)
+            } else {
+              reject(`verifyCtString:發生了例外錯誤`)
             }
           })
           .catch((error: string) => {
-            reject(error)
+            reject(`verifyCtString:${error}`)
           })
       }
     })
   }
 
   /**
-   * Line login換access token
+   * 已驗證ct，進行打卡驗證
+   * 參數：
+   *  eventId=活動ID
+   *  ctCookies=需要ct中的storeId和number
    */
-  const checkLineLoginVerify = (accessToken: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      if (accessToken) {
-        setLineT0kenCookies(accessToken)
-        if (!VITE_API_URL) {
-          resolve('template')
-        } else {
-          scanEntry
-            .checkLineLoginVerify(accessToken)
-            .then((res: VerifyCodeResType) => {
-              if (res.result) {
-                const serviceT0ken = res.token || ''
-                setLoginT0kenCookies(serviceT0ken)
-                resolve(serviceT0ken)
-              } else {
-                reject(`checkLineLoginVerify:${res.error || '發生了例外錯誤'}`)
-              }
-            })
-            .catch((error: string) => {
-              reject(error)
-            })
-        }
-      } else {
-        resolve('')
-      }
-    })
-  }
-
-  // 打卡驗證
   const commitStoreCheckIn = async (
     eventId: string = '',
-    t0kenObj: ParseCtStringState | null = null
+    ctStr: string = ''
   ): Promise<boolean | ScanResultType> => {
+    const ctToken = getT0kenCookies()
     const loginT0kenObj = getLoginT0kenCookies()
-    const locationObj = getLocationStorage()
+
     return new Promise((resolve, reject) => {
       if (eventId === '') {
         reject('此活動不存在，請重新操作')
+      } else if (ctStr === null) {
+        reject('請重新進行掃描打卡')
       } else if (!VITE_API_URL) {
         reject('服務中斷，請稍後再試')
-      } else if (t0kenObj === null) {
-        reject('請重新進行掃描打卡')
+      } else if (ctToken === null) {
+        reject('驗證錯誤，請重新操作')
       } else if (loginT0kenObj === null) {
         reject('訪客無法進行打卡，請重新操作')
+      } else if (userStore.userLatitude === null || userStore.userLongitude === null) {
+        reject('無法取得手機定位，請重新操作')
       } else {
-        const { storeId, number, token } = t0kenObj
+        const { storeId, number } = parseCtToStoreAndNumber(ctStr)
         const { loginT0ken } = loginT0kenObj
-        const [latitude, longitude] = locationObj
+        const headerKey = loginT0ken ? loginT0ken.slice(4, 10) : ''
         const data = {
           storeId: String(storeId),
           eventId: Number(eventId),
           key: String(number),
-          longitude: Number(longitude),
-          latitude: Number(latitude)
+          latitude: userStore.userLatitude,
+          longitude: userStore.userLongitude
         } as checkInVerifyBodyType
-        const headerKey = loginT0ken ? loginT0ken.slice(4, 10) : ''
         const headers = {
-          store: String(storeId),
           key: `${number}|||${headerKey}`,
-          Auth1: token,
+          store: String(storeId),
+          Auth1: ctToken,
           Auth2: loginT0ken
         } as checkInVerifyHeaderType
         checkIn
@@ -254,9 +237,10 @@ export function useFetchData() {
             ) {
               // reject(`${msg} 請重新進行掃描打卡`)
               reject(
-                `${code}${msg}storeId: ${storeId}|eventId:${eventId}|longitude:${longitude}|latitude:${latitude}`
+                `${code}${msg}storeId: ${storeId}|eventId:${eventId}|longitude:${userStore.userLongitude}|latitude:${userStore.userLatitude}`
               )
             } else if (checkInStoreInfo) {
+              // 成功蓋版，顯示打卡成功門市資訊
               resolve({
                 eventId: String(eventId),
                 storeId: checkInStoreInfo.storeId,
@@ -298,6 +282,37 @@ export function useFetchData() {
           .catch((error: any) => {
             reject(`服務異常，${error.msg}`)
           })
+      }
+    })
+  }
+
+  /**
+   * Line login換access token
+   */
+  const checkLineLoginVerify = (accessToken: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      if (accessToken) {
+        setLineT0kenCookies(accessToken)
+        if (!VITE_API_URL) {
+          resolve('template')
+        } else {
+          scanEntry
+            .checkLineLoginVerify(accessToken)
+            .then((res: VerifyCodeResType) => {
+              if (res.result) {
+                const serviceT0ken = res.token || ''
+                setLoginT0kenCookies(serviceT0ken)
+                resolve(serviceT0ken)
+              } else {
+                reject(`checkLineLoginVerify:${res.error || '發生了例外錯誤'}`)
+              }
+            })
+            .catch((error: string) => {
+              reject(error)
+            })
+        }
+      } else {
+        resolve('')
       }
     })
   }
@@ -395,8 +410,8 @@ export function useFetchData() {
       // 取出localstorage活動的簡化資料
       let enevtList: CampaignBaseInterface[] = getEventsStorage()
       if (enevtList.length === 0) {
-        const parseQrStringObj = getCtT0kenCookies()
-        const storeId = parseQrStringObj ? parseQrStringObj.storeId || '' : ''
+        const ctString = getQRcodeString()
+        const { storeId } = parseCtToStoreAndNumber(ctString)
         fetchAllCampaign(storeId)
           .then((res: CampaignInterface[]) => {
             enevtList = res

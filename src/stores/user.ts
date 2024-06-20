@@ -7,5 +7,20 @@ export const useUserStore = defineStore('user', () => {
   const updateProfile = (profile: ProfileType = {}) => {
     userProfile.value = profile
   }
-  return { userProfile, updateProfile }
+
+  const userLatitude = ref<null | number>(null)
+  const userLongitude = ref<null | number>(null)
+  const updateLocation = (latitude: null | number = null, longitude: null | number = null) => {
+    userLatitude.value = latitude ? Number(latitude) : null
+    userLongitude.value = longitude ? Number(longitude) : null
+  }
+
+  return {
+    userProfile,
+    updateProfile,
+
+    userLatitude,
+    userLongitude,
+    updateLocation
+  }
 })

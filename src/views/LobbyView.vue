@@ -1,21 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import type { CampaignInterface } from '@/types/ResponseHandle'
+import type { CampaignInterface, AdsInterface } from '@/types/ResponseHandle'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
-
-import type { AdsInterface } from '@/types/ResponseHandle'
 import content from '@/assets/content'
 
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-
 import { useLayoutStore } from '@/stores/layout'
+
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
 import CampaignItem from '@/components/lobby/CampaignItem.vue'
 import LobbyHeader from '@/components/lobby/LobbyHeader.vue'
 import LobbyAds from '@/components/lobby/LobbyAds.vue'
-
-const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 
 const { errorAlert } = useSweetAlert()
 const {
@@ -26,8 +22,8 @@ const {
   parseParamCT,
   parseClientLocation
 } = useFetchData()
-
 const layoutStore = useLayoutStore()
+
 const displayCampaignList = ref<CampaignInterface[]>([])
 const adsList = ref<AdsInterface[]>([])
 const shareList = ref([
@@ -64,22 +60,25 @@ onMounted(async () => {
   const Location = parseClientLocation(window.location.href)
   const storeId = ctStr ? ctStr.substring(2, 8) : ''
 
-  layoutStore.loadToggle(true)
   try {
+    layoutStore.loadToggle(true)
     const [result1, result2] = await Promise.all([fetchAllCampaign(storeId), fetchAdData()])
     displayCampaignList.value = result1 || []
     adsList.value = result2 || []
+    
+    layoutStore.loadToggle(false)
 
     if (ctStr && Location.lat && Location.lon) {
       await verifyCtString(ctStr, Location.lat, Location.lon)
     }
   } catch (error) {
     errorAlert(String(error))
+    layoutStore.loadToggle(false)
   }
-  layoutStore.loadToggle(false)
 })
 
-// TODO remove
+// TODO remove genrate Mock QRCode
+const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 const activityId = ref('')
 const storeId = ref('')
 const genrate = async () => {

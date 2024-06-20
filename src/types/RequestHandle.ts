@@ -34,8 +34,8 @@ export type checkInVerifyHeaderType = {
   store?: string
   key?: string
   FV?: string
-  Auth1?: number
-  Auth2?: number
+  Auth1?: string
+  Auth2?: string
 }
 
 /**

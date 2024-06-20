@@ -8,14 +8,16 @@ import jsQR from 'jsqr'
 import dialogCatImg from '@/assets/images/cat/dialog-cat.png'
 import content from '@/assets/content'
 
-import { useFetchData } from '@/composable/useFetch'
 import ScanResult from '@/components/ScanResult.vue'
 import HeaderMenu from '@/components/HeaderMenu.vue'
 
+import { useFetchData } from '@/composable/useFetch'
 import { useLayoutStore } from '@/stores/layout'
+
+const route = useRoute()
+const eventId = route?.params?.id
 const { parseParamCT, parseClientLocation, verifyCtString, commitStoreCheckIn } = useFetchData()
 const layoutStore = useLayoutStore()
-const route = useRoute()
 
 // https://github.com/cozmo/jsQR/blob/master/docs/index.html
 const canvasVisible = ref(false)
@@ -80,11 +82,7 @@ let animationId: AnimationRequestId | null = null
 const scanResultContent = ref({})
 const scanErrorMsg = ref('')
 const scanStatuMsg = ref('')
-const showsScanResult = computed(
-  () => Object.keys(scanResultContent.value).length > 0 || scanErrorMsg.value !== ''
-)
 
-const eventId = route?.params?.id
 const updateOutPutData = async (imageData: any) => {
   if (qrCodeOutputData.value !== '') return
   const code = jsQR(imageData.data, imageData.width, imageData.height, {
@@ -101,33 +99,30 @@ const updateOutPutData = async (imageData: any) => {
     qrCodeOutputData.value = code.data
 
     try {
-      layoutStore.loadToggle(true)
-
-      // QRcode掃瞄出網址將ct取出
       const ctStr = parseParamCT(code.data)
-      // 取得經緯度
       const { lat, lon } = parseClientLocation(code.data)
 
-      // 驗證ct
-      const t0kenObj = await verifyCtString(ctStr, lat, lon)
-
-      // 打卡驗證
-      const commitRes = await commitStoreCheckIn(String(eventId), t0kenObj)
-
+      layoutStore.loadToggle(true)
+      await verifyCtString(ctStr, lat, lon)
+      const commitRes = await commitStoreCheckIn(String(eventId), ctStr)
       if (commitRes) {
-        // 打卡成功蓋版
+        // 成功蓋版，顯示打卡成功門市資訊
         scanResultContent.value = commitRes
+        layoutStore.toggleScanResult(true)
       }
+      layoutStore.loadToggle(false)
     } catch (error) {
       // 打卡失敗蓋版
       scanErrorMsg.value = String(error)
+      layoutStore.loadToggle(false)
+      layoutStore.toggleScanResult(true)
     }
-    layoutStore.loadToggle(false)
   }
 }
 
 const cleanOutPutData = () => {
   qrCodeOutputData.value = ''
+  layoutStore.toggleScanResult(false)
 }
 
 const scanAgain = () => {
@@ -160,7 +155,6 @@ let streamInstance: any = null
 onMounted(() => {
   const ua = navigator.userAgent
   isMobile.value = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua)
-  layoutStore.loadToggle(true)
 
   video = document.createElement('video') as HTMLVideoElement
   canvasElement = document.getElementById('canvas') as HTMLCanvasElement
@@ -170,6 +164,7 @@ onMounted(() => {
   const getVideoSize = () => {
     if (!video || !canvasElement) return
 
+    layoutStore.loadToggle(true)
     const ratio = Math.round((video.videoWidth / video.videoHeight) * 100) / 100
     if (window.innerWidth > 680) {
       // 640:400
@@ -210,7 +205,6 @@ onMounted(() => {
         console.error(error)
         canvasVisible.value = false
         videoLoading.value = false
-        layoutStore.loadToggle(false)
       })
   }
 })
@@ -279,7 +273,7 @@ onUnmounted(() => {
   </main>
 
   <ScanResult
-    v-if="showsScanResult"
+    v-if="layoutStore.showScanResult"
     :result="scanResultContent"
     :error="scanErrorMsg"
     @scanAgain="scanAgain"

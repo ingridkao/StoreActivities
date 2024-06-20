@@ -4,7 +4,12 @@
  */
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { EventSimpleInterface, EventInterface, IconInterface, PrizeUiDisplayInfoType } from '@/types/ResponseHandle'
+import type {
+  EventSimpleInterface,
+  EventInterface,
+  IconInterface,
+  PrizeUiDisplayInfoType
+} from '@/types/ResponseHandle'
 
 import content from '@/assets/content'
 import emptyStampImg from '@/assets/images/stamp/empty.png'
@@ -77,23 +82,23 @@ const clickReceivePrize = async () => {
 }
 
 onMounted(async () => {
-  layoutStore.loadToggle(true)
   try {
+    layoutStore.loadToggle(true)
+
     const confirmRes = await confirmEvent(eventId)
     collectedActivity.value = confirmRes
     const CollecRes = await fetchCollectData(eventId)
+    collectedStore.value = CollecRes && CollecRes.historyList ? CollecRes.historyList : []
+    iconStore.value = CollecRes && CollecRes.storeIconList ? CollecRes.storeIconList : []
+    setAccumulatCheckinCount(collectedStore.value.length)
+
     layoutStore.loadToggle(false)
-    if (CollecRes) {
-      collectedStore.value = CollecRes.historyList || []
-      iconStore.value = CollecRes.storeIconList || []
-      setAccumulatCheckinCount(collectedStore.value.length)
-    }
 
     const prizeRes = await fetchReceivePrize(eventId)
-    if (prizeRes && prizeRes.length > 0) {
-      prizeInfo.value = prizeRes
-    }
+    prizeInfo.value = prizeRes || []
+
   } catch (error) {
+    layoutStore.loadToggle(false)
     if (error === 1) {
       activityErrorAlert(content.activity.notFound)
     } else if (error === 2) {
@@ -101,7 +106,6 @@ onMounted(async () => {
     } else {
       errorAlert(String(error), `/activity/${eventId}`)
     }
-    layoutStore.loadToggle(false)
   }
 })
 
@@ -125,11 +129,14 @@ const isGradeStampColor = (index: number) => {
   return stampBorder[borderStampIndex]
 }
 
-const openPrizeDialog = (baseIndex:number) => {
-  const PrizeInfo = prizeInfo.value.find(item=>item.grade === baseIndex)
-  const targetPrize = collectedActivity.value && collectedActivity.value.redeemPrize? collectedActivity.value.redeemPrize[baseIndex] : 0
+const openPrizeDialog = (baseIndex: number) => {
+  const PrizeInfo = prizeInfo.value.find((item) => item.grade === baseIndex)
+  const targetPrize =
+    collectedActivity.value && collectedActivity.value.redeemPrize
+      ? collectedActivity.value.redeemPrize[baseIndex]
+      : 0
   const remaining = targetPrize - collectedStore.value.length
-  if(PrizeInfo){
+  if (PrizeInfo) {
     openPrizeInfo(PrizeInfo, remaining)
   }
 }
@@ -195,11 +202,11 @@ const parseIconURL = (baseItem: EventInterface) => {
               :alt="collectedStore[baseItem - 1]['storeName']"
             />
           </button>
-          <button 
+          <button
             v-else-if="isGradeStampIndex(baseItem)"
             @click="openPrizeDialog(isGradeStampIndex(baseItem))"
           >
-            <img              
+            <img
               :src="BorderStampImg"
               class="stamp-grade"
               :style="{ borderColor: `${isGradeStampColor(baseItem)}` }"

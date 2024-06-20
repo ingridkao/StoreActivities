@@ -92,7 +92,6 @@ router.beforeEach(async (to, from, next) => {
   const layoutStore = useLayoutStore()
   layoutStore.toggleDirection(false)
   layoutStore.toggleScanResult(false)
-  layoutStore.loadToggle(false)
   layoutStore.closeNav()
 
   layoutStore.pageLoadToggle(true)
