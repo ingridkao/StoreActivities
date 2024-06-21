@@ -59,7 +59,7 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
   cursor: pointer;
   border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.3);
+  @extend %shadowBox2;
   background-color: transparent;
   &.invalid {
     opacity: 0.3;

@@ -44,9 +44,9 @@ footer {
 .custom-dialog {
   &-popup {
     @extend %roundBox;
+    @extend %shadowBox1;
     overflow: visible;
     background-color: $purple;
-    box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.4);
   }
   &-closeicon {
     width: 2.5rem;

@@ -85,7 +85,6 @@ export function useFetchData() {
   const parseClientLocation = (url: string): { lat: number | null; lon: number | null } => {
     // TODO dev取的URL
     const Location = parseParamLocation(url)
-    //
     return {
       ...Location
     }
@@ -144,8 +143,7 @@ export function useFetchData() {
           .verifyQRString(ctStr)
           .then((res: any) => {
             if (res?.code === ResponseCodes.QRCODE_TIMEOUT) {
-              reject('QRcode掃描失效，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
-              // reject(`QRcode掃描失效 ct:${ctStr}`)
+              reject('QRcode逾時，請點選門市 ibon 螢幕右上角的QRcode，即可以取得新的QRcode')
             } else if (res && res.token) {
               setQRcodeString(ctStr)
               setCtT0kenCookies(res.token)

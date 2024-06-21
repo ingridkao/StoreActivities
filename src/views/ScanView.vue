@@ -292,7 +292,7 @@ video {
 
   &__box {
     @extend %roundBox;
-    @extend %shadowBox;
+    @extend %shadowBox1;
     width: 90%;
     margin: auto;
     background-color: $purple;

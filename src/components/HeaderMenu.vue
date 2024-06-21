@@ -79,7 +79,6 @@ const goToActivityInfo = () => {
         <RouterLink to="/" class="sidemenu__item">回到活動大廳</RouterLink>
         <!-- <RouterLink to="/album" class="sidemenu__item last">門市打卡紀錄</RouterLink> -->
 
-        <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
         <div
           v-if="Object.keys(userStore.userProfile).length > 0"
           class="sidemenu__item sidemenu__avendar"

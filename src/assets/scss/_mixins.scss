@@ -88,9 +88,11 @@ $purple: #8b84d3;
   overflow: hidden;
 }
 
-%shadowBox {
-  width: 100%;
+%shadowBox1 {
   box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.4);
+}
+%shadowBox2 {
+  box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.3);
 }
 
 %cardWidth {

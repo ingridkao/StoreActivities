@@ -65,7 +65,7 @@ onMounted(async () => {
     const [result1, result2] = await Promise.all([fetchAllCampaign(storeId), fetchAdData()])
     displayCampaignList.value = result1 || []
     adsList.value = result2 || []
-    
+
     layoutStore.loadToggle(false)
 
     if (ctStr && Location.lat && Location.lon) {
@@ -185,7 +185,7 @@ const genrate = async () => {
     &-link {
       @extend %flexColInfo;
       @extend %cardWidth;
-      box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.3);
+      @extend %shadowBox2;
       border-radius: 1.75rem;
       background-color: $white2;
       aspect-ratio: 169/50;

@@ -188,7 +188,7 @@ onUnmounted(() => {
       height: 3.125rem;
       padding: 0 1rem;
 
-      box-shadow: 0px 0.25rem 0.25rem rgb($black, 0.3);
+      @extend %shadowBox2;
       background-color: $grayBlue;
 
       font-size: 0.875rem;
