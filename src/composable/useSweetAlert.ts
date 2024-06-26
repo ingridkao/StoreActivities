@@ -1,6 +1,7 @@
 import Swal, { type SweetAlertIcon } from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useDay } from '@/composable/useDay'
+import { useLayoutStore } from '@/stores/layout'
 
 import type { EventInterface, AwardType } from '@/types/ResponseHandle'
 import content from '@/assets/content'
@@ -11,6 +12,7 @@ import successCatImg from '@/assets/images/cat/check-success-cat.png'
 export function useSweetAlert() {
   const router = useRouter()
   const { parseData } = useDay()
+  const layoutStore = useLayoutStore()
 
   const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
   const originURL = window.location.origin
@@ -18,8 +20,8 @@ export function useSweetAlert() {
   const baseImgURL = `${fileOrigin}/images/example-store.png`
 
   const errorAlert = (
-    text: any = '', 
-    routerPath: string = '/', 
+    text: any = '',
+    routerPath: string = '/',
     iconName: SweetAlertIcon = 'error',
     title: string = content.swal.default
   ) => {
@@ -30,6 +32,7 @@ export function useSweetAlert() {
     }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
       if (result.isConfirmed || result.isDismissed) {
         router.push({ path: routerPath, replace: true })
+        layoutStore.loadToggle(false)
       }
     })
   }
@@ -218,6 +221,23 @@ export function useSweetAlert() {
     )
   }
 
+  const mapErrorAlert = (errorString: string, activityId: string | string[] = '') => {
+    Swal.fire({
+      icon: 'info',
+      title: '地圖功能異常',
+      text: errorString || ''
+    }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
+      if (result.isConfirmed || result.isDismissed) {
+        if (activityId) {
+          router.push({ path: `/activity/${activityId}`, replace: true })
+        } else {
+          router.push({ path: '/', replace: true })
+        }
+        layoutStore.loadToggle(false)
+      }
+    })
+  }
+
   const authAlert = (error: string = '', goToLogin: () => void, isDismiss: () => void) => {
     return Swal.fire({
       icon: 'info',
@@ -230,11 +250,13 @@ export function useSweetAlert() {
       if (result.isDismissed) isDismiss()
     })
   }
+
   return {
     errorAlert,
     activityErrorAlert,
     storeInfoAlert,
     geoLocationErrorAlert,
+    mapErrorAlert,
     openStoreInfo,
     openPrizeInfo,
     authAlert

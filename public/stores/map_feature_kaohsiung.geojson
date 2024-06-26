@@ -17,8 +17,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區後昌路858之2號1樓",
-                "store_id": "120250",
-                "store_name": "秀昌"
+                "storeid": "120250",
+                "storename": "秀昌"
             }
         },
         {
@@ -37,8 +37,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區建國二路233號",
-                "store_id": "135964",
-                "store_name": "港東"
+                "storeid": "135964",
+                "storename": "港東"
             }
         },
         {
@@ -57,8 +57,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區左營大路14-5號",
-                "store_id": "188614",
-                "store_name": "新左營"
+                "storeid": "188614",
+                "storename": "新左營"
             }
         },
         {
@@ -77,8 +77,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區明華一路126號",
-                "store_id": "188658",
-                "store_name": "安華"
+                "storeid": "188658",
+                "storename": "安華"
             }
         },
         {
@@ -97,8 +97,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區寶德里覺民路338號",
-                "store_id": "943806",
-                "store_name": "光武"
+                "storeid": "943806",
+                "storename": "光武"
             }
         },
         {
@@ -117,8 +117,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區明吉路9號",
-                "store_id": "992772",
-                "store_name": "理馨"
+                "storeid": "992772",
+                "storename": "理馨"
             }
         }
     ]

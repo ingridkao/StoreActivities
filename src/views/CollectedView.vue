@@ -96,7 +96,6 @@ onMounted(async () => {
 
     const prizeRes = await fetchReceivePrize(eventId)
     prizeInfo.value = prizeRes || []
-
   } catch (error) {
     layoutStore.loadToggle(false)
     if (error === 1) {

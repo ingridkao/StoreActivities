@@ -17,7 +17,7 @@ export function useLink() {
   }
 
   const linkToPrepareScan = async (activityId: string | string[] = '') => {
-    if (activityId === '') {
+    if (!activityId) {
       router.push('/')
     } else {
       try {

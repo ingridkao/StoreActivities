@@ -6,7 +6,6 @@ dayjs.extend(isBetween)
 import type { checkInVerifyBodyType, checkInVerifyHeaderType } from '@/types/RequestHandle'
 import { ResponseCodes } from '@/types/ResponseHandle'
 import type {
-  ApiResType,
   GenrateMockQRCodeResType,
   VerifyCodeResType,
   CampaignBaseInterface,
@@ -23,12 +22,10 @@ import type {
   PrizeType,
   PrizeUiDisplayInfoType
 } from '@/types/ResponseHandle'
-import type { GenrateMockQRCodeState, ParseCtStringState } from '@/types/StateHandle'
+import type { GenrateMockQRCodeState } from '@/types/StateHandle'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
 import { useEventStorage } from '@/composable/useEventStorage'
-// import { useLIFF } from '@/composable/useLIFF'
 
-import { useLayoutStore } from '@/stores/layout'
 import { useUserStore } from '@/stores/user'
 import apis from '@/api/apiRoutes'
 import mockDatas from '@/api/mockData'
@@ -38,7 +35,6 @@ const { VITE_API_URL, VITE_UI_MODE, VITE_OUTDIR } = import.meta.env
 
 export function useFetchData() {
   const { scanEntry, checkIn, prize, storeMap } = apis
-  const layoutStore = useLayoutStore()
   const userStore = useUserStore()
   const {
     setQRcodeString,
@@ -527,45 +523,86 @@ export function useFetchData() {
     })
   }
 
-  // 讀取指定城市資料
-  const originURL = window.location.origin
-  const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
-  const fetchLayerData = async (selectCity: string = '') => {
-    const targerCity = String(selectCity)
-    if (!targerCity) return false
-    try {
-      layoutStore.loadToggle(true)
-      const geoRes = await axios.get(`${fileOrigin}/stores/map_${targerCity}.geojson`)
-      layoutStore.loadToggle(false)
-      if (geoRes && geoRes.data) return geoRes.data
-      return false
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  // const fetchLayerData = async (center: number[]) => {
-  //   const loginT0ken = getLoginT0kenCookies()
-  //   if (loginT0ken && loginT0ken.loginT0ken) {
-  //     try {
-  //       layoutStore.loadToggle(true)
-  //       const geoRes = await storeMap.getGeoData(center, loginT0ken.loginT0ken)
-  //       layoutStore.loadToggle(false)
-  //       console.log(geoRes);
-  //       if (geoRes && geoRes.data) {
-  //         return geoRes.data
-  //       // }else{
-
-  //       }
-  //       return false
-  //     } catch (error) {
-  //       throw new Error('GetStoreMapGeoJson Failed: ' + error)
-  //     }
-  //   }else{
-  //     // throw new Error('Failed: ' + err)
-  //     throw new Error('此服務需要登入')
+  // 讀取指定城市資料mockup
+  // const originURL = window.location.origin
+  // const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
+  // const fetchLayerData = async (selectCity: string = '') => {
+  //   const targerCity = String(selectCity)
+  //   if (!targerCity) return false
+  //   try {
+  //     const geoRes = await axios.get(`${fileOrigin}/stores/map_${targerCity}.geojson`)
+  //     if (geoRes && geoRes.data) return geoRes.data
+  //     return false
+  //   } catch (error) {
+  //     console.log(error)
   //   }
   // }
+
+  const loginT0ken =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFYUxvZ2luUHJvdGVjdERhdGEiOiJBZGk5ZS9OZXF4Mi93bC9NU0tJSllJYWdreHJXeW9hc1hROWdLVCsySFBKdE5vKzRPSUhaWDViT2dqY21ZMEI3cjA1a0N5U0t1d2dLdDRUUDRNWXVuS2NvUHVuYmpjdGx1TkFSNktpVUN0YmpMYnhTMGZEWHNEQkgzNXIxSk1DajZBdkNDM2xlc1BEcHY1b3lDMWpMUmc3YkcyWFhoTFh6RFprWHdPYlJKaDlZMHVLZVVXYm1aMEQ3RW8wSU1jdkdhYms2V3BHK29pK3ZEMWJJWG8wYUVETVZsVDlrRnlBbTBlNzRMdVk1N1piRGR0MkxQNVhPRGlpalprbFlHRXArIiwiZWF1IjoiNCIsImNyeXB0byI6ImVhX2NyeXB0byIsIm5iZiI6MTcxOTM5NTgxOCwiZXhwIjoxNzE5NDAzMDE4LCJpYXQiOjE3MTkzOTU4MTgsImlzcyI6IkV4dHJhQWN0aXZpdHlBcGkiLCJhdWQiOiJFeHRyYUFjdGl2aXR5QXBpIn0.W6heeSZcrqe2ws_EeEd1UsPjfkWKU_jYU-jNO06GgZc'
+  const fetchDefaultLayerData = async (long: number, lat: number) => {
+    // const loginCookies = getLoginT0kenCookies()
+    // if (loginCookies && loginCookies.loginT0ken) {
+
+    try {
+      // const geoRes = await storeMap.getGeoData(long, lat, loginCookies.loginT0ken)
+      const geoRes = await storeMap.getGeoData(long, lat, '', loginT0ken)
+      if (geoRes && geoRes.geojsonStr) {
+        return JSON.parse(geoRes.geojsonStr)
+      } else {
+        // {storeCount: 0, storeList: null, geojsonStr: null}
+        return null
+      }
+    } catch (error) {
+      throw String(error)
+    }
+    // }else{
+    //   throw '此服務需要登入'
+    // }
+  }
+
+  const fetchActiveLayerData = async (long: number, lat: number, activityId: string | string[]) => {
+    // const loginCookies = getLoginT0kenCookies()
+    // if (loginCookies && loginCookies.loginT0ken) {
+    try {
+      // const geoRes = await storeMap.getGeoData(long, lat, String(activityId), loginCookies.loginT0ken)
+      const geoRes = await storeMap.getGeoData(long, lat, String(activityId), loginT0ken)
+      if (geoRes && geoRes.geojsonStr) {
+        return JSON.parse(geoRes.geojsonStr)
+      } else {
+        // {storeCount: 0, storeList: null, geojsonStr: null}
+        return null
+      }
+    } catch (error) {
+      throw String(error)
+    }
+    // }else{
+    //   throw '此服務需要登入'
+    // }
+  }
+
+  const fetchActiveIconData = async (activityId: string | string[]) => {
+    // const loginCookies = getLoginT0kenCookies()
+    // if (loginCookies && loginCookies.loginT0ken) {
+    if (!activityId) {
+      throw '需要指定活動'
+    } else {
+      try {
+        // const geoRes = await storeMap.getIconData(Number(activityId), loginCookies.loginT0ken)
+        const iconRes = await storeMap.getIconData(Number(activityId), loginT0ken)
+        if (iconRes) {
+          return iconRes.iconTypeList
+        } else {
+          return []
+        }
+      } catch (error) {
+        throw String(error)
+      }
+    }
+    // }else{
+    //   throw '此服務需要登入'
+    // }
+  }
 
   return {
     parseParamCT,
@@ -585,6 +622,10 @@ export function useFetchData() {
     fetchAdData,
     fetchAlbumData,
     fetchCollectData,
-    fetchLayerData
+
+    // fetchLayerData,
+    fetchDefaultLayerData,
+    fetchActiveLayerData,
+    fetchActiveIconData
   }
 }

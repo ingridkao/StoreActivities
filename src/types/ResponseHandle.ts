@@ -25,12 +25,6 @@ export enum ResponseCodes {
   EXCEPTION = 50000
 }
 
-export type ApiResType = {
-  code: number
-  msg?: string
-  result?: {}
-}
-
 // 模擬
 export type GenrateMockQRCodeResType = {
   lat?: number

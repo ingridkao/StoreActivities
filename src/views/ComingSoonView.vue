@@ -28,7 +28,7 @@ import partyCatImg from '@/assets/images/cat/party-cats.png'
   > div {
     @extend %mainSection;
     max-width: $content-small;
-    .box{
+    .box {
       position: absolute;
       bottom: 0.5rem;
       left: 20%;
@@ -48,6 +48,5 @@ import partyCatImg from '@/assets/images/cat/party-cats.png'
       }
     }
   }
-
 }
 </style>

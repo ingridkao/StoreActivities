@@ -19,6 +19,11 @@ export default defineConfig(({ mode }) => {
           target: 'https://print-api-uat.ibon.com.tw/cloudprint_api_dev/api/ExtraActivity',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
+        },
+        '/file': {
+          target: 'https://print-uat.ibon.com.tw/print/PrintFile',
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/file/, '')
         }
       }
     },
