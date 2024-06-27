@@ -31,9 +31,12 @@ import apis from '@/api/apiRoutes'
 import mockDatas from '@/api/mockData'
 import EventContent from '@/assets/events'
 
-const { VITE_API_URL, VITE_UI_MODE, VITE_OUTDIR } = import.meta.env
+const { VITE_API_URL, VITE_UI_MODE, MODE } = import.meta.env
+let loginT0ken =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFYUxvZ2luUHJvdGVjdERhdGEiOiJBZGk5ZS9OZXF4Mi93bC9NU0tJSllJYWdreHJXeW9hc1hROWdLVCsySFBKdE5vKzRPSUhaWDViT2dqY21ZMEI3cjA1a0N5U0t1d2dLdDRUUDRNWXVuS2NvUHVuYmpjdGx1TkFSNktpVUN0YmpMYnhTMGZEWHNEQkgzNXIxSk1DajZBdkNDM2xlc1BEcHY1b3lDMWpMUmc3YkcyWFhoTFh6RFprWHdPYlJKaDlZMHVLZVVXYm1aMEQ3RW8wSU1jdkdhYms2V3BHK29pK3ZEMWJJWG8wYUVHeXNia2swS3N0dk1TWjhnUXNWT0tmdHR6NWNaaHYreENuVTJva0lLTE5hd2dYWXF5bDYvV1NDalVJMVlSMm5oUT09IiwiZWF1IjoiNCIsImNyeXB0byI6ImVhX2NyeXB0byIsIm5iZiI6MTcxOTQ2OTExNSwiZXhwIjoxNzE5NDc2MzE1LCJpYXQiOjE3MTk0NjkxMTUsImlzcyI6IkV4dHJhQWN0aXZpdHlBcGkiLCJhdWQiOiJFeHRyYUFjdGl2aXR5QXBpIn0.vEEe3f0XIuAxeYWqgYh_AG-03JEpVpamO_cl0s2ryFU'
 
 export function useFetchData() {
+  const DEV = MODE === 'development'
   const { scanEntry, checkIn, prize, storeMap } = apis
   const userStore = useUserStore()
   const {
@@ -538,14 +541,16 @@ export function useFetchData() {
   //   }
   // }
 
-  const loginT0ken =
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJFYUxvZ2luUHJvdGVjdERhdGEiOiJBZGk5ZS9OZXF4Mi93bC9NU0tJSllJYWdreHJXeW9hc1hROWdLVCsySFBKdE5vKzRPSUhaWDViT2dqY21ZMEI3cjA1a0N5U0t1d2dLdDRUUDRNWXVuS2NvUHVuYmpjdGx1TkFSNktpVUN0YmpMYnhTMGZEWHNEQkgzNXIxSk1DajZBdkNDM2xlc1BEcHY1b3lDMWpMUmc3YkcyWFhoTFh6RFprWHdPYlJKaDlZMHVLZVVXYm1aMEQ3RW8wSU1jdkdhYms2V3BHK29pK3ZEMWJJWG8wYUVETVZsVDlrRnlBbTBlNzRMdVk1N1piRGR0MkxQNVhPRGlpalprbFlHRXArIiwiZWF1IjoiNCIsImNyeXB0byI6ImVhX2NyeXB0byIsIm5iZiI6MTcxOTM5NTgxOCwiZXhwIjoxNzE5NDAzMDE4LCJpYXQiOjE3MTkzOTU4MTgsImlzcyI6IkV4dHJhQWN0aXZpdHlBcGkiLCJhdWQiOiJFeHRyYUFjdGl2aXR5QXBpIn0.W6heeSZcrqe2ws_EeEd1UsPjfkWKU_jYU-jNO06GgZc'
   const fetchDefaultLayerData = async (long: number, lat: number) => {
-    // const loginCookies = getLoginT0kenCookies()
-    // if (loginCookies && loginCookies.loginT0ken) {
-
+    const loginCookies = getLoginT0kenCookies()
+    if (!DEV) {
+      if (loginCookies && loginCookies.loginT0ken) {
+        loginT0ken = loginCookies.loginT0ken
+      } else {
+        throw '此服務需要登入'
+      }
+    }
     try {
-      // const geoRes = await storeMap.getGeoData(long, lat, loginCookies.loginT0ken)
       const geoRes = await storeMap.getGeoData(long, lat, '', loginT0ken)
       if (geoRes && geoRes.geojsonStr) {
         return JSON.parse(geoRes.geojsonStr)
@@ -556,52 +561,45 @@ export function useFetchData() {
     } catch (error) {
       throw String(error)
     }
-    // }else{
-    //   throw '此服務需要登入'
-    // }
   }
 
   const fetchActiveLayerData = async (long: number, lat: number, activityId: string | string[]) => {
-    // const loginCookies = getLoginT0kenCookies()
-    // if (loginCookies && loginCookies.loginT0ken) {
+    const loginCookies = getLoginT0kenCookies()
+    if (!DEV) {
+      if (loginCookies && loginCookies.loginT0ken) {
+        loginT0ken = loginCookies.loginT0ken
+      } else {
+        throw '此服務需要登入'
+      }
+    }
     try {
-      // const geoRes = await storeMap.getGeoData(long, lat, String(activityId), loginCookies.loginT0ken)
       const geoRes = await storeMap.getGeoData(long, lat, String(activityId), loginT0ken)
       if (geoRes && geoRes.geojsonStr) {
         return JSON.parse(geoRes.geojsonStr)
       } else {
-        // {storeCount: 0, storeList: null, geojsonStr: null}
         return null
       }
     } catch (error) {
       throw String(error)
     }
-    // }else{
-    //   throw '此服務需要登入'
-    // }
   }
 
   const fetchActiveIconData = async (activityId: string | string[]) => {
-    // const loginCookies = getLoginT0kenCookies()
-    // if (loginCookies && loginCookies.loginT0ken) {
-    if (!activityId) {
-      throw '需要指定活動'
-    } else {
-      try {
-        // const geoRes = await storeMap.getIconData(Number(activityId), loginCookies.loginT0ken)
-        const iconRes = await storeMap.getIconData(Number(activityId), loginT0ken)
-        if (iconRes) {
-          return iconRes.iconTypeList
-        } else {
-          return []
-        }
-      } catch (error) {
-        throw String(error)
+    if (!activityId) throw '需要指定活動'
+    const loginCookies = getLoginT0kenCookies()
+    if (!DEV) {
+      if (loginCookies && loginCookies.loginT0ken) {
+        loginT0ken = loginCookies.loginT0ken
+      } else {
+        throw '此服務需要登入'
       }
     }
-    // }else{
-    //   throw '此服務需要登入'
-    // }
+    try {
+      const iconRes = await storeMap.getIconData(Number(activityId), loginT0ken)
+      return iconRes && iconRes.iconTypeList ? iconRes.iconTypeList: []
+    } catch (error) {
+      throw String(error)
+    }
   }
 
   return {
