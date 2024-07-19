@@ -41,7 +41,7 @@ const props = defineProps<{
     display: block;
     overflow: hidden;
     border-radius: 0.5rem;
-    aspect-ratio: 169/50;
+    aspect-ratio: 1280/720;
     img {
       object-fit: cover;
     }
@@ -52,6 +52,6 @@ const props = defineProps<{
 }
 .swiper-slide {
   width: 90%;
-  max-width: $card-middle;
+  max-width: $card-large;
 }
 </style>

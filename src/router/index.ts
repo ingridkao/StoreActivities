@@ -63,6 +63,15 @@ const router = createRouter({
       }
     },
     {
+      path: '/map8Store/:id?',
+      name: 'Map8Store',
+      component: () => import('../views/Map8StoreView.vue'),
+      meta: {
+        title: '門市地圖',
+        requiresAuth: true
+      }
+    },
+    {
       path: '/album',
       name: 'Album',
       component: () => import('../views/AlbumView.vue'),
@@ -109,7 +118,7 @@ router.beforeEach(async (to, from, next) => {
   const verifyLogin = async () => {
     try {
       let serviceT0ken = null
-      if (['Album', 'Collected', 'MapStore'].includes(String(to.name))) {
+      if (['Album', 'Collected', 'MapStore', 'Map8Store'].includes(String(to.name))) {
         serviceT0ken = await getLineAccess(to.path)
       } else if (to.name === 'Activity' && to.params.id) {
         serviceT0ken = await getLineProfileAndAccess(String(to.params.id))
