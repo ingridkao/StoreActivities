@@ -114,8 +114,7 @@ export function useMapbox() {
       type: 'symbol',
       layout: {
         ...storeLayerStyle,
-        // 'icon-image': markerId,
-        'icon-image': ['case', ['in', '', 'iconid'], markerId, ['get', 'iconid']],
+        'icon-image': ['case', ["to-boolean", ['get', 'iconid']], ['get', 'iconid'], markerId],
         'icon-size': [
           'interpolate',
           ['linear'],
@@ -138,7 +137,7 @@ export function useMapbox() {
       layout: {
         ...storeLayerStyle,
         visibility: 'none',
-        'icon-image': ['case', ['has', 'iconid'], ['get', 'iconid'], markerId],
+        'icon-image': ['case', ["to-boolean", ['get', 'iconid']], ['get', 'iconid'], markerId],
         'icon-size': [
           'interpolate',
           ['linear'],
@@ -201,7 +200,7 @@ export function useMapbox() {
     if (activityId && mapboxEl.getLayer(activityLayerName)) {
       switch (target) {
         case 'Event':
-          getActivityFeaturesCount()
+          getActiveLayerCount()
           mapboxEl.setLayoutProperty(activityLayerName, 'visibility', 'visible')
           break
         default:
@@ -358,7 +357,6 @@ export function useMapbox() {
 
                 storeFilterOptions.push({ value: 'Event', nameTw: '活動限定' })
                 // updateChecked('Event')
-                // getActivityFeaturesCount()
               } else {
                 // 該活動沒有限定門市
                 // storeFilterOptions.push({ value: 'A,B', nameTw: '主題門市'})
@@ -427,7 +425,7 @@ export function useMapbox() {
         // 地圖平移結束
         mapboxEl.on('dragend', async (e: any) => {
           // console.log('dragend');
-          getActivityFeaturesCount()
+          getActiveLayerCount()
           getDefaultLayerCount()
         })
 
@@ -440,7 +438,7 @@ export function useMapbox() {
         // Geolocation API 位置成功更新時觸發。
         geolocateEl.on('geolocate', () => {
           console.log('A geolocate event has occurred.')
-          getActivityFeaturesCount()
+          getActiveLayerCount()
           getDefaultLayerCount()
         })
 
@@ -455,18 +453,6 @@ export function useMapbox() {
   })
 
   /**
-   * 取得目前在地中得活動門市數量訊息
-   */
-  const getActivityFeaturesCount = () => {
-    if (activityId && storeFilterSelectd.value === 'Event') {
-      const activityFeatures = mapboxEl.queryRenderedFeatures({ layers: [activityLayerName] })
-      mapDisplayCountMsg.value = `目前地圖中出現${activityFeatures.length}家活動門市，共有${activeStoreCount.value}家`
-    } else {
-      mapDisplayCountMsg.value = ''
-    }
-  }
-
-  /**
    * 擷取符合地圖中心位置的一般門市資料到地圖Source中
    */
   const getDefaultLayerCount = async () => {
@@ -476,6 +462,27 @@ export function useMapbox() {
       const defaultNewResults = await fetchDefaultLayerData(LocationCenter.lng, LocationCenter.lat)
       if (defaultNewResults) {
         mapboxEl.getSource(defaultSourceName).setData(defaultNewResults)
+      }
+    } catch (error) {
+      mapErrorAlert(String(error))
+    }
+  }
+
+  /**
+   * 擷取符合地圖中心位置的活動限定門市資料到地圖Source中
+   * 取得目前在地中得活動門市數量訊息
+   */
+  const getActiveLayerCount = async () => {
+    if (!(activityId && storeFilterSelectd.value === 'Event')) return
+    try {
+      const LocationCenter = mapboxEl.getCenter()
+      const activeResults = await fetchActiveLayerData(LocationCenter.lng, LocationCenter.lat, activityId)
+      if (activeResults) {
+        mapboxEl.getSource(activitySourceName).setData(activeResults)
+        const activityFeatures = mapboxEl.queryRenderedFeatures({ layers: [activityLayerName] })
+        mapDisplayCountMsg.value = `目前地圖中出現${activityFeatures.length}家活動門市，共有${activeStoreCount.value}家`
+      }else{
+        mapDisplayCountMsg.value = ''
       }
     } catch (error) {
       mapErrorAlert(String(error))

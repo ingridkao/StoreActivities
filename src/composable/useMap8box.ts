@@ -114,7 +114,6 @@ export function useMap8box() {
       layout: {
         ...storeLayerStyle,
         'icon-image': markerId,
-        // 'icon-image': ['case', ['in', '', 'iconid'], markerId, ['get', 'iconid']],
         'icon-size': [
           'interpolate',
           ['linear'],
@@ -137,7 +136,7 @@ export function useMap8box() {
       layout: {
         ...storeLayerStyle,
         visibility: 'none',
-        'icon-image': ['case', ['has', 'iconid'], ['get', 'iconid'], markerId],
+        'icon-image': ['case', ["to-boolean", ['get', 'iconid']], ['get', 'iconid'], markerId],
         'icon-size': [
           'interpolate',
           ['linear'],
@@ -145,7 +144,7 @@ export function useMap8box() {
           mapConfig.zoom,
           0.4,
           mapConfig.maxZoom,
-          0.3
+          0.45
         ]
       }
     })
