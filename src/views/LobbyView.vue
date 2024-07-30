@@ -130,8 +130,13 @@ const genrate = async () => {
     <div>
       <label for="activityId">活動ID</label>
       <input type="text" v-model="activityId" />
-      <label for="activityId">店號六碼</label>
-      <input type="text" v-model="storeId" />
+      <label>門市</label>
+      <select v-model="storeId">
+        <option value="110817">千翔(台北市中正區許昌街17號)</option>
+        <option value="111119">PTC-1(台北市內湖區瑞湖街125號)</option>
+        <option value="111278">前港(台北市士林區後港街98之1號2號)</option>
+        <option value="111636">江東(台北市中山區長安東路二段43號45-1號)</option>
+      </select>
       <button @click="genrate">送出</button>
       <template v-if="qrString">
         <div style="width: 90px">

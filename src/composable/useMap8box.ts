@@ -16,7 +16,6 @@ export function useMap8box() {
   const layoutStore = useLayoutStore()
   const route = useRoute()
   const activityId = route?.params?.id
-  console.log(activityId);
   
   const defaultSourceName = 'default-store-source'
   const activitySourceName = 'activity-store-source'
@@ -449,6 +448,8 @@ export function useMap8box() {
         geolocateEl.on('trackuserlocationend', () => {
           console.log('A trackuserlocationend event has occurred.')
         })
+
+        // send map8use api
       })
   })
 
