@@ -14,6 +14,10 @@ export default defineConfig(({ mode }) => {
       }
     },
     server: {
+      https: {
+        key: './localhost-key.pem',
+        cert: './localhost.pem',
+      },
       proxy: {
         '/api': {
           target: 'https://print-api-uat.ibon.com.tw/cloudprint_api_dev/api/ExtraActivity',

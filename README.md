@@ -4,6 +4,8 @@
 [demo](https://qwaretest2.web.app/)
 
 
+node v18.20.4
+
 ## 1.Git Flow
 
 Branch:

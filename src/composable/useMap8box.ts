@@ -11,7 +11,7 @@ import type { GeoJsonProperties, LatLngType, ActiveIconType, IconTypeListType } 
 
 export function useMap8box() {
   const { VITE_OUTDIR, VITE_MAP8_KEY, VITE_ASSETS_URL } = import.meta.env
-  const { fetchDefaultLayerData, fetchActiveLayerData, fetchActiveIconData } = useFetchData()
+  const { fetchDefaultLayerData, fetchActiveLayerData, fetchActiveIconData, addMap8UseCount } = useFetchData()
   const { mapErrorAlert } = useSweetAlert()
   const layoutStore = useLayoutStore()
   const route = useRoute()
@@ -450,6 +450,11 @@ export function useMap8box() {
         })
 
         // send map8use api
+        addMap8UseCount().then(res => {
+          console.log(res);
+        }).catch(error=>{
+          console.log(error);
+        })
       })
   })
 
