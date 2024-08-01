@@ -139,6 +139,7 @@ npm run deploy
 ```
 VITE_LIFF_ID=
 VITE_MAPBOX_KEY=
+VITE_MAP8_KEY=
 
 VITE_UI_MODE=
 VITE_ASSETS_URL=
@@ -295,3 +296,40 @@ npm i dayjs
    - 原本`{s}`代表是TileLayer連結的subdomain，預設為a, b或c其中一個，[參考文章](https://ithelp.ithome.com.tw/articles/10203732)
 
    - openstreetmap地圖圖磚 [使用政策](https://operations.osmfoundation.org/policies/tiles/)
+
+
+
+## Mapbox相關
+
+  1. 不支援GIF僅靜態圖片和canvas
+  2. 基本設定：
+    ```
+      const mapConfig = {
+        minZoom: 14,
+        zoom: 16,
+        maxZoom: 16.5,
+        taipeiCenter: [121.54885, 25.03625],
+        taipeiBound: [
+          [24.396308, 121.2827],
+          [25.585285, 122.0522]
+        ],
+        maxBounds: [
+          [105, 15],
+          [138.45858, 33.4]
+        ]
+      }
+    ```
+      1. zoom: 初始 ZOOM LEVEL; [0-20, 0 為最小 (遠), 20 ;最大 (近)]
+      2. minZoom: 最大區域新北
+      3. center: 初始中心座標，格式為 [lng, lat]
+      4. maxBounds: 區域
+   3. [map-events](https://docs.mapbox.com/mapbox-gl-js/api/map/#map-events)
+      1. moveend: 包含zoom和dragend
+      2. dragend: 平移完成
+      3. idle: 在渲染最後一幀後，地圖進入「空閒」狀態。
+   4. [GeolocateControl](https://docs.mapbox.com/mapbox-gl-js/api/markers/#geolocatecontrol)
+      > 控制項GeolocateControl提供了一個按鈕，該按鈕使用瀏覽器的地理定位 API 在地圖上定位使用者。
+      > 並非所有瀏覽器都支援地理定位，某些使用者可能會停用該功能。對包括 Chrome 在內的現代瀏覽器的地理定位支援需要透過 HTTPS 提供網站服務。如果地理定位支援不可用，GeolocateControl將顯示為已停用。
+      1. trackUserLocation: 預設false，當設定為true該控制項會充當切換按鈕，當啟動時，會主動監視使用者位置的變更。
+      2. showUserHeading: 預設false，當設定為true在使用者位置點旁邊繪製一個箭頭，指示裝置的方向。
+      3. showAccuracyCircle: 預設true，在使用者位置周圍繪製一個透明圓圈，指示使用者位置的準確性（95% 置信度）

@@ -4,7 +4,12 @@
  */
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { EventSimpleInterface, EventInterface, IconInterface } from '@/types/ResponseHandle'
+import type {
+  EventSimpleInterface,
+  EventInterface,
+  IconInterface,
+  PrizeUiDisplayInfoType
+} from '@/types/ResponseHandle'
 
 import content from '@/assets/content'
 import emptyStampImg from '@/assets/images/stamp/empty.png'
@@ -18,8 +23,8 @@ import { useEventStorage } from '@/composable/useEventStorage'
 import { useDay } from '@/composable/useDay'
 import { useLink } from '@/composable/useLink'
 import { useLayoutStore } from '@/stores/layout'
-const { confirmEvent, fetchCollectData, commitReceivePrize } = useFetchData()
-const { activityErrorAlert, errorAlert, openStoreInfo } = useSweetAlert()
+const { confirmEvent, fetchCollectData, commitReceivePrize, fetchReceivePrize } = useFetchData()
+const { activityErrorAlert, errorAlert, openStoreInfo, openPrizeInfo } = useSweetAlert()
 const { setAccumulatCheckinCount } = useEventStorage()
 const { parseYMD, parseMD } = useDay()
 const { linkToTargetActivityIdPage } = useLink()
@@ -30,6 +35,8 @@ const router = useRouter()
 const collectedActivity = ref<EventSimpleInterface | null>(null)
 const collectedStore = ref<EventInterface[]>([])
 const iconStore = ref<IconInterface[]>([])
+const prizeInfo = ref<PrizeUiDisplayInfoType[]>([])
+
 const stampBaseCount = computed(() => {
   const albumCount = collectedStore.value.length
   if (albumCount <= 24) return 24
@@ -75,18 +82,22 @@ const clickReceivePrize = async () => {
 }
 
 onMounted(async () => {
-  layoutStore.loadToggle(true)
   try {
+    layoutStore.loadToggle(true)
+
     const confirmRes = await confirmEvent(eventId)
     collectedActivity.value = confirmRes
-    const res = await fetchCollectData(eventId)
-    if (res) {
-      collectedStore.value = res.historyList || []
-      iconStore.value = res.storeIconList || []
-      setAccumulatCheckinCount(collectedStore.value.length)
-    }
+    const CollecRes = await fetchCollectData(eventId)
+    collectedStore.value = CollecRes && CollecRes.historyList ? CollecRes.historyList : []
+    iconStore.value = CollecRes && CollecRes.storeIconList ? CollecRes.storeIconList : []
+    setAccumulatCheckinCount(collectedStore.value.length)
+
     layoutStore.loadToggle(false)
+
+    const prizeRes = await fetchReceivePrize(eventId)
+    prizeInfo.value = prizeRes || []
   } catch (error) {
+    layoutStore.loadToggle(false)
     if (error === 1) {
       activityErrorAlert(content.activity.notFound)
     } else if (error === 2) {
@@ -94,22 +105,38 @@ onMounted(async () => {
     } else {
       errorAlert(String(error), `/activity/${eventId}`)
     }
-    layoutStore.loadToggle(false)
   }
 })
 
-const stampBorder = ['#ffcf24', '#b26cf7', '#ff8d3b', '#f06f9d']
-const isGradeStamp = (index: number) => {
+const isGradeStampIndex = (index: number) => {
   if (
     collectedActivity.value &&
     collectedActivity.value.redeemPrize.length > 0 &&
     collectedStore.value.length >= 0
   ) {
     const borderStampIndex = collectedActivity.value.redeemPrize.findIndex((item) => item === index)
-    if (borderStampIndex === -1) return false
-    return stampBorder[borderStampIndex]
+    return borderStampIndex
   } else {
-    return false
+    return -1
+  }
+}
+
+const stampBorder = ['#ffcf24', '#b26cf7', '#ff8d3b', '#f06f9d']
+const isGradeStampColor = (index: number) => {
+  const borderStampIndex = isGradeStampIndex(index)
+  if (borderStampIndex === -1) return false
+  return stampBorder[borderStampIndex]
+}
+
+const openPrizeDialog = (baseIndex: number) => {
+  const PrizeInfo = prizeInfo.value.find((item) => item.grade === baseIndex)
+  const targetPrize =
+    collectedActivity.value && collectedActivity.value.redeemPrize
+      ? collectedActivity.value.redeemPrize[baseIndex]
+      : 0
+  const remaining = targetPrize - collectedStore.value.length
+  if (PrizeInfo) {
+    openPrizeInfo(PrizeInfo, remaining)
   }
 }
 
@@ -141,7 +168,7 @@ const parseIconURL = (baseItem: EventInterface) => {
       </div>
       <div class="collected__body">
         <div class="stamp" v-for="baseItem in stampBaseCount" :key="baseItem">
-          <div
+          <button
             v-if="
               collectedStore[baseItem - 1] && Object.keys(collectedStore[baseItem - 1]).length > 0
             "
@@ -170,17 +197,21 @@ const parseIconURL = (baseItem: EventInterface) => {
             <img
               :src="checkedStampImg"
               class="stamp-grade"
-              :style="{ borderColor: `${isGradeStamp(baseItem)}` }"
+              :style="{ borderColor: `${isGradeStampColor(baseItem)}` }"
               :alt="collectedStore[baseItem - 1]['storeName']"
             />
-          </div>
-          <img
-            v-else-if="isGradeStamp(baseItem)"
-            :src="BorderStampImg"
-            class="stamp-grade"
-            :style="{ borderColor: `${isGradeStamp(baseItem)}` }"
-            :alt="`門市${baseItem}`"
-          />
+          </button>
+          <button
+            v-else-if="isGradeStampIndex(baseItem)"
+            @click="openPrizeDialog(isGradeStampIndex(baseItem))"
+          >
+            <img
+              :src="BorderStampImg"
+              class="stamp-grade"
+              :style="{ borderColor: `${isGradeStampColor(baseItem)}` }"
+              :alt="`獎項級距${baseItem}`"
+            />
+          </button>
           <img v-else :src="emptyStampImg" alt="還沒打卡" />
         </div>
       </div>

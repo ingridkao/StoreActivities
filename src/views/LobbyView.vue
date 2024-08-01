@@ -1,21 +1,17 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import type { CampaignInterface } from '@/types/ResponseHandle'
+import type { CampaignInterface, AdsInterface } from '@/types/ResponseHandle'
 import vueQr from 'vue-qr/src/packages/vue-qr.vue'
-
-import type { AdsInterface } from '@/types/ResponseHandle'
 import content from '@/assets/content'
 
 import { useFetchData } from '@/composable/useFetch'
 import { useSweetAlert } from '@/composable/useSweetAlert'
-
 import { useLayoutStore } from '@/stores/layout'
+
 import ParagraphTitle from '@/components/ParagraphTitle.vue'
 import CampaignItem from '@/components/lobby/CampaignItem.vue'
 import LobbyHeader from '@/components/lobby/LobbyHeader.vue'
 import LobbyAds from '@/components/lobby/LobbyAds.vue'
-
-const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 
 const { errorAlert } = useSweetAlert()
 const {
@@ -26,8 +22,8 @@ const {
   parseParamCT,
   parseClientLocation
 } = useFetchData()
-
 const layoutStore = useLayoutStore()
+
 const displayCampaignList = ref<CampaignInterface[]>([])
 const adsList = ref<AdsInterface[]>([])
 const shareList = ref([
@@ -64,22 +60,25 @@ onMounted(async () => {
   const Location = parseClientLocation(window.location.href)
   const storeId = ctStr ? ctStr.substring(2, 8) : ''
 
-  layoutStore.loadToggle(true)
   try {
+    layoutStore.loadToggle(true)
     const [result1, result2] = await Promise.all([fetchAllCampaign(storeId), fetchAdData()])
     displayCampaignList.value = result1 || []
     adsList.value = result2 || []
+
+    layoutStore.loadToggle(false)
 
     if (ctStr && Location.lat && Location.lon) {
       await verifyCtString(ctStr, Location.lat, Location.lon)
     }
   } catch (error) {
     errorAlert(String(error))
+    layoutStore.loadToggle(false)
   }
-  layoutStore.loadToggle(false)
 })
 
-// TODO remove
+// TODO remove genrate Mock QRCode
+const ORIGIN_URL = import.meta.env.VITE_ORIGIN_URL || window.location.href
 const activityId = ref('')
 const storeId = ref('')
 const genrate = async () => {
@@ -131,8 +130,13 @@ const genrate = async () => {
     <div>
       <label for="activityId">活動ID</label>
       <input type="text" v-model="activityId" />
-      <label for="activityId">店號六碼</label>
-      <input type="text" v-model="storeId" />
+      <label>門市</label>
+      <select v-model="storeId">
+        <option value="110817">千翔(台北市中正區許昌街17號)</option>
+        <option value="111119">PTC-1(台北市內湖區瑞湖街125號)</option>
+        <option value="111278">前港(台北市士林區後港街98之1號2號)</option>
+        <option value="111636">江東(台北市中山區長安東路二段43號45-1號)</option>
+      </select>
       <button @click="genrate">送出</button>
       <template v-if="qrString">
         <div style="width: 90px">
@@ -150,13 +154,13 @@ const genrate = async () => {
 
   &_section {
     @extend %flexColInfo;
+    gap: 1rem;
     @extend %mainSection;
     max-width: $content-large;
     padding: 1.625rem;
 
     .section__title {
       justify-content: flex-start;
-      margin-bottom: 1.25rem;
       @media screen and (min-width: $content-large) {
         justify-content: center;
       }
@@ -186,7 +190,7 @@ const genrate = async () => {
     &-link {
       @extend %flexColInfo;
       @extend %cardWidth;
-      box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.3);
+      @extend %shadowBox2;
       border-radius: 1.75rem;
       background-color: $white2;
       aspect-ratio: 169/50;

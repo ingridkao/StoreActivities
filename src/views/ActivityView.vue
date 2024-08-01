@@ -11,35 +11,37 @@ import { ref, watchEffect } from 'vue'
 import { useRoute } from 'vue-router'
 import type { EventSimpleInterface } from '@/types/ResponseHandle'
 import content from '@/assets/content'
+import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
+import titleDecoBottomImg from '@/assets/images/activity/title-deco-bottom.svg'
 
 import HeaderMenu from '@/components/HeaderMenu.vue'
 import ParagraphItem from '@/components/ParagraphItem.vue'
 import DirectionInfo from '@/components/DirectionInfo.vue'
 import ScanResult from '@/components/ScanResult.vue'
 
-import { useGeolocation } from '@vueuse/core'
-import { useLIFF } from '@/composable/useLIFF'
 import { useFetchData } from '@/composable/useFetch'
 import { useBrowserStorage } from '@/composable/useBrowserStorage'
+import { useLIFF } from '@/composable/useLIFF'
+import { useGeolocation } from '@vueuse/core'
 import { useGeo } from '@/composable/useGeo'
 import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useDay } from '@/composable/useDay'
 
 import { useLayoutStore } from '@/stores/layout'
+// import { useUserStore } from '@/stores/user'
 
-import titleDecoTopImg from '@/assets/images/activity/title-deco-top.svg'
-import titleDecoBottomImg from '@/assets/images/activity/title-deco-bottom.svg'
-
+const route = useRoute()
+const eventId = route?.params?.id
 const { confirmEvent, verifyCtString, commitStoreCheckIn } = useFetchData()
-const { getCtT0kenCookies, setLocationStorage } = useBrowserStorage()
+const { getQRcodeString, getT0kenCookies } = useBrowserStorage()
 const { scanCode } = useLIFF()
 const { coords, error } = useGeolocation()
 const { geoErrorHandler } = useGeo()
-const { parseYear, parseMD } = useDay()
 const { activityErrorAlert, errorAlert } = useSweetAlert()
-const route = useRoute()
-const eventId = route?.params?.id
-const eventInfo = ref<EventSimpleInterface>()
+const { parseYear, parseMD } = useDay()
+
+const layoutStore = useLayoutStore()
+// const userStore = useUserStore()
 
 let getPosition = false
 const confirmCoords = () => {
@@ -48,12 +50,13 @@ const confirmCoords = () => {
   if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
     getPosition = true
     // TODO !! 正式環境要打開
-    // setLocationStorage(latitude, longitude)
+    // userStore.updateLocation(latitude, longitude)
   } else if (error.value && error.value.code >= 1) {
     geoErrorHandler(error.value.code)
   }
 }
 
+const eventInfo = ref<EventSimpleInterface>()
 watchEffect(async () => {
   try {
     const confirmRes = await confirmEvent(eventId)
@@ -79,32 +82,35 @@ const commitScan = async () => {
   if (eventId === '') return
 
   // 具有有效的活動ID
-  layoutStore.loadToggle(true)
   try {
-    let ctTokenCookiesObj = getCtT0kenCookies()
+    layoutStore.loadToggle(true)
+
+    const ctToken = getT0kenCookies()
+    let ctStr = getQRcodeString()
+
     // 沒有驗證過ct,打開手機鏡頭準備掃描
-    if (ctTokenCookiesObj === null) {
-      // TODO 經緯度要帶上面的
+    if (ctToken === null) {
       const { ct, lat, lon } = await scanCode(eventId)
-      ctTokenCookiesObj = await verifyCtString(ct, lat, lon)
+      await verifyCtString(ct, lat, lon)
+      ctStr = ct
     }
 
-    // 已驗證ct，進行打卡驗證
-    const commitRes = await commitStoreCheckIn(eventId, ctTokenCookiesObj)
+    const commitRes = await commitStoreCheckIn(eventId, ctStr)
     if (commitRes) {
-      // 成功蓋版，顯示打卡成功門是資訊
+      // 成功蓋版，顯示打卡成功門市資訊
       scanResultContent.value = commitRes
       layoutStore.toggleScanResult(true)
     }
+
+    layoutStore.loadToggle(false)
   } catch (error) {
     // 錯誤蓋版，顯示錯誤訊息包含打卡失敗
     scanErrorMsg.value = String(error)
+    layoutStore.loadToggle(false)
     layoutStore.toggleScanResult(true)
   }
-  layoutStore.loadToggle(false)
 }
 
-const layoutStore = useLayoutStore()
 const openDirection = () => {
   layoutStore.toggleDirection(true)
   layoutStore.toggleScanResult(false)
@@ -203,9 +209,9 @@ const parseHeaderImg =
   &__top {
     @extend %absoluteTopSection;
     left: 0;
-    max-height: 500px;
+    max-height: 30rem;
     overflow-y: hidden;
-    aspect-ratio: 65 / 50;
+    aspect-ratio: 65 / 58;
   }
 
   &__main {
@@ -251,7 +257,7 @@ const parseHeaderImg =
     }
 
     &_banner {
-      padding-top: 1.875rem;
+      padding-top: 2rem;
       > img {
         z-index: 2;
         aspect-ratio: 65/88;
@@ -271,13 +277,16 @@ const parseHeaderImg =
       color: $white2;
       &--day {
         @extend %flexRowInfo;
-        border: 0.5px solid $white2;
-        padding: 0.5rem 0.75rem;
+        border: 0.5px solid rgba($white3, 0.6);
+        padding: 0.5rem;
         gap: 0.5rem;
+        h4 {
+          font-size: 1.3rem;
+        }
         &-line {
-          width: 2rem;
+          width: 1.5rem;
           height: 1px;
-          background-color: $white;
+          background-color: rgba($white3, 0.6);
         }
       }
     }
@@ -292,7 +301,7 @@ const parseHeaderImg =
     }
     &_directionBtn {
       position: absolute;
-      top: -1.875rem;
+      top: -1.25rem;
       right: 1.25rem;
       z-index: 3;
     }

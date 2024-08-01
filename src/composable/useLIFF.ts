@@ -139,12 +139,10 @@ export function useLIFF() {
 
         const scanresult = await liff.scanCodeV2()
         if (scanresult && scanresult.value) {
-          // QRcode掃瞄出網址將ct取出
-          const ct = parseParamCT(scanresult.value)
-          // 取得經緯度
+          const ctStr = parseParamCT(scanresult.value)
           const Location = parseClientLocation(scanresult.value)
           return {
-            ct,
+            ct: ctStr,
             ...Location
           }
         } else {

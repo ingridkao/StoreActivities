@@ -6,10 +6,8 @@ export type GenrateMockQRCodeState = {
 }
 
 export type ParseCtStringState = {
-  ctStr?: string
-  storeId?: string // 店號(6碼)
-  number?: string // 驗證碼(6碼)
-  token?: string // 驗證碼(6碼)
+  storeId?: string // 店號6碼：ctStr.substring(2, 8)
+  number?: string // 驗證碼6碼：ctStr.substring(17, 23)
 }
 
 export type AccessT0kenState = {

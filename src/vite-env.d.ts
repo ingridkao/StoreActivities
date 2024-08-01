@@ -3,6 +3,7 @@
 interface ImportMetaEnv {
   readonly VITE_LIFF_ID: string
   readonly VITE_MAPBOX_KEY: string
+  readonly VITE_MAP8_KEY: string
 
   readonly VITE_UI_MODE: string
   readonly VITE_ASSETS_URL: string

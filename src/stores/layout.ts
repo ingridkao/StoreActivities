@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 
 export const useLayoutStore = defineStore('loading', () => {
-  const load = ref(true)
+  const load = ref(false)
   const loadToggle = (action: boolean) => {
     load.value = action
   }

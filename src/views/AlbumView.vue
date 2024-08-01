@@ -26,14 +26,15 @@ const stampBaseCount = computed(() => {
 })
 
 onMounted(async () => {
-  layoutStore.loadToggle(true)
   try {
+    layoutStore.loadToggle(true)
     const res = await fetchAlbumData()
     albumStore.value = res && res.historyList ? res.historyList : []
+    layoutStore.loadToggle(false)
   } catch (error) {
     errorAlert(String(error))
+    layoutStore.loadToggle(false)
   }
-  layoutStore.loadToggle(false)
 })
 </script>
 
@@ -74,7 +75,7 @@ onMounted(async () => {
             {{ albumStore[index]['storeName'] }}
           </p>
           <img :src="checkedStampImg" alt="checked stamp" />
-          <div class="stamp-count">
+          <div class="stamp-count" v-if="albumStore[index]['storeTimes'] > 1">
             {{ albumStore[index]['storeTimes'] >= 99 ? 99 : albumStore[index]['storeTimes'] }}
           </div>
         </button>

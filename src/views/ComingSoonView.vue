@@ -1,22 +1,18 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import content from '@/assets/content'
-import checkFailImageImg from '@/assets/images/cat/check-fail-cat.png'
+import partyCatImg from '@/assets/images/cat/party-cats.png'
 </script>
 
 <template>
   <main class="comingSoon">
     <div>
-      <div class="comingSoon-top">
-        <div class="catImg">
-          <img :src="checkFailImageImg" alt="無奈喵~~" width="336" height="403" />
-        </div>
-        <div class="text">
-          <h5>404 訪問的頁面不存在</h5>
-          <div class="dialog">Coming soon</div>
-        </div>
+      <img :src="partyCatImg" alt="喵喵開派對" width="336" height="403" />
+      <div class="box">
+        <h5>404</h5>
+        <h5>訪問的頁面不存在</h5>
+        <RouterLink to="/" class="store-btn activity" :title="content.btn.backHome"></RouterLink>
       </div>
-      <RouterLink to="/" class="store-btn activity" :title="content.btn.backHome"></RouterLink>
     </div>
   </main>
 </template>
@@ -24,47 +20,33 @@ import checkFailImageImg from '@/assets/images/cat/check-fail-cat.png'
 <style lang="scss" scoped>
 .comingSoon {
   @extend %pageMain;
+  @extend %flexColInfo;
   background: url('@/assets/images/bg/fail.png');
   overflow: hidden;
   height: 100vh;
 
   > div {
-    @extend %flexColInfo;
-    justify-content: center;
     @extend %mainSection;
     max-width: $content-small;
-    height: 100%;
-  }
+    .box {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 20%;
+      width: 60%;
+      height: 10rem;
+      @extend %roundBox;
+      @extend %shadowBox1;
+      background-color: $whitePure;
 
-  &-top {
-    @extend %flexRowInfo;
-    align-items: flex-start;
-    .catImg {
-      padding-top: 2rem;
-    }
-    .text {
-      text-align: right;
-      > h5 {
-        color: $white;
-        margin-bottom: 0.25rem;
-      }
-      .dialog {
-        @extend %flexColInfo;
-        justify-content: center;
-        @extend %imgContainer;
-        background-image: url('@/assets/images/lobby/top-dialog.svg');
-        aspect-ratio: 163/70;
-        width: 12rem;
-        padding-right: 0.5rem;
+      @extend %flexColInfo;
+      justify-content: center;
 
-        color: $gray1;
-        font-weight: 700;
-        font-size: 2rem;
+      .store-btn {
+        width: 60%;
+        margin: 1rem auto 0;
+        background-size: contain;
       }
     }
-  }
-  .store-btn {
-    margin: 2rem auto;
   }
 }
 </style>

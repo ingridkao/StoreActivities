@@ -11,9 +11,10 @@ import mapCatImg from '@/assets/images/cat/map-cat.png'
 
 const { linkToPrepareScan } = useLink()
 const {
-  storeFilterOptions,
   storeFilterSelectd,
+  storeFilterOptions,
   targetBoxData,
+  mapDisplayCountMsg,
   toggleStoreInfo,
   updateChecked,
   mapNavigation
@@ -30,12 +31,7 @@ const handleOutsideClick = (event: Event) => {
   toggleStoreInfo(String(inputTarget.classList.value))
 }
 
-const goToActivityDetailPage = () => {
-  linkToPrepareScan(activityId)
-}
-
 onMounted(async () => {
-  console.log('onMounted')
   document.addEventListener('click', handleOutsideClick)
 })
 onUnmounted(() => {
@@ -52,12 +48,18 @@ onUnmounted(() => {
     <div class="mapPanel">
       <div v-if="targetBoxData.toggle" class="panelBox mapPanel-info">
         <div class="mapPanel-info-logo">
-          <img src="/images/example-logo.svg" alt="7-11 logo" />
+          <img
+            v-if="targetBoxData.imgURL"
+            :src="targetBoxData.imgURL"
+            :alt="targetBoxData.info['storename']"
+          />
+          <img v-else src="/images/example-logo.svg" alt="7-11 logo" />
         </div>
 
         <div v-if="targetBoxData.info" class="mapPanel-info-content">
           <p>{{ content.mapStore.storeLabel }}：</p>
-          <p>{{ targetBoxData.info['store_id'] }} {{ targetBoxData.info['store_name'] }}</p>
+          <p>{{ targetBoxData.info['storeid'] }} {{ targetBoxData.info['storename'] }}</p>
+          <!-- <p>{{ targetBoxData.info.storetype }}</p> -->
           <p>{{ content.mapStore.addressLabel }}：</p>
           <p>{{ targetBoxData.info['address'] }}</p>
         </div>
@@ -77,14 +79,13 @@ onUnmounted(() => {
           <button
             class="store-btn"
             :class="btnClassName"
-            @click="goToActivityDetailPage"
+            @click="linkToPrepareScan(activityId)"
             :title="btnName"
           >
             {{ btnName }}
           </button>
         </div>
 
-        <!-- TODO URL slug有activityId時顯示活動門市 -->
         <div class="mapPanel-filter">
           <button
             v-for="item in storeFilterOptions"
@@ -96,6 +97,10 @@ onUnmounted(() => {
           >
             {{ item.nameTw }}
           </button>
+        </div>
+
+        <div class="mapPanel-count">
+          {{ mapDisplayCountMsg }}
         </div>
       </div>
     </div>
@@ -188,7 +193,7 @@ onUnmounted(() => {
       height: 3.125rem;
       padding: 0 1rem;
 
-      box-shadow: 0px 0.25rem 0.25rem rgb($black, 0.3);
+      @extend %shadowBox2;
       background-color: $grayBlue;
 
       font-size: 0.875rem;
@@ -198,6 +203,13 @@ onUnmounted(() => {
         color: $black;
       }
     }
+  }
+
+  &-count {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.75rem;
+    font-size: 0.8rem;
   }
 }
 </style>

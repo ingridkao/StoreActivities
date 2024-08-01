@@ -1,13 +1,26 @@
 import { parseHeaderAuth } from './common'
 
 const StoreMapApi = (axios: any, event: any) => ({
-  getGeoData(center: [number, number], loginT0ken: string) {
+  getGeoData(long: number, lat: number, activityId: string = '', loginT0ken: string = '') {
     return axios.post(
       `${event}/GetStoreMapGeoJson`,
       {
         data: {
-          longitude: center[0],
-          latitude: center[1]
+          longitude: long,
+          latitude: lat,
+          eventId: activityId ? Number(activityId) : '',
+          range: activityId ? '' : 'center'
+        }
+      },
+      { headers: parseHeaderAuth(loginT0ken) }
+    )
+  },
+  getIconData(activityId: number, loginT0ken: string = '') {
+    return axios.post(
+      `${event}/GetEaEventIconTypeByEvent`,
+      {
+        data: {
+          id: activityId
         }
       },
       { headers: parseHeaderAuth(loginT0ken) }

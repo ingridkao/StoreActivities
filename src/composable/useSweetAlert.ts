@@ -1,15 +1,18 @@
 import Swal, { type SweetAlertIcon } from 'sweetalert2'
 import { useRouter } from 'vue-router'
 import { useDay } from '@/composable/useDay'
+import { useLayoutStore } from '@/stores/layout'
 
-import type { EventInterface } from '@/types/ResponseHandle'
+import type { EventInterface, AwardType } from '@/types/ResponseHandle'
 import content from '@/assets/content'
 import closeIconImg from '@/assets/images/icon/close.svg'
 import dialogCatImg from '@/assets/images/cat/dialog-cat.png'
+import successCatImg from '@/assets/images/cat/check-success-cat.png'
 
 export function useSweetAlert() {
   const router = useRouter()
   const { parseData } = useDay()
+  const layoutStore = useLayoutStore()
 
   const { VITE_ASSETS_URL, VITE_OUTDIR } = import.meta.env
   const originURL = window.location.origin
@@ -17,8 +20,8 @@ export function useSweetAlert() {
   const baseImgURL = `${fileOrigin}/images/example-store.png`
 
   const errorAlert = (
-    text: any = '', 
-    routerPath: string = '/', 
+    text: any = '',
+    routerPath: string = '/',
     iconName: SweetAlertIcon = 'error',
     title: string = content.swal.default
   ) => {
@@ -29,6 +32,7 @@ export function useSweetAlert() {
     }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
       if (result.isConfirmed || result.isDismissed) {
         router.push({ path: routerPath, replace: true })
+        layoutStore.loadToggle(false)
       }
     })
   }
@@ -87,16 +91,16 @@ export function useSweetAlert() {
 
     Swal.fire({
       html: `
-				<div class="store-info-dialog__dialog-container--content">
-					<div class="store-info-dialog__dialog-container--content-image">
+				<div class="custom-dialog-container-content store-info-content">
+					<div class="store-info-content-image">
 						<img src="${imgURL}" alt="${storeName ?? 'store'}門市"/>
 					</div>
 				</div>
-				<div class="store-info-dialog__dialog-container--footer">
-					<div class="store-info-dialog__dialog-container--footer-image">
+				<div class="custom-dialog-container-footer">
+					<div class="store-info-footer-image">
 						<img src="${dialogCatImg}" alt="掃描喵~" />
 					</div>
-					<div class="store-info-dialog__dialog-container--footer-info">
+					<div class="custom-dialog-container-footer-info">
 						<h6>${storeName ?? '7-11門市'}</h6>
             <div>
               <div>
@@ -114,9 +118,49 @@ export function useSweetAlert() {
       showCloseButton: true,
       showConfirmButton: false,
       customClass: {
-        popup: 'store-info-dialog__dialog-popup',
-        closeButton: 'store-info-dialog__close-icon',
-        htmlContainer: 'store-info-dialog__dialog-container'
+        popup: 'custom-dialog-popup',
+        closeButton: 'custom-dialog-closeicon',
+        htmlContainer: 'custom-dialog-container'
+      }
+    })
+  }
+
+  const openPrizeInfo = (award: AwardType, remaining: number = 0) => {
+    Swal.fire({
+      html: `
+        <div class="custom-dialog-container-content awards-info-content">
+          <div class="awards-info-content-list">
+            <h6>
+              再打卡<b> ${remaining} 家</b>門市! <br>
+              即可以兌換${award.awardName}!!
+            </h6>
+            <P>${award.operatingProcedures}</P>
+          </div>
+        </div>
+        <div class="custom-dialog-container-footer">
+          <div class="store-info-footer-image">
+            <img src="${successCatImg}" alt="開心喵~" />
+          </div>
+          <div class="custom-dialog-container-footer-info awards-info-footer-info">
+            <h6>${award.instructions}</h6>
+            <div>
+              <div>
+                <p>${content.winning.deadline}</p>
+                <p>${award.useInterval}</p>
+              </div> 
+            </div> 
+          </div>
+        </div>
+      `,
+      width: '313px',
+      padding: 0,
+      closeButtonHtml: `<img src="${closeIconImg}" alt="close"/>`,
+      showCloseButton: true,
+      showConfirmButton: false,
+      customClass: {
+        popup: 'custom-dialog-popup awards-info-popup',
+        closeButton: 'custom-dialog-closeicon',
+        htmlContainer: 'custom-dialog-container'
       }
     })
   }
@@ -177,6 +221,23 @@ export function useSweetAlert() {
     )
   }
 
+  const mapErrorAlert = (errorString: string, activityId: string | string[] = '') => {
+    Swal.fire({
+      icon: 'info',
+      title: '地圖功能異常',
+      text: errorString || ''
+    }).then((result: { isConfirmed?: boolean; isDismissed?: boolean }) => {
+      if (result.isConfirmed || result.isDismissed) {
+        if (activityId) {
+          router.push({ path: `/activity/${activityId}`, replace: true })
+        } else {
+          router.push({ path: '/', replace: true })
+        }
+        layoutStore.loadToggle(false)
+      }
+    })
+  }
+
   const authAlert = (error: string = '', goToLogin: () => void, isDismiss: () => void) => {
     return Swal.fire({
       icon: 'info',
@@ -189,12 +250,15 @@ export function useSweetAlert() {
       if (result.isDismissed) isDismiss()
     })
   }
+
   return {
     errorAlert,
     activityErrorAlert,
     storeInfoAlert,
     geoLocationErrorAlert,
+    mapErrorAlert,
     openStoreInfo,
+    openPrizeInfo,
     authAlert
   }
 }

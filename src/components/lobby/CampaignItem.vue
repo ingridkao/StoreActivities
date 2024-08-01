@@ -46,10 +46,10 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
     </div>
     <div class="activities__info">
       <h6>{{ props.campaignItem.eventName }}</h6>
-      <p>
+      <b>
         {{ parseYYYYMMDD(props.campaignItem.startTime) }} -
         {{ parseYYYYMMDD(props.campaignItem.endTime) }}
-      </p>
+      </b>
     </div>
   </div>
 </template>
@@ -59,7 +59,7 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
   cursor: pointer;
   border-radius: 1.5rem;
   overflow: hidden;
-  box-shadow: 0px 0.25rem 0.25rem 0px rgba($black, 0.3);
+  @extend %shadowBox2;
   background-color: transparent;
   &.invalid {
     opacity: 0.3;
@@ -81,16 +81,8 @@ const fileOrigin = VITE_OUTDIR ? `${originURL}/${VITE_OUTDIR}` : ''
     gap: 0.5rem;
 
     padding: 1rem;
-    background-color: $white;
-    h6 {
-      color: $black;
-      font-weight: 500;
-    }
-    p {
-      color: $black;
-      font-weight: 500;
-      font-size: 0.75rem;
-    }
+    background-color: $whitePure;
+    color: $black;
   }
 }
 </style>

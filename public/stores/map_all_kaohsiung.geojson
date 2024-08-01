@@ -17,8 +17,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區加昌里壽民路58號",
-                "store_id": "117911",
-                "store_name": "樂民"
+                "storeid": "117911",
+                "storename": "樂民"
             }
         },
         {
@@ -37,8 +37,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區龍水里美術東二路103號1樓",
-                "store_id": "120191",
-                "store_name": "美藝"
+                "storeid": "120191",
+                "storename": "美藝"
             }
         },
         {
@@ -57,8 +57,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區後昌路858之2號1樓",
-                "store_id": "120250",
-                "store_name": "秀昌"
+                "storeid": "120250",
+                "storename": "秀昌"
             }
         },
         {
@@ -77,8 +77,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區杭州西街111號1樓",
-                "store_id": "121747",
-                "store_name": "鳳城"
+                "storeid": "121747",
+                "storename": "鳳城"
             }
         },
         {
@@ -97,8 +97,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區新強里崗山北街36號38號1樓",
-                "store_id": "122485",
-                "store_name": "來家"
+                "storeid": "122485",
+                "storename": "來家"
             }
         },
         {
@@ -117,8 +117,8 @@
                 "city": "高雄市",
                 "section": "林園區",
                 "address": "高雄市林園區鳳林路一段2號1樓",
-                "store_id": "122946",
-                "store_name": "霖園"
+                "storeid": "122946",
+                "storename": "霖園"
             }
         },
         {
@@ -137,8 +137,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區灣內里鳳仁路95之15號",
-                "store_id": "125831",
-                "store_name": "友福"
+                "storeid": "125831",
+                "storename": "友福"
             }
         },
         {
@@ -157,8 +157,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區鼎泰里河堤路510號",
-                "store_id": "128003",
-                "store_name": "河堤"
+                "storeid": "128003",
+                "storename": "河堤"
             }
         },
         {
@@ -177,8 +177,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區廣澤里文橫二路41號",
-                "store_id": "128612",
-                "store_name": "華堂"
+                "storeid": "128612",
+                "storename": "華堂"
             }
         },
         {
@@ -197,8 +197,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區大德二路61號",
-                "store_id": "129051",
-                "store_name": "鑫程"
+                "storeid": "129051",
+                "storename": "鑫程"
             }
         },
         {
@@ -217,8 +217,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區自立一路68號70號",
-                "store_id": "130040",
-                "store_name": "國城"
+                "storeid": "130040",
+                "storename": "國城"
             }
         },
         {
@@ -237,8 +237,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區鎮興路170號",
-                "store_id": "130084",
-                "store_name": "鎮興"
+                "storeid": "130084",
+                "storename": "鎮興"
             }
         },
         {
@@ -257,8 +257,8 @@
                 "city": "高雄市",
                 "section": "路竹區",
                 "address": "高雄市路竹區社南里大社路42號42之1號46號1樓",
-                "store_id": "131696",
-                "store_name": "路科"
+                "storeid": "131696",
+                "storename": "路科"
             }
         },
         {
@@ -277,8 +277,8 @@
                 "city": "高雄市",
                 "section": "林園區",
                 "address": "高雄市林園區東林西路1號3號5號",
-                "store_id": "131892",
-                "store_name": "園東"
+                "storeid": "131892",
+                "storename": "園東"
             }
         },
         {
@@ -297,8 +297,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區成功一路455之1號",
-                "store_id": "132150",
-                "store_name": "太華"
+                "storeid": "132150",
+                "storename": "太華"
             }
         },
         {
@@ -317,8 +317,8 @@
                 "city": "高雄市",
                 "section": "路竹區",
                 "address": "高雄市路竹區中正路172號172之1號",
-                "store_id": "132208",
-                "store_name": "元茗"
+                "storeid": "132208",
+                "storename": "元茗"
             }
         },
         {
@@ -337,8 +337,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區文福里文化西路35號1樓",
-                "store_id": "135263",
-                "store_name": "文建"
+                "storeid": "135263",
+                "storename": "文建"
             }
         },
         {
@@ -357,8 +357,8 @@
                 "city": "高雄市",
                 "section": "大樹區",
                 "address": "高雄市大樹區久堂里城隍巷15-8號",
-                "store_id": "135735",
-                "store_name": "九曲堂"
+                "storeid": "135735",
+                "storename": "九曲堂"
             }
         },
         {
@@ -377,8 +377,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區自由路1號",
-                "store_id": "135919",
-                "store_name": "前中"
+                "storeid": "135919",
+                "storename": "前中"
             }
         },
         {
@@ -397,8 +397,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區建國二路233號",
-                "store_id": "135964",
-                "store_name": "港東"
+                "storeid": "135964",
+                "storename": "港東"
             }
         },
         {
@@ -417,8 +417,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區中山路344號346號",
-                "store_id": "136532",
-                "store_name": "翠屏"
+                "storeid": "136532",
+                "storename": "翠屏"
             }
         },
         {
@@ -437,8 +437,8 @@
                 "city": "高雄市",
                 "section": "湖內區",
                 "address": "高雄市湖內區湖東里中山路一段229號",
-                "store_id": "136727",
-                "store_name": "新東專"
+                "storeid": "136727",
+                "storename": "新東專"
             }
         },
         {
@@ -457,8 +457,8 @@
                 "city": "高雄市",
                 "section": "小港區",
                 "address": "高雄市小港區孔宅里高鳳路332號",
-                "store_id": "136749",
-                "store_name": "孔鳳"
+                "storeid": "136749",
+                "storename": "孔鳳"
             }
         },
         {
@@ -477,8 +477,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區壽天里公園東路154號",
-                "store_id": "136901",
-                "store_name": "岡農"
+                "storeid": "136901",
+                "storename": "岡農"
             }
         },
         {
@@ -497,8 +497,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區中華四路64號",
-                "store_id": "137041",
-                "store_name": "高昇"
+                "storeid": "137041",
+                "storename": "高昇"
             }
         },
         {
@@ -517,8 +517,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區信義里介壽路10巷25弄9號15號",
-                "store_id": "139081",
-                "store_name": "新兆湘"
+                "storeid": "139081",
+                "storename": "新兆湘"
             }
         },
         {
@@ -537,8 +537,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區中山路261號",
-                "store_id": "139092",
-                "store_name": "鈦旺"
+                "storeid": "139092",
+                "storename": "鈦旺"
             }
         },
         {
@@ -557,8 +557,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區寶國里義華路171號",
-                "store_id": "140025",
-                "store_name": "義明"
+                "storeid": "140025",
+                "storename": "義明"
             }
         },
         {
@@ -577,8 +577,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區民族一路987號",
-                "store_id": "140209",
-                "store_name": "重愛"
+                "storeid": "140209",
+                "storename": "重愛"
             }
         },
         {
@@ -597,8 +597,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區瑞隆路619號",
-                "store_id": "140704",
-                "store_name": "新憲德"
+                "storeid": "140704",
+                "storename": "新憲德"
             }
         },
         {
@@ -617,8 +617,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區建國一路211號213號",
-                "store_id": "141246",
-                "store_name": "新道明"
+                "storeid": "141246",
+                "storename": "新道明"
             }
         },
         {
@@ -637,8 +637,8 @@
                 "city": "高雄市",
                 "section": "燕巢區",
                 "address": "高雄市燕巢區深中路58號1樓",
-                "store_id": "142412",
-                "store_name": "高應大"
+                "storeid": "142412",
+                "storename": "高應大"
             }
         },
         {
@@ -657,8 +657,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區義仁里鳳林一路51巷5號1樓",
-                "store_id": "142618",
-                "store_name": "昭明"
+                "storeid": "142618",
+                "storename": "昭明"
             }
         },
         {
@@ -677,8 +677,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區翠屏里德惠路66號1樓",
-                "store_id": "143242",
-                "store_name": "雙德"
+                "storeid": "143242",
+                "storename": "雙德"
             }
         },
         {
@@ -697,8 +697,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區壽峰里前峰路152號之1一樓",
-                "store_id": "143611",
-                "store_name": "仁峰"
+                "storeid": "143611",
+                "storename": "仁峰"
             }
         },
         {
@@ -717,8 +717,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區德智里熱河一街190號192號",
-                "store_id": "143921",
-                "store_name": "智由"
+                "storeid": "143921",
+                "storename": "智由"
             }
         },
         {
@@ -737,8 +737,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區建昌里右昌街148號",
-                "store_id": "146171",
-                "store_name": "鑫建昌"
+                "storeid": "146171",
+                "storename": "鑫建昌"
             }
         },
         {
@@ -757,8 +757,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區新下里華夏路256號",
-                "store_id": "146872",
-                "store_name": "南屏"
+                "storeid": "146872",
+                "storename": "南屏"
             }
         },
         {
@@ -777,8 +777,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區鎮南里五甲二路744號",
-                "store_id": "147244",
-                "store_name": "天虹"
+                "storeid": "147244",
+                "storename": "天虹"
             }
         },
         {
@@ -797,8 +797,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區新光里華夏路979號",
-                "store_id": "149767",
-                "store_name": "浚興"
+                "storeid": "149767",
+                "storename": "浚興"
             }
         },
         {
@@ -817,8 +817,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區安東里吉林街271號",
-                "store_id": "151173",
-                "store_name": "吉遠"
+                "storeid": "151173",
+                "storename": "吉遠"
             }
         },
         {
@@ -837,8 +837,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區福山里華夏路1453號1樓",
-                "store_id": "154699",
-                "store_name": "夏義"
+                "storeid": "154699",
+                "storename": "夏義"
             }
         },
         {
@@ -857,8 +857,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區振成里鳳林三路322號324號1樓",
-                "store_id": "154910",
-                "store_name": "大發"
+                "storeid": "154910",
+                "storename": "大發"
             }
         },
         {
@@ -877,8 +877,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區新康街241號243號245號1樓",
-                "store_id": "155072",
-                "store_name": "鳳新"
+                "storeid": "155072",
+                "storename": "鳳新"
             }
         },
         {
@@ -897,8 +897,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區華豐里裕誠路1160號明倫路138號",
-                "store_id": "158440",
-                "store_name": "華豐"
+                "storeid": "158440",
+                "storename": "華豐"
             }
         },
         {
@@ -917,8 +917,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區瑞昌里瑞隆路310號312號",
-                "store_id": "158679",
-                "store_name": "瑞崗"
+                "storeid": "158679",
+                "storename": "瑞崗"
             }
         },
         {
@@ -937,8 +937,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區大同二路1號",
-                "store_id": "159502",
-                "store_name": "龍客"
+                "storeid": "159502",
+                "storename": "龍客"
             }
         },
         {
@@ -957,8 +957,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區高鐵路107號B1",
-                "store_id": "160177",
-                "store_name": "左運"
+                "storeid": "160177",
+                "storename": "左運"
             }
         },
         {
@@ -977,8 +977,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區民族一路900號",
-                "store_id": "161343",
-                "store_name": "文藻"
+                "storeid": "161343",
+                "storename": "文藻"
             }
         },
         {
@@ -997,8 +997,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區鎮東里光遠路73號",
-                "store_id": "161491",
-                "store_name": "黃埔"
+                "storeid": "161491",
+                "storename": "黃埔"
             }
         },
         {
@@ -1017,8 +1017,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區六合路117號",
-                "store_id": "162117",
-                "store_name": "文昌"
+                "storeid": "162117",
+                "storename": "文昌"
             }
         },
         {
@@ -1037,8 +1037,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區仁政里青年一路299號301號303號1樓",
-                "store_id": "162586",
-                "store_name": "新仁政"
+                "storeid": "162586",
+                "storename": "新仁政"
             }
         },
         {
@@ -1057,8 +1057,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區福山里民族一路1014號1樓",
-                "store_id": "162623",
-                "store_name": "榮耀"
+                "storeid": "162623",
+                "storename": "榮耀"
             }
         },
         {
@@ -1077,8 +1077,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區大仁北路175號1樓",
-                "store_id": "162726",
-                "store_name": "仁東"
+                "storeid": "162726",
+                "storename": "仁東"
             }
         },
         {
@@ -1097,8 +1097,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區復興三路150號1樓",
-                "store_id": "162911",
-                "store_name": "復興"
+                "storeid": "162911",
+                "storename": "復興"
             }
         },
         {
@@ -1117,8 +1117,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區一心二路208號",
-                "store_id": "162933",
-                "store_name": "新盛心"
+                "storeid": "162933",
+                "storename": "新盛心"
             }
         },
         {
@@ -1137,8 +1137,8 @@
                 "city": "高雄市",
                 "section": "路竹區",
                 "address": "高雄市路竹區華正路390號",
-                "store_id": "163475",
-                "store_name": "竹滬"
+                "storeid": "163475",
+                "storename": "竹滬"
             }
         },
         {
@@ -1157,8 +1157,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區復興四路10號1樓",
-                "store_id": "163729",
-                "store_name": "軟科"
+                "storeid": "163729",
+                "storename": "軟科"
             }
         },
         {
@@ -1177,8 +1177,8 @@
                 "city": "高雄市",
                 "section": "橋頭區",
                 "address": "高雄市橋頭區仕隆里隆豐路275號",
-                "store_id": "164032",
-                "store_name": "新隆豐"
+                "storeid": "164032",
+                "storename": "新隆豐"
             }
         },
         {
@@ -1197,8 +1197,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區惠豐里德民路115號",
-                "store_id": "164102",
-                "store_name": "都會"
+                "storeid": "164102",
+                "storename": "都會"
             }
         },
         {
@@ -1217,8 +1217,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區惠民里高楠公路1764之1號",
-                "store_id": "165574",
-                "store_name": "惠心"
+                "storeid": "165574",
+                "storename": "惠心"
             }
         },
         {
@@ -1237,8 +1237,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區岡山路264號1樓",
-                "store_id": "165758",
-                "store_name": "岡燕"
+                "storeid": "165758",
+                "storename": "岡燕"
             }
         },
         {
@@ -1257,8 +1257,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區鳳林路97號1樓",
-                "store_id": "166692",
-                "store_name": "鳳陽"
+                "storeid": "166692",
+                "storename": "鳳陽"
             }
         },
         {
@@ -1277,8 +1277,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區創新路76號78號80號1樓",
-                "store_id": "167008",
-                "store_name": "豐創"
+                "storeid": "167008",
+                "storename": "豐創"
             }
         },
         {
@@ -1297,8 +1297,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區鼎強里鼎金後路432號1.2樓",
-                "store_id": "167293",
-                "store_name": "鼎強"
+                "storeid": "167293",
+                "storename": "鼎強"
             }
         },
         {
@@ -1317,8 +1317,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區加昌路275.277號",
-                "store_id": "167385",
-                "store_name": "新加昌"
+                "storeid": "167385",
+                "storename": "新加昌"
             }
         },
         {
@@ -1337,8 +1337,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區光輝里後昌路637號639號1樓",
-                "store_id": "170026",
-                "store_name": "新昌"
+                "storeid": "170026",
+                "storename": "新昌"
             }
         },
         {
@@ -1357,8 +1357,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區三民路213號",
-                "store_id": "170347",
-                "store_name": "大民"
+                "storeid": "170347",
+                "storename": "大民"
             }
         },
         {
@@ -1377,8 +1377,8 @@
                 "city": "高雄市",
                 "section": "旗津區",
                 "address": "高雄市旗津區海岸路9號",
-                "store_id": "170576",
-                "store_name": "旗津"
+                "storeid": "170576",
+                "storename": "旗津"
             }
         },
         {
@@ -1397,8 +1397,8 @@
                 "city": "高雄市",
                 "section": "阿蓮區",
                 "address": "高雄市阿蓮區中山路15號17號19號",
-                "store_id": "170602",
-                "store_name": "阿蓮"
+                "storeid": "170602",
+                "storename": "阿蓮"
             }
         },
         {
@@ -1417,8 +1417,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區龍子里裕誠路2080號",
-                "store_id": "170613",
-                "store_name": "誠美"
+                "storeid": "170613",
+                "storename": "誠美"
             }
         },
         {
@@ -1437,8 +1437,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區慶豐街1號",
-                "store_id": "171052",
-                "store_name": "慶豐"
+                "storeid": "171052",
+                "storename": "慶豐"
             }
         },
         {
@@ -1457,8 +1457,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區鳳屏一路564號",
-                "store_id": "171328",
-                "store_name": "鳳屏"
+                "storeid": "171328",
+                "storename": "鳳屏"
             }
         },
         {
@@ -1477,8 +1477,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區永豐路1號",
-                "store_id": "171535",
-                "store_name": "泰豐"
+                "storeid": "171535",
+                "storename": "泰豐"
             }
         },
         {
@@ -1497,8 +1497,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區新上里裕誠路448號",
-                "store_id": "173863",
-                "store_name": "凹仔底"
+                "storeid": "173863",
+                "storename": "凹仔底"
             }
         },
         {
@@ -1517,8 +1517,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區安康里九如一路877號",
-                "store_id": "177290",
-                "store_name": "鑫永年"
+                "storeid": "177290",
+                "storename": "鑫永年"
             }
         },
         {
@@ -1537,8 +1537,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區中民里永年街48號50號52號1樓",
-                "store_id": "177430",
-                "store_name": "延慶"
+                "storeid": "177430",
+                "storename": "延慶"
             }
         },
         {
@@ -1557,8 +1557,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區勝利路123號",
-                "store_id": "177474",
-                "store_name": "勝利"
+                "storeid": "177474",
+                "storename": "勝利"
             }
         },
         {
@@ -1577,8 +1577,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區中山東路209-1及209-2號1樓",
-                "store_id": "180193",
-                "store_name": "瑞竹"
+                "storeid": "180193",
+                "storename": "瑞竹"
             }
         },
         {
@@ -1597,8 +1597,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區中山路223.225.227號",
-                "store_id": "180300",
-                "store_name": "鳳凌"
+                "storeid": "180300",
+                "storename": "鳳凌"
             }
         },
         {
@@ -1617,8 +1617,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區重愛路168號1樓",
-                "store_id": "181440",
-                "store_name": "山福"
+                "storeid": "181440",
+                "storename": "山福"
             }
         },
         {
@@ -1637,8 +1637,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區後協里仁壽路248號",
-                "store_id": "181484",
-                "store_name": "柳橋"
+                "storeid": "181484",
+                "storename": "柳橋"
             }
         },
         {
@@ -1657,8 +1657,8 @@
                 "city": "高雄市",
                 "section": "橋頭區",
                 "address": "高雄市橋頭區仕豐路61號1樓",
-                "store_id": "181510",
-                "store_name": "仕豐"
+                "storeid": "181510",
+                "storename": "仕豐"
             }
         },
         {
@@ -1677,8 +1677,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區安和里察哈爾一街148號1樓",
-                "store_id": "182281",
-                "store_name": "後驛"
+                "storeid": "182281",
+                "storename": "後驛"
             }
         },
         {
@@ -1697,8 +1697,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區光榮里西藏街6號1樓",
-                "store_id": "182306",
-                "store_name": "藏美"
+                "storeid": "182306",
+                "storename": "藏美"
             }
         },
         {
@@ -1717,8 +1717,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區左營大路340號",
-                "store_id": "182650",
-                "store_name": "廟東"
+                "storeid": "182650",
+                "storename": "廟東"
             }
         },
         {
@@ -1737,8 +1737,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區嘉興路151號1.2樓",
-                "store_id": "182797",
-                "store_name": "嘉興"
+                "storeid": "182797",
+                "storename": "嘉興"
             }
         },
         {
@@ -1757,8 +1757,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區青年路二段596號.598巷2.4號1.2樓",
-                "store_id": "183206",
-                "store_name": "澄清湖"
+                "storeid": "183206",
+                "storename": "澄清湖"
             }
         },
         {
@@ -1777,8 +1777,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區永芳里進學路103號1樓",
-                "store_id": "183228",
-                "store_name": "源隆"
+                "storeid": "183228",
+                "storename": "源隆"
             }
         },
         {
@@ -1797,8 +1797,8 @@
                 "city": "高雄市",
                 "section": "左营区",
                 "address": "高雄市左營區明誠二路318.320號",
-                "store_id": "183480",
-                "store_name": "新上明"
+                "storeid": "183480",
+                "storename": "新上明"
             }
         },
         {
@@ -1817,8 +1817,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區林森四路255號",
-                "store_id": "184081",
-                "store_name": "亞新灣"
+                "storeid": "184081",
+                "storename": "亞新灣"
             }
         },
         {
@@ -1837,8 +1837,8 @@
                 "city": "高雄市",
                 "section": "鹽埕區",
                 "address": "高雄市鹽埕區大勇路29號",
-                "store_id": "184092",
-                "store_name": "駁藝"
+                "storeid": "184092",
+                "storename": "駁藝"
             }
         },
         {
@@ -1857,8 +1857,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區中正三路84號1樓",
-                "store_id": "184209",
-                "store_name": "正仁"
+                "storeid": "184209",
+                "storename": "正仁"
             }
         },
         {
@@ -1877,8 +1877,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區忠純里中華五路969巷6號1樓",
-                "store_id": "184553",
-                "store_name": "忠純"
+                "storeid": "184553",
+                "storename": "忠純"
             }
         },
         {
@@ -1897,8 +1897,8 @@
                 "city": "高雄市",
                 "section": "路竹區",
                 "address": "高雄市路竹區中山路1821號",
-                "store_id": "184830",
-                "store_name": "高苑"
+                "storeid": "184830",
+                "storename": "高苑"
             }
         },
         {
@@ -1917,8 +1917,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區三多一路239號1樓",
-                "store_id": "185040",
-                "store_name": "福海"
+                "storeid": "185040",
+                "storename": "福海"
             }
         },
         {
@@ -1937,8 +1937,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區華榮路387號1樓",
-                "store_id": "185202",
-                "store_name": "榮夏"
+                "storeid": "185202",
+                "storename": "榮夏"
             }
         },
         {
@@ -1957,8 +1957,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區林森一路162號",
-                "store_id": "185660",
-                "store_name": "新球庭"
+                "storeid": "185660",
+                "storename": "新球庭"
             }
         },
         {
@@ -1977,8 +1977,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區三多一路108.110號",
-                "store_id": "186098",
-                "store_name": "宏順"
+                "storeid": "186098",
+                "storename": "宏順"
             }
         },
         {
@@ -1997,8 +1997,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區菜公里高鐵路115號1樓",
-                "store_id": "186113",
-                "store_name": "彩虹市"
+                "storeid": "186113",
+                "storename": "彩虹市"
             }
         },
         {
@@ -2017,8 +2017,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區翠屏里三民路304號",
-                "store_id": "186135",
-                "store_name": "大社"
+                "storeid": "186135",
+                "storename": "大社"
             }
         },
         {
@@ -2037,8 +2037,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區草江里七賢二路193號193-1號193-2號1樓",
-                "store_id": "186205",
-                "store_name": "新盛"
+                "storeid": "186205",
+                "storename": "新盛"
             }
         },
         {
@@ -2057,8 +2057,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區寶安里建興路51號53號1樓",
-                "store_id": "186272",
-                "store_name": "龍城"
+                "storeid": "186272",
+                "storename": "龍城"
             }
         },
         {
@@ -2077,8 +2077,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區北門里鳳松路108.110.112號1樓",
-                "store_id": "186375",
-                "store_name": "鳳駿"
+                "storeid": "186375",
+                "storename": "鳳駿"
             }
         },
         {
@@ -2097,8 +2097,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區自強三路2.6號新光路72.74號",
-                "store_id": "186456",
-                "store_name": "強泥"
+                "storeid": "186456",
+                "storename": "強泥"
             }
         },
         {
@@ -2117,8 +2117,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區鎮陽里前鎮街278號280號",
-                "store_id": "186630",
-                "store_name": "鎮陽"
+                "storeid": "186630",
+                "storename": "鎮陽"
             }
         },
         {
@@ -2137,8 +2137,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區明誠里裕誠路1610號1612號",
-                "store_id": "186733",
-                "store_name": "祥裕"
+                "storeid": "186733",
+                "storename": "祥裕"
             }
         },
         {
@@ -2157,8 +2157,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區新厝里鳳林二路160號",
-                "store_id": "186836",
-                "store_name": "鳳明"
+                "storeid": "186836",
+                "storename": "鳳明"
             }
         },
         {
@@ -2177,8 +2177,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區壽天里壽天路37號之3",
-                "store_id": "187666",
-                "store_name": "肯娣"
+                "storeid": "187666",
+                "storename": "肯娣"
             }
         },
         {
@@ -2197,8 +2197,8 @@
                 "city": "高雄市",
                 "section": "鳥松區",
                 "address": "高雄市鳥松區本館路196號1樓",
-                "store_id": "188119",
-                "store_name": "球場"
+                "storeid": "188119",
+                "storename": "球場"
             }
         },
         {
@@ -2217,8 +2217,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區左營大路14-5號",
-                "store_id": "188614",
-                "store_name": "新左營"
+                "storeid": "188614",
+                "storename": "新左營"
             }
         },
         {
@@ -2237,8 +2237,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區明華一路126號",
-                "store_id": "188658",
-                "store_name": "安華"
+                "storeid": "188658",
+                "storename": "安華"
             }
         },
         {
@@ -2257,8 +2257,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區中庄里八德路69號71號73號",
-                "store_id": "188739",
-                "store_name": "德庄"
+                "storeid": "188739",
+                "storename": "德庄"
             }
         },
         {
@@ -2277,8 +2277,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區青海路641號1樓",
-                "store_id": "188913",
-                "store_name": "海青"
+                "storeid": "188913",
+                "storename": "海青"
             }
         },
         {
@@ -2297,8 +2297,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區九如一路126號128號130號",
-                "store_id": "189514",
-                "store_name": "鑫寶華"
+                "storeid": "189514",
+                "storename": "鑫寶華"
             }
         },
         {
@@ -2317,8 +2317,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區潮寮里華中南路275號",
-                "store_id": "189754",
-                "store_name": "潮欣"
+                "storeid": "189754",
+                "storename": "潮欣"
             }
         },
         {
@@ -2337,8 +2337,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區創新路1號",
-                "store_id": "189994",
-                "store_name": "新創"
+                "storeid": "189994",
+                "storename": "新創"
             }
         },
         {
@@ -2357,8 +2357,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區富國路112號116號1樓",
-                "store_id": "190248",
-                "store_name": "國勝"
+                "storeid": "190248",
+                "storename": "國勝"
             }
         },
         {
@@ -2377,8 +2377,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區鳳仁路174號",
-                "store_id": "190640",
-                "store_name": "鳳仁"
+                "storeid": "190640",
+                "storename": "鳳仁"
             }
         },
         {
@@ -2397,8 +2397,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區海邊路48.48-1.48-2號",
-                "store_id": "193111",
-                "store_name": "海音"
+                "storeid": "193111",
+                "storename": "海音"
             }
         },
         {
@@ -2417,8 +2417,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區博愛三路378.380號",
-                "store_id": "193465",
-                "store_name": "生態園"
+                "storeid": "193465",
+                "storename": "生態園"
             }
         },
         {
@@ -2437,8 +2437,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區藍田路962.966號",
-                "store_id": "193579",
-                "store_name": "學高"
+                "storeid": "193579",
+                "storename": "學高"
             }
         },
         {
@@ -2457,8 +2457,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區文濱路22號",
-                "store_id": "194309",
-                "store_name": "方城市"
+                "storeid": "194309",
+                "storename": "方城市"
             }
         },
         {
@@ -2477,8 +2477,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區民權二路380號1樓",
-                "store_id": "194424",
-                "store_name": "長權"
+                "storeid": "194424",
+                "storename": "長權"
             }
         },
         {
@@ -2497,8 +2497,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區樂仁路116號",
-                "store_id": "195069",
-                "store_name": "樂仁"
+                "storeid": "195069",
+                "storename": "樂仁"
             }
         },
         {
@@ -2517,8 +2517,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區武營路433號",
-                "store_id": "195209",
-                "store_name": "武營"
+                "storeid": "195209",
+                "storename": "武營"
             }
         },
         {
@@ -2537,8 +2537,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區復興二路22號",
-                "store_id": "195771",
-                "store_name": "興陽"
+                "storeid": "195771",
+                "storename": "興陽"
             }
         },
         {
@@ -2557,8 +2557,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區明倫路149號",
-                "store_id": "195863",
-                "store_name": "華榮"
+                "storeid": "195863",
+                "storename": "華榮"
             }
         },
         {
@@ -2577,8 +2577,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區鳳楠路235號朝明路233號",
-                "store_id": "197238",
-                "store_name": "好事登"
+                "storeid": "197238",
+                "storename": "好事登"
             }
         },
         {
@@ -2597,8 +2597,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區中山一路11號(中央公園站內)",
-                "store_id": "197711",
-                "store_name": "中央公"
+                "storeid": "197711",
+                "storename": "中央公"
             }
         },
         {
@@ -2617,8 +2617,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區振成里新田路114號",
-                "store_id": "197870",
-                "store_name": "新崛江"
+                "storeid": "197870",
+                "storename": "新崛江"
             }
         },
         {
@@ -2637,8 +2637,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區重信路601號",
-                "store_id": "197881",
-                "store_name": "信科"
+                "storeid": "197881",
+                "storename": "信科"
             }
         },
         {
@@ -2657,8 +2657,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區仁雄路6之11號1樓",
-                "store_id": "198161",
-                "store_name": "仁雄"
+                "storeid": "198161",
+                "storename": "仁雄"
             }
         },
         {
@@ -2677,8 +2677,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區成功二路62號",
-                "store_id": "198378",
-                "store_name": "正成"
+                "storeid": "198378",
+                "storename": "正成"
             }
         },
         {
@@ -2697,8 +2697,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區善志街27號",
-                "store_id": "198448",
-                "store_name": "善志"
+                "storeid": "198448",
+                "storename": "善志"
             }
         },
         {
@@ -2717,8 +2717,8 @@
                 "city": "高雄市",
                 "section": "彌陀區",
                 "address": "高雄市彌陀區中正路246號",
-                "store_id": "198644",
-                "store_name": "彌盛"
+                "storeid": "198644",
+                "storename": "彌盛"
             }
         },
         {
@@ -2737,8 +2737,8 @@
                 "city": "高雄市",
                 "section": "路竹區",
                 "address": "高雄市路竹區國昌路1號",
-                "store_id": "198703",
-                "store_name": "一揚"
+                "storeid": "198703",
+                "storename": "一揚"
             }
         },
         {
@@ -2757,8 +2757,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區龍水二路1.3號",
-                "store_id": "199865",
-                "store_name": "美南"
+                "storeid": "199865",
+                "storename": "美南"
             }
         },
         {
@@ -2777,8 +2777,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區勝利路110號",
-                "store_id": "200239",
-                "store_name": "春秋閣"
+                "storeid": "200239",
+                "storename": "春秋閣"
             }
         },
         {
@@ -2797,8 +2797,8 @@
                 "city": "高雄市",
                 "section": "小港區",
                 "address": "高雄市小港區民益路46號1樓及2樓",
-                "store_id": "200505",
-                "store_name": "永益"
+                "storeid": "200505",
+                "storename": "永益"
             }
         },
         {
@@ -2817,8 +2817,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區鼎泰里裕誠路56號",
-                "store_id": "200860",
-                "store_name": "鼎瑞"
+                "storeid": "200860",
+                "storename": "鼎瑞"
             }
         },
         {
@@ -2837,8 +2837,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區博孝里河東路8號1樓",
-                "store_id": "200882",
-                "store_name": "愛河"
+                "storeid": "200882",
+                "storename": "愛河"
             }
         },
         {
@@ -2857,8 +2857,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區保社里旗楠路71號",
-                "store_id": "201070",
-                "store_name": "好事達"
+                "storeid": "201070",
+                "storename": "好事達"
             }
         },
         {
@@ -2877,8 +2877,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區臨海二路8號",
-                "store_id": "201092",
-                "store_name": "臨海"
+                "storeid": "201092",
+                "storename": "臨海"
             }
         },
         {
@@ -2897,8 +2897,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區裕誠路1946號1樓",
-                "store_id": "201162",
-                "store_name": "裕東"
+                "storeid": "201162",
+                "storename": "裕東"
             }
         },
         {
@@ -2917,8 +2917,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區六合一路27號",
-                "store_id": "201173",
-                "store_name": "中義"
+                "storeid": "201173",
+                "storename": "中義"
             }
         },
         {
@@ -2937,8 +2937,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區中華路16-66號1.2樓",
-                "store_id": "201221",
-                "store_name": "華社"
+                "storeid": "201221",
+                "storename": "華社"
             }
         },
         {
@@ -2957,8 +2957,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區店仔頂路23.25號",
-                "store_id": "206754",
-                "store_name": "蓮潭"
+                "storeid": "206754",
+                "storename": "蓮潭"
             }
         },
         {
@@ -2977,8 +2977,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區民族一路427-20號2樓",
-                "store_id": "207241",
-                "store_name": "悅誠"
+                "storeid": "207241",
+                "storename": "悅誠"
             }
         },
         {
@@ -2997,8 +2997,8 @@
                 "city": "高雄市",
                 "section": "小港區",
                 "address": "高雄市小港區漢民路381號",
-                "store_id": "213556",
-                "store_name": "順苓"
+                "storeid": "213556",
+                "storename": "順苓"
             }
         },
         {
@@ -3017,8 +3017,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區光明路二段810號1F",
-                "store_id": "213590",
-                "store_name": "三隆"
+                "storeid": "213590",
+                "storename": "三隆"
             }
         },
         {
@@ -3037,8 +3037,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區仁壽里公園西路三段131號133號",
-                "store_id": "215057",
-                "store_name": "鴻林"
+                "storeid": "215057",
+                "storename": "鴻林"
             }
         },
         {
@@ -3057,8 +3057,8 @@
                 "city": "高雄市",
                 "section": "鹽埕區",
                 "address": "高雄市鹽埕區大仁路139號瀨南路172號",
-                "store_id": "832915",
-                "store_name": "鹽埕"
+                "storeid": "832915",
+                "storename": "鹽埕"
             }
         },
         {
@@ -3077,8 +3077,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區竹後里水管路189號",
-                "store_id": "854030",
-                "store_name": "台塑"
+                "storeid": "854030",
+                "storename": "台塑"
             }
         },
         {
@@ -3097,8 +3097,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區民族一路1084號",
-                "store_id": "855480",
-                "store_name": "華民"
+                "storeid": "855480",
+                "storename": "華民"
             }
         },
         {
@@ -3117,8 +3117,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區草衙里后安路146號",
-                "store_id": "861061",
-                "store_name": "后安"
+                "storeid": "861061",
+                "storename": "后安"
             }
         },
         {
@@ -3137,8 +3137,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區五武漢里武慶二路52號54號",
-                "store_id": "865513",
-                "store_name": "武慶"
+                "storeid": "865513",
+                "storename": "武慶"
             }
         },
         {
@@ -3157,8 +3157,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區青年一路220號",
-                "store_id": "865627",
-                "store_name": "寶成"
+                "storeid": "865627",
+                "storename": "寶成"
             }
         },
         {
@@ -3177,8 +3177,8 @@
                 "city": "高雄市",
                 "section": "小港區",
                 "address": "高雄市小港區桂陽路255號",
-                "store_id": "874104",
-                "store_name": "桂陽"
+                "storeid": "874104",
+                "storename": "桂陽"
             }
         },
         {
@@ -3197,8 +3197,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區正興路1號3號",
-                "store_id": "885643",
-                "store_name": "雙興"
+                "storeid": "885643",
+                "storename": "雙興"
             }
         },
         {
@@ -3217,8 +3217,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區新田路189號191號",
-                "store_id": "895879",
-                "store_name": "新田"
+                "storeid": "895879",
+                "storename": "新田"
             }
         },
         {
@@ -3237,8 +3237,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區復興三路116號",
-                "store_id": "895938",
-                "store_name": "高雄"
+                "storeid": "895938",
+                "storename": "高雄"
             }
         },
         {
@@ -3257,8 +3257,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區苓雅二路243號",
-                "store_id": "896193",
-                "store_name": "永泰"
+                "storeid": "896193",
+                "storename": "永泰"
             }
         },
         {
@@ -3277,8 +3277,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區明誠里南屏路527號529號",
-                "store_id": "896551",
-                "store_name": "文信"
+                "storeid": "896551",
+                "storename": "文信"
             }
         },
         {
@@ -3297,8 +3297,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區中山二路463號",
-                "store_id": "896997",
-                "store_name": "中雅"
+                "storeid": "896997",
+                "storename": "中雅"
             }
         },
         {
@@ -3317,8 +3317,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區復興一路28號30號32號1樓",
-                "store_id": "905077",
-                "store_name": "復橫"
+                "storeid": "905077",
+                "storename": "復橫"
             }
         },
         {
@@ -3337,8 +3337,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區復興一路176號",
-                "store_id": "905354",
-                "store_name": "興國"
+                "storeid": "905354",
+                "storename": "興國"
             }
         },
         {
@@ -3357,8 +3357,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區壽峰里前峰路80號",
-                "store_id": "913584",
-                "store_name": "利明"
+                "storeid": "913584",
+                "storename": "利明"
             }
         },
         {
@@ -3377,8 +3377,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區意誠里三多四路93號",
-                "store_id": "914152",
-                "store_name": "東泥"
+                "storeid": "914152",
+                "storename": "東泥"
             }
         },
         {
@@ -3397,8 +3397,8 @@
                 "city": "高雄市",
                 "section": "阿蓮區",
                 "address": "高雄市阿蓮區民生路92號",
-                "store_id": "914244",
-                "store_name": "蓮山"
+                "storeid": "914244",
+                "storename": "蓮山"
             }
         },
         {
@@ -3417,8 +3417,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區一心一路406號",
-                "store_id": "915546",
-                "store_name": "天山"
+                "storeid": "915546",
+                "storename": "天山"
             }
         },
         {
@@ -3437,8 +3437,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區瑞平里公正路25號",
-                "store_id": "922500",
-                "store_name": "崗正"
+                "storeid": "922500",
+                "storename": "崗正"
             }
         },
         {
@@ -3457,8 +3457,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區自強二路172號",
-                "store_id": "928597",
-                "store_name": "前金"
+                "storeid": "928597",
+                "storename": "前金"
             }
         },
         {
@@ -3477,8 +3477,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區忠純里中華五路997號",
-                "store_id": "936037",
-                "store_name": "獅甲"
+                "storeid": "936037",
+                "storename": "獅甲"
             }
         },
         {
@@ -3497,8 +3497,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區碧紅里中山北路2號",
-                "store_id": "936381",
-                "store_name": "群弘益"
+                "storeid": "936381",
+                "storename": "群弘益"
             }
         },
         {
@@ -3517,8 +3517,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區意誠里新光路64號66號",
-                "store_id": "941615",
-                "store_name": "新強"
+                "storeid": "941615",
+                "storename": "新強"
             }
         },
         {
@@ -3537,8 +3537,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區寶德里覺民路338號",
-                "store_id": "943806",
-                "store_name": "光武"
+                "storeid": "943806",
+                "storename": "光武"
             }
         },
         {
@@ -3557,8 +3557,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區中山一路279號",
-                "store_id": "956400",
-                "store_name": "天健"
+                "storeid": "956400",
+                "storename": "天健"
             }
         },
         {
@@ -3577,8 +3577,8 @@
                 "city": "高雄市",
                 "section": "小港區",
                 "address": "高雄市小港區泰山里宏平路83-2號",
-                "store_id": "966119",
-                "store_name": "宏文"
+                "storeid": "966119",
+                "storename": "宏文"
             }
         },
         {
@@ -3597,8 +3597,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區龍子里大順一路825號",
-                "store_id": "966359",
-                "store_name": "順屏"
+                "storeid": "966359",
+                "storename": "順屏"
             }
         },
         {
@@ -3617,8 +3617,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區大遼里大遼路122-3號",
-                "store_id": "968908",
-                "store_name": "友情"
+                "storeid": "968908",
+                "storename": "友情"
             }
         },
         {
@@ -3637,8 +3637,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區中東里復興一路72號1樓",
-                "store_id": "971502",
-                "store_name": "新三華"
+                "storeid": "971502",
+                "storename": "新三華"
             }
         },
         {
@@ -3657,8 +3657,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區中山二路268號B1(高雄捷運R8站)",
-                "store_id": "971708",
-                "store_name": "雄捷"
+                "storeid": "971708",
+                "storename": "雄捷"
             }
         },
         {
@@ -3677,8 +3677,8 @@
                 "city": "高雄市",
                 "section": "小港區",
                 "address": "高雄市小港區山明里水秀路59號",
-                "store_id": "972158",
-                "store_name": "田金"
+                "storeid": "972158",
+                "storename": "田金"
             }
         },
         {
@@ -3697,8 +3697,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區雄峰里九如四路2007號1樓",
-                "store_id": "972561",
-                "store_name": "新前鋒"
+                "storeid": "972561",
+                "storename": "新前鋒"
             }
         },
         {
@@ -3717,8 +3717,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區翠華路601巷122,126號",
-                "store_id": "973128",
-                "store_name": "新海勝"
+                "storeid": "973128",
+                "storename": "新海勝"
             }
         },
         {
@@ -3737,8 +3737,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區復興三路435號437號",
-                "store_id": "982409",
-                "store_name": "鑫愛群"
+                "storeid": "982409",
+                "storename": "鑫愛群"
             }
         },
         {
@@ -3757,8 +3757,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區十全一路74號",
-                "store_id": "985372",
-                "store_name": "安生"
+                "storeid": "985372",
+                "storename": "安生"
             }
         },
         {
@@ -3777,8 +3777,8 @@
                 "city": "高雄市",
                 "section": "旗津區",
                 "address": "高雄市旗津區振興里廟前路12號1樓",
-                "store_id": "990411",
-                "store_name": "旗廟"
+                "storeid": "990411",
+                "storename": "旗廟"
             }
         },
         {
@@ -3797,8 +3797,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區有光路123號.125號.127號",
-                "store_id": "991171",
-                "store_name": "新有光"
+                "storeid": "991171",
+                "storename": "新有光"
             }
         },
         {
@@ -3817,8 +3817,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區瑞興里瑞興路250-1號1樓",
-                "store_id": "992288",
-                "store_name": "瑞順"
+                "storeid": "992288",
+                "storename": "瑞順"
             }
         },
         {
@@ -3837,8 +3837,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區明吉路9號",
-                "store_id": "992772",
-                "store_name": "理馨"
+                "storeid": "992772",
+                "storename": "理馨"
             }
         },
         {
@@ -3857,8 +3857,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區藍昌路379號1樓",
-                "store_id": "993797",
-                "store_name": "藍田"
+                "storeid": "993797",
+                "storename": "藍田"
             }
         },
         {
@@ -3877,8 +3877,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區後庄村成功路43號",
-                "store_id": "993926",
-                "store_name": "美庄"
+                "storeid": "993926",
+                "storename": "美庄"
             }
         },
         {
@@ -3897,8 +3897,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區大同一路268號1樓",
-                "store_id": "996682",
-                "store_name": "青盛"
+                "storeid": "996682",
+                "storename": "青盛"
             }
         },
         {
@@ -3917,8 +3917,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區三多二路437號439號441號441-1號1樓",
-                "store_id": "111843",
-                "store_name": "學源"
+                "storeid": "111843",
+                "storename": "學源"
             }
         },
         {
@@ -3937,8 +3937,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區九如二路86號1樓",
-                "store_id": "113621",
-                "store_name": "新如東"
+                "storeid": "113621",
+                "storename": "新如東"
             }
         },
         {
@@ -3957,8 +3957,8 @@
                 "city": "高雄市",
                 "section": "大樹區",
                 "address": "高雄市大樹區樣腳里中興東路7號9號11號13號",
-                "store_id": "113768",
-                "store_name": "大樹"
+                "storeid": "113768",
+                "storename": "大樹"
             }
         },
         {
@@ -3977,8 +3977,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區正大里輔仁路一段145號1樓",
-                "store_id": "113953",
-                "store_name": "正心"
+                "storeid": "113953",
+                "storename": "正心"
             }
         },
         {
@@ -3997,8 +3997,8 @@
                 "city": "高雄市",
                 "section": "路竹區",
                 "address": "高雄市路竹區大社路162號",
-                "store_id": "114200",
-                "store_name": "路好"
+                "storeid": "114200",
+                "storename": "路好"
             }
         },
         {
@@ -4017,8 +4017,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區清豐里旗楠路891號1樓",
-                "store_id": "115856",
-                "store_name": "麗景"
+                "storeid": "115856",
+                "storename": "麗景"
             }
         },
         {
@@ -4037,8 +4037,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區二甲里鳳南一路25號27號",
-                "store_id": "117025",
-                "store_name": "鳳南"
+                "storeid": "117025",
+                "storename": "鳳南"
             }
         },
         {
@@ -4057,8 +4057,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區本和里大福街211號1樓",
-                "store_id": "117726",
-                "store_name": "宏明"
+                "storeid": "117726",
+                "storename": "宏明"
             }
         },
         {
@@ -4077,8 +4077,8 @@
                 "city": "高雄市",
                 "section": "小港區",
                 "address": "高雄市小港區高坪二十二路321號",
-                "store_id": "193915",
-                "store_name": "坪高"
+                "storeid": "193915",
+                "storename": "坪高"
             }
         },
         {
@@ -4097,8 +4097,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區龍成路58.60.62號",
-                "store_id": "196637",
-                "store_name": "龍鎮"
+                "storeid": "196637",
+                "storename": "龍鎮"
             }
         },
         {
@@ -4117,8 +4117,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區鎮南里五甲二路744號",
-                "store_id": "198024",
-                "store_name": "天虹"
+                "storeid": "198024",
+                "storename": "天虹"
             }
         },
         {
@@ -4137,8 +4137,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區富民路65號一.二樓",
-                "store_id": "207300",
-                "store_name": "富慶"
+                "storeid": "207300",
+                "storename": "富慶"
             }
         },
         {
@@ -4157,8 +4157,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區二甲里鳳南一路25號27號",
-                "store_id": "213682",
-                "store_name": "鳳南"
+                "storeid": "213682",
+                "storename": "鳳南"
             }
         },
         {
@@ -4177,8 +4177,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區瑞隆路619號",
-                "store_id": "213730",
-                "store_name": "新憲德"
+                "storeid": "213730",
+                "storename": "新憲德"
             }
         },
         {
@@ -4197,8 +4197,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區翠屏里三民路304號",
-                "store_id": "213811",
-                "store_name": "大社"
+                "storeid": "213811",
+                "storename": "大社"
             }
         },
         {
@@ -4217,8 +4217,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區慶豐街1號",
-                "store_id": "201335",
-                "store_name": "慶豐"
+                "storeid": "201335",
+                "storename": "慶豐"
             }
         },
         {
@@ -4237,8 +4237,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區華豐里裕誠路1160號明倫路138號",
-                "store_id": "213729",
-                "store_name": "華豐"
+                "storeid": "213729",
+                "storename": "華豐"
             }
         },
         {
@@ -4257,8 +4257,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區富國路112號116號1樓",
-                "store_id": "213785",
-                "store_name": "國勝"
+                "storeid": "213785",
+                "storename": "國勝"
             }
         },
         {
@@ -4277,8 +4277,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區鼎泰里裕誠路56號",
-                "store_id": "213615",
-                "store_name": "鼎瑞"
+                "storeid": "213615",
+                "storename": "鼎瑞"
             }
         },
         {
@@ -4297,8 +4297,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區鼎金後路432號1樓",
-                "store_id": "201405",
-                "store_name": "鼎強"
+                "storeid": "201405",
+                "storename": "鼎強"
             }
         },
         {
@@ -4317,8 +4317,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區民族一路427-20號2樓",
-                "store_id": "216636",
-                "store_name": "悅誠"
+                "storeid": "216636",
+                "storename": "悅誠"
             }
         },
         {
@@ -4337,8 +4337,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區大德二路61號",
-                "store_id": "201508",
-                "store_name": "鑫程"
+                "storeid": "201508",
+                "storename": "鑫程"
             }
         },
         {
@@ -4357,8 +4357,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區新田路189號191號",
-                "store_id": "213992",
-                "store_name": "新田"
+                "storeid": "213992",
+                "storename": "新田"
             }
         },
         {
@@ -4377,8 +4377,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區建昌里右昌街148號",
-                "store_id": "214098",
-                "store_name": "鑫建昌"
+                "storeid": "214098",
+                "storename": "鑫建昌"
             }
         },
         {
@@ -4397,8 +4397,8 @@
                 "city": "高雄市",
                 "section": "鹽埕區",
                 "address": "高雄市鹽埕區大勇路29號",
-                "store_id": "201601",
-                "store_name": "駁藝"
+                "storeid": "201601",
+                "storename": "駁藝"
             }
         },
         {
@@ -4417,8 +4417,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區文橫二路164-1號.164-2號",
-                "store_id": "207698",
-                "store_name": "文漾"
+                "storeid": "207698",
+                "storename": "文漾"
             }
         },
         {
@@ -4437,8 +4437,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區翠華路601巷122,126號",
-                "store_id": "201612",
-                "store_name": "新海勝"
+                "storeid": "201612",
+                "storename": "新海勝"
             }
         },
         {
@@ -4457,8 +4457,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區自立一路68號70號",
-                "store_id": "201645",
-                "store_name": "國城"
+                "storeid": "201645",
+                "storename": "國城"
             }
         },
         {
@@ -4477,8 +4477,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區富國路112號116號1樓",
-                "store_id": "201689",
-                "store_name": "國勝"
+                "storeid": "201689",
+                "storename": "國勝"
             }
         },
         {
@@ -4497,8 +4497,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區中山二路268-1號",
-                "store_id": "207207",
-                "store_name": "捷心"
+                "storeid": "207207",
+                "storename": "捷心"
             }
         },
         {
@@ -4517,8 +4517,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區瑞興路216號1樓",
-                "store_id": "208093",
-                "store_name": "瑞順"
+                "storeid": "208093",
+                "storename": "瑞順"
             }
         },
         {
@@ -4537,8 +4537,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區鳳楠路82號1樓",
-                "store_id": "208989",
-                "store_name": "四季春"
+                "storeid": "208989",
+                "storename": "四季春"
             }
         },
         {
@@ -4557,8 +4557,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區仁雄路97-3號1樓",
-                "store_id": "209890",
-                "store_name": "尚讚"
+                "storeid": "209890",
+                "storename": "尚讚"
             }
         },
         {
@@ -4577,8 +4577,8 @@
                 "city": "高雄市",
                 "section": "內門區",
                 "address": "高雄市內門區大學路200號",
-                "store_id": "209971",
-                "store_name": "靜月"
+                "storeid": "209971",
+                "storename": "靜月"
             }
         },
         {
@@ -4597,8 +4597,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區九如一路805號",
-                "store_id": "210409",
-                "store_name": "平等"
+                "storeid": "210409",
+                "storename": "平等"
             }
         },
         {
@@ -4617,8 +4617,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市苓雅區文橫二路2號與文橫二路二巷2號",
-                "store_id": "211734",
-                "store_name": "華文"
+                "storeid": "211734",
+                "storename": "華文"
             }
         },
         {
@@ -4637,8 +4637,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區保社里旗楠路71號",
-                "store_id": "216278",
-                "store_name": "好事達"
+                "storeid": "216278",
+                "storename": "好事達"
             }
         },
         {
@@ -4657,8 +4657,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區慶豐街1號",
-                "store_id": "217097",
-                "store_name": "慶豐"
+                "storeid": "217097",
+                "storename": "慶豐"
             }
         },
         {
@@ -4677,8 +4677,8 @@
                 "city": "高雄市",
                 "section": "橋頭區",
                 "address": "高雄市橋頭區甲昌路227號",
-                "store_id": "209937",
-                "store_name": "侑群"
+                "storeid": "209937",
+                "storename": "侑群"
             }
         },
         {
@@ -4697,8 +4697,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區左營大路676號1樓2樓678號1樓",
-                "store_id": "211310",
-                "store_name": "哈囉"
+                "storeid": "211310",
+                "storename": "哈囉"
             }
         },
         {
@@ -4717,8 +4717,8 @@
                 "city": "高雄市",
                 "section": "林園區",
                 "address": "高雄市林園區仁愛路129.131.133號",
-                "store_id": "212047",
-                "store_name": "仁忠"
+                "storeid": "212047",
+                "storename": "仁忠"
             }
         },
         {
@@ -4737,8 +4737,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區鎮南里五甲二路744號",
-                "store_id": "217525",
-                "store_name": "天虹"
+                "storeid": "217525",
+                "storename": "天虹"
             }
         },
         {
@@ -4757,8 +4757,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區竹後里水管路189號191號",
-                "store_id": "201874",
-                "store_name": "台塑"
+                "storeid": "201874",
+                "storename": "台塑"
             }
         },
         {
@@ -4777,8 +4777,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區六合二路37號",
-                "store_id": "212368",
-                "store_name": "合莊"
+                "storeid": "212368",
+                "storename": "合莊"
             }
         },
         {
@@ -4797,8 +4797,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區復興一路28號30號32號1樓",
-                "store_id": "201900",
-                "store_name": "復橫"
+                "storeid": "201900",
+                "storename": "復橫"
             }
         },
         {
@@ -4817,8 +4817,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市前鎮區英明路一號",
-                "store_id": "211930",
-                "store_name": "新聖明"
+                "storeid": "211930",
+                "storename": "新聖明"
             }
         },
         {
@@ -4837,8 +4837,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區十全一路74號",
-                "store_id": "201922",
-                "store_name": "安生"
+                "storeid": "201922",
+                "storename": "安生"
             }
         },
         {
@@ -4857,8 +4857,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區大社路30-29號",
-                "store_id": "211103",
-                "store_name": "社旺"
+                "storeid": "211103",
+                "storename": "社旺"
             }
         },
         {
@@ -4877,8 +4877,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區武營路433號",
-                "store_id": "217318",
-                "store_name": "武營"
+                "storeid": "217318",
+                "storename": "武營"
             }
         },
         {
@@ -4897,8 +4897,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區大學西路815.817號",
-                "store_id": "207676",
-                "store_name": "晉學"
+                "storeid": "207676",
+                "storename": "晉學"
             }
         },
         {
@@ -4917,8 +4917,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區六合路117號",
-                "store_id": "217536",
-                "store_name": "文昌"
+                "storeid": "217536",
+                "storename": "文昌"
             }
         },
         {
@@ -4937,8 +4937,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區中山一路279號",
-                "store_id": "238821",
-                "store_name": "天健"
+                "storeid": "238821",
+                "storename": "天健"
             }
         },
         {
@@ -4957,8 +4957,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區博愛一路1號",
-                "store_id": "212003",
-                "store_name": "新博如"
+                "storeid": "212003",
+                "storename": "新博如"
             }
         },
         {
@@ -4977,8 +4977,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區自由二路398號1樓400號1樓402號1樓",
-                "store_id": "212184",
-                "store_name": "昱廣"
+                "storeid": "212184",
+                "storename": "昱廣"
             }
         },
         {
@@ -4997,8 +4997,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區五福一路77號1樓",
-                "store_id": "228743",
-                "store_name": "文化"
+                "storeid": "228743",
+                "storename": "文化"
             }
         },
         {
@@ -5017,8 +5017,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區灣內里鳳仁路95之15號",
-                "store_id": "238577",
-                "store_name": "友福"
+                "storeid": "238577",
+                "storename": "友福"
             }
         },
         {
@@ -5037,8 +5037,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區惠民里高楠公路1764之1號",
-                "store_id": "239592",
-                "store_name": "惠心"
+                "storeid": "239592",
+                "storename": "惠心"
             }
         },
         {
@@ -5057,8 +5057,8 @@
                 "city": "高雄市",
                 "section": "阿蓮區",
                 "address": "高雄市阿蓮區中山路15號17號19號",
-                "store_id": "237345",
-                "store_name": "阿蓮"
+                "storeid": "237345",
+                "storename": "阿蓮"
             }
         },
         {
@@ -5077,8 +5077,8 @@
                 "city": "高雄市",
                 "section": "小港區",
                 "address": "高雄市小港區漢民路219號1樓",
-                "store_id": "228651",
-                "store_name": "苓民"
+                "storeid": "228651",
+                "storename": "苓民"
             }
         },
         {
@@ -5097,8 +5097,8 @@
                 "city": "高雄市",
                 "section": "新興區",
                 "address": "高雄市新興區新田路144號1樓2樓144之1號1樓2樓",
-                "store_id": "228905",
-                "store_name": "新田"
+                "storeid": "228905",
+                "storename": "新田"
             }
         },
         {
@@ -5117,8 +5117,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區鼓山三路8-25號1樓",
-                "store_id": "210421",
-                "store_name": "銀川"
+                "storeid": "210421",
+                "storename": "銀川"
             }
         },
         {
@@ -5137,8 +5137,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區仁孝路368號1樓",
-                "store_id": "206880",
-                "store_name": "赤山"
+                "storeid": "206880",
+                "storename": "赤山"
             }
         },
         {
@@ -5157,8 +5157,8 @@
                 "city": "高雄市",
                 "section": "鼓山區",
                 "address": "高雄市鼓山區臨海二路52號1樓52-1號1樓",
-                "store_id": "229414",
-                "store_name": "哨臨"
+                "storeid": "229414",
+                "storename": "哨臨"
             }
         },
         {
@@ -5177,8 +5177,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區成功一路455之1號",
-                "store_id": "237448",
-                "store_name": "太華"
+                "storeid": "237448",
+                "storename": "太華"
             }
         },
         {
@@ -5197,8 +5197,8 @@
                 "city": "高雄市",
                 "section": "彌陀區",
                 "address": "高雄市彌陀區文安路1-1號1樓1-2號1樓",
-                "store_id": "229241",
-                "store_name": "彌安"
+                "storeid": "229241",
+                "storename": "彌安"
             }
         },
         {
@@ -5217,8 +5217,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區成功一路455之1號",
-                "store_id": "241285",
-                "store_name": "太華"
+                "storeid": "241285",
+                "storename": "太華"
             }
         },
         {
@@ -5237,8 +5237,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區鳳屏一路564號566號",
-                "store_id": "237529",
-                "store_name": "鳳屏"
+                "storeid": "237529",
+                "storename": "鳳屏"
             }
         },
         {
@@ -5257,8 +5257,8 @@
                 "city": "高雄市",
                 "section": "大寮區",
                 "address": "高雄市大寮區八德路197號1樓2樓199號",
-                "store_id": "210683",
-                "store_name": "德龍"
+                "storeid": "210683",
+                "storename": "德龍"
             }
         },
         {
@@ -5277,8 +5277,8 @@
                 "city": "高雄市",
                 "section": "前鎮區",
                 "address": "高雄市前鎮區南衙路47號",
-                "store_id": "211321",
-                "store_name": "南衙"
+                "storeid": "211321",
+                "storename": "南衙"
             }
         },
         {
@@ -5297,8 +5297,8 @@
                 "city": "高雄市",
                 "section": "鳳山區",
                 "address": "高雄市鳳山區大明路193號",
-                "store_id": "211480",
-                "store_name": "大強"
+                "storeid": "211480",
+                "storename": "大強"
             }
         },
         {
@@ -5317,8 +5317,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區武營路433號",
-                "store_id": "249393",
-                "store_name": "武營"
+                "storeid": "249393",
+                "storename": "武營"
             }
         },
         {
@@ -5337,8 +5337,8 @@
                 "city": "高雄市",
                 "section": "楠梓區",
                 "address": "高雄市楠梓區壽豐路517號519號521號",
-                "store_id": "230975",
-                "store_name": "惠豐"
+                "storeid": "230975",
+                "storename": "惠豐"
             }
         },
         {
@@ -5357,8 +5357,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區八德西路1870-1號1樓",
-                "store_id": "229942",
-                "store_name": "得永"
+                "storeid": "229942",
+                "storename": "得永"
             }
         },
         {
@@ -5377,8 +5377,8 @@
                 "city": "高雄市",
                 "section": "前金區",
                 "address": "高雄市前金區自強一路149號1樓2樓",
-                "store_id": "230997",
-                "store_name": "幸福川"
+                "storeid": "230997",
+                "storename": "幸福川"
             }
         },
         {
@@ -5397,8 +5397,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區竹圍東街93號1樓",
-                "store_id": "231820",
-                "store_name": "竹圍東"
+                "storeid": "231820",
+                "storename": "竹圍東"
             }
         },
         {
@@ -5417,8 +5417,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區重愛路168號1樓",
-                "store_id": "237703",
-                "store_name": "山福"
+                "storeid": "237703",
+                "storename": "山福"
             }
         },
         {
@@ -5437,8 +5437,8 @@
                 "city": "高雄市",
                 "section": "大社區",
                 "address": "高雄市大社區金龍路380號",
-                "store_id": "207849",
-                "store_name": "金順"
+                "storeid": "207849",
+                "storename": "金順"
             }
         },
         {
@@ -5457,8 +5457,8 @@
                 "city": "高雄市",
                 "section": "岡山區",
                 "address": "高雄市岡山區介壽路78號",
-                "store_id": "208059",
-                "store_name": "新兆湘"
+                "storeid": "208059",
+                "storename": "新兆湘"
             }
         },
         {
@@ -5477,8 +5477,8 @@
                 "city": "高雄市",
                 "section": "仁武區",
                 "address": "高雄市仁武區仁雄路35號澄合街172之1號",
-                "store_id": "193591",
-                "store_name": "澄雄"
+                "storeid": "193591",
+                "storename": "澄雄"
             }
         },
         {
@@ -5497,8 +5497,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區政德路585號",
-                "store_id": "231602",
-                "store_name": "重德"
+                "storeid": "231602",
+                "storename": "重德"
             }
         },
         {
@@ -5517,8 +5517,8 @@
                 "city": "高雄市",
                 "section": "苓雅區",
                 "address": "高雄市苓雅區三多一路66號68號",
-                "store_id": "235408",
-                "store_name": "宏順"
+                "storeid": "235408",
+                "storename": "宏順"
             }
         },
         {
@@ -5537,8 +5537,8 @@
                 "city": "高雄市",
                 "section": "三民區",
                 "address": "高雄市三民區博愛一路1號",
-                "store_id": "253808",
-                "store_name": "新博如"
+                "storeid": "253808",
+                "storename": "新博如"
             }
         },
         {
@@ -5557,8 +5557,8 @@
                 "city": "高雄市",
                 "section": "左營區",
                 "address": "高雄市左營區重信路601號",
-                "store_id": "254786",
-                "store_name": "信科"
+                "storeid": "254786",
+                "storename": "信科"
             }
         }
     ]

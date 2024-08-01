@@ -25,10 +25,14 @@ watchEffect(() => {
     if (activityId) {
       menuList.value = [
         { link: `/collected/${activityId}`, key: 'Collected', name: '活動打卡紀錄' },
-        { link: `/mapStore/${activityId}`, key: 'MapStore', name: '活動門市地圖' }
+        // { link: `/mapStore/${activityId}`, key: 'MapStore', name: '活動門市地圖' },
+        { link: `/map8Store/${activityId}`, key: 'Map8Store', name: '活動門市地圖' }
       ]
     } else {
-      menuList.value = [{ link: '/mapStore', key: 'MapStore', name: '門市地圖' }]
+      menuList.value = [
+        // { link: '/mapStore', key: 'MapStore', name: '門市地圖' },
+        { link: `/map8Store`, key: 'Map8Store', name: '門市地圖' }
+      ]
     }
   }
 })
@@ -79,7 +83,6 @@ const goToActivityInfo = () => {
         <RouterLink to="/" class="sidemenu__item">回到活動大廳</RouterLink>
         <!-- <RouterLink to="/album" class="sidemenu__item last">門市打卡紀錄</RouterLink> -->
 
-        <!--TODO: keep user info block and wait for the PM to confirm the requirements. -->
         <div
           v-if="Object.keys(userStore.userProfile).length > 0"
           class="sidemenu__item sidemenu__avendar"

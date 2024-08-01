@@ -25,11 +25,15 @@ const onResponse = (response: any) => {
 
 const onError = (error: any) => {
   const { response, data } = error
-  if (response) {
-    return Promise.reject(response.data?.message || response.data?.errorMessage || '服務異常')
+  if (response && response.status === 401) {
+    return Promise.reject('沒有權限')
+  } else if (response && response.data) {
+    return Promise.reject(response.data.message || response.data.errorMessage || '服務異常')
   } else if (data) {
-    return Promise.reject(data?.message || data?.errorMessage || '服務異常')
+    console.log(2)
+    return Promise.reject(data.message || data.errorMessage || '服務異常')
   } else {
+    console.log(3)
     return Promise.reject('服務異常')
   }
 }

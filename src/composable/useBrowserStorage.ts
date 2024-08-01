@@ -7,18 +7,8 @@ export function useBrowserStorage() {
   // 12小時後自動刪掉
   const inTwelveMinutes = new Date(new Date().getTime() + 12 * 60 * 60 * 1000)
 
-  // - 儲存網站抓取的經緯度
-  // TODO: 如果位置會一直移動好像存在store會比較好
-  const setLocationStorage = (latitude: null | number = null, longitude: null | number = null) => {
-    const toString = `${latitude},${longitude}`
-    Cookies.set('STORE_LOCATION', toString)
-  }
-  const getLocationStorage = () => {
-    const locationStorage = Cookies.get('STORE_LOCATION')
-    return locationStorage ? locationStorage.split(',') : []
-  }
-
-  // 儲存ct參數
+  // 儲存ct字串
+  // 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+亂碼(1碼)+驗證碼(6碼)+時間戳記YYYY(4碼)
   const setQRcodeString = (ctStr: string = '') => {
     if (ctStr) {
       Cookies.set('STORE_CT', ctStr, {
@@ -27,32 +17,35 @@ export function useBrowserStorage() {
     }
   }
 
+  // 取出儲存的ct string
+  const getQRcodeString = () => {
+    const ctStr = Cookies.get('STORE_CT')
+    return ctStr || ''
+  }
+
+  // 解析ct
+  // 店號(6碼)
+  // 驗證碼(6碼)
+  const parseCtToStoreAndNumber = (ctStr: string) => {
+    return {
+      storeId: ctStr ? ctStr.substring(2, 8) : null,
+      number: ctStr ? ctStr.substring(17, 23) : null
+    } as ParseCtStringState
+  }
+
   // 儲存驗證ct後的token
-  const setCtT0kenCookies = (t0ken: string = '') => {
-    if (t0ken) {
-      Cookies.set('STORE_CT_T', t0ken, {
+  const setCtT0kenCookies = (ctToken: string = '') => {
+    if (ctToken) {
+      Cookies.set('STORE_CT_T', ctToken, {
         expires: inFiveMinutes
       })
     }
   }
 
-  // 解析
-  // 場域代碼(2碼)+店號(6碼)+時間戳記MMddHHmm(8碼)+亂碼(1碼)+驗證碼(6碼)+時間戳記YYYY(4碼)
-  const parseCtT0ken = (ctStr: string, t0ken: string) => {
-    return {
-      ctStr: ctStr,
-      storeId: ctStr.substring(2, 8),
-      number: ctStr.substring(17, 23),
-      token: t0ken
-    } as ParseCtStringState
-  }
-
-  // 取出儲存的ct及驗證ct後的token
-  const getCtT0kenCookies = () => {
-    const ctStr = Cookies.get('STORE_CT')
+  // 取出儲存在cookies中驗證ct後的token
+  const getT0kenCookies = () => {
     const t0ken = Cookies.get('STORE_CT_T')
-    if (!ctStr || !t0ken) return null
-    return parseCtT0ken(ctStr, t0ken) || null
+    return t0ken || null
   }
 
   // 移除儲存的ct及驗證ct後的token
@@ -91,11 +84,12 @@ export function useBrowserStorage() {
   }
 
   return {
-    setLocationStorage,
-    getLocationStorage,
     setQRcodeString,
-    parseCtT0ken,
-    getCtT0kenCookies,
+    getQRcodeString,
+
+    parseCtToStoreAndNumber,
+    getT0kenCookies,
+
     removeCtT0kenCookies,
     setCtT0kenCookies,
     setLineT0kenCookies,
