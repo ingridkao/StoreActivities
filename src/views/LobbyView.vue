@@ -55,6 +55,7 @@ const shareList = ref([
 ])
 
 const qrString = ref<string>('')
+const qrString2 = ref<string>('')
 onMounted(async () => {
   const ctStr = parseParamCT(window.location.href)
   const Location = parseClientLocation(window.location.href)
@@ -85,6 +86,7 @@ const genrate = async () => {
   const MockCode = await genrateMockQRCode(activityId.value, storeId.value)
   if (MockCode) {
     qrString.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}&lat=${MockCode.lat}&lon=${MockCode.long}`
+    qrString2.value = `${ORIGIN_URL}?ct=${MockCode.qrCode}`
   }
 }
 </script>
@@ -129,7 +131,13 @@ const genrate = async () => {
 
     <div>
       <label for="activityId">活動ID</label>
-      <input type="text" v-model="activityId" />
+      <select v-model="activityId">
+        <option 
+          v-for="item in displayCampaignList" 
+          :value="item.id"
+          :key="item.id"
+        >{{ item.eventName }}</option>
+      </select>
       <label>門市</label>
       <select v-model="storeId">
         <option value="110817">千翔(台北市中正區許昌街17號)</option>
@@ -143,6 +151,12 @@ const genrate = async () => {
           <vueQr :text="qrString" :size="90" :correctLevel="1" :margin="1" />
         </div>
         <a :href="qrString" target="_blank">{{ qrString }}</a>
+      </template>
+      <template v-if="qrString2">
+        <div style="width: 90px">
+          <vueQr :text="qrString2" :size="90" :correctLevel="1" :margin="1" />
+        </div>
+        <a :href="qrString2" target="_blank">{{ qrString2 }}</a>
       </template>
     </div>
   </main>
