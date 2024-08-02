@@ -28,7 +28,7 @@ import { useSweetAlert } from '@/composable/useSweetAlert'
 import { useDay } from '@/composable/useDay'
 
 import { useLayoutStore } from '@/stores/layout'
-// import { useUserStore } from '@/stores/user'
+import { useUserStore } from '@/stores/user'
 
 const route = useRoute()
 const eventId = route?.params?.id
@@ -41,7 +41,7 @@ const { activityErrorAlert, errorAlert } = useSweetAlert()
 const { parseYear, parseMD } = useDay()
 
 const layoutStore = useLayoutStore()
-// const userStore = useUserStore()
+const userStore = useUserStore()
 
 let getPosition = false
 const confirmCoords = () => {
@@ -50,7 +50,7 @@ const confirmCoords = () => {
   if (Number.isFinite(latitude) && Number.isFinite(longitude)) {
     getPosition = true
     // TODO !! 正式環境要打開
-    // userStore.updateLocation(latitude, longitude)
+    userStore.updateLocation(latitude, longitude)
   } else if (error.value && error.value.code >= 1) {
     geoErrorHandler(error.value.code)
   }
@@ -105,6 +105,7 @@ const commitScan = async () => {
     layoutStore.loadToggle(false)
   } catch (error) {
     // 錯誤蓋版，顯示錯誤訊息包含打卡失敗
+    // 抓經緯度
     scanErrorMsg.value = String(error)
     layoutStore.loadToggle(false)
     layoutStore.toggleScanResult(true)

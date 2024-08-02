@@ -133,9 +133,9 @@ const genrate = async () => {
       <label>門市</label>
       <select v-model="storeId">
         <option value="110817">千翔(台北市中正區許昌街17號)</option>
-        <option value="111119">PTC-1(台北市內湖區瑞湖街125號)</option>
-        <option value="111278">前港(台北市士林區後港街98之1號2號)</option>
-        <option value="111636">江東(台北市中山區長安東路二段43號45-1號)</option>
+        <option value="870504">道生(台北市信義區新仁里東興路57號)</option>
+        <option value="666000">情系測(台北市信義區東興路65號9樓)</option>
+        <option value="966164">中興醫(台北市大同區鄭州路145號B1)</option>
       </select>
       <button @click="genrate">送出</button>
       <template v-if="qrString">
