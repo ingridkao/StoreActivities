@@ -602,6 +602,23 @@ export function useFetchData() {
     }
   }
 
+
+  const addMap8UseCount = async () => {
+    const loginCookies = getLoginT0kenCookies()
+    if (!DEV) {
+      if (loginCookies && loginCookies.loginT0ken) {
+        loginT0ken = loginCookies.loginT0ken
+      } else {
+        throw '此服務需要登入'
+      }
+    }
+    try {
+      const logRes = await storeMap.setMap8UseLog(loginT0ken)
+      return logRes 
+    } catch (error) {
+      throw String(error)
+    }
+  }
   return {
     parseParamCT,
     parseClientLocation,
@@ -624,6 +641,8 @@ export function useFetchData() {
     // fetchLayerData,
     fetchDefaultLayerData,
     fetchActiveLayerData,
-    fetchActiveIconData
+    fetchActiveIconData,
+
+    addMap8UseCount
   }
 }
